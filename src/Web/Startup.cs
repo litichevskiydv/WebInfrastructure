@@ -1,5 +1,6 @@
 ﻿namespace Web
 {
+    using Infrastructure.Web.Configuration;
     using Infrastructure.Web.Routing;
     using JetBrains.Annotations;
     using Microsoft.AspNetCore.Builder;
@@ -11,13 +12,15 @@
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IHostingEnvironment env, CommandLineArgumentsProvider commandLineArgumentsProvider)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", true, true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
-                .AddEnvironmentVariables();
+                .AddEnvironmentVariables()
+                .AddCommandLine(commandLineArgumentsProvider.Arguments);
+
             Configuration = builder.Build();
         }
 
@@ -25,7 +28,7 @@
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(x => x.UseCentralRoutePrefix("api/[controller]"));
+            services.AddMvc(x => x.UseCentralRoutePrefix($"{Configuration.GetValue("api_route_preffix", "api")}/[controller]"));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)

@@ -14,7 +14,8 @@
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
     "JetBrains.Annotations": "10.1.5",
     "Web.Application": "1.0.0-*",
-    "Infrastructure.Web": "1.0.0-*"
+    "Infrastructure.Web": "1.0.0-*",
+    "Microsoft.Extensions.Configuration.CommandLine": "1.0.0"
   },
 
   "tools": {
