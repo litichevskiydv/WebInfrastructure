@@ -18,6 +18,7 @@
     },
     "Web": {
       "commandName": "Project",
+      "commandLineArgs": "--api_route_preffix api",
       "launchBrowser": true,
       "launchUrl": "http://localhost:5000/api/values",
       "environmentVariables": {

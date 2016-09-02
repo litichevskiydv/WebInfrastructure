@@ -1,6 +1,7 @@
 ﻿namespace Web
 {
     using System.IO;
+    using Infrastructure.Web.Configuration;
     using JetBrains.Annotations;
     using Microsoft.AspNetCore.Hosting;
 
@@ -14,6 +15,7 @@
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
+                .ConfigureServices(services => services.CaptureCommandLineArguments(args))
                 .Build();
 
             host.Run();
