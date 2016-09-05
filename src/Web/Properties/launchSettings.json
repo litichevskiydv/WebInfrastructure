@@ -16,14 +16,17 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Web": {
+    "WebDevelopment": {
       "commandName": "Project",
-      "commandLineArgs": "--api_route_preffix api",
+      "commandLineArgs": "--environment Development --api_route_preffix api",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:5000/api/values",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      "launchUrl": "http://localhost:5000/api/values"
+    },
+    "WebStaging": {
+      "commandName": "Project",
+      "commandLineArgs": "--environment Development --api_route_preffix api",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:5000/api/values"
     }
   }
 }

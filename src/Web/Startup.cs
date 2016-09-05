@@ -16,8 +16,8 @@
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", true, true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
+                .AddJsonFile("appsettings.json", false, true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", false)
                 .AddEnvironmentVariables()
                 .AddCommandLine(commandLineArgumentsProvider.Arguments);
 
