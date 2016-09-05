@@ -21,6 +21,12 @@
       "commandLineArgs": "--environment Development --api_route_preffix api",
       "launchBrowser": true,
       "launchUrl": "http://localhost:5000/api/values"
+    },
+    "WebStaging": {
+      "commandName": "Project",
+      "commandLineArgs": "--environment Development --api_route_preffix api",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:5000/api/values"
     }
   }
 }
