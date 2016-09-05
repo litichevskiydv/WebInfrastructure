@@ -12,10 +12,11 @@
         {
             var host = new WebHostBuilder()
                 .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
-                .UseStartup<Startup>()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseConfigurationFromCommandLine(args)
                 .ConfigureServices(services => services.CaptureCommandLineArguments(args))
+                .UseStartup<Startup>()
                 .Build();
 
             host.Run();
