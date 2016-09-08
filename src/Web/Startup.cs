@@ -1,6 +1,7 @@
 ﻿namespace Web
 {
     using Infrastructure.Web.Configuration;
+    using Infrastructure.Web.Logging;
     using Infrastructure.Web.Routing;
     using JetBrains.Annotations;
     using Microsoft.AspNetCore.Builder;
@@ -15,11 +16,12 @@
         public Startup(IHostingEnvironment env, CommandLineArgumentsProvider commandLineArgumentsProvider)
         {
             var builder = new ConfigurationBuilder()
+                .AddEnvironmentVariables()
+                .AddCommandLine(commandLineArgumentsProvider.Arguments)
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", false, true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", false)
-                .AddEnvironmentVariables()
-                .AddCommandLine(commandLineArgumentsProvider.Arguments);
+                .AddNLogConfig($"NLog.{env.EnvironmentName}.config");
 
             Configuration = builder.Build();
         }
@@ -33,8 +35,9 @@
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            loggerFactory
+                .AddConsole(Configuration.GetSection("Logging"))
+                .AddNLog();
 
             app.UseMvc();
         }
