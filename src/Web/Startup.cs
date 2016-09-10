@@ -1,7 +1,7 @@
 ﻿namespace Web
 {
-    using System.Globalization;
     using Infrastructure.Web.Configuration;
+    using Infrastructure.Web.ExceptionsHandling;
     using Infrastructure.Web.JsonConverters;
     using Infrastructure.Web.Logging;
     using Infrastructure.Web.Routing;
@@ -36,7 +36,9 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddMvc(x => x.UseCentralRoutePrefix($"{Configuration.GetValue("api_route_preffix", "api")}/[controller]"))
+                .AddMvc(x => x
+                            .UseCentralRoutePrefix($"{Configuration.GetValue("api_route_preffix", "api")}/[controller]")
+                            .UseUnhandledExceptionFilter())
                 .AddJsonOptions(x =>
                                 {
                                     var settings = x.SerializerSettings;
