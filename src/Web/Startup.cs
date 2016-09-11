@@ -1,9 +1,9 @@
 ﻿namespace Web
 {
-    using System.Globalization;
     using Infrastructure.Web.Configuration;
-    using Infrastructure.Web.JsonConverters;
+    using Infrastructure.Web.ExceptionsHandling;
     using Infrastructure.Web.Logging;
+    using Infrastructure.Web.OutputFormatting;
     using Infrastructure.Web.Routing;
     using JetBrains.Annotations;
     using Microsoft.AspNetCore.Builder;
@@ -11,9 +11,6 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
-    using Newtonsoft.Json.Serialization;
 
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public class Startup
@@ -36,16 +33,10 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddMvc(x => x.UseCentralRoutePrefix($"{Configuration.GetValue("api_route_preffix", "api")}/[controller]"))
-                .AddJsonOptions(x =>
-                                {
-                                    var settings = x.SerializerSettings;
-                                    settings.NullValueHandling = NullValueHandling.Ignore;
-                                    settings.Formatting = Formatting.Indented;
-                                    settings.ContractResolver = new DefaultContractResolver();
-                                    settings.Converters.Add(new DateTimeConverter());
-                                    settings.Converters.Add(new StringEnumConverter {CamelCaseText = true});
-                                });
+                .AddMvc(x => x
+                            .UseCentralRoutePrefix($"{Configuration.GetValue("api_route_preffix", "api")}/[controller]")
+                            .UseUnhandledExceptionFilter())
+                .AddJsonOptions(x => x.SerializerSettings.UseDefaultSettings());
 
         }
 

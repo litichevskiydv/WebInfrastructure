@@ -1,9 +1,10 @@
-﻿namespace Infrastructure.Web.JsonConverters
+﻿namespace Infrastructure.Web.OutputFormatting.JsonConverters
 {
     using System;
     using System.Globalization;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
+
     public class DateTimeConverter : IsoDateTimeConverter
     {
         public DateTimeConverter()
