@@ -6,7 +6,7 @@
     {
         public static MvcOptions UseUnhandledExceptionFilter(this MvcOptions mvcOptions)
         {
-            mvcOptions.Filters.Add(typeof(UnhandledExceptionFilterAttribute));
+            mvcOptions.Filters.Add(typeof(UnhandledExceptionsFilterAttribute));
             return mvcOptions;
         }
     }

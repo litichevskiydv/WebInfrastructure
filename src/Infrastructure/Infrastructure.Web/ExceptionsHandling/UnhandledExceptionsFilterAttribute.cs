@@ -8,12 +8,12 @@
     using Microsoft.AspNetCore.Mvc.Filters;
     using Microsoft.Extensions.Logging;
 
-    public class UnhandledExceptionFilterAttribute : ExceptionFilterAttribute
+    public class UnhandledExceptionsFilterAttribute : ExceptionFilterAttribute
     {
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly ILogger _logger;
 
-        public UnhandledExceptionFilterAttribute(IHostingEnvironment hostingEnvironment, ILogger<UnhandledExceptionFilterAttribute> logger)
+        public UnhandledExceptionsFilterAttribute(IHostingEnvironment hostingEnvironment, ILogger<UnhandledExceptionsFilterAttribute> logger)
         {
             if (hostingEnvironment == null)
                 throw new ArgumentNullException(nameof(hostingEnvironment));
