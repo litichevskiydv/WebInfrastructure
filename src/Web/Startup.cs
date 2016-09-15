@@ -1,5 +1,8 @@
 ﻿namespace Web
 {
+    using System;
+    using Autofac;
+    using Autofac.Extensions.DependencyInjection;
     using Infrastructure.Web.Configuration;
     using Infrastructure.Web.ExceptionsHandling;
     using Infrastructure.Web.Logging;
@@ -30,14 +33,19 @@
 
         public IConfigurationRoot Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services
+                .AddOptions()
                 .AddMvc(x => x
                             .UseCentralRoutePrefix($"{Configuration.GetValue("api_route_preffix", "api")}/[controller]")
                             .UseUnhandledExceptionFilter())
                 .AddJsonOptions(x => x.SerializerSettings.UseDefaultSettings());
 
+            var containerBuilder = new ContainerBuilder();
+            containerBuilder.Populate(services);
+            var container = containerBuilder.Build();
+            return new AutofacServiceProvider(container);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
