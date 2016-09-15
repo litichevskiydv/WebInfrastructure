@@ -25,7 +25,7 @@
                 .AddCommandLine(commandLineArgumentsProvider.Arguments)
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", false, true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", false)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", false, true)
                 .AddNLogConfig($"NLog.{env.EnvironmentName}.config");
 
             Configuration = builder.Build();
