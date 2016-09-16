@@ -43,17 +43,11 @@
             serializerSettings.UseDefaultSettings();
         }
 
-        protected virtual void ConfigureSwaggerDocumentator(SwaggerGenOptions options)
-        {
-        }
+        protected abstract void ConfigureSwaggerDocumentator(SwaggerGenOptions options);
 
-        protected virtual void ConfigureOptions(IServiceCollection services)
-        {
-        }
+        protected abstract void ConfigureOptions(IServiceCollection services);
 
-        protected virtual void RegisterDependencies(ContainerBuilder containerBuilder)
-        {   
-        }
+        protected abstract void RegisterDependencies(ContainerBuilder containerBuilder);
 
         [UsedImplicitly]
         public IServiceProvider ConfigureServices(IServiceCollection services)
