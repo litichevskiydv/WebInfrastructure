@@ -4,7 +4,8 @@
 
   "dependencies": {
     "Microsoft.AspNetCore.Mvc": "1.0.0",
-    "Microsoft.AspNetCore.Mvc.WebApiCompatShim": "1.0.0"
+    "Microsoft.AspNetCore.Mvc.WebApiCompatShim": "1.0.0",
+    "JetBrains.Annotations": "10.1.5"
   },
 
   "frameworks": {

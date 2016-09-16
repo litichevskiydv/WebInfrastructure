@@ -1,60 +1,31 @@
 ﻿namespace Web
 {
-    using System;
+    using System.Reflection;
+    using Application.Services.Impl;
     using Autofac;
-    using Autofac.Extensions.DependencyInjection;
+    using Infrastructure.Web;
     using Infrastructure.Web.Configuration;
-    using Infrastructure.Web.ExceptionsHandling;
-    using Infrastructure.Web.Logging;
-    using Infrastructure.Web.OutputFormatting;
-    using Infrastructure.Web.Routing;
+    using Installers;
     using JetBrains.Annotations;
-    using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
 
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-    public class Startup
+    public class Startup : WebApiBaseStartup
     {
         public Startup(IHostingEnvironment env, CommandLineArgumentsProvider commandLineArgumentsProvider)
+            : base(env, commandLineArgumentsProvider)
         {
-            var builder = new ConfigurationBuilder()
-                .AddEnvironmentVariables()
-                .AddCommandLine(commandLineArgumentsProvider.Arguments)
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", false, true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", false, true)
-                .AddNLogConfig($"NLog.{env.EnvironmentName}.config");
-
-            Configuration = builder.Build();
         }
 
-        public IConfigurationRoot Configuration { get; }
-
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        protected override void ConfigureOptions(IServiceCollection services)
         {
-            services
-                .AddOptions()
-                .AddMvc(x => x
-                            .UseCentralRoutePrefix($"{Configuration.GetValue("api_route_preffix", "api")}/[controller]")
-                            .UseUnhandledExceptionFilter())
-                .AddJsonOptions(x => x.SerializerSettings.UseDefaultSettings());
-
-            var containerBuilder = new ContainerBuilder();
-            containerBuilder.Populate(services);
-            var container = containerBuilder.Build();
-            return new AutofacServiceProvider(container);
+            services.Configure<SimpleValuesProviderConfiguration>(Configuration.GetSection("ValuesProviderConfiguration"));
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        protected override void RegisterDependencies(ContainerBuilder containerBuilder)
         {
-            loggerFactory
-                .AddConsole(Configuration.GetSection("Logging"))
-                .AddNLog();
-
-            app.UseMvc();
+            containerBuilder.RegisterAssemblyModules(typeof(CommonDependenciesModule).GetTypeInfo().Assembly);
         }
     }
 }
