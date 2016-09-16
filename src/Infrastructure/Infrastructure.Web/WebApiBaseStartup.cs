@@ -5,6 +5,7 @@
     using Autofac.Extensions.DependencyInjection;
     using Configuration;
     using ExceptionsHandling;
+    using JetBrains.Annotations;
     using Logging;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -14,6 +15,7 @@
     using Newtonsoft.Json;
     using OutputFormatting;
     using Routing;
+    using Swashbuckle.SwaggerGen.Application;
 
     public abstract class WebApiBaseStartup
     {
@@ -41,6 +43,10 @@
             serializerSettings.UseDefaultSettings();
         }
 
+        protected virtual void ConfigureSwaggerDocumentator(SwaggerGenOptions options)
+        {
+        }
+
         protected virtual void ConfigureOptions(IServiceCollection services)
         {
         }
@@ -49,6 +55,7 @@
         {   
         }
 
+        [UsedImplicitly]
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services
@@ -56,6 +63,18 @@
                             .UseCentralRoutePrefix($"{Configuration.GetValue("api_route_preffix", "api")}/[controller]")
                             .UseUnhandledExceptionFilter())
                 .AddJsonOptions(x => ConfigureJsonSerialization(x.SerializerSettings));
+
+            services.AddSwaggerGen();
+            services.ConfigureSwaggerGen(options =>
+                                         {
+                                             ConfigureSwaggerDocumentator(options);
+
+                                             var xmlDocsPath = Configuration.GetValue<string>("xml_docs");
+                                             if (string.IsNullOrWhiteSpace(xmlDocsPath) == false)
+                                                 options.IncludeXmlComments(xmlDocsPath);
+
+                                             options.DescribeAllEnumsAsStrings();
+                                         });
 
             ConfigureOptions(services.AddOptions());
 
@@ -76,12 +95,15 @@
             return app;
         }
 
+        [UsedImplicitly]
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             AddLoggerProviders(loggerFactory.AddConsole(Configuration.GetSection("Logging")));
 
             AddMiddlewaresToPipeLine(app.UseUnhandledExceptionsLoggingMiddleware(), env)
-                .UseMvc();
+                .UseMvc()
+                .UseSwagger()
+                .UseSwaggerUi();
         }
     }
 }

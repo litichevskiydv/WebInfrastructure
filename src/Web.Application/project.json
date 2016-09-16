@@ -1,13 +1,11 @@
 {
   "version": "1.0.0-*",
   "authors": [ "dmitriy.litichevskiy" ],
-
   "dependencies": {
     "Microsoft.AspNetCore.Mvc": "1.0.0",
     "Microsoft.AspNetCore.Mvc.WebApiCompatShim": "1.0.0",
     "JetBrains.Annotations": "10.1.5"
   },
-
   "frameworks": {
     "netstandard1.6": {
       "dependencies": {
@@ -18,5 +16,8 @@
         "portable-net45+win8"
       ]
     }
+  },
+  "buildOptions": {
+    "xmlDoc": true
   }
 }
