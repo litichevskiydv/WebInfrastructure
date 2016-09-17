@@ -19,6 +19,7 @@
                                              {
                                                  BaseUrl = _apiTestsFixture.Server.BaseAddress.ToString(),
                                                  TimeoutInMilliseconds = apiTestsFixture.TimeoutInMilliseconds
+                                             },
                                 _apiTestsFixture.Server.CreateHandler());
         }
 

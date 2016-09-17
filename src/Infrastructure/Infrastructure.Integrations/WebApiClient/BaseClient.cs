@@ -41,7 +41,7 @@
             _messageHandler = messageHandler;
         }
 
-        private async Task<HttpResponseMessage> GetResponseMessageBase(string url, HttpMethod method, object data)
+        private async Task<HttpResponseMessage> GetResponseMessageAsync(string url, HttpMethod method, object data)
         {
             if (string.IsNullOrWhiteSpace(url))
                 throw new ArgumentNullException(nameof(url));
@@ -65,14 +65,9 @@
             }
         }
 
-        private Task<HttpResponseMessage> GetResponseMessageAsync(string url, HttpMethod method, object data)
-        {
-            return GetResponseMessageBase(url, method, data);
-        }
-
         private HttpResponseMessage GetResponseMessage(string url, HttpMethod method, object data)
         {
-            return GetResponseMessageBase(url, method, data).Result;
+            return GetResponseMessageAsync(url, method, data).Result;
         }
 
         private static Exception CreateException(HttpResponseMessage responseMessage)
@@ -81,6 +76,8 @@
                 return new NotFoundException(responseMessage.ReasonPhrase);
             if (responseMessage.StatusCode == HttpStatusCode.Unauthorized)
                 return new UnauthorizedException(responseMessage.ReasonPhrase);
+            if (responseMessage.StatusCode == HttpStatusCode.BadRequest)
+                return new BadRequestException(responseMessage.ReasonPhrase);
 
             if (responseMessage.Content != null)
                 try
