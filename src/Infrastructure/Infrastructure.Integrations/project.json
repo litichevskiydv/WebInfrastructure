@@ -1,6 +1,10 @@
-﻿{
+{
   "version": "1.0.0-*",
   "authors": [ "dmitriy.litichevskiy" ],
+
+  "dependencies": {
+    "Microsoft.AspNet.WebApi.Client": "5.2.3"
+  },
 
   "frameworks": {
     "netstandard1.6": {
