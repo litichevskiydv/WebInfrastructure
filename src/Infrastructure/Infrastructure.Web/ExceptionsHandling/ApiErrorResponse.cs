@@ -1,11 +1,11 @@
 ﻿namespace Infrastructure.Web.ExceptionsHandling
 {
     using System;
-    using JetBrains.Annotations;
+    using Domain.Models.WebApiExceptionsContract;
 
-    public class ApiErrorResponse : ExceptionData
+    public class ApiErrorResponse : ExceptionData, IHeaderMessage
     {
-        public string Message { [UsedImplicitly] get; set; }
+        public string Message { get; set; }
 
         public ApiErrorResponse(string message, Exception exception) : base(exception)
         {

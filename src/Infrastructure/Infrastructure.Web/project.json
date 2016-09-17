@@ -5,6 +5,7 @@
   "dependencies": {
     "Autofac": "4.1.0",
     "Autofac.Extensions.DependencyInjection": "4.0.0",
+    "Infrastructure.Domain": "1.0.0-*",
     "JetBrains.Annotations": "10.1.5",
     "Microsoft.AspNetCore.Mvc": "1.0.0",
     "Microsoft.AspNetCore.Mvc.WebApiCompatShim": "1.0.0",

@@ -1,8 +1,9 @@
 ﻿namespace Infrastructure.Integrations.WebApiClient
 {
     using System.Text;
+    using Domain.Models.WebApiExceptionsContract;
 
-    public class ApiErrorResponse : ExceptionData
+    public class ApiErrorResponse : ExceptionData, IHeaderMessage
     {
         public string Message { get; set; }
 

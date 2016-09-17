@@ -1,17 +1,10 @@
 ﻿namespace Infrastructure.Integrations.WebApiClient
 {
     using System.Text;
+    using Domain.Models.WebApiExceptionsContract;
 
-    public class ExceptionData
+    public class ExceptionData : ExceptionDataBase<ExceptionData>
     {
-        public string ExceptionType { get; set; }
-
-        public string ExceptionMessage { get; set; }
-
-        public string StackTrace { get; set; }
-
-        public ExceptionData InnerException { get; set; }
-
         public override string ToString()
         {
             var builder = new StringBuilder();

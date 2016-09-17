@@ -1,18 +1,10 @@
 ﻿namespace Infrastructure.Web.ExceptionsHandling
 {
     using System;
-    using JetBrains.Annotations;
+    using Domain.Models.WebApiExceptionsContract;
 
-    public class ExceptionData
+    public class ExceptionData : ExceptionDataBase<ExceptionData>
     {
-        public string ExceptionType { [UsedImplicitly] get; set; }
-
-        public string ExceptionMessage { [UsedImplicitly] get; set; }
-
-        public string StackTrace { [UsedImplicitly] get; set; }
-
-        public ExceptionData InnerException { [UsedImplicitly] get; set; }
-
         public ExceptionData(Exception exception)
         {
             ExceptionType = exception.GetType().ToString();
