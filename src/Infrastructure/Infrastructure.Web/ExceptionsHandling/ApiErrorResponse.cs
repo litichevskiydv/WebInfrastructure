@@ -3,7 +3,7 @@
     using System;
     using Domain.Models.WebApiExceptionsContract;
 
-    public class ApiErrorResponse : ExceptionData, IHeaderMessage
+    public class ApiErrorResponse : ExceptionData, IApiErrorResponse<ExceptionData>
     {
         public string Message { get; set; }
 

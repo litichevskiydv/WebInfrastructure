@@ -3,8 +3,13 @@
     using System;
     using Domain.Models.WebApiExceptionsContract;
 
-    public class ExceptionData : ExceptionDataBase<ExceptionData>
+    public class ExceptionData : IExceptionData<ExceptionData>
     {
+        public string ExceptionType { get; set; }
+        public string ExceptionMessage { get; set; }
+        public string StackTrace { get; set; }
+        public ExceptionData InnerException { get; set; }
+
         public ExceptionData(Exception exception)
         {
             ExceptionType = exception.GetType().ToString();
