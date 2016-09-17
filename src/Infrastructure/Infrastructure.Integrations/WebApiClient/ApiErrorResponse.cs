@@ -14,7 +14,7 @@
                 builder.AppendLine(Message);
 
             var baseInformation = base.ToString();
-            if (string.IsNullOrWhiteSpace(baseInformation))
+            if (string.IsNullOrWhiteSpace(baseInformation) == false)
                 builder.AppendLine(baseInformation);
 
             return builder.ToString();

@@ -19,33 +19,29 @@
         private readonly MediaTypeFormatter _formatter;
         protected Action<HttpRequestHeaders> RequestHeadersConfigurator;
 
-        private BaseClient()
-        {
-            _formatter = new JsonMediaTypeFormatter
-                         {
-                             SerializerSettings = new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore}
-                         };
-        }
-
-        protected BaseClient(ClientConfiguration configuration) : this()
+        protected BaseClient(ClientConfiguration configuration)
         {
             if (configuration == null)
                 throw new ArgumentNullException(nameof(configuration));
 
             _baseUrl = configuration.BaseUrl;
             _timeout = TimeSpan.FromMilliseconds(configuration.TimeoutInMilliseconds);
+
+            _formatter = new JsonMediaTypeFormatter
+                         {
+                             SerializerSettings = new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore}
+                         };
         }
 
-        protected BaseClient(HttpMessageHandler messageHandler, TimeSpan timeout) : this()
+        protected BaseClient(ClientConfiguration configuration, HttpMessageHandler messageHandler) : this(configuration)
         {
             if (messageHandler == null)
                 throw new ArgumentNullException(nameof(messageHandler));
 
             _messageHandler = messageHandler;
-            _timeout = timeout;
         }
 
-        private Task<HttpResponseMessage> GetResponseMessageBase(string url, HttpMethod method, object data)
+        private async Task<HttpResponseMessage> GetResponseMessageBase(string url, HttpMethod method, object data)
         {
             if (string.IsNullOrWhiteSpace(url))
                 throw new ArgumentNullException(nameof(url));
@@ -65,13 +61,13 @@
                 if (method != HttpMethod.Get && data != null)
                     request.Content = data as HttpContent ??
                                       new ObjectContent(data.GetType(), data, _formatter, _formatter.SupportedMediaTypes.FirstOrDefault());
-                return httpClient.SendAsync(request);
+                return await httpClient.SendAsync(request).ConfigureAwait(false);
             }
         }
 
-        private async Task<HttpResponseMessage> GetResponseMessageAsync(string url, HttpMethod method, object data)
+        private Task<HttpResponseMessage> GetResponseMessageAsync(string url, HttpMethod method, object data)
         {
-            return await GetResponseMessageBase(url, method, data).ConfigureAwait(false);
+            return GetResponseMessageBase(url, method, data);
         }
 
         private HttpResponseMessage GetResponseMessage(string url, HttpMethod method, object data)
