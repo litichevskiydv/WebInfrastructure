@@ -1,4 +1,4 @@
-﻿namespace Web.Tests
+﻿namespace Infrastructure.Web.Testing.Extensions
 {
     using System;
     using Microsoft.Extensions.Logging;

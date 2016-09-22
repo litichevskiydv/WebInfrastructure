@@ -1,24 +1,25 @@
-﻿namespace Web.Tests
+﻿namespace Infrastructure.Web.Testing
 {
     using System;
     using System.IO;
     using JetBrains.Annotations;
-    using Infrastructure.Web.Configuration;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.TestHost;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
     using Moq;
+    using Configuration;
 
     [UsedImplicitly]
-    public class ApiTestsFixture : IDisposable
+    public class BaseApiTestsFixture<TStartup> : IDisposable where TStartup : WebApiBaseStartup
     {
         public TestServer Server { get; }
         public Mock<ILogger> Logger { get; }
 
+        public IConfigurationRoot Configuration { get; }
         public int TimeoutInMilliseconds { get; }
 
-        public ApiTestsFixture()
+        public BaseApiTestsFixture()
         {
             Logger = new Mock<ILogger>();
             Logger.Setup(x => x.IsEnabled(It.IsAny<LogLevel>())).Returns(true);
@@ -36,14 +37,14 @@
                              .UseEnvironment(environment)
                              .ConfigureServices(services => services.CaptureCommandLineArguments(new string[0]))
                              .UseLoggerFactory(mockLoggerFactory.Object)
-                             .UseStartup<TestsStartup>());
+                             .UseStartup<TStartup>());
 
-            var configuration = new ConfigurationBuilder()
+            Configuration = new ConfigurationBuilder()
                 .SetBasePath(currentDirectory)
                 .AddJsonFile("appsettings.json", false, false)
                 .AddJsonFile($"appsettings.{environment}.json", true, false)
                 .Build();
-            TimeoutInMilliseconds = configuration.GetValue<int>("ApiTimeoutInMilliseconds");
+            TimeoutInMilliseconds = Configuration.GetValue<int>("ApiTimeoutInMilliseconds");
         }
 
         public void Dispose()

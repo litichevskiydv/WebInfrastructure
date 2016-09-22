@@ -2,15 +2,16 @@
 {
     using Client;
     using Infrastructure.Integrations.WebApiClient;
+    using Infrastructure.Web.Testing.Extensions;
     using Moq;
     using Xunit;
 
-    public class ValuesControllerTests : IClassFixture<ApiTestsFixture>
+    public class ValuesControllerTests : IClassFixture<TestsFixture>
     {
-        private readonly ApiTestsFixture _apiTestsFixture;
+        private readonly TestsFixture _apiTestsFixture;
         private readonly ValuesClient _valuesClient;
 
-        public ValuesControllerTests(ApiTestsFixture apiTestsFixture)
+        public ValuesControllerTests(TestsFixture apiTestsFixture)
         {
             _apiTestsFixture = apiTestsFixture;
             _apiTestsFixture.Logger.ResetCalls();

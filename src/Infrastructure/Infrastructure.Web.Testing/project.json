@@ -1,0 +1,27 @@
+﻿{
+  "version": "1.0.0-*",
+  "authors": [ "dmitriy.litichevskiy" ],
+
+  "frameworks": {
+    "netstandard1.6": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.0"
+      },
+      "imports": [
+        "dotnet5.6",
+        "portable-net45+win8"
+      ]
+    }
+  },
+
+  "dependencies": {
+    "Microsoft.Extensions.Configuration": "1.0.0",
+    "Microsoft.Extensions.Configuration.FileExtensions": "1.0.0",
+    "Microsoft.Extensions.Configuration.Json": "1.0.0",
+    "Microsoft.Extensions.Configuration.Binder": "1.0.0",
+    "Microsoft.AspNetCore.TestHost": "1.0.0",
+    "Moq": "4.6.38-alpha",
+    "JetBrains.Annotations": "10.1.5",
+    "Infrastructure.Web": "1.0.0-*"
+  }
+}
