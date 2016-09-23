@@ -11,7 +11,7 @@
     using Configuration;
 
     [UsedImplicitly]
-    public class BaseApiTestsFixture : IDisposable
+    public abstract class BaseApiTestsFixture : IDisposable
     {
         public TestServer Server { get; }
         public Mock<ILogger> Logger { get; }

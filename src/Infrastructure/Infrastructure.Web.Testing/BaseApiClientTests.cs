@@ -6,7 +6,7 @@
     using Xunit;
 
     public class BaseApiClientTests<TFixture, TApiClient> : IClassFixture<TFixture>
-        where TFixture : BaseApiTestsFixture
+        where TFixture : BaseApiTestsFixture, new()
         where TApiClient : BaseFluentClient
     {
         protected readonly TFixture Fixture;
