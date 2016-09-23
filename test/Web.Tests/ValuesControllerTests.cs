@@ -1,22 +1,23 @@
 ﻿namespace Web.Tests
 {
-    using Client;
+    using Client.ServicesClients;
     using Infrastructure.Integrations.WebApiClient;
+    using Infrastructure.Web.Testing;
     using Infrastructure.Web.Testing.Extensions;
     using Moq;
     using Xunit;
 
-    public class ValuesControllerTests : IClassFixture<TestsFixture>
+    public class ValuesControllerTests : IClassFixture<BaseApiTestsFixture<TestsStartup>>
     {
-        private readonly TestsFixture _apiTestsFixture;
-        private readonly ValuesClient _valuesClient;
+        private readonly BaseApiTestsFixture<TestsStartup> _apiTestsFixture;
+        private readonly ValuesServiceClient _valuesClient;
 
-        public ValuesControllerTests(TestsFixture apiTestsFixture)
+        public ValuesControllerTests(BaseApiTestsFixture<TestsStartup> apiTestsFixture)
         {
             _apiTestsFixture = apiTestsFixture;
             _apiTestsFixture.Logger.ResetCalls();
 
-            _valuesClient = new ValuesClient(new ClientConfiguration
+            _valuesClient = new ValuesServiceClient(new ClientConfiguration
                                              {
                                                  BaseUrl = _apiTestsFixture.Server.BaseAddress.ToString(),
                                                  TimeoutInMilliseconds = apiTestsFixture.TimeoutInMilliseconds

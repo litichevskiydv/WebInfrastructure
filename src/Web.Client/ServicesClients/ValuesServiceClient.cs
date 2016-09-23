@@ -1,17 +1,17 @@
-﻿namespace Web.Client
+﻿namespace Web.Client.ServicesClients
 {
-    using System;
     using System.Collections.Generic;
     using System.Net.Http;
     using System.Threading.Tasks;
     using Infrastructure.Integrations.WebApiClient;
-    public class ValuesClient : BaseClient
+
+    public class ValuesServiceClient : BaseClient
     {
-        public ValuesClient(ClientConfiguration configuration) : base(configuration)
+        public ValuesServiceClient(ClientConfiguration configuration) : base(configuration)
         {
         }
 
-        public ValuesClient(ClientConfiguration configuration, HttpMessageHandler messageHandler) : base(configuration, messageHandler)
+        public ValuesServiceClient(ClientConfiguration configuration, HttpMessageHandler messageHandler) : base(configuration, messageHandler)
         {
         }
 
