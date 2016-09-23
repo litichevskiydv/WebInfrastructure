@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "authors": [ "dmitriy.litichevskiy" ],
 
@@ -22,6 +22,8 @@
     "Microsoft.AspNetCore.TestHost": "1.0.0",
     "Moq": "4.6.38-alpha",
     "JetBrains.Annotations": "10.1.5",
-    "Infrastructure.Web": "1.0.0-*"
+    "Infrastructure.Web": "1.0.0-*",
+    "xunit.core": "2.1.0",
+    "Infrastructure.Integrations": "1.0.0-*"
   }
 }

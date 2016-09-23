@@ -11,7 +11,7 @@
     using Configuration;
 
     [UsedImplicitly]
-    public class BaseApiTestsFixture<TStartup> : IDisposable where TStartup : WebApiBaseStartup
+    public class BaseApiTestsFixture : IDisposable
     {
         public TestServer Server { get; }
         public Mock<ILogger> Logger { get; }
@@ -19,7 +19,7 @@
         public IConfigurationRoot Configuration { get; }
         public int TimeoutInMilliseconds { get; }
 
-        public BaseApiTestsFixture()
+        public BaseApiTestsFixture(Type startupType)
         {
             Logger = new Mock<ILogger>();
             Logger.Setup(x => x.IsEnabled(It.IsAny<LogLevel>())).Returns(true);
@@ -37,7 +37,7 @@
                              .UseEnvironment(environment)
                              .ConfigureServices(services => services.CaptureCommandLineArguments(new string[0]))
                              .UseLoggerFactory(mockLoggerFactory.Object)
-                             .UseStartup<TStartup>());
+                             .UseStartup(startupType));
 
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(currentDirectory)
@@ -50,6 +50,14 @@
         public void Dispose()
         {
             Server.Dispose();
+        }
+    }
+
+    [UsedImplicitly]
+    public class BaseApiTestsFixture<TStartup> : BaseApiTestsFixture where TStartup : WebApiBaseStartup
+    {
+        public BaseApiTestsFixture() : base(typeof(TStartup))
+        {
         }
     }
 }

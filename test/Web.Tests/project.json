@@ -22,7 +22,6 @@
   "dependencies": {
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "Infrastructure.Web.Testing": "1.0.0-*",
-    "Moq": "4.6.38-alpha",
     "Web": "1.0.0-*",
     "Web.Application": "1.0.0-*",
     "Web.Client": "1.0.0-*",
