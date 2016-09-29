@@ -1,0 +1,29 @@
+version: 1.0.{build}
+configuration: Release
+platform: Any CPU
+before_build:
+- cmd: >-
+    dotnet restore "src\Infrastructure\Infrastructure.Domain"
+
+    dotnet restore "src\Infrastructure\Infrastructure.Integrations"
+
+    dotnet restore "src\Infrastructure\Infrastructure.Web"
+
+    dotnet restore "src\Infrastructure\Infrastructure.Web.Testing"
+
+    dotnet restore "src\Web.Application"
+
+    dotnet restore "src\Web"
+
+    dotnet restore "src\Web.Client"
+
+    dotnet restore "test\Web.Tests"
+build:
+  parallel: true
+  verbosity: minimal
+test_script:
+- cmd: >-
+    cd "test\Web.Tests"
+
+    dotnet test -c %CONFIGURATION%
+deploy: off
