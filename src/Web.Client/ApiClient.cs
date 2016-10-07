@@ -16,7 +16,7 @@
 
         public ApiClient(ClientConfiguration configuration, HttpMessageHandler messageHandler)
         {
-            _valuesServiceClient = new ValuesServiceClient(configuration, messageHandler);
+            _valuesServiceClient = new ValuesServiceClient(messageHandler, configuration);
             ServicesClients.Add(_valuesServiceClient);
         }
 

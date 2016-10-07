@@ -18,12 +18,12 @@
             Fixture.Logger.ResetCalls();
 
             ServiceClient = (TServiceClient) Activator.CreateInstance(typeof(TServiceClient),
+                Fixture.Server.CreateHandler(),
                 new ClientConfiguration
                 {
                     BaseUrl = Fixture.Server.BaseAddress.ToString(),
                     TimeoutInMilliseconds = Fixture.TimeoutInMilliseconds
-                },
-                Fixture.Server.CreateHandler());
+                });
         }
     }
 }

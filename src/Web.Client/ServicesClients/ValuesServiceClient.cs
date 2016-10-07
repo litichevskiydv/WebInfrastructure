@@ -11,7 +11,7 @@
         {
         }
 
-        public ValuesServiceClient(ClientConfiguration configuration, HttpMessageHandler messageHandler) : base(configuration, messageHandler)
+        public ValuesServiceClient(HttpMessageHandler messageHandler, ClientConfiguration configuration) : base(messageHandler, configuration)
         {
         }
 

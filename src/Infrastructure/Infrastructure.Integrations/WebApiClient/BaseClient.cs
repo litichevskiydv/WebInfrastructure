@@ -17,7 +17,10 @@
         private readonly HttpMessageHandler _messageHandler;
 
         private readonly MediaTypeFormatter _formatter;
-        protected Action<HttpRequestHeaders> RequestHeadersConfigurator;
+
+        protected virtual void RequestHeadersConfigurator(HttpRequestHeaders requestHeaders)
+        {
+        }
 
         protected BaseClient(ClientConfiguration configuration)
         {
@@ -33,7 +36,7 @@
                          };
         }
 
-        protected BaseClient(ClientConfiguration configuration, HttpMessageHandler messageHandler) : this(configuration)
+        protected BaseClient(HttpMessageHandler messageHandler, ClientConfiguration configuration) : this(configuration)
         {
             if (messageHandler == null)
                 throw new ArgumentNullException(nameof(messageHandler));
@@ -55,7 +58,7 @@
                 httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", _formatter.SupportedMediaTypes.First().MediaType);
                 foreach (var mediaTypeHeaderValue in _formatter.SupportedMediaTypes)
                     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaTypeHeaderValue.MediaType));
-                RequestHeadersConfigurator?.Invoke(httpClient.DefaultRequestHeaders);
+                RequestHeadersConfigurator(httpClient.DefaultRequestHeaders);
 
                 var request = new HttpRequestMessage(method, url);
                 if (method != HttpMethod.Get && data != null)
