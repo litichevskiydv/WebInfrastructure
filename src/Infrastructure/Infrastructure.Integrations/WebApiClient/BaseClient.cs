@@ -70,7 +70,12 @@
             return GetResponseMessageAsync(url, method, data).Result;
         }
 
-        private static Exception CreateException(HttpResponseMessage responseMessage)
+        private async Task<T> ReadAsAsyncWithAwaitConfiguration<T>(HttpContent httpContent)
+        {
+            return await httpContent.ReadAsAsync<T>(Enumerable.Repeat(_formatter, 1)).ConfigureAwait(false);
+        }
+
+        private static async Task<Exception> CreateException(HttpResponseMessage responseMessage)
         {
             if (responseMessage.StatusCode == HttpStatusCode.NotFound)
                 return new NotFoundException(responseMessage.ReasonPhrase);
@@ -82,7 +87,7 @@
             if (responseMessage.Content != null)
                 try
                 {
-                    var errorResponse = responseMessage.Content.ReadAsAsync<ApiErrorResponse>().Result.ToString();
+                    var errorResponse = (await responseMessage.Content.ReadAsAsync<ApiErrorResponse>().ConfigureAwait(false)).ToString();
                     return new ApiException(responseMessage.StatusCode,
                                string.IsNullOrWhiteSpace(errorResponse) ? responseMessage.ReasonPhrase : errorResponse);
                 }
@@ -91,29 +96,6 @@
                     return new ApiException(responseMessage.StatusCode, responseMessage.ReasonPhrase, exception);
                 }
             return new ApiException(responseMessage.StatusCode, responseMessage.ReasonPhrase);
-        }
-
-        private T Call<T>(string url, HttpMethod method, object data)
-        {
-            var responseMessage = GetResponseMessage(url, method, data);
-            if (responseMessage != null)
-            {
-                if (responseMessage.IsSuccessStatusCode)
-                    return responseMessage.StatusCode == HttpStatusCode.NoContent
-                        ? default(T)
-                        : responseMessage.Content.ReadAsAsync<T>(Enumerable.Repeat(_formatter, 1)).Result;
-            }
-
-            throw CreateException(responseMessage);
-        }
-
-        private void Call(string url, HttpMethod method, object data)
-        {
-            var responseMessage = GetResponseMessage(url, method, data);
-            if (responseMessage != null && responseMessage.IsSuccessStatusCode)
-                return;
-
-            throw CreateException(responseMessage);
         }
 
         private async Task<T> CallAsync<T>(string url, HttpMethod method, object data)
@@ -125,11 +107,25 @@
                 {
                     if (responseMessage.StatusCode == HttpStatusCode.NoContent)
                         return default(T);
-                    return await responseMessage.Content.ReadAsAsync<T>(Enumerable.Repeat(_formatter, 1)).ConfigureAwait(false);
+                    return await ReadAsAsyncWithAwaitConfiguration<T>(responseMessage.Content);
                 }
             }
 
-            throw CreateException(responseMessage);
+            throw await CreateException(responseMessage);
+        }
+
+        private T Call<T>(string url, HttpMethod method, object data)
+        {
+            var responseMessage = GetResponseMessage(url, method, data);
+            if (responseMessage != null)
+            {
+                if (responseMessage.IsSuccessStatusCode)
+                    return responseMessage.StatusCode == HttpStatusCode.NoContent
+                        ? default(T)
+                        : ReadAsAsyncWithAwaitConfiguration<T>(responseMessage.Content).Result;
+            }
+
+            throw CreateException(responseMessage).Result;
         }
 
         private async Task CallAsync(string url, HttpMethod method, object data)
@@ -138,12 +134,21 @@
             if (responseMessage != null && responseMessage.IsSuccessStatusCode)
                 return;
 
-            throw CreateException(responseMessage);
+            throw await CreateException(responseMessage);
+        }
+
+        private void Call(string url, HttpMethod method, object data)
+        {
+            var responseMessage = GetResponseMessage(url, method, data);
+            if (responseMessage != null && responseMessage.IsSuccessStatusCode)
+                return;
+
+            throw CreateException(responseMessage).Result;
         }
 
         protected Task<T> GetAsync<T>(string url)
         {
-            return this.CallAsync<T>(url, HttpMethod.Get, null);
+            return CallAsync<T>(url, HttpMethod.Get, null);
         }
 
         protected T Get<T>(string url)
@@ -153,12 +158,12 @@
 
         protected Task<T> PutAsync<T>(string url, object data)
         {
-            return this.CallAsync<T>(url, HttpMethod.Put, data);
+            return CallAsync<T>(url, HttpMethod.Put, data);
         }
 
         protected Task PutAsync(string url, object data)
         {
-            return this.CallAsync(url, HttpMethod.Put, data);
+            return CallAsync(url, HttpMethod.Put, data);
         }
 
         protected T Put<T>(string url, object data)
@@ -173,12 +178,12 @@
 
         protected Task<T> PostAsync<T>(string url, object data)
         {
-            return this.CallAsync<T>(url, HttpMethod.Post, data);
+            return CallAsync<T>(url, HttpMethod.Post, data);
         }
 
         protected Task PostAsync(string url, object data)
         {
-            return this.CallAsync(url, HttpMethod.Post, data);
+            return CallAsync(url, HttpMethod.Post, data);
         }
 
         protected void Post(string url, object data)
@@ -193,7 +198,7 @@
 
         protected Task DeleteAsync(string url)
         {
-            return this.CallAsync(url, HttpMethod.Delete, null);
+            return CallAsync(url, HttpMethod.Delete, null);
         }
 
         protected void Delete(string url)
