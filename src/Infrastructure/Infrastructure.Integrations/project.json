@@ -2,12 +2,6 @@
   "version": "1.0.0-*",
   "authors": [ "dmitriy.litichevskiy" ],
 
-  "dependencies": {
-    "Infrastructure.Domain": "1.0.0-*",
-    "Microsoft.AspNet.WebApi.Client": "5.2.3",
-    "System.Dynamic.Runtime": "4.0.11"
-  },
-
   "frameworks": {
     "netstandard1.6": {
       "dependencies": {
@@ -18,5 +12,12 @@
         "portable-net45+win8"
       ]
     }
+  },
+
+  "dependencies": {
+    "Infrastructure.Domain": "1.0.0-*",
+    "Microsoft.AspNet.WebApi.Client": "5.2.3",
+    "System.Dynamic.Runtime": "4.0.11",
+    "JetBrains.Annotations": "10.1.5"
   }
 }

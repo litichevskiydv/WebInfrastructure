@@ -1,6 +1,7 @@
 ﻿namespace Infrastructure.Integrations.WebApiClient
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -18,6 +19,8 @@
 
         private readonly MediaTypeFormatter _formatter;
 
+        private readonly Dictionary<HttpStatusCode, Type> _exceptionsTypesByStatusCodes;
+
         protected virtual void RequestHeadersConfigurator(HttpRequestHeaders requestHeaders)
         {
         }
@@ -34,6 +37,13 @@
                          {
                              SerializerSettings = new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore}
                          };
+
+            _exceptionsTypesByStatusCodes = new Dictionary<HttpStatusCode, Type>
+                                            {
+                                                {HttpStatusCode.NotFound, typeof(NotFoundException)},
+                                                {HttpStatusCode.Unauthorized, typeof(UnauthorizedAccessException)},
+                                                {HttpStatusCode.BadRequest, typeof(BadRequestException)}
+                                            };
         }
 
         protected BaseClient(HttpMessageHandler messageHandler, ClientConfiguration configuration) : this(configuration)
@@ -78,27 +88,46 @@
             return await httpContent.ReadAsAsync<T>(Enumerable.Repeat(_formatter, 1)).ConfigureAwait(false);
         }
 
-        private static async Task<Exception> CreateException(HttpResponseMessage responseMessage)
+        private static T DeserializeWithDefault<T>(string value)
         {
-            if (responseMessage.StatusCode == HttpStatusCode.NotFound)
-                return new NotFoundException(responseMessage.ReasonPhrase);
-            if (responseMessage.StatusCode == HttpStatusCode.Unauthorized)
-                return new UnauthorizedException(responseMessage.ReasonPhrase);
-            if (responseMessage.StatusCode == HttpStatusCode.BadRequest)
-                return new BadRequestException(responseMessage.ReasonPhrase);
+            try
+            {
+                return JsonConvert.DeserializeObject<T>(value);
+            }
+            catch (Exception)
+            {
+                return default(T);
+            }
+        }
 
+        private async Task<Exception> CreateException(HttpResponseMessage responseMessage)
+        {
+            var exceptionMessage = responseMessage.ReasonPhrase;
+            Exception errorResponseReadingException = null;
             if (responseMessage.Content != null)
+            {
+                string responseText = null;
                 try
                 {
-                    var errorResponse = (await responseMessage.Content.ReadAsAsync<ApiErrorResponse>().ConfigureAwait(false)).ToString();
-                    return new ApiException(responseMessage.StatusCode,
-                               string.IsNullOrWhiteSpace(errorResponse) ? responseMessage.ReasonPhrase : errorResponse);
+                    responseText = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
                 catch (Exception exception)
                 {
-                    return new ApiException(responseMessage.StatusCode, responseMessage.ReasonPhrase, exception);
+                    errorResponseReadingException = exception;
                 }
-            return new ApiException(responseMessage.StatusCode, responseMessage.ReasonPhrase);
+                if (string.IsNullOrWhiteSpace(responseText) == false)
+                    exceptionMessage = DeserializeWithDefault<ApiErrorResponse>(responseText)?.ToString() ?? responseText;
+            }
+
+            Type exceptionType;
+            if (_exceptionsTypesByStatusCodes.TryGetValue(responseMessage.StatusCode, out exceptionType))
+                return errorResponseReadingException == null
+                    ? (Exception) Activator.CreateInstance(exceptionType, exceptionMessage)
+                    : (Exception) Activator.CreateInstance(exceptionType, exceptionMessage, errorResponseReadingException);
+
+            return errorResponseReadingException == null
+                ? new ApiException(responseMessage.StatusCode, exceptionMessage)
+                : new ApiException(responseMessage.StatusCode, exceptionMessage, errorResponseReadingException);
         }
 
         private async Task<T> CallAsync<T>(string url, HttpMethod method, object data)
