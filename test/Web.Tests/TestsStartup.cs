@@ -1,9 +1,9 @@
 ﻿namespace Web.Tests
 {
-    using Infrastructure.Web.Configuration;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
+    using Skeleton.Web.Configuration;
 
     public class TestsStartup : Startup
     {

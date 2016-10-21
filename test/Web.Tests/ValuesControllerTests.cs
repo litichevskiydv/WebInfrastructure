@@ -1,8 +1,8 @@
 ﻿namespace Web.Tests
 {
     using Client.ServicesClients;
-    using Infrastructure.Web.Testing;
-    using Infrastructure.Web.Testing.Extensions;
+    using Skeleton.Web.Testing;
+    using Skeleton.Web.Testing.Extensions;
     using Xunit;
 
     public class ValuesControllerTests : BaseServiceClientTests<BaseApiTestsFixture<TestsStartup>, ValuesServiceClient>

@@ -2,8 +2,8 @@
 {
     using System.Collections.Generic;
     using Client;
-    using Infrastructure.Web.Testing;
-    using Infrastructure.Web.Testing.Extensions;
+    using Skeleton.Web.Testing;
+    using Skeleton.Web.Testing.Extensions;
     using Xunit;
 
     public class ValuesApiClientTests : BaseApiClientTests<BaseApiTestsFixture<TestsStartup>, ApiClient>

@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using Infrastructure.Integrations.WebApiClient;
+    using Skeleton.Integrations.WebApiClient;
 
     public class ValuesServiceClient : BaseClient
     {

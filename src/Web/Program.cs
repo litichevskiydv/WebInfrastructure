@@ -1,9 +1,9 @@
 ﻿namespace Web
 {
     using System.IO;
-    using Infrastructure.Web.Configuration;
     using JetBrains.Annotations;
     using Microsoft.AspNetCore.Hosting;
+    using Skeleton.Web.Configuration;
 
     [UsedImplicitly(ImplicitUseTargetFlags.Members)]
     public static class Program

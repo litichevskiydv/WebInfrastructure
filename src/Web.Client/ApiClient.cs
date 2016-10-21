@@ -1,8 +1,8 @@
 ﻿namespace Web.Client
 {
     using System.Net.Http;
-    using Infrastructure.Integrations.WebApiClient;
     using ServicesClients;
+    using Skeleton.Integrations.WebApiClient;
 
     public class ApiClient : BaseFluentClient
     {

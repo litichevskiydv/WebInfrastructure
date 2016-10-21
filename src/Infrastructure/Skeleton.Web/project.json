@@ -1,0 +1,33 @@
+﻿{
+  "version": "1.0.0-*",
+  "authors": [ "dmitriy.litichevskiy" ],
+
+  "frameworks": {
+    "netstandard1.6": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.0"
+      },
+      "imports": [
+        "dotnet5.6",
+        "portable-net45+win8"
+      ]
+    }
+  },
+  
+  "dependencies": {
+    "Autofac": "4.1.0",
+    "Autofac.Extensions.DependencyInjection": "4.0.0",
+    "JetBrains.Annotations": "10.1.5",
+    "Microsoft.AspNetCore.Mvc": "1.0.0",
+    "Microsoft.AspNetCore.Mvc.WebApiCompatShim": "1.0.0",
+    "Microsoft.Extensions.Configuration": "1.0.0",
+    "Microsoft.Extensions.Configuration.Binder": "1.0.0",
+    "Microsoft.Extensions.Configuration.CommandLine": "1.0.0",
+    "Microsoft.Extensions.Configuration.FileExtensions": "1.0.0",
+    "Microsoft.Extensions.Configuration.Json": "1.0.0",
+    "Microsoft.Extensions.Logging.Console": "1.0.0",
+    "NLog.Extensions.Logging": "1.0.0-rtm-alpha4",
+    "Swashbuckle": "6.0.0-beta902",
+	"Skeleton.Domain": "1.0.0-*"
+  }
+}
