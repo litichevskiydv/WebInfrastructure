@@ -1,29 +1,21 @@
-version: 1.0.{build}
+version: 1.0.0.{build}
+branches:
+  only:
+  - master
 configuration: Release
 platform: Any CPU
-before_build:
-- cmd: >-
-    dotnet restore "src\Infrastructure\Infrastructure.Domain"
-
-    dotnet restore "src\Infrastructure\Infrastructure.Integrations"
-
-    dotnet restore "src\Infrastructure\Infrastructure.Web"
-
-    dotnet restore "src\Infrastructure\Infrastructure.Web.Testing"
-
-    dotnet restore "src\Web.Application"
-
-    dotnet restore "src\Web"
-
-    dotnet restore "src\Web.Client"
-
-    dotnet restore "test\Web.Tests"
-build:
-  parallel: true
-  verbosity: minimal
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: 1.0.0
+  assembly_file_version: '{version}'
+  assembly_informational_version: 1.0
+nuget:
+  project_feed: true
+build_script:
+- cmd: call build\BuildSolution.bat %CONFIGURATION%
 test_script:
-- cmd: >-
-    cd "test\Web.Tests"
-
-    dotnet test -c %CONFIGURATION%
+- cmd: call build\RunTests.bat %CONFIGURATION%
+artifacts:
+- path: src\Infrastructure\**\*.nupkg
 deploy: off
