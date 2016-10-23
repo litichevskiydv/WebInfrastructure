@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "description": "Library contains clients for integrations with external services",
   "authors": [ "dmitriy.litichevskiy" ],
@@ -19,7 +19,8 @@
     "Microsoft.AspNet.WebApi.Client": "5.2.3",
     "System.Dynamic.Runtime": "4.0.11",
     "JetBrains.Annotations": "10.1.5",
-    "Skeleton.Domain": "1.0.0-*"
+    "Skeleton.Domain": "1.0.0-*",
+    "Skeleton.Web.Serialization": "1.0.0-*"
   },
 
   "packOptions": {

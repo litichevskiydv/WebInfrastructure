@@ -33,10 +33,7 @@
             _baseUrl = configuration.BaseUrl;
             _timeout = TimeSpan.FromMilliseconds(configuration.TimeoutInMilliseconds);
 
-            _formatter = new JsonMediaTypeFormatter
-                         {
-                             SerializerSettings = new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore}
-                         };
+            _formatter = new JsonMediaTypeFormatter {SerializerSettings = configuration.SerializerSettings};
 
             _exceptionsTypesByStatusCodes = new Dictionary<HttpStatusCode, Type>
                                             {

@@ -33,7 +33,12 @@
 
         public static JsonSerializerSettings UseDefaultSettings(this JsonSerializerSettings serializerSettings)
         {
-            return UseConverter(UseConverter(UseContractResolver(UseFormatting(UseNullValueHandling(serializerSettings, NullValueHandling.Ignore), Formatting.Indented), new DefaultContractResolver()), new DateTimeConverter()), new StringEnumConverter {CamelCaseText = true});
+            return serializerSettings
+                .UseNullValueHandling(NullValueHandling.Ignore)
+                .UseFormatting(Formatting.Indented)
+                .UseContractResolver(new DefaultContractResolver())
+                .UseConverter(new DateTimeConverter())
+                .UseConverter(new StringEnumConverter());
         }
     }
 }
