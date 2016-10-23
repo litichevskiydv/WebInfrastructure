@@ -1,5 +1,6 @@
 ﻿{
   "version": "1.0.0-*",
+  "description": "Library with common conventions and extensions for web applications development",
   "authors": [ "dmitriy.litichevskiy" ],
 
   "frameworks": {
@@ -11,6 +12,18 @@
         "dotnet5.6",
         "portable-net45+win8"
       ]
+    }
+  },
+
+  "packOptions": {
+    "summary": "Library with common conventions and extensions for web applications development",
+    "tags": [ "Web conventions", "Common extensions" ],
+    "projectUrl": "https://github.com/litichevskiydv/WebInfrastructure",
+    "licenseUrl": "https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE",
+    "owners": [ "dmitriy.litichevskiy" ],
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/litichevskiydv/WebInfrastructure"
     }
   }
 }

@@ -20,9 +20,9 @@
   },
 
   "dependencies": {
-	"xunit": "2.2.0-*",
+    "xunit": "2.2.0-*",
     "dotnet-test-xunit": "2.2.0-*",
-	"Skeleton.Web.Testing": "1.0.0-*",
+    "Skeleton.Web.Testing": "1.0.0-*",
     "Web": "1.0.0-*",
     "Web.Application": "1.0.0-*",
     "Web.Client": "1.0.0-*"

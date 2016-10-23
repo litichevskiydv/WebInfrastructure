@@ -1,5 +1,6 @@
 ﻿{
   "version": "1.0.0-*",
+  "description": "Library with common classes for creation WebApi integration tests",
   "authors": [ "dmitriy.litichevskiy" ],
 
   "frameworks": {
@@ -23,7 +24,19 @@
     "Moq": "4.6.38-alpha",
     "JetBrains.Annotations": "10.1.5",
     "xunit": "2.2.0-*",
-	"Skeleton.Web": "1.0.0-*",
+    "Skeleton.Web": "1.0.0-*",
     "Skeleton.Integrations": "1.0.0-*"
+  },
+
+  "packOptions": {
+    "summary": "Library with common classes for creation WebApi integration tests",
+    "tags": [ "WebApi integration testing" ],
+    "projectUrl": "https://github.com/litichevskiydv/WebInfrastructure",
+    "licenseUrl": "https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE",
+    "owners": [ "dmitriy.litichevskiy" ],
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/litichevskiydv/WebInfrastructure"
+    }
   }
 }
