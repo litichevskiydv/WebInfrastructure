@@ -1,0 +1,33 @@
+{
+  "version": "1.0.0-*",
+  "description": "Library with serialization conventions and settings",
+  "authors": [ "dmitriy.litichevskiy" ],
+
+  "frameworks": {
+    "netstandard1.6": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.0"
+      },
+      "imports": [
+        "dotnet5.6",
+        "portable-net45+win8"
+      ]
+    }
+  },
+
+  "dependencies": {
+    "Newtonsoft.Json": "9.0.1"
+  },
+
+  "packOptions": {
+    "summary": "Library with serialization conventions and settings",
+    "tags": [ "JSON conventions", "JSON serializer settings" ],
+    "projectUrl": "https://github.com/litichevskiydv/WebInfrastructure",
+    "licenseUrl": "https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE",
+    "owners": [ "dmitriy.litichevskiy" ],
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/litichevskiydv/WebInfrastructure"
+    }
+  }
+}

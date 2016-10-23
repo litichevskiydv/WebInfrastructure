@@ -29,7 +29,8 @@
     "Microsoft.Extensions.Logging.Console": "1.0.0",
     "NLog.Extensions.Logging": "1.0.0-rtm-alpha4",
     "Swashbuckle": "6.0.0-beta902",
-    "Skeleton.Domain": "1.0.0-*"
+    "Skeleton.Domain": "1.0.0-*",
+    "Skeleton.Web.Serialization": "1.0.0-*"
   },
 
   "packOptions": {

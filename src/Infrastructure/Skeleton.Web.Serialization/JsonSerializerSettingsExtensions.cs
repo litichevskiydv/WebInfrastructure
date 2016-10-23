@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Web.OutputFormatting
+﻿namespace Skeleton.Web.Serialization
 {
     using JsonConverters;
     using Newtonsoft.Json;
@@ -33,12 +33,7 @@
 
         public static JsonSerializerSettings UseDefaultSettings(this JsonSerializerSettings serializerSettings)
         {
-            return serializerSettings
-                .UseNullValueHandling(NullValueHandling.Ignore)
-                .UseFormatting(Formatting.Indented)
-                .UseContractResolver(new DefaultContractResolver())
-                .UseConverter(new DateTimeConverter())
-                .UseConverter(new StringEnumConverter {CamelCaseText = true});
+            return UseConverter(UseConverter(UseContractResolver(UseFormatting(UseNullValueHandling(serializerSettings, NullValueHandling.Ignore), Formatting.Indented), new DefaultContractResolver()), new DateTimeConverter()), new StringEnumConverter {CamelCaseText = true});
         }
     }
 }

@@ -11,7 +11,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
-    using OutputFormatting;
+    using Serialization;
 
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public class UnhandledExceptionsLoggingMiddleware

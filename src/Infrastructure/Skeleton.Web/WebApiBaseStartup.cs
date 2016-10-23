@@ -13,9 +13,9 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
-    using OutputFormatting;
     using Routing;
     using Swashbuckle.SwaggerGen.Application;
+    using Serialization;
 
     public abstract class WebApiBaseStartup
     {
