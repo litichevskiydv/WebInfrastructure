@@ -13,7 +13,10 @@ assembly_info:
 nuget:
   project_feed: true
 build_script:
-- cmd: call build\BuildSolution.bat %CONFIGURATION%
+- cmd: >-
+    call build\BuildSolution.bat %CONFIGURATION%
+
+    call build\CreatePackages.bat %CONFIGURATION% alpha-build%APPVEYOR_BUILD_NUMBER%
 test_script:
 - cmd: call build\RunTests.bat %CONFIGURATION%
 artifacts:
