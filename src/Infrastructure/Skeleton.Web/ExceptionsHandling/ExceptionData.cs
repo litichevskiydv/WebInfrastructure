@@ -1,7 +1,7 @@
 ﻿namespace Skeleton.Web.ExceptionsHandling
 {
     using System;
-    using Domain.Models.WebApiExceptionsContract;
+    using Conventions.Responses;
 
     public class ExceptionData : IExceptionData<ExceptionData>
     {

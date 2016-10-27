@@ -1,7 +1,7 @@
 ﻿namespace Skeleton.Web.ExceptionsHandling
 {
     using System;
-    using Domain.Models.WebApiExceptionsContract;
+    using Conventions.Responses;
 
     public class ApiErrorResponse : ExceptionData, IApiErrorResponse<ExceptionData>
     {

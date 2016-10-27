@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Domain.Models.WebApiExceptionsContract
+﻿namespace Skeleton.Web.Conventions.Responses
 {
     public interface IApiErrorResponse<TInnerExceptionData> : IExceptionData<TInnerExceptionData> where TInnerExceptionData : class 
     {

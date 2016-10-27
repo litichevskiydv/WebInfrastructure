@@ -1,6 +1,6 @@
-{
+﻿{
   "version": "1.0.0-*",
-  "description": "Library contains clients for integrations with external services",
+  "description": "Library with common conventions for web applications development",
   "authors": [ "dmitriy.litichevskiy" ],
 
   "frameworks": {
@@ -15,17 +15,9 @@
     }
   },
 
-  "dependencies": {
-    "Microsoft.AspNet.WebApi.Client": "5.2.3",
-    "System.Dynamic.Runtime": "4.0.11",
-    "JetBrains.Annotations": "10.1.5",
-    "Skeleton.Web.Serialization": "1.0.0-*",
-    "Skeleton.Web.Conventions": "1.0.0-*"
-  },
-
   "packOptions": {
-    "summary": "Library contains clients for integrations with external services",
-    "tags": [ "Integrations", "WebApi client" ],
+    "summary": "Library with common conventions for web applications development",
+    "tags": [ "Web conventions" ],
     "projectUrl": "https://github.com/litichevskiydv/WebInfrastructure",
     "licenseUrl": "https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE",
     "owners": [ "dmitriy.litichevskiy" ],

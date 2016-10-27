@@ -32,6 +32,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Web.Tests", "test\Web.Tests
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Skeleton.Web.Serialization", "src\Infrastructure\Skeleton.Web.Serialization\Skeleton.Web.Serialization.xproj", "{5F47AC99-30AD-4532-B995-610B16AE02B8}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Skeleton.Web.Conventions", "src\Infrastructure\Skeleton.Web.Conventions\Skeleton.Web.Conventions.xproj", "{9642F6C1-0856-453B-9DF9-56EC85646C2E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,6 +76,10 @@ Global
 		{5F47AC99-30AD-4532-B995-610B16AE02B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F47AC99-30AD-4532-B995-610B16AE02B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F47AC99-30AD-4532-B995-610B16AE02B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9642F6C1-0856-453B-9DF9-56EC85646C2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9642F6C1-0856-453B-9DF9-56EC85646C2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9642F6C1-0856-453B-9DF9-56EC85646C2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9642F6C1-0856-453B-9DF9-56EC85646C2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,5 +95,6 @@ Global
 		{1EB8CDD8-C701-4B90-A766-7A9E660E2278} = {DE1BE141-BE1D-4C36-BF58-E4747EE33A30}
 		{F3E20831-A3B5-4C08-95C8-E84F5858B0C7} = {47FA2CFA-AE7F-4DC7-8C8A-965FB2FA12EE}
 		{5F47AC99-30AD-4532-B995-610B16AE02B8} = {DB312248-D325-4521-8EE6-852CD9B44CAA}
+		{9642F6C1-0856-453B-9DF9-56EC85646C2E} = {DB312248-D325-4521-8EE6-852CD9B44CAA}
 	EndGlobalSection
 EndGlobal
