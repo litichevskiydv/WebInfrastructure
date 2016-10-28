@@ -25,7 +25,7 @@
     "JetBrains.Annotations": "10.1.5",
     "xunit": "2.2.0-*",
     "Skeleton.Web": "1.0.0-*",
-    "Skeleton.Integrations": "1.0.0-*"
+    "Skeleton.Web.Integration": "1.0.0-*"
   },
 
   "packOptions": {

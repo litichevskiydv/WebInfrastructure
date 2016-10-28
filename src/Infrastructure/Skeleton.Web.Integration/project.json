@@ -1,6 +1,6 @@
 {
   "version": "1.0.0-*",
-  "description": "Library contains clients for integrations with external services",
+  "description": "Library contains base client for integration with WebApi",
   "authors": [ "dmitriy.litichevskiy" ],
 
   "frameworks": {
@@ -24,7 +24,7 @@
   },
 
   "packOptions": {
-    "summary": "Library contains clients for integrations with external services",
+    "summary": "Library contains base client for integration with WebApi",
     "tags": [ "Integrations", "WebApi client" ],
     "projectUrl": "https://github.com/litichevskiydv/WebInfrastructure",
     "licenseUrl": "https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE",

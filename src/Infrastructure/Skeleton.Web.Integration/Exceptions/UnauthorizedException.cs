@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Integrations.WebApiClient.Exceptions
+﻿namespace Skeleton.Web.Integration.Exceptions
 {
     using System;
     using JetBrains.Annotations;

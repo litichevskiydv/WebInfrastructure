@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Integrations.WebApiClient
+﻿namespace Skeleton.Web.Integration
 {
     using Newtonsoft.Json;
     using Web.Serialization;

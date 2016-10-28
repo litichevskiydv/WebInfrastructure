@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Integrations.WebApiClient
+﻿namespace Skeleton.Web.Integration
 {
     using System;
     using System.Net.Http.Headers;
