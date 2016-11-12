@@ -13,6 +13,8 @@
         public static readonly IEnumerable<object[]> Int32ValuesListTestsData;
         [UsedImplicitly]
         public static readonly IEnumerable<object[]> Int64ValuesListTestsData;
+        [UsedImplicitly]
+        public static readonly IEnumerable<object[]> DecimalValuesListTestsData;
 
         static PrimitiveValuesListTests()
         {
@@ -26,6 +28,11 @@
                                            new object[] {new[] {1000000000L, 1000000001L, 1000000002L}},
                                            new object[] {new long[0]}
                                        };
+            DecimalValuesListTestsData = new[]
+                                         {
+                                             new object[] {new[] {1.234m, 5.678m, 99.123m}},
+                                             new object[] {new decimal[0]}
+                                         };
         }
 
         [Theory]
@@ -65,6 +72,32 @@ if type_id (N'[dbo].[Int64ValuesList]') is null
                 actual = connection.Query<long>(@"
 select [Value] from @Param",
                         new { Param = new Int64ValuesList("Int64ValuesList", expected) })
+                    .ToArray();
+            }
+
+            // Then
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [MemberData(nameof(DecimalValuesListTestsData))]
+        public void ShouldUseDecimalValuesListInQuery(decimal[] expected)
+        {
+            // When
+            decimal[] actual;
+            using (var connection = GetConnection())
+            {
+                connection.Execute(@"
+if type_id (N'[dbo].[DecimalValuesList]') is null
+	create type [dbo].[DecimalValuesList] as table([Value] [numeric](6,3) not null)");
+
+                actual = connection.Query<decimal>(@"
+select [Value] from @Param",
+                        new
+                        {
+                            Param = PrimitiveValuesList.Create("DecimalValuesList", expected,
+                                new MetaDataCreationOptions {Precision = 6, Scale = 3})
+                        })
                     .ToArray();
             }
 
