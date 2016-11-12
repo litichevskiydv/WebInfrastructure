@@ -14,7 +14,7 @@
         public static TvpParameter<TSource> Create<TSource>(string typeName, IEnumerable<TSource> source,
             Func<IMetaDataOptionsBuilder<TSource>, IMetaDataOptionsBuilder<TSource>> optionsConfigurator = null) where TSource : class
         {
-            return new TvpParameter<TSource>(typeName, source);
+            return new TvpParameter<TSource>(typeName, source, optionsConfigurator);
         }
     }
 

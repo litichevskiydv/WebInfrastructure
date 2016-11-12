@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "description": "Tests Dapper's extensions and helpers",
   "authors": [ "dmitriy.litichevskiy" ],
@@ -27,6 +27,7 @@
     "Dapper": "1.50.2",
     "Microsoft.NETCore.Portable.Compatibility": "1.0.1",
     "JetBrains.Annotations": "10.1.5",
-    "Skeleton.Dapper": "1.0.0-*"
+    "Skeleton.Dapper": "1.0.0-*",
+    "Skeleton.Common": "1.0.0-*"
   }
 }

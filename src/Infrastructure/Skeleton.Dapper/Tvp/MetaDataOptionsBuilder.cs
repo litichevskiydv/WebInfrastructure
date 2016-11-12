@@ -18,21 +18,31 @@
             return ((MemberExpression) member.Body).Member.Name;
         }
 
-        private IMetaDataOptionsBuilder<TSource> SetMaxLength(LambdaExpression member, long maxLength)
+        private IMetaDataOptionsBuilder<TSource> SetAccuracy(LambdaExpression member, byte precision, byte scale)
         {
-            if(maxLength <= 0)
-                throw new ArgumentException($"{nameof(maxLength)} must be positive");
+            if (scale > precision)
+                throw new ArgumentException($"{nameof(scale)} cannot be greater than {nameof(precision)}");
 
-            PropertiesSqlMetaDataOptions[GetMemberName(member)] = new MetaDataCreationOptions {MaxLength = maxLength};
+            PropertiesSqlMetaDataOptions[GetMemberName(member)] = new MetaDataCreationOptions { Precision = precision, Scale = scale };
             return this;
+        }
+
+        public IMetaDataOptionsBuilder<TSource> SetAccuracy(Expression<Func<TSource, decimal?>> member, byte precision, byte scale)
+        {
+            return SetAccuracy((LambdaExpression)member, precision, scale);
         }
 
         public IMetaDataOptionsBuilder<TSource> SetAccuracy(Expression<Func<TSource, decimal>> member, byte precision, byte scale)
         {
-            if(scale > precision)
-                throw new ArgumentException($"{nameof(scale)} cannot be greater than {nameof(precision)}");
+            return SetAccuracy((LambdaExpression)member, precision, scale);
+        }
 
-            PropertiesSqlMetaDataOptions[GetMemberName(member)] = new MetaDataCreationOptions {Precision = precision, Scale = scale};
+        private IMetaDataOptionsBuilder<TSource> SetMaxLength(LambdaExpression member, long maxLength)
+        {
+            if (maxLength <= 0)
+                throw new ArgumentException($"{nameof(maxLength)} must be positive");
+
+            PropertiesSqlMetaDataOptions[GetMemberName(member)] = new MetaDataCreationOptions { MaxLength = maxLength };
             return this;
         }
 
