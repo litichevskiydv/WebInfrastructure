@@ -1,0 +1,33 @@
+{
+  "version": "1.0.0-*",
+  "description": "Tests Dapper's extensions and helpers",
+  "authors": [ "dmitriy.litichevskiy" ],
+
+  "buildOptions": {
+    "debugType": "portable"
+  },
+
+  "testRunner": "xunit",
+
+  "frameworks": {
+    "netcoreapp1.0": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.0.1"
+        }
+      },
+      "imports": "portable-net45+win8"
+    }
+  },
+
+  "dependencies": {
+    "xunit": "2.2.0-*",
+    "dotnet-test-xunit": "2.2.0-*",
+    "Dapper": "1.50.2",
+    "Microsoft.NETCore.Portable.Compatibility": "1.0.1",
+    "JetBrains.Annotations": "10.1.5",
+    "Skeleton.Dapper": "1.0.0-*",
+    "Skeleton.Common": "1.0.0-*"
+  }
+}
