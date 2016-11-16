@@ -1,4 +1,5 @@
 dotnet pack "src\Infrastructure\Skeleton.Common" -c %1 --version-suffix %2
+dotnet pack "src\Infrastructure\Skeleton.CQRS.Abstractions" -c %1 --version-suffix %2
 dotnet pack "src\Infrastructure\Skeleton.Dapper" -c %1 --version-suffix %2
 dotnet pack "src\Infrastructure\Skeleton.Web.Conventions" -c %1 --version-suffix %2
 dotnet pack "src\Infrastructure\Skeleton.Web.Serialization" -c %1 --version-suffix %2
