@@ -1,5 +1,7 @@
-﻿namespace Skeleton.CQRS.Abstractions.Commands
+﻿namespace Skeleton.CQRS.Implementations.Commands.CommandsFactory
 {
+    using Abstractions.Commands;
+
     /// <summary>
     /// Commands factory interface
     /// </summary>
