@@ -1,5 +1,7 @@
-﻿namespace Skeleton.CQRS.Abstractions.Queries
+﻿namespace Skeleton.CQRS.Implementations.Queries.QueriesFactory
 {
+    using Abstractions.Queries;
+
     /// <summary>
     /// Queries factory interface
     /// </summary>

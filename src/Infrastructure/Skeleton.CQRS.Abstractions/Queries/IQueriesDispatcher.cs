@@ -9,8 +9,8 @@
         /// Method for queries execution
         /// </summary>
         /// <typeparam name="TResult">Query result type</typeparam>
-        /// <param name="query">Information needed for queries execution</param>
+        /// <param name="criterion">Information needed for queries execution</param>
         /// <returns>Query result</returns>
-        TResult Execute<TResult>(ICriterion query);
+        TResult Execute<TResult>(ICriterion criterion);
     }
 }
