@@ -1,5 +1,6 @@
 dotnet restore "src\Infrastructure\Skeleton.Common"
 dotnet restore "src\Infrastructure\Skeleton.CQRS.Abstractions"
+dotnet restore "src\Infrastructure\Skeleton.CQRS.Implementations"
 dotnet restore "src\Infrastructure\Skeleton.Dapper"
 dotnet restore "src\Infrastructure\Skeleton.Web.Conventions"
 dotnet restore "src\Infrastructure\Skeleton.Web.Serialization"
@@ -14,6 +15,7 @@ dotnet restore "test\Infrastructure\Skeleton.Dapper.Tests"
 
 dotnet build "src\Infrastructure\Skeleton.Common" -c %1 --no-dependencies
 dotnet build "src\Infrastructure\Skeleton.CQRS.Abstractions" -c %1 --no-dependencies
+dotnet build "src\Infrastructure\Skeleton.CQRS.Implementations" -c %1 --no-dependencies
 dotnet build "src\Infrastructure\Skeleton.Dapper" -c %1 --no-dependencies
 dotnet build "src\Infrastructure\Skeleton.Web.Conventions" -c %1 --no-dependencies
 dotnet build "src\Infrastructure\Skeleton.Web.Serialization" -c %1 --no-dependencies
