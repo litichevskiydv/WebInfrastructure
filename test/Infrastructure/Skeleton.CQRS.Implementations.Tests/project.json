@@ -1,0 +1,32 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "Tests for CQRS pattern implementations",
+  "authors": [ "dmitriy.litichevskiy" ],
+
+  "buildOptions": {
+    "debugType": "portable"
+  },
+
+  "testRunner": "xunit",
+
+  "frameworks": {
+    "netcoreapp1.0": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.0.1"
+        }
+      },
+      "imports": "portable-net45+win8"
+    }
+  },
+
+  "dependencies": {
+    "xunit": "2.2.0-*",
+    "dotnet-test-xunit": "2.2.0-*",
+    "Moq": "4.6.38-alpha",
+    "Microsoft.NETCore.Portable.Compatibility": "1.0.1",
+    "JetBrains.Annotations": "10.1.5",
+    "Skeleton.CQRS.Implementations": "1.0.0-*"
+  }
+}

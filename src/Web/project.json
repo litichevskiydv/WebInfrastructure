@@ -36,8 +36,8 @@
     "Microsoft.Extensions.Configuration.CommandLine": "1.0.0",
     "Autofac": "4.1.0",
     "Autofac.Extensions.DependencyInjection": "4.0.0",
-	"Skeleton.Web": "1.0.0-*",
-	"Web.Application": "1.0.0-*"
+	  "Skeleton.Web": "1.0.0-*",
+	  "Web.Application": "1.0.0-*"
   },
 
   "runtimeOptions": {

@@ -1,0 +1,29 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "Library with abstractions for CQRS pattern",
+  "authors": [ "dmitriy.litichevskiy" ],
+
+  "frameworks": {
+    "netstandard1.6": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.0"
+      },
+      "imports": [
+        "dotnet5.6",
+        "portable-net45+win8"
+      ]
+    }
+  },
+
+  "packOptions": {
+    "summary": "Library with abstractions for CQRS pattern",
+    "tags": [ "CQRS" ],
+    "projectUrl": "https://github.com/litichevskiydv/WebInfrastructure",
+    "licenseUrl": "https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE",
+    "owners": [ "dmitriy.litichevskiy" ],
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/litichevskiydv/WebInfrastructure"
+    }
+  }
+}
