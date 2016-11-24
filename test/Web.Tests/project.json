@@ -20,6 +20,7 @@
   },
 
   "dependencies": {
+    "Microsoft.DotNet.InternalAbstractions": "1.0.0",
     "xunit": "2.2.0-*",
     "dotnet-test-xunit": "2.2.0-*",
     "Skeleton.Web.Testing": "1.0.0-*",
