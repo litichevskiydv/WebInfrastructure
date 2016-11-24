@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "authors": [ "dmitriy.litichevskiy" ],
   
@@ -9,7 +9,7 @@
   "frameworks": {
     "netstandard1.6": {
       "dependencies": {
-        "NETStandard.Library": "1.6.0"
+        "NETStandard.Library": "1.6.1"
       },
       "imports": [
         "dotnet5.6",
@@ -19,8 +19,8 @@
   },
   
   "dependencies": {
-    "Microsoft.AspNetCore.Mvc": "1.0.0",
-    "Microsoft.AspNetCore.Mvc.WebApiCompatShim": "1.0.0",
-    "JetBrains.Annotations": "10.1.5"
+    "Microsoft.AspNetCore.Mvc": "1.1.0",
+    "Microsoft.AspNetCore.Mvc.WebApiCompatShim": "1.1.0",
+    "JetBrains.Annotations": "10.2.1"
   }
 }

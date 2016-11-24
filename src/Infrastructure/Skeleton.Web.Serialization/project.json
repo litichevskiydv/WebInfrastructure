@@ -6,7 +6,7 @@
   "frameworks": {
     "netstandard1.6": {
       "dependencies": {
-        "NETStandard.Library": "1.6.0"
+        "NETStandard.Library": "1.6.1"
       },
       "imports": [
         "dotnet5.6",
@@ -16,7 +16,7 @@
   },
 
   "dependencies": {
-    "Newtonsoft.Json": "9.0.1"
+    "Newtonsoft.Json": "9.0.2-beta1"
   },
 
   "packOptions": {

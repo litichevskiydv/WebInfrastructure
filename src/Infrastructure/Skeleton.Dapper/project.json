@@ -6,13 +6,13 @@
   "frameworks": {
     "netstandard1.6": {
       "dependencies": {
-        "NETStandard.Library": "1.6.0"
+        "NETStandard.Library": "1.6.1"
       }
     }
   },
 
   "dependencies": {
-    "Dapper": "1.50.2"
+    "Dapper": "1.50.3-beta1"
   },
 
   "packOptions": {
