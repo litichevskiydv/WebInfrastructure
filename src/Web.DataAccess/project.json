@@ -1,0 +1,21 @@
+﻿{
+  "version": "1.0.0-*",
+  "authors": [ "dmitriy.litichevskiy" ],
+
+  "frameworks": {
+    "netstandard1.6": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.1"
+      },
+      "imports": [
+        "dotnet5.6",
+        "portable-net45+win8"
+      ]
+    }
+  },
+
+  "dependencies": {
+    "JetBrains.Annotations": "10.2.1",
+    "Skeleton.CQRS.Abstractions": "1.0.0-*"
+  }
+}
