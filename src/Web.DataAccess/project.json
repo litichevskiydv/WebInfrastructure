@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "authors": [ "dmitriy.litichevskiy" ],
 
@@ -16,6 +16,7 @@
 
   "dependencies": {
     "JetBrains.Annotations": "10.2.1",
-    "Skeleton.CQRS.Abstractions": "1.0.0-*"
+    "Skeleton.CQRS.Abstractions": "1.0.0-*",
+    "Web.Domain": "1.0.0-*"
   }
 }
