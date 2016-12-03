@@ -23,5 +23,22 @@
             Assert.NotEmpty((IEnumerable<string>)ApiClient.CurrentState);
             Fixture.Logger.VerifyNoErrors();
         }
+
+        [Fact]
+        public void ShouldSetValue()
+        {
+            // Given
+            const int id = 1;
+            const string expectedValue = "test";
+
+            // When
+            ApiClient
+                .SetValue(id, expectedValue)
+                .GetValue(id);
+
+            // Then
+            Assert.Equal(expectedValue, (string)ApiClient.CurrentState);
+            Fixture.Logger.VerifyNoErrors();
+        }
     }
 }

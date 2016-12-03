@@ -25,5 +25,17 @@
             CurrentState = _valuesServiceClient.Get();
             return this;
         }
+
+        public ApiClient GetValue(int id)
+        {
+            CurrentState = _valuesServiceClient.Get(id);
+            return this;
+        }
+
+        public ApiClient SetValue(int id, string value)
+        {
+            _valuesServiceClient.Set(id, value);
+            return this;
+        }
     }
 }
