@@ -23,6 +23,26 @@
         public Task<IEnumerable<string>> GetAsync()
         {
             return GetAsync<IEnumerable<string>>("api/values");
-        } 
+        }
+
+        public string Get(int id)
+        {
+            return Get<string>($"api/values/{id}");
+        }
+
+        public Task<string> GetAsync(int id)
+        {
+            return GetAsync<string>($"api/values/{id}");
+        }
+
+        public void Set(int id, string value)
+        {
+            Put($"api/values/{id}", value);
+        }
+
+        public Task SetAsync(int id, string value)
+        {
+            return PutAsync($"api/values/{id}", value);
+        }
     }
 }
