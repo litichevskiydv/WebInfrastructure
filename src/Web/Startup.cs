@@ -38,7 +38,7 @@
 
         protected override void RegisterDependencies(ContainerBuilder containerBuilder)
         {
-            containerBuilder.RegisterAssemblyModules(typeof(CommonDependenciesModule).GetTypeInfo().Assembly);
+            containerBuilder.RegisterAssemblyModules(typeof(CommonInstaller).GetTypeInfo().Assembly);
         }
     }
 }

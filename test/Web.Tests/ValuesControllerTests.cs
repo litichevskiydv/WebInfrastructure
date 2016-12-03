@@ -24,5 +24,21 @@
             Assert.NotEmpty(await ServiceClient.GetAsync());
             Fixture.Logger.VerifyNoErrors();
         }
+
+        [Fact]
+        public void ShouldSetValue()
+        {
+            // Given
+            const int id = 1;
+            const string expectedValue = "test";
+
+            // When
+            ServiceClient.Set(id, expectedValue);
+            var actualValue = ServiceClient.Get(id);
+
+            // Then
+            Assert.Equal(expectedValue, actualValue);
+            Fixture.Logger.VerifyNoErrors();
+        }
     }
 }

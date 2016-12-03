@@ -1,11 +1,7 @@
-{
+﻿{
   "version": "1.0.0-*",
   "authors": [ "dmitriy.litichevskiy" ],
-  
-  "buildOptions": {
-    "xmlDoc": true
-  },
-  
+
   "frameworks": {
     "netstandard1.6": {
       "dependencies": {
@@ -19,10 +15,6 @@
   },
 
   "dependencies": {
-    "Microsoft.AspNetCore.Mvc": "1.1.0",
-    "Microsoft.AspNetCore.Mvc.WebApiCompatShim": "1.1.0",
-    "JetBrains.Annotations": "10.2.1",
-    "Skeleton.CQRS.Abstractions": "1.0.0-*",
-    "Web.Domain": "1.0.0-*"
+    "Skeleton.CQRS.Abstractions": "1.0.0-*"
   }
 }

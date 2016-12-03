@@ -17,7 +17,9 @@
         private readonly TimeSpan _timeout;
         private readonly HttpMessageHandler _messageHandler;
 
-        private readonly MediaTypeFormatter _formatter;
+        private readonly MediaTypeFormatter _defaultFormatter;
+        private readonly MediaTypeFormatter[] _supportedFormatters;
+        private readonly string[] _supportedMediaTypes;
 
         private readonly Dictionary<HttpStatusCode, Type> _exceptionsTypesByStatusCodes;
 
@@ -33,7 +35,9 @@
             _baseUrl = configuration.BaseUrl;
             _timeout = TimeSpan.FromMilliseconds(configuration.TimeoutInMilliseconds);
 
-            _formatter = new JsonMediaTypeFormatter {SerializerSettings = configuration.SerializerSettings};
+            _defaultFormatter = new JsonMediaTypeFormatter {SerializerSettings = configuration.SerializerSettings};
+            _supportedFormatters = new[] {new TextMediaTypeFormatter(), _defaultFormatter};
+            _supportedMediaTypes = _supportedFormatters.SelectMany(x => x.SupportedMediaTypes.Select(type => type.MediaType)).ToArray();
 
             _exceptionsTypesByStatusCodes = new Dictionary<HttpStatusCode, Type>
                                             {
@@ -62,15 +66,14 @@
                 httpClient.Timeout = _timeout;
 
                 httpClient.DefaultRequestHeaders.Accept.Clear();
-                httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", _formatter.SupportedMediaTypes.First().MediaType);
-                foreach (var mediaTypeHeaderValue in _formatter.SupportedMediaTypes)
-                    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaTypeHeaderValue.MediaType));
+                foreach (var mediaType in _supportedMediaTypes)
+                    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
                 RequestHeadersConfigurator(httpClient.DefaultRequestHeaders);
 
                 var request = new HttpRequestMessage(method, url);
                 if (method != HttpMethod.Get && data != null)
                     request.Content = data as HttpContent ??
-                                      new ObjectContent(data.GetType(), data, _formatter, _formatter.SupportedMediaTypes.FirstOrDefault());
+                                      new ObjectContent(data.GetType(), data, _defaultFormatter, _defaultFormatter.SupportedMediaTypes.FirstOrDefault());
                 return await httpClient.SendAsync(request).ConfigureAwait(false);
             }
         }
@@ -82,7 +85,7 @@
 
         private async Task<T> ReadAsAsyncWithAwaitConfiguration<T>(HttpContent httpContent)
         {
-            return await httpContent.ReadAsAsync<T>(Enumerable.Repeat(_formatter, 1)).ConfigureAwait(false);
+            return await httpContent.ReadAsAsync<T>(_supportedFormatters).ConfigureAwait(false);
         }
 
         private static T DeserializeWithDefault<T>(string value)

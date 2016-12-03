@@ -8,10 +8,10 @@
     public interface IQuery<in TCriterion, out TResult> where TCriterion : ICriterion
     {
         /// <summary>
-        /// Method for query execution
+        /// Method for criterion execution
         /// </summary>
-        /// <param name="query">Information needed for query execution</param>
+        /// <param name="criterion">Information needed for criterion execution</param>
         /// <returns>Query result</returns>
-        TResult Ask(TCriterion query);
+        TResult Ask(TCriterion criterion);
     }
 }

@@ -6,7 +6,7 @@
     using JetBrains.Annotations;
 
     [UsedImplicitly]
-    public class CommonDependenciesModule : Module
+    public class CommonInstaller : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
