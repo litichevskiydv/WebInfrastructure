@@ -7,6 +7,8 @@ dotnet restore "src\Infrastructure\Skeleton.Web.Serialization"
 dotnet restore "src\Infrastructure\Skeleton.Web.Integration"
 dotnet restore "src\Infrastructure\Skeleton.Web"
 dotnet restore "src\Infrastructure\Skeleton.Web.Testing"
+dotnet restore "src\Web.Domain"
+dotnet restore "src\Web.DataAccess"
 dotnet restore "src\Web.Application"
 dotnet restore "src\Web"
 dotnet restore "src\Web.Client"
@@ -23,6 +25,8 @@ dotnet build "src\Infrastructure\Skeleton.Web.Serialization" -c %1 --no-dependen
 dotnet build "src\Infrastructure\Skeleton.Web.Integration" -c %1 --no-dependencies
 dotnet build "src\Infrastructure\Skeleton.Web" -c %1 --no-dependencies
 dotnet build "src\Infrastructure\Skeleton.Web.Testing" -c %1 --no-dependencies
+dotnet build "src\Web.Domain" -c %1 --no-dependencies
+dotnet build "src\Web.DataAccess" -c %1 --no-dependencies
 dotnet build "src\Web.Application" -c %1 --no-dependencies
 dotnet build "src\Web" -c %1 --no-dependencies
 dotnet build "src\Web.Client" -c %1 --no-dependencies
