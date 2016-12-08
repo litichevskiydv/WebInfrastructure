@@ -29,7 +29,7 @@
         /// Determines whether sequence <paramref name="first"/> equals to sequence <paramref name="second"/>
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of sequences</typeparam>
-        public static bool EqualsByElements<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second)
+        public static bool IsEquals<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second)
         {
             if (ReferenceEquals(first, second))
                 return true;

@@ -42,7 +42,7 @@
                     && Value8.Equals(other.Value8)
                     && Value9.Equals(other.Value9)
                     && Value10.Equals(other.Value10)
-                    && Value12.EqualsByElements(other.Value12)
+                    && Value12.IsEquals(other.Value12)
                     && string.Equals(Value14, other.Value14)
                     && Value15.Equals(other.Value15);
             }
