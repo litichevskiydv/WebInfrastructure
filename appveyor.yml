@@ -21,7 +21,10 @@ build_script:
 
     call build\CreatePackages.bat %CONFIGURATION% alpha-build%APPVEYOR_BUILD_NUMBER%
 test_script:
-- cmd: call build\RunTests.bat %CONFIGURATION%
+- cmd: >-
+    call build\RunTests.bat %CONFIGURATION%
+
+    call build\CalculateCoverage.bat
 artifacts:
 - path: src\Infrastructure\**\*.nupkg
 deploy: off
