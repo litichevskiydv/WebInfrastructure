@@ -3,15 +3,16 @@
   "description": "Library contains base client for integration with WebApi",
   "authors": [ "dmitriy.litichevskiy" ],
 
+  "buildOptions": {
+    "debugType": "portable"
+  },
+
   "frameworks": {
     "netstandard1.6": {
       "dependencies": {
         "NETStandard.Library": "1.6.1"
       },
-      "imports": [
-        "dotnet5.6",
-        "portable-net45+win8"
-      ]
+      "imports": "portable-net45+win8"
     }
   },
 

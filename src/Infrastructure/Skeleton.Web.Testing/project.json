@@ -3,15 +3,16 @@
   "description": "Library with common classes for creation WebApi integration tests",
   "authors": [ "dmitriy.litichevskiy" ],
 
+  "buildOptions": {
+    "debugType": "portable"
+  },
+
   "frameworks": {
     "netstandard1.6": {
       "dependencies": {
         "NETStandard.Library": "1.6.1"
       },
-      "imports": [
-        "dotnet5.6",
-        "portable-net45+win8"
-      ]
+      "imports": "portable-net45+win8"
     }
   },
 
@@ -21,7 +22,7 @@
     "Microsoft.Extensions.Configuration.Json": "1.1.0",
     "Microsoft.Extensions.Configuration.Binder": "1.1.0",
     "Microsoft.AspNetCore.TestHost": "1.1.0",
-    "Moq": "4.6.38-alpha",
+    "Moq": "4.6.38-*",
     "JetBrains.Annotations": "10.2.1",
     "xunit": "2.2.0-*",
     "Skeleton.Web": "1.0.0-*",

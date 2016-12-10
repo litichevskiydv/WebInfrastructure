@@ -3,15 +3,15 @@
   "description": "Library with abstractions for CQRS pattern",
   "authors": [ "dmitriy.litichevskiy" ],
 
+  "buildOptions": {
+    "debugType": "portable"
+  },
+
   "frameworks": {
     "netstandard1.6": {
       "dependencies": {
         "NETStandard.Library": "1.6.1"
-      },
-      "imports": [
-        "dotnet5.6",
-        "portable-net45+win8"
-      ]
+      }
     }
   },
 

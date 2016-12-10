@@ -3,15 +3,16 @@
   "description": "Library with common classes for WebApi creation",
   "authors": [ "dmitriy.litichevskiy" ],
 
+  "buildOptions": {
+    "debugType": "portable"
+  },
+
   "frameworks": {
     "netstandard1.6": {
       "dependencies": {
         "NETStandard.Library": "1.6.1"
       },
-      "imports": [
-        "dotnet5.6",
-        "portable-net45+win8"
-      ]
+      "imports": "portable-net45+win8"
     }
   },
 
@@ -27,7 +28,7 @@
     "Microsoft.Extensions.Configuration.FileExtensions": "1.1.0",
     "Microsoft.Extensions.Configuration.Json": "1.1.0",
     "Microsoft.Extensions.Logging.Console": "1.1.0",
-    "NLog.Extensions.Logging": "1.0.0-rtm-alpha4",
+    "NLog.Extensions.Logging": "1.0.0-*",
     "Swashbuckle": "6.0.0-beta902",
     "Skeleton.Web.Serialization": "1.0.0-*",
     "Skeleton.Web.Conventions": "1.0.0-*"
