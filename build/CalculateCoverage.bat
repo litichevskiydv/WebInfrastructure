@@ -5,7 +5,7 @@ tools\OpenCover\tools\OpenCover.Console.exe -target:"C:\Program Files\dotnet\dot
 tools\OpenCover\tools\OpenCover.Console.exe -target:"C:\Program Files\dotnet\dotnet.exe" -targetargs:" test ""test\Infrastructure\Skeleton.CQRS.Implementations.Tests"" -c Debug" -register:user -filter:"+[Skeleton*]* -[xunit*]*" -threshold:100 -oldstyle -returntargetcode -mergeoutput -output:coverage.xml
 tools\OpenCover\tools\OpenCover.Console.exe -target:"C:\Program Files\dotnet\dotnet.exe" -targetargs:" test ""test\Infrastructure\Skeleton.Dapper.Tests"" -c Debug" -register:user -filter:"+[Skeleton*]* -[xunit*]*" -threshold:100 -oldstyle -returntargetcode -mergeoutput -output:coverage.xml
 cd "test\Web.Tests"
-..\..tools\OpenCover\tools\OpenCover.Console.exe -target:"C:\Program Files\dotnet\dotnet.exe" -targetargs:" test -c Debug" -register:user -filter:"+[Skeleton*]* -[xunit*]*" -threshold:100 -oldstyle -returntargetcode -mergeoutput -output:..\..\coverage.xml
+..\..\tools\OpenCover\tools\OpenCover.Console.exe -target:"C:\Program Files\dotnet\dotnet.exe" -targetargs:" test -c Debug" -register:user -filter:"+[Skeleton*]* -[xunit*]*" -threshold:100 -oldstyle -returntargetcode -mergeoutput -output:..\..\coverage.xml
 cd "..\.."
 
 SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%
