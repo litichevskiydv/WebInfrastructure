@@ -2,7 +2,6 @@
 {
     using System;
     using System.Net;
-    using System.Web.Http;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
@@ -26,25 +25,16 @@
 
         public override void OnException(ExceptionContext context)
         {
-            var httpResponseException = context.Exception as HttpResponseException;
-            if (httpResponseException != null)
-                context.Result = new ResponseMessageResult(httpResponseException.Response)
-                                 {
-                                     StatusCode = (int) httpResponseException.Response.StatusCode
-                                 };
-            else
-            {
-                const string message = "Unhandled exception has occurred";
-                _logger.LogError(0, context.Exception, message);
+            const string message = "Unhandled exception has occurred";
+            _logger.LogError(0, context.Exception, message);
 
-                context.Result = _hostingEnvironment.IsDevelopment() || _hostingEnvironment.IsStaging()
-                    ? new ObjectResult(new ApiErrorResponse(message, context.Exception))
-                      {
-                          DeclaredType = typeof(ApiErrorResponse),
-                          StatusCode = (int) HttpStatusCode.InternalServerError
-                      }
-                    : new ObjectResult(message) {DeclaredType = typeof(string), StatusCode = (int) HttpStatusCode.InternalServerError};
-            }
+            context.Result = _hostingEnvironment.IsDevelopment() || _hostingEnvironment.IsStaging()
+                ? new ObjectResult(new ApiErrorResponse(message, context.Exception))
+                  {
+                      DeclaredType = typeof(ApiErrorResponse),
+                      StatusCode = (int) HttpStatusCode.InternalServerError
+                  }
+                : new ObjectResult(message) {DeclaredType = typeof(string), StatusCode = (int) HttpStatusCode.InternalServerError};
         }
     }
 }
