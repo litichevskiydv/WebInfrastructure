@@ -1,6 +1,7 @@
 ﻿namespace Web.DataAccess.Repositories.Impl
 {
     using System.Collections.Concurrent;
+    using System.Collections.Generic;
     using JetBrains.Annotations;
 
     [UsedImplicitly]
@@ -13,10 +14,9 @@
             _storage = new ConcurrentDictionary<int, TValue>();
         }
 
-        public TValue GetOrDefault(int key)
+        public TValue Get(int key)
         {
-            TValue value;
-            return _storage.TryGetValue(key, out value) ? value : default(TValue);
+            return _storage[key];
         }
 
         public void Set(int key, TValue value)
