@@ -5,7 +5,6 @@
     using Autofac.Extensions.DependencyInjection;
     using Configuration;
     using ExceptionsHandling;
-    using JetBrains.Annotations;
     using Logging;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -49,7 +48,6 @@
 
         protected abstract void RegisterDependencies(ContainerBuilder containerBuilder);
 
-        [UsedImplicitly]
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services
@@ -89,7 +87,6 @@
             return app;
         }
 
-        [UsedImplicitly]
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             AddLoggerProviders(loggerFactory.AddConsole(Configuration.GetSection("Logging")));

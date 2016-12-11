@@ -19,7 +19,6 @@
   "dependencies": {
     "Microsoft.AspNet.WebApi.Client": "5.2.3",
     "System.Dynamic.Runtime": "4.3.0",
-    "JetBrains.Annotations": "10.2.1",
     "Skeleton.Web.Serialization": "1.0.0-*",
     "Skeleton.Web.Conventions": "1.0.0-*"
   },

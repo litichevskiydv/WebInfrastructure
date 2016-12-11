@@ -11,15 +11,13 @@
     "netstandard1.6": {
       "dependencies": {
         "NETStandard.Library": "1.6.1"
-      },
-      "imports": "portable-net45+win8"
+      }
     }
   },
 
   "dependencies": {
     "Autofac": "4.2.1",
     "Autofac.Extensions.DependencyInjection": "4.0.0",
-    "JetBrains.Annotations": "10.2.1",
     "Microsoft.AspNetCore.Mvc": "1.1.0",
     "Microsoft.Extensions.Configuration": "1.1.0",
     "Microsoft.Extensions.Configuration.Binder": "1.1.0",

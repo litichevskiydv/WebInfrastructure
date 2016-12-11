@@ -3,14 +3,12 @@
     using System;
     using System.IO;
     using Configuration;
-    using JetBrains.Annotations;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.TestHost;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
     using Moq;
 
-    [UsedImplicitly]
     public abstract class BaseApiTestsFixture : IDisposable
     {
         public TestServer Server { get; }
@@ -53,7 +51,6 @@
         }
     }
 
-    [UsedImplicitly]
     public class BaseApiTestsFixture<TStartup> : BaseApiTestsFixture where TStartup : WebApiBaseStartup
     {
         public BaseApiTestsFixture() : base(typeof(TStartup))
