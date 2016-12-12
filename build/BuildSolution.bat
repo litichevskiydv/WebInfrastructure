@@ -15,6 +15,7 @@ dotnet restore "src\Web.Client"
 dotnet restore "test\Infrastructure\Skeleton.Common.Tests"
 dotnet restore "test\Infrastructure\Skeleton.CQRS.Implementations.Tests"
 dotnet restore "test\Infrastructure\Skeleton.Dapper.Tests"
+dotnet restore "test\Infrastructure\Skeleton.Web.Tests"
 dotnet restore "test\Web.Tests"
 
 dotnet build "src\Infrastructure\Skeleton.Common" -c %1 --no-dependencies
@@ -34,4 +35,5 @@ dotnet build "src\Web.Client" -c %1 --no-dependencies
 dotnet build "test\Infrastructure\Skeleton.Common.Tests" -c %1 --no-dependencies
 dotnet build "test\Infrastructure\Skeleton.CQRS.Implementations.Tests" -c %1 --no-dependencies
 dotnet build "test\Infrastructure\Skeleton.Dapper.Tests" -c %1 --no-dependencies
+dotnet build "test\Infrastructure\Skeleton.Web.Tests" -c %1 --no-dependencies
 dotnet build "test\Web.Tests" -c %1 --no-dependencies
