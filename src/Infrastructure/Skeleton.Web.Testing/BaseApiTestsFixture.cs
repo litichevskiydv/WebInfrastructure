@@ -26,7 +26,7 @@
 
             var environment = Environment.GetEnvironmentVariable("Hosting:Environment")
                               ?? Environment.GetEnvironmentVariable("ASPNET_ENV")
-                              ?? "Development";
+                              ?? EnvironmentName.Development;
             var currentDirectory = Directory.GetCurrentDirectory();
 
             Server = new TestServer(
