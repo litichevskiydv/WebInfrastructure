@@ -1,8 +1,9 @@
 {
   "version": "1.0.0-*",
   "authors": [ "dmitriy.litichevskiy" ],
-  
+
   "buildOptions": {
+    "debugType": "portable",
     "xmlDoc": true
   },
   
@@ -11,10 +12,7 @@
       "dependencies": {
         "NETStandard.Library": "1.6.1"
       },
-      "imports": [
-        "dotnet5.6",
-        "portable-net45+win8"
-      ]
+      "imports": "portable-net45+win8"
     }
   },
 

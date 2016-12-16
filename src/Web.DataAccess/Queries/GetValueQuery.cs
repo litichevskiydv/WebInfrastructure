@@ -21,7 +21,7 @@
 
         public string Ask(GetValueQueryCriterion criterion)
         {
-            return _repository.GetOrDefault(criterion.Key);
+            return _repository.Get(criterion.Key);
         }
     }
 }

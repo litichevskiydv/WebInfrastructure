@@ -1,6 +1,8 @@
 ﻿namespace Web.Tests
 {
+    using System.Collections.Generic;
     using Client.ServicesClients;
+    using Skeleton.Web.Integration.Exceptions;
     using Skeleton.Web.Testing;
     using Skeleton.Web.Testing.Extensions;
     using Xunit;
@@ -39,6 +41,44 @@
             // Then
             Assert.Equal(expectedValue, actualValue);
             Fixture.Logger.VerifyNoErrors();
+        }
+
+        [Fact]
+        public async void ShouldSetValueAsync()
+        {
+            // Given
+            const int id = 1;
+            const string expectedValue = "test";
+
+            // When
+            await ServiceClient.SetAsync(id, expectedValue);
+            var actualValue = await ServiceClient.GetAsync(id);
+
+            // Then
+            Assert.Equal(expectedValue, actualValue);
+            Fixture.Logger.VerifyNoErrors();
+        }
+
+        [Fact]
+        public void ShouldThrowExceptionWhileGettingValueByNonexistentKey()
+        {
+            // Given
+            const int id = 2;
+
+            // When, Then
+            Assert.Throws<ApiException>(() => ServiceClient.Get(id));
+            Fixture.Logger.VerifyErrorWasLogged<KeyNotFoundException>();
+        }
+
+        [Fact]
+        public async void ShouldThrowExceptionWhileGettingValueByNonexistentKeyAsync()
+        {
+            // Given
+            const int id = 2;
+
+            // When, Then
+            await Assert.ThrowsAsync<ApiException>(async () => await ServiceClient.GetAsync(id));
+            Fixture.Logger.VerifyErrorWasLogged<KeyNotFoundException>();
         }
     }
 }

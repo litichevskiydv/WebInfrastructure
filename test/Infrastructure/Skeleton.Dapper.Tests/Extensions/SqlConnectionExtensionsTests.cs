@@ -57,7 +57,7 @@
         {
             // When
             TestEntity[] actual;
-            using (var connection = GetConnection())
+            using (var connection = SqlConnectionsFactoryMethod())
             {
                 connection.Execute(@"create table #TestEntities (Id int identity(1, 1) not null, Name nvarchar(max) not null, Value int not null)");
                 connection.BulkInsert("#TestEntities", expected);

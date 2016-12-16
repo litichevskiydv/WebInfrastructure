@@ -108,7 +108,7 @@
         {
             // When
             TestEntityWithAllTypes[] actual;
-            using (var connection = GetConnection())
+            using (var connection = ConnectionsFactory.Create())
             {
                 connection.Execute(@"
 if type_id (N'[dbo].[TestListWithAllTypes]') is null

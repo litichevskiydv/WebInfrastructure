@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using Client;
+    using Skeleton.Web.Integration.Exceptions;
     using Skeleton.Web.Testing;
     using Skeleton.Web.Testing.Extensions;
     using Xunit;
@@ -39,6 +40,17 @@
             // Then
             Assert.Equal(expectedValue, (string)ApiClient.CurrentState);
             Fixture.Logger.VerifyNoErrors();
+        }
+
+        [Fact]
+        public void ShouldThrowExceptionWhileGettingValueByNonexistentKey()
+        {
+            // Given
+            const int id = 2;
+
+            // When, Then
+            Assert.Throws<ApiException>(() => ApiClient.GetValue(id));
+            Fixture.Logger.VerifyErrorWasLogged<KeyNotFoundException>();
         }
     }
 }

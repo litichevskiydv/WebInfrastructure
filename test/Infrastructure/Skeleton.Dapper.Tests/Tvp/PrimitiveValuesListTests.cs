@@ -41,7 +41,7 @@
         {
             // When
             int[] actual;
-            using (var connection = GetConnection())
+            using (var connection = ConnectionsFactory.Create())
             {
                 connection.Execute(@"
 if type_id (N'[dbo].[Int32ValuesList]') is null
@@ -63,7 +63,7 @@ select [Value] from @Param",
         {
             // When
             long[] actual;
-            using (var connection = GetConnection())
+            using (var connection = ConnectionsFactory.Create())
             {
                 connection.Execute(@"
 if type_id (N'[dbo].[Int64ValuesList]') is null
@@ -85,7 +85,7 @@ select [Value] from @Param",
         {
             // When
             decimal[] actual;
-            using (var connection = GetConnection())
+            using (var connection = ConnectionsFactory.Create())
             {
                 connection.Execute(@"
 if type_id (N'[dbo].[DecimalValuesList]') is null
