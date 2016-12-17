@@ -15,7 +15,7 @@
         public BaseApiClientTests(TFixture fixture)
         {
             Fixture = fixture;
-            Fixture.Logger.ResetCalls();
+            Fixture.MockLogger.ResetCalls();
 
             ApiClient = (TApiClient)Activator.CreateInstance(typeof(TApiClient),
                 new ClientConfiguration

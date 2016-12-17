@@ -17,7 +17,6 @@
     public class UnhandledExceptionsLoggingMiddlewareTests
     {
         private readonly Mock<ILogger> _mockLogger;
-        private readonly Mock<ILoggerFactory> _mockLoggerFactory;
 
         [UsedImplicitly]
         public static IEnumerable<object[]> EnvironmentsWhereExceptionDetailAvailable;
@@ -34,17 +33,14 @@
 
         public UnhandledExceptionsLoggingMiddlewareTests()
         {
-            _mockLogger = new Mock<ILogger>();
-            _mockLogger.Setup(x => x.IsEnabled(It.IsAny<LogLevel>())).Returns(true);
-            _mockLoggerFactory = new Mock<ILoggerFactory>();
-            _mockLoggerFactory.Setup(x => x.CreateLogger(It.IsAny<string>())).Returns(_mockLogger.Object);
+            _mockLogger = MockLoggerExtensions.CreateMockLogger();
         }
 
         private IWebHostBuilder ConfigureHost(string environmentName)
         {
             return new WebHostBuilder()
                 .UseEnvironment(environmentName)
-                .UseLoggerFactory(_mockLoggerFactory.Object)
+                .UseMockLogger(_mockLogger)
                 .Configure(app =>
                            {
                                app.UseUnhandledExceptionsLoggingMiddleware();

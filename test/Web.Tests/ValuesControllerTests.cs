@@ -17,14 +17,14 @@
         public void ShouldReturnValues()
         {
             Assert.NotEmpty(ServiceClient.Get());
-            Fixture.Logger.VerifyNoErrors();
+            Fixture.MockLogger.VerifyNoErrors();
         }
 
         [Fact]
         public async void ShouldReturnValuesAsync()
         {
             Assert.NotEmpty(await ServiceClient.GetAsync());
-            Fixture.Logger.VerifyNoErrors();
+            Fixture.MockLogger.VerifyNoErrors();
         }
 
         [Fact]
@@ -40,7 +40,7 @@
 
             // Then
             Assert.Equal(expectedValue, actualValue);
-            Fixture.Logger.VerifyNoErrors();
+            Fixture.MockLogger.VerifyNoErrors();
         }
 
         [Fact]
@@ -56,7 +56,7 @@
 
             // Then
             Assert.Equal(expectedValue, actualValue);
-            Fixture.Logger.VerifyNoErrors();
+            Fixture.MockLogger.VerifyNoErrors();
         }
 
         [Fact]
@@ -67,7 +67,7 @@
 
             // When, Then
             Assert.Throws<ApiException>(() => ServiceClient.Get(id));
-            Fixture.Logger.VerifyErrorWasLogged<KeyNotFoundException>();
+            Fixture.MockLogger.VerifyErrorWasLogged<KeyNotFoundException>();
         }
 
         [Fact]
@@ -78,7 +78,7 @@
 
             // When, Then
             await Assert.ThrowsAsync<ApiException>(async () => await ServiceClient.GetAsync(id));
-            Fixture.Logger.VerifyErrorWasLogged<KeyNotFoundException>();
+            Fixture.MockLogger.VerifyErrorWasLogged<KeyNotFoundException>();
         }
     }
 }

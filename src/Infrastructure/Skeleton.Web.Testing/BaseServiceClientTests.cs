@@ -15,7 +15,7 @@
         protected BaseServiceClientTests(TFixture fixture)
         {
             Fixture = fixture;
-            Fixture.Logger.ResetCalls();
+            Fixture.MockLogger.ResetCalls();
 
             ServiceClient = (TServiceClient) Activator.CreateInstance(typeof(TServiceClient),
                 Fixture.Server.CreateHandler(),

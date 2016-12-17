@@ -22,7 +22,7 @@
 
             // Then
             Assert.NotEmpty((IEnumerable<string>)ApiClient.CurrentState);
-            Fixture.Logger.VerifyNoErrors();
+            Fixture.MockLogger.VerifyNoErrors();
         }
 
         [Fact]
@@ -39,7 +39,7 @@
 
             // Then
             Assert.Equal(expectedValue, (string)ApiClient.CurrentState);
-            Fixture.Logger.VerifyNoErrors();
+            Fixture.MockLogger.VerifyNoErrors();
         }
 
         [Fact]
@@ -50,7 +50,7 @@
 
             // When, Then
             Assert.Throws<ApiException>(() => ApiClient.GetValue(id));
-            Fixture.Logger.VerifyErrorWasLogged<KeyNotFoundException>();
+            Fixture.MockLogger.VerifyErrorWasLogged<KeyNotFoundException>();
         }
     }
 }
