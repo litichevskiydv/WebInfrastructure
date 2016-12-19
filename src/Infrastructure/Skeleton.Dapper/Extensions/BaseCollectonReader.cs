@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.Common;
 using System.Linq;
 using System.Reflection;
@@ -13,8 +14,6 @@ namespace Skeleton.Dapper.Extensions
         private readonly IEnumerator<object> _collectionEnumerator;
         private bool _disposed;
 
-        private readonly Dictionary<string, int> _propertiesIndicesByNames;
-
         private readonly IPropertyInfoProvider _propertyInfoProvider;
 
         public BaseCollectonReader(IReadOnlyCollection<object> collection, IPropertyInfoProvider propertyInfoProvider)
@@ -23,7 +22,6 @@ namespace Skeleton.Dapper.Extensions
 
             _collectionEnumerator = collection.GetEnumerator();
             HasRows = collection.Count > 0;
-            _propertiesIndicesByNames = _propertyInfoProvider.GetPropertiesIndicesByNames();
         }
 
         public override int Depth => 0;
@@ -39,10 +37,7 @@ namespace Skeleton.Dapper.Extensions
 
         public override int GetOrdinal(string name)
         {
-            int index;
-            if (_propertiesIndicesByNames.TryGetValue(name, out index) == false)
-                throw new IndexOutOfRangeException();
-            return index;
+            return _propertyInfoProvider.GetOrdinal(name);
         }
 
         public override string GetName(int ordinal)
@@ -77,7 +72,10 @@ namespace Skeleton.Dapper.Extensions
 
         public override int GetValues(object[] values)
         {
-            return _propertyInfoProvider.GetValues(values);
+            var valuesCount = Math.Min(values.Length, FieldCount);
+            for (var i = 0; i < valuesCount; i++)
+                values[i] = GetValue(i);
+            return valuesCount;
         }
 
         public override object GetValue(int ordinal)
