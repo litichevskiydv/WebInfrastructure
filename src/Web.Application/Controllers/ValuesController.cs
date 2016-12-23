@@ -9,6 +9,7 @@
     using Services;
     using Skeleton.CQRS.Abstractions.Commands;
     using Skeleton.CQRS.Abstractions.Queries;
+    using Skeleton.Web.ExceptionsHandling;
 
     /// <summary>
     /// Endpoint for configuration values

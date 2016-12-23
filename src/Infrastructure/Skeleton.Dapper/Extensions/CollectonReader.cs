@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data.Common;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Skeleton.Dapper.Extensions
 {
-    public class BaseCollectonReader : DbDataReader
+    public class CollectonReader : DbDataReader
     {
         private readonly IEnumerator<object> _collectionEnumerator;
         private bool _disposed;
 
         private readonly IPropertyInfoProvider _propertyInfoProvider;
 
-        public BaseCollectonReader(IReadOnlyCollection<object> collection, IPropertyInfoProvider propertyInfoProvider)
+        public CollectonReader(IReadOnlyCollection<object> collection, IPropertyInfoProvider propertyInfoProvider)
         {
             _propertyInfoProvider = propertyInfoProvider;
 
@@ -42,7 +38,7 @@ namespace Skeleton.Dapper.Extensions
 
         public override string GetName(int ordinal)
         {
-            return _propertyInfoProvider.GetName(ordinal); //_itemProperties[ordinal].Name;
+            return _propertyInfoProvider.GetName(ordinal);
         }
 
         public override Type GetFieldType(int ordinal)

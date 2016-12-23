@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace Skeleton.Dapper.Extensions
+namespace Skeleton.Dapper.Extensions.PropertyInfoProviders
 {
     public class ExpandoObjectPropertyInfoProvider : IPropertyInfoProvider
     {
@@ -14,6 +12,9 @@ namespace Skeleton.Dapper.Extensions
 
         public ExpandoObjectPropertyInfoProvider(IDictionary<string, object> properties)
         {
+            if (properties == null || properties.Count == 0)
+                throw new InvalidOperationException("Cannot collect properties from object");
+
             _itemProperties = properties;
             var tmp = _itemProperties.Select(x => new { x.Key }).ToList();
             for (int i = 0; i < tmp.Count; i++)

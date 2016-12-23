@@ -1,4 +1,8 @@
-﻿namespace Skeleton.Dapper.Tests.Extensions
+﻿using System;
+using System.Dynamic;
+using Skeleton.Dapper.Extensions.PropertyInfoProviders;
+
+namespace Skeleton.Dapper.Tests.Extensions
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -18,6 +22,7 @@
 
             public int Value { get; set; }
 
+
             protected bool Equals(TestEntity other)
             {
                 return string.Equals(Name, other.Name) && Value == other.Value;
@@ -27,7 +32,7 @@
             {
                 if (ReferenceEquals(null, obj)) return false;
                 if (ReferenceEquals(this, obj)) return true;
-                return obj.GetType() == GetType() && Equals((TestEntity) obj);
+                return obj.GetType() == GetType() && Equals((TestEntity)obj);
             }
         }
 
@@ -60,12 +65,88 @@
             using (var connection = SqlConnectionsFactoryMethod())
             {
                 connection.Execute(@"create table #TestEntities (Id int identity(1, 1) not null, Name nvarchar(max) not null, Value int not null)");
-                connection.BulkInsert("#TestEntities", expected);
+                connection.BulkInsert("#TestEntities", expected, new StrictTypePropertyInfoProvider<TestEntity>());
                 actual = connection.Query<TestEntity>("select * from #TestEntities").ToArray();
             }
 
             // Then
             Assert.Equal(expected, actual);
         }
+
+
+
+        [Fact]
+        public void StrictTypePropertyInfoProviderTest()
+        {
+            var expected = new TestEntity { Name = "First", Value = 1, Id = 1 };
+
+            IPropertyInfoProvider provider = new StrictTypePropertyInfoProvider<TestEntity>();
+
+            Assert.Equal(3, provider.FieldCount);
+            Assert.Equal("Int32", provider.GetDataTypeName(0));
+            Assert.Equal("Name", provider.GetName(1));
+            Assert.Equal(typeof(int), provider.GetFieldType(2));
+            Assert.Equal(0, provider.GetOrdinal("Id"));
+            Assert.Equal("First", provider.GetValue(1, expected));
+        }
+
+        [Fact]
+        public void SimpleTypePropertyInfoProviderFailTest()
+        {
+            Assert.Throws<InvalidOperationException>(() => new StrictTypePropertyInfoProvider<object>());
+        }
+
+        [Fact]
+        public void ExpandoObjectPropertyInfoProviderTest()
+        {
+            dynamic expected = new ExpandoObject();
+            expected.Id = 1;
+            expected.Name = "First";
+            expected.Value = 5;
+
+            IPropertyInfoProvider provider = new ExpandoObjectPropertyInfoProvider(expected);
+
+            Assert.Equal(3, provider.FieldCount);
+            Assert.Equal("Int32", provider.GetDataTypeName(0));
+            Assert.Equal("Name", provider.GetName(1));
+            Assert.Equal(typeof(int), provider.GetFieldType(2));
+            Assert.Equal(0, provider.GetOrdinal("Id"));
+            Assert.Equal("First", provider.GetValue(1, expected));
+        }
+
+        [Fact]
+        public void NullExpandoObjectPropertyInfoProviderFailTest()
+        {
+            Assert.Throws<InvalidOperationException>(() => new ExpandoObjectPropertyInfoProvider(new ExpandoObject()));
+        }
+
+        [Fact]
+        public void ShouldPerformObjectExpandoBulkInsert()
+        {
+            dynamic item1 = new ExpandoObject();
+            item1.Id = 1;
+            item1.Name = "First";
+            item1.Value = 5;
+
+            dynamic item2 = new ExpandoObject();
+            item2.Id = 2;
+            item2.Name = "Second";
+            item2.Value = 10;
+
+            var expected = new List<ExpandoObject>() { item1, item2 };
+
+            // When
+            dynamic[] actual;
+            using (var connection = SqlConnectionsFactoryMethod())
+            {
+                connection.Execute(@"create table #TestEntities (Id int identity(1, 1) not null, Name nvarchar(max) not null, Value int not null)");
+                connection.BulkInsert("#TestEntities", expected, new ExpandoObjectPropertyInfoProvider(item1));
+                actual = connection.Query("select * from #TestEntities").ToArray();
+            }
+            // Then
+            Assert.Equal(expected, actual);
+        }
+
+
     }
 }
