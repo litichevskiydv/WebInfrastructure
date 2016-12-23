@@ -4,8 +4,15 @@
     using Microsoft.Extensions.Logging;
     using Moq;
 
-    public static class MockExtensions
+    public static class MockLoggerExtensions
     {
+        public static Mock<ILogger> CreateMockLogger()
+        {
+            var mockLogger = new Mock<ILogger>();
+            mockLogger.Setup(x => x.IsEnabled(It.IsAny<LogLevel>())).Returns(true);
+            return mockLogger;
+        }
+
         public static void VerifyNoErrors(this Mock<ILogger> mockLogger)
         {
             mockLogger.Verify(
