@@ -73,8 +73,6 @@ namespace Skeleton.Dapper.Tests.Extensions
             Assert.Equal(expected, actual);
         }
 
-
-
         [Fact]
         public void StrictTypePropertyInfoProviderTest()
         {
