@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Reflection;
     using Configuration;
     using Extensions;
     using Microsoft.AspNetCore.Hosting;
@@ -25,7 +26,7 @@
             var environment = Environment.GetEnvironmentVariable("Hosting:Environment")
                               ?? Environment.GetEnvironmentVariable("ASPNET_ENV")
                               ?? EnvironmentName.Development;
-            var currentDirectory = Directory.GetCurrentDirectory();
+            var currentDirectory = Path.GetDirectoryName(startupType.GetTypeInfo().Assembly.Location);
 
             Server = new TestServer(
                          new WebHostBuilder()
