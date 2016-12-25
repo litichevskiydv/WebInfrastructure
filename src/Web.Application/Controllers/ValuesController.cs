@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Domain.CommandContexts;
     using Domain.Criteria;
     using Microsoft.AspNetCore.Mvc;
@@ -94,8 +95,10 @@
         /// </summary>
         /// <param name="id">Configuration value index</param>
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
+            _logger.LogInformation("Delete value request");
+            await _commandsDispatcher.ExecuteAsync(new DeleteValueAsyncCommandContext(id));
         }
     }
 }

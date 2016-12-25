@@ -1,7 +1,6 @@
 ﻿namespace Web.DataAccess.Repositories.Impl
 {
     using System.Collections.Concurrent;
-    using System.Collections.Generic;
     using JetBrains.Annotations;
 
     [UsedImplicitly]
@@ -22,6 +21,12 @@
         public void Set(int key, TValue value)
         {
             _storage.AddOrUpdate(key, value, (k, v) => value);
+        }
+
+        public void Delete(int key)
+        {
+            TValue value;
+            _storage.TryRemove(key, out value);
         }
     }
 }

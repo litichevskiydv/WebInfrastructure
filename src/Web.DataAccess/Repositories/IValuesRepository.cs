@@ -17,5 +17,11 @@
         /// <param name="key">Storage key</param>
         /// <param name="value">Value for key</param>
         void Set(int key, TValue value);
+
+        /// <summary>
+        /// Delete value by key from storage
+        /// </summary>
+        /// <param name="key">Storage key</param>
+        void Delete(int key);
     }
 }

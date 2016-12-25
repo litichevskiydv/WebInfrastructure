@@ -37,5 +37,11 @@
             _valuesServiceClient.Set(id, value);
             return this;
         }
+
+        public ApiClient DeleteValue(int id)
+        {
+            _valuesServiceClient.Delete(id);
+            return this;
+        }
     }
 }

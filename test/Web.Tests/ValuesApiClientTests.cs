@@ -52,5 +52,21 @@
             Assert.Throws<ApiException>(() => ApiClient.GetValue(id));
             Fixture.MockLogger.VerifyErrorWasLogged<KeyNotFoundException>();
         }
+
+        [Fact]
+        public void ShouldDeleteValue()
+        {
+            // Given
+            const int id = 2;
+
+            // When
+            ApiClient
+                .SetValue(id, "test")
+                .DeleteValue(id);
+
+            // When, Then
+            Assert.Throws<ApiException>(() => ApiClient.GetValue(id));
+            Fixture.MockLogger.VerifyErrorWasLogged<KeyNotFoundException>();
+        }
     }
 }

@@ -44,5 +44,15 @@
         {
             return PutAsync($"api/values/{id}", value);
         }
+
+        public void Delete(int id)
+        {
+            Delete($"api/values/{id}");
+        }
+
+        public Task DeleteAsync(int id)
+        {
+            return DeleteAsync($"api/values/{id}");
+        }
     }
 }

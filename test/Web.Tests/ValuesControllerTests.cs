@@ -60,6 +60,36 @@
         }
 
         [Fact]
+        public void ShouldDeleteValue()
+        {
+            // Given
+            const int id = 1;
+
+            // When
+            ServiceClient.Set(id, "test");
+            ServiceClient.Delete(id);
+
+            // Then
+            Assert.Throws<ApiException>(() => ServiceClient.Get(id));
+            Fixture.MockLogger.VerifyErrorWasLogged<KeyNotFoundException>();
+        }
+
+        [Fact]
+        public async void ShouldDeleteValueAsync()
+        {
+            // Given
+            const int id = 1;
+
+            // When
+            await ServiceClient.SetAsync(id, "test");
+            await ServiceClient.DeleteAsync(id);
+
+            // Then
+            Assert.Throws<ApiException>(() => ServiceClient.Get(id));
+            Fixture.MockLogger.VerifyErrorWasLogged<KeyNotFoundException>();
+        }
+
+        [Fact]
         public void ShouldThrowExceptionWhileGettingValueByNonexistentKey()
         {
             // Given
