@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Net;
     using System.Threading.Tasks;
     using Domain.CommandContexts;
     using Domain.Criteria;
@@ -10,6 +11,7 @@
     using Services;
     using Skeleton.CQRS.Abstractions.Commands;
     using Skeleton.CQRS.Abstractions.Queries;
+    using Skeleton.Web.Conventions.Responses;
 
     /// <summary>
     /// Endpoint for configuration values
@@ -70,12 +72,25 @@
         }
 
         /// <summary>
-        /// Dummy post configuration value to config
+        /// Dummy validate and post configuration value to config
         /// </summary>
+        /// <param name="id">Configuration value index</param>
         /// <param name="value">New value</param>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("{id}")]
+        [Produces(typeof(ApiResponse<int>))]
+        public IActionResult Post(int id, [FromBody] string value)
         {
+            _logger.LogInformation("Validation and post value request");
+
+            if (id < 0)
+                return new ObjectResult(ApiResponse.Error(new[] {new ApiResponseError {Code = "01", Title = "Id shouldn't be negative"}}))
+                       {
+                           StatusCode = (int) HttpStatusCode.BadRequest,
+                           DeclaredType = typeof(ApiResponse<object>)
+                       };
+
+            _commandsDispatcher.Execute(new SetValueCommandContext(id, value));
+            return new OkObjectResult(ApiResponse.Success(id)) {DeclaredType = typeof(ApiResponse<int>)};
         }
 
         /// <summary>

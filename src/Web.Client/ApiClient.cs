@@ -38,6 +38,12 @@
             return this;
         }
 
+        public ApiClient PostValue(int id, string value)
+        {
+            CurrentState = _valuesServiceClient.Post(id, value);
+            return this;
+        }
+
         public ApiClient DeleteValue(int id)
         {
             _valuesServiceClient.Delete(id);

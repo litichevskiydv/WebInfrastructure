@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Net.Http;
     using System.Threading.Tasks;
+    using Skeleton.Web.Conventions.Responses;
     using Skeleton.Web.Integration;
 
     public class ValuesServiceClient : BaseClient
@@ -43,6 +44,16 @@
         public Task SetAsync(int id, string value)
         {
             return PutAsync($"api/values/{id}", value);
+        }
+
+        public ApiResponse<int> Post(int id, string value)
+        {
+            return Post<ApiResponse<int>>($"api/values/{id}", value);
+        }
+
+        public Task<ApiResponse<int>> PostAsync(int id, string value)
+        {
+            return PostAsync<ApiResponse<int>>($"api/values/{id}", value);
         }
 
         public void Delete(int id)
