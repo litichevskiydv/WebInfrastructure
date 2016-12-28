@@ -65,7 +65,7 @@ namespace Skeleton.Dapper.Tests.Extensions
             using (var connection = SqlConnectionsFactoryMethod())
             {
                 connection.Execute(@"create table #TestEntities (Id int identity(1, 1) not null, Name nvarchar(max) not null, Value int not null)");
-                connection.BulkInsert("#TestEntities", expected, new StrictTypePropertyInfoProvider<TestEntity>());
+                connection.BulkInsert("#TestEntities", expected, new StrictTypePropertyInfoProvider(typeof(TestEntity)));
                 actual = connection.Query<TestEntity>("select * from #TestEntities").ToArray();
             }
 
@@ -78,7 +78,7 @@ namespace Skeleton.Dapper.Tests.Extensions
         {
             var expected = new TestEntity { Name = "First", Value = 1, Id = 1 };
 
-            IPropertyInfoProvider provider = new StrictTypePropertyInfoProvider<TestEntity>();
+            IPropertyInfoProvider provider = new StrictTypePropertyInfoProvider(typeof(TestEntity));
 
             Assert.Equal(3, provider.FieldCount);
             Assert.Equal("Int32", provider.GetDataTypeName(0));
@@ -91,7 +91,7 @@ namespace Skeleton.Dapper.Tests.Extensions
         [Fact]
         public void SimpleTypePropertyInfoProviderFailTest()
         {
-            Assert.Throws<InvalidOperationException>(() => new StrictTypePropertyInfoProvider<object>());
+            Assert.Throws<InvalidOperationException>(() => new StrictTypePropertyInfoProvider(typeof(object)));
         }
 
         [Fact]
@@ -144,6 +144,27 @@ namespace Skeleton.Dapper.Tests.Extensions
             // Then
             Assert.Equal(expected, actual);
         }
+
+        [Fact]
+        public void ShouldPerformDynamicObjectExpandoBulkInsert()
+        {
+            dynamic expected = new { Id = 1, Name = "First", Value = 5 };
+
+            // When
+            dynamic actual;
+            using (var connection = SqlConnectionsFactoryMethod())
+            {
+                connection.Execute(@"create table #TestEntities (Id int identity(1, 1) not null, Name nvarchar(max) not null, Value int not null)");
+                connection.BulkInsert("#TestEntities", new [] { expected });
+                actual = connection.Query("select * from #TestEntities").Single();
+            }
+            // Then
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.Value, actual.Value);
+        }
+
+
 
 
     }

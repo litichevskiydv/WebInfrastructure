@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Skeleton.Dapper.Extensions.PropertyInfoProviders
 {
@@ -16,11 +17,11 @@ namespace Skeleton.Dapper.Extensions.PropertyInfoProviders
                 throw new InvalidOperationException("Cannot collect properties from object");
 
             _itemProperties = properties;
-            var tmp = _itemProperties.Select(x => new { x.Key }).ToList();
+            var tmp = _itemProperties.Keys.ToList();
             for (int i = 0; i < tmp.Count; i++)
             {
-                _propertiesIndicesByNames.Add(tmp[i].Key, i);
-                _propertiesKeyIndices.Add(i, tmp[i].Key);
+                _propertiesIndicesByNames.Add(tmp[i], i);
+                _propertiesKeyIndices.Add(i, tmp[i]);
             }
         }
 

@@ -5,13 +5,13 @@ using System.Reflection;
 
 namespace Skeleton.Dapper.Extensions.PropertyInfoProviders
 {
-    public class StrictTypePropertyInfoProvider<TSource> : IPropertyInfoProvider where TSource : class
+    public class StrictTypePropertyInfoProvider : IPropertyInfoProvider //where TSource : class
     {
         private readonly PropertyInfo[] _itemProperties;
         private readonly Dictionary<string, int> _propertiesIndicesByNames;
-        public StrictTypePropertyInfoProvider()
+        public StrictTypePropertyInfoProvider(Type type)
         {
-            _itemProperties = typeof(TSource).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            _itemProperties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             if (_itemProperties == null || !_itemProperties.Any())
                 throw new InvalidOperationException("Cannot collect properties from object");
             _propertiesIndicesByNames = _itemProperties
