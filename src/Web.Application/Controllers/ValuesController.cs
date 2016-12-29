@@ -11,11 +11,7 @@
     using Services;
     using Skeleton.CQRS.Abstractions.Commands;
     using Skeleton.CQRS.Abstractions.Queries;
-<<<<<<< HEAD
-    using Skeleton.Web.ExceptionsHandling;
-=======
     using Skeleton.Web.Conventions.Responses;
->>>>>>> refs/remotes/litichevskiydv/master
 
     /// <summary>
     /// Endpoint for configuration values
