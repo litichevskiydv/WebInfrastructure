@@ -22,6 +22,10 @@
     "JetBrains.Annotations": "10.2.1",
     "Skeleton.CQRS.Abstractions": "1.0.0-*",
     "Web.Domain": "1.0.0-*",
+<<<<<<< HEAD
     "Skeleton.Web": "1.0.0-*"
+=======
+    "Skeleton.Web.Conventions": "1.0.0-*"
+>>>>>>> refs/remotes/litichevskiydv/master
   }
 }

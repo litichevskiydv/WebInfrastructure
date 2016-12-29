@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Net;
+    using System.Threading.Tasks;
     using Domain.CommandContexts;
     using Domain.Criteria;
     using Microsoft.AspNetCore.Mvc;
@@ -9,7 +11,11 @@
     using Services;
     using Skeleton.CQRS.Abstractions.Commands;
     using Skeleton.CQRS.Abstractions.Queries;
+<<<<<<< HEAD
     using Skeleton.Web.ExceptionsHandling;
+=======
+    using Skeleton.Web.Conventions.Responses;
+>>>>>>> refs/remotes/litichevskiydv/master
 
     /// <summary>
     /// Endpoint for configuration values
@@ -70,12 +76,25 @@
         }
 
         /// <summary>
-        /// Dummy post configuration value to config
+        /// Dummy validate and post configuration value to config
         /// </summary>
+        /// <param name="id">Configuration value index</param>
         /// <param name="value">New value</param>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("{id}")]
+        [Produces(typeof(ApiResponse<int>))]
+        public IActionResult Post(int id, [FromBody] string value)
         {
+            _logger.LogInformation("Validation and post value request");
+
+            if (id < 0)
+                return new ObjectResult(ApiResponse.Error(new[] {new ApiResponseError {Code = "01", Title = "Id shouldn't be negative"}}))
+                       {
+                           StatusCode = (int) HttpStatusCode.BadRequest,
+                           DeclaredType = typeof(ApiResponse<object>)
+                       };
+
+            _commandsDispatcher.Execute(new SetValueCommandContext(id, value));
+            return new OkObjectResult(ApiResponse.Success(id)) {DeclaredType = typeof(ApiResponse<int>)};
         }
 
         /// <summary>
@@ -95,8 +114,10 @@
         /// </summary>
         /// <param name="id">Configuration value index</param>
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
+            _logger.LogInformation("Delete value request");
+            await _commandsDispatcher.ExecuteAsync(new DeleteValueAsyncCommandContext(id));
         }
     }
 }

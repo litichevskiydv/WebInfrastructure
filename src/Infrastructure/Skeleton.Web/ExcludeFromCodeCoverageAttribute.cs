@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Dapper
+﻿namespace Skeleton.Web
 {
     using System;
 

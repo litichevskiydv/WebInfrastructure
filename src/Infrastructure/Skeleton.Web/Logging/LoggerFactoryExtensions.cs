@@ -7,6 +7,7 @@
 
     public static class LoggerFactoryExtensions
     {
+        [ExcludeFromCodeCoverage]
         public static ILoggerFactory AddNLog(this ILoggerFactory factory)
         {
             LogManager.AddHiddenAssembly(Assembly.Load(new AssemblyName("Microsoft.Extensions.Logging")));

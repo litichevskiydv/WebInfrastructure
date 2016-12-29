@@ -3,7 +3,10 @@
   "authors": [ "dmitriy.litichevskiy" ],
 
   "buildOptions": {
-    "debugType": "portable"
+    "debugType": "portable",
+    "copyToOutput": {
+      "include": [ "appsettings.json", "appsettings.Development.json", "appsettings.Staging.json" ]
+    }
   },
 
   "testRunner": "xunit",

@@ -60,6 +60,58 @@
         }
 
         [Fact]
+        public void ShouldNotValidateNegativeKeys()
+        {
+            Assert.Throws<BadRequestException>(() => ServiceClient.Post(-1, "test"));
+        }
+
+        [Fact]
+        public async void ShouldValidatePositiveKeys()
+        {
+            // Given
+            const int id = 1;
+            const string expectedValue = "test";
+
+            // When
+            await ServiceClient.PostAsync(id, expectedValue);
+            var actualValue = await ServiceClient.GetAsync(id);
+
+            // Then
+            Assert.Equal(expectedValue, actualValue);
+            Fixture.MockLogger.VerifyNoErrors();
+        }
+
+        [Fact]
+        public void ShouldDeleteValue()
+        {
+            // Given
+            const int id = 1;
+
+            // When
+            ServiceClient.Set(id, "test");
+            ServiceClient.Delete(id);
+
+            // Then
+            Assert.Throws<ApiException>(() => ServiceClient.Get(id));
+            Fixture.MockLogger.VerifyErrorWasLogged<KeyNotFoundException>();
+        }
+
+        [Fact]
+        public async void ShouldDeleteValueAsync()
+        {
+            // Given
+            const int id = 1;
+
+            // When
+            await ServiceClient.SetAsync(id, "test");
+            await ServiceClient.DeleteAsync(id);
+
+            // Then
+            Assert.Throws<ApiException>(() => ServiceClient.Get(id));
+            Fixture.MockLogger.VerifyErrorWasLogged<KeyNotFoundException>();
+        }
+
+        [Fact]
         public void ShouldThrowExceptionWhileGettingValueByNonexistentKey()
         {
             // Given
