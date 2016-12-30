@@ -58,7 +58,7 @@ namespace Skeleton.Dapper.Tests.Extensions
 
         [Theory]
         [MemberData(nameof(BulkInsertUsageTestsData))]
-        public void ShouldPerformBulkInsert(TestEntity[] expected)
+        public void ShouldPerformBulkInsertWithPropertyInfoProvider(TestEntity[] expected)
         {
             // When
             TestEntity[] actual;
@@ -72,6 +72,25 @@ namespace Skeleton.Dapper.Tests.Extensions
             // Then
             Assert.Equal(expected, actual);
         }
+
+        [Theory]
+        [MemberData(nameof(BulkInsertUsageTestsData))]
+        public void ShouldPerformBulkInsert(TestEntity[] expected)
+        {
+            // When
+            TestEntity[] actual;
+            using (var connection = SqlConnectionsFactoryMethod())
+            {
+                connection.Execute(@"create table #TestEntities (Id int identity(1, 1) not null, Name nvarchar(max) not null, Value int not null)");
+                connection.BulkInsert("#TestEntities", expected);
+                actual = connection.Query<TestEntity>("select * from #TestEntities").ToArray();
+            }
+
+            // Then
+            Assert.Equal(expected, actual);
+        }
+
+
 
         [Fact]
         public void StrictTypePropertyInfoProviderTest()
@@ -146,7 +165,7 @@ namespace Skeleton.Dapper.Tests.Extensions
         }
 
         [Fact]
-        public void ShouldPerformDynamicObjectExpandoBulkInsert()
+        public void ShouldPerformDynamicBulkInsert()
         {
             dynamic expected = new { Id = 1, Name = "First", Value = 5 };
 
