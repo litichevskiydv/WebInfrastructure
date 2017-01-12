@@ -24,17 +24,17 @@ namespace Skeleton.Dapper.Extensions.PropertyInfoProviders
         {
             return _itemProperties[ordinal].Name;
         }
-
+        
         public Type GetFieldType(int ordinal)
         {
             return _itemProperties[ordinal].PropertyType;
         }
-
+        
         public string GetDataTypeName(int ordinal)
         {
             return _itemProperties[ordinal].PropertyType.Name;
         }
-
+        
         public int GetOrdinal(string name)
         {
             int index;
