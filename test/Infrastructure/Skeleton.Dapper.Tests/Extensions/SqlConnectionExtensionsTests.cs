@@ -1,16 +1,15 @@
-﻿using System;
-using System.Dynamic;
-using Skeleton.Dapper.Extensions.PropertyInfoProviders;
-
-namespace Skeleton.Dapper.Tests.Extensions
+﻿namespace Skeleton.Dapper.Tests.Extensions
 {
+    using System;
+    using System.Dynamic;
     using System.Collections.Generic;
     using System.Linq;
-    using Dapper.Extensions;
     using global::Dapper;
     using JetBrains.Annotations;
     using Tests;
     using Xunit;
+    using Dapper.Extensions;
+    using Dapper.Extensions.PropertyInfoProviders;
 
     public class SqlConnectionExtensionsTests : DbUsingTestBase
     {
@@ -100,7 +99,6 @@ namespace Skeleton.Dapper.Tests.Extensions
             IPropertyInfoProvider provider = new StrictTypePropertyInfoProvider(typeof(TestEntity));
 
             Assert.Equal(3, provider.FieldCount);
-            Assert.Equal("Int32", provider.GetDataTypeName(0));
             Assert.Equal("Name", provider.GetName(1));
             Assert.Equal(typeof(int), provider.GetFieldType(2));
             Assert.Equal(0, provider.GetOrdinal("Id"));
@@ -124,7 +122,6 @@ namespace Skeleton.Dapper.Tests.Extensions
             IPropertyInfoProvider provider = new ExpandoObjectPropertyInfoProvider(expected);
 
             Assert.Equal(3, provider.FieldCount);
-            Assert.Equal("Int32", provider.GetDataTypeName(0));
             Assert.Equal("Name", provider.GetName(1));
             Assert.Equal(typeof(int), provider.GetFieldType(2));
             Assert.Equal(0, provider.GetOrdinal("Id"));
@@ -182,9 +179,5 @@ namespace Skeleton.Dapper.Tests.Extensions
             Assert.Equal(expected.Name, actual.Name);
             Assert.Equal(expected.Value, actual.Value);
         }
-
-
-
-
     }
 }

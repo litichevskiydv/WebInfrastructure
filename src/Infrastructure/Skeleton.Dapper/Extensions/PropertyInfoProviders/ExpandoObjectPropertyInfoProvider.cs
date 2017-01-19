@@ -37,11 +37,6 @@ namespace Skeleton.Dapper.Extensions.PropertyInfoProviders
             return _itemProperties[_propertiesKeyIndices[ordinal]].GetType();
         }
 
-        public string GetDataTypeName(int ordinal)
-        {
-            return _itemProperties[_propertiesKeyIndices[ordinal]].GetType().Name;
-        }
-
         public object GetValue(int ordinal, object collectionEnumeratorCurrent)
         {
             string propertyName = _propertiesKeyIndices[ordinal];

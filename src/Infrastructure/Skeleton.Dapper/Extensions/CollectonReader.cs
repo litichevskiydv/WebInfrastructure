@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data.Common;
-
-namespace Skeleton.Dapper.Extensions
+﻿namespace Skeleton.Dapper.Extensions
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Data.Common;
+
     public class CollectonReader : DbDataReader
     {
         private readonly IEnumerator<object> _collectionEnumerator;
@@ -58,7 +58,7 @@ namespace Skeleton.Dapper.Extensions
         [ExcludeFromCodeCoverage]
         public override string GetDataTypeName(int ordinal)
         {
-            return _propertyInfoProvider.GetDataTypeName(ordinal);
+            return _propertyInfoProvider.GetFieldType(ordinal).Name;
         }
 
 

@@ -1,12 +1,10 @@
-﻿using System;
-using System.Dynamic;
-using System.Linq;
-using Skeleton.Dapper.Extensions.PropertyInfoProviders;
-
-namespace Skeleton.Dapper.Extensions
+﻿namespace Skeleton.Dapper.Extensions
 {
+    using System.Dynamic;
+    using System.Linq;
     using System.Collections.Generic;
     using System.Data.SqlClient;
+    using PropertyInfoProviders;
 
     public static class SqlConnectionExtensions
     {
@@ -25,10 +23,9 @@ namespace Skeleton.Dapper.Extensions
                 return;
             if (typeof(TSource) == typeof(ExpandoObject))
                 BulkInsertInternal(connection, tableName, source,
-                    new ExpandoObjectPropertyInfoProvider(source.First() as Dictionary<string, object>), batchSize, timeout);
+                new ExpandoObjectPropertyInfoProvider(source.First() as Dictionary<string, object>), batchSize, timeout);
             else
-                BulkInsertInternal(connection, tableName, source, new StrictTypePropertyInfoProvider(source.First().GetType()),
-                    batchSize, timeout);
+                BulkInsertInternal(connection, tableName, source, new StrictTypePropertyInfoProvider(source.First().GetType()), batchSize, timeout);
         }
 
         private static void BulkInsertInternal(SqlConnection connection, string tableName,
