@@ -1,0 +1,29 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "Library with authorisation models implementations",
+  "authors": [ "dmitriy.litichevskiy" ],
+
+  "buildOptions": {
+    "debugType": "portable"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.1"
+      }
+    }
+  },
+
+  "packOptions": {
+    "summary": "Library with authorisation models implementations",
+    "tags": [ "WebApi authorisation" ],
+    "projectUrl": "https://github.com/litichevskiydv/WebInfrastructure",
+    "licenseUrl": "https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE",
+    "owners": [ "dmitriy.litichevskiy" ],
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/litichevskiydv/WebInfrastructure"
+    }
+  }
+}
