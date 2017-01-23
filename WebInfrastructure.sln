@@ -54,7 +54,7 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Skeleton.Common.Tests", "te
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Skeleton.Web.Tests", "test\Infrastructure\Skeleton.Web.Tests\Skeleton.Web.Tests.xproj", "{5977FCE6-4904-4C24-9991-4FE7A53DB8D5}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Skeleton.Web.Authorisation", "src\Infrastructure\Skeleton.Web.Authorisation\Skeleton.Web.Authorisation.xproj", "{B77B31A5-4760-488B-9ED0-B97EC8E13DF6}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Skeleton.Web.Authentication", "src\Infrastructure\Skeleton.Web.Authentication\Skeleton.Web.Authentication.xproj", "{B77B31A5-4760-488B-9ED0-B97EC8E13DF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
