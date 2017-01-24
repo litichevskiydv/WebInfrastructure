@@ -1,7 +1,6 @@
 ﻿namespace Skeleton.Web.Authorisation.JwtBearer
 {
     using System;
-    using Configuration;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Options;
 
