@@ -15,6 +15,12 @@
                 throw new ArgumentNullException(nameof(next));
             if (options == null)
                 throw new ArgumentNullException(nameof(options));
+            if (string.IsNullOrWhiteSpace(options.Value.GetEndpotint))
+                throw new ArgumentNullException(nameof(options.Value.GetEndpotint));
+            if (string.IsNullOrWhiteSpace(options.Value.SigningAlgorithmName))
+                throw new ArgumentNullException(nameof(options.Value.SigningAlgorithmName));
+            if (options.Value.SigningKey == null)
+                throw new ArgumentNullException(nameof(options.Value.SigningKey));
 
             _next = next;
             _options = options.Value;
