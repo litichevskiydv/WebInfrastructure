@@ -11,6 +11,6 @@ namespace Skeleton.Web.Authorisation.JwtBearer
 
         public string SigningAlgorithmName { get; set; }
 
-        public TimeSpan? LifeTime { get; set; }
+        public TimeSpan? Lifetime { get; set; }
     }
 }

@@ -30,12 +30,12 @@
             return options;
         }
 
-        public static TokensIssuingOptions WithLifeTime(this TokensIssuingOptions options, TimeSpan? lifeTime)
+        public static TokensIssuingOptions WithLifetime(this TokensIssuingOptions options, TimeSpan? lifetime)
         {
             if (options == null)
                 throw new ArgumentNullException(nameof(options));
 
-            options.LifeTime = lifeTime;
+            options.Lifetime = lifetime;
             return options;
         }
     }
