@@ -15,7 +15,7 @@
             if (parametersBuilder == null)
                 throw new ArgumentNullException(nameof(parametersBuilder));
 
-            options.TokenValidationParameters = parametersBuilder(new TokenValidationParameters());
+            options.TokenValidationParameters = parametersBuilder(options.TokenValidationParameters);
             return options;
         }
 
