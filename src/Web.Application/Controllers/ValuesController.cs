@@ -8,7 +8,6 @@
     using Domain.Criteria;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
-    using Services;
     using Skeleton.CQRS.Abstractions.Commands;
     using Skeleton.CQRS.Abstractions.Queries;
     using Skeleton.Web.Conventions.Responses;
@@ -20,7 +19,6 @@
     {
         private readonly IQueriesDispatcher _queriesDispatcher;
         private readonly ICommandsDispatcher _commandsDispatcher;
-        private readonly IValuesProvider _valuesProvider;
         private readonly ILogger<ValuesController> _logger;
 
         /// <summary>
@@ -28,23 +26,18 @@
         /// </summary>
         /// <param name="queriesDispatcher">Queries dispatcher</param>
         /// <param name="commandsDispatcher">Commands dispatcher</param>
-        /// <param name="valuesProvider">Configuration values provider</param>
         /// <param name="logger">Messages logger</param>
-        public ValuesController(IQueriesDispatcher queriesDispatcher, ICommandsDispatcher commandsDispatcher, IValuesProvider valuesProvider,
-            ILogger<ValuesController> logger)
+        public ValuesController(IQueriesDispatcher queriesDispatcher, ICommandsDispatcher commandsDispatcher, ILogger<ValuesController> logger)
         {
             if(queriesDispatcher == null)
                 throw new ArgumentNullException(nameof(queriesDispatcher));
             if (commandsDispatcher == null)
                 throw new ArgumentNullException(nameof(commandsDispatcher));
-            if (valuesProvider == null)
-                throw new ArgumentNullException(nameof(valuesProvider));
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
 
             _queriesDispatcher = queriesDispatcher;
             _commandsDispatcher = commandsDispatcher;
-            _valuesProvider = valuesProvider;
             _logger = logger;
         }
 
@@ -53,10 +46,10 @@
         /// </summary>
         /// <returns>Configuration values</returns>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IEnumerable<string>> Get()
         {
             _logger.LogInformation("Get values request");
-            return _valuesProvider.Get();
+            return await _queriesDispatcher.ExecuteAsync<string[]>(new GetAllValuesQueryCriterion());
         }
 
         /// <summary>

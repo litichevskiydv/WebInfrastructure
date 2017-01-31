@@ -1,8 +1,8 @@
 ﻿namespace Web
 {
     using System.Reflection;
-    using Application.Services.Impl;
     using Autofac;
+    using Domain.Dtos;
     using Installers;
     using JetBrains.Annotations;
     using Microsoft.AspNetCore.Hosting;
@@ -33,12 +33,12 @@
 
         protected override void ConfigureOptions(IServiceCollection services)
         {
-            services.Configure<SimpleValuesProviderConfiguration>(Configuration.GetSection("ValuesProviderConfiguration"));
+            services.Configure<DefaultConfigurationValues>(Configuration.GetSection("DefaultConfigurationValues"));
         }
 
         protected override void RegisterDependencies(ContainerBuilder containerBuilder)
         {
-            containerBuilder.RegisterAssemblyModules(typeof(CommonInstaller).GetTypeInfo().Assembly);
+            containerBuilder.RegisterAssemblyModules(typeof(DataAccessInstaller).GetTypeInfo().Assembly);
         }
     }
 }

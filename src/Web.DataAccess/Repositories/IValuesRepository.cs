@@ -1,7 +1,15 @@
 ﻿namespace Web.DataAccess.Repositories
 {
+    using System.Collections.Generic;
+
     public interface IValuesRepository<TValue>
     {
+        /// <summary>
+        /// Returns all stored values
+        /// </summary>
+        /// <returns>All stored values</returns>
+        IEnumerable<TValue> Get();
+
         /// <summary>
         /// Return value for key from storage
         /// </summary>
