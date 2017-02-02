@@ -1,6 +1,8 @@
 ﻿namespace Web.DataAccess.Repositories.Impl
 {
     using System.Collections.Concurrent;
+    using System.Collections.Generic;
+    using System.Linq;
     using JetBrains.Annotations;
 
     [UsedImplicitly]
@@ -11,6 +13,11 @@
         public InMemoryValuesRepository()
         {
             _storage = new ConcurrentDictionary<int, TValue>();
+        }
+
+        public IEnumerable<TValue> Get()
+        {
+            return _storage.Values.ToArray();
         }
 
         public TValue Get(int key)
