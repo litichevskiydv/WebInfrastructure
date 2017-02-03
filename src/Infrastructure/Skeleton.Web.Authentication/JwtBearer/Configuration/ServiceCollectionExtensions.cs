@@ -6,15 +6,15 @@
 
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection UseJwtBearerAuthorisationTokens(this IServiceCollection services,
-            Func<IJwtBearerAuthorisationConfigurator, IJwtBearerAuthorisationConfigurator> configurationBuilder)
+        public static IServiceCollection AddJwtBearerAuthorisationTokens(this IServiceCollection services,
+            Func<IJwtBearerAuthenticationConfigurator, IJwtBearerAuthenticationConfigurator> configurationBuilder)
         {
             if (services == null)
                 throw new ArgumentNullException(nameof(services));
             if (configurationBuilder == null)
                 throw new ArgumentNullException(nameof(configurationBuilder));
 
-            var configurator = new JwtBearerAuthorisationConfigurator();
+            var configurator = new JwtBearerAuthenticationConfigurator();
             configurationBuilder(configurator);
             return services
                 .AddOptions()

@@ -4,7 +4,7 @@
     using Microsoft.AspNetCore.Builder;
     using Microsoft.IdentityModel.Tokens;
 
-    internal class JwtBearerAuthorisationConfigurator : IJwtBearerAuthorisationConfigurator
+    internal class JwtBearerAuthenticationConfigurator : IJwtBearerAuthenticationConfigurator
     {
         private Func<JwtBearerOptions, JwtBearerOptions> _jwtBearerOptionsBuilder;
         private Func<TokensIssuingOptions, TokensIssuingOptions> _tokensIssuingOptionsBuilder;
@@ -12,7 +12,7 @@
         private SecurityKey _signingKey;
         private string _signingAlgorithmName;
 
-        public IJwtBearerAuthorisationConfigurator ConfigureJwtBearerOptions(Func<JwtBearerOptions, JwtBearerOptions> builder)
+        public IJwtBearerAuthenticationConfigurator ConfigureJwtBearerOptions(Func<JwtBearerOptions, JwtBearerOptions> builder)
         {
             if (builder == null)
                 throw new ArgumentNullException(nameof(builder));
@@ -21,7 +21,7 @@
             return this;
         }
 
-        public IJwtBearerAuthorisationConfigurator ConfigureTokensIssuingOptions(Func<TokensIssuingOptions, TokensIssuingOptions> builder)
+        public IJwtBearerAuthenticationConfigurator ConfigureTokensIssuingOptions(Func<TokensIssuingOptions, TokensIssuingOptions> builder)
         {
             if(builder == null)
                 throw new ArgumentNullException(nameof(builder));
@@ -30,7 +30,7 @@
             return this;
         }
 
-        public IJwtBearerAuthorisationConfigurator ConfigureSigningKey(string signingAlgorithmName, SecurityKey signingKey)
+        public IJwtBearerAuthenticationConfigurator ConfigureSigningKey(string signingAlgorithmName, SecurityKey signingKey)
         {
             if(string.IsNullOrWhiteSpace(signingAlgorithmName))
                 throw new ArgumentNullException(nameof(signingAlgorithmName));
