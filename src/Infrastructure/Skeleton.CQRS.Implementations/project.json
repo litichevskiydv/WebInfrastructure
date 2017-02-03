@@ -16,7 +16,7 @@
   },
 
   "dependencies": {
-    "Autofac": "4.2.1",
+    "Autofac": "4.3.0",
     "Skeleton.CQRS.Abstractions": "1.0.0-*"
   },
 

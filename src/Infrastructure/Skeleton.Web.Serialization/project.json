@@ -16,7 +16,7 @@
   },
 
   "dependencies": {
-    "Newtonsoft.Json": "9.0.2-*"
+    "Newtonsoft.Json": "9.0.2-beta2"
   },
 
   "packOptions": {
