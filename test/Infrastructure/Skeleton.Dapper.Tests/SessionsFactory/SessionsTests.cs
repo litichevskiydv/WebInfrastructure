@@ -22,19 +22,21 @@
                 try
                 {
                     // Given
-                    connection.Execute("create table ##TransactionsTest ([ID] int, [Value] varchar(32));");
+                    var insertQuery = new QueryObject("insert into ##TransactionsTest ([ID], [Value]) values (1, '123');");
+                    var countQuery = new QueryObject("select count(*) from ##TransactionsTest;");
 
                     // When
+                    connection.Execute("create table ##TransactionsTest ([ID] int, [Value] varchar(32));");
                     using (var session = _sessionsFactory.Create())
                     {
-                        session.Execute("insert into ##TransactionsTest ([ID], [Value]) values (1, '123');");
+                        session.Execute(insertQuery);
                         session.Commit();
                     }
 
                     // Then
                     int actualRecordsCount;
                     using (var session = _sessionsFactory.Create())
-                        actualRecordsCount = session.Query<int>("select count(*) from ##TransactionsTest;").Single();
+                        actualRecordsCount = session.Query<int>(countQuery).Single();
                     Assert.Equal(1, actualRecordsCount);
                 }
                 finally
@@ -50,16 +52,18 @@
                 try
                 {
                     // Given
-                    connection.Execute("create table ##TransactionsTest ([ID] int, [Value] varchar(32));");
+                    var insertQuery = new QueryObject("insert into ##TransactionsTest ([ID], [Value]) values (1, '123');");
+                    var countQuery = new QueryObject("select count(*) from ##TransactionsTest;");
 
                     // When
+                    connection.Execute("create table ##TransactionsTest ([ID] int, [Value] varchar(32));");
                     using (var session = _sessionsFactory.Create())
-                        await session.ExecuteAsync("insert into ##TransactionsTest ([ID], [Value]) values (1, '123');");
+                        await session.ExecuteAsync(insertQuery);
 
                     // Then
                     int actualRecordsCount;
                     using (var session = _sessionsFactory.Create())
-                        actualRecordsCount = (await session.QueryAsync<int>("select count(*) from ##TransactionsTest;")).Single();
+                        actualRecordsCount = (await session.QueryAsync<int>(countQuery)).Single();
                     Assert.Equal(0, actualRecordsCount);
                 }
                 finally
