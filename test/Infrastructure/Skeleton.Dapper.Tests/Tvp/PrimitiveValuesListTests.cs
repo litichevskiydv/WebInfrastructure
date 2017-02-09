@@ -2,6 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
+    using Dapper.Extensions;
     using Dapper.Tvp;
     using JetBrains.Annotations;
     using Xunit;
@@ -35,22 +37,29 @@
                                          };
         }
 
+        private static QueryObject CreateTableQuery()
+        {
+            return new QueryObject(@"
+if type_id (N'[dbo].[Int32ValuesList]') is null
+	create type [dbo].[Int32ValuesList] as table([Value] [int] not null)");
+        }
+
+        private static QueryObject GetAllValuesQuery(IEnumerable<int> values)
+        {
+            return new QueryObject("select [Value] from @Param",
+                new {Param = new Int32ValuesList("Int32ValuesList", values)});
+        }
+
         [Theory]
         [MemberData(nameof(Int32ValuesListTestsData))]
-        public void ShouldUseInt32ValuesListInQuery(int[] expected)
+        public async Task ShouldUseInt32ValuesListInQuery(int[] expected)
         {
             // When
             int[] actual;
             using (var connection = ConnectionsFactory.Create())
             {
-                connection.Execute(@"
-if type_id (N'[dbo].[Int32ValuesList]') is null
-	create type [dbo].[Int32ValuesList] as table([Value] [int] not null)");
-
-                actual = connection.Query<int>(@"
-select [Value] from @Param",
-                        new {Param = new Int32ValuesList("Int32ValuesList", expected)})
-                    .ToArray();
+                connection.Execute(CreateTableQuery());
+                actual = (await connection.QueryAsync<int>(GetAllValuesQuery(expected))).ToArray();
             }
 
             // Then
