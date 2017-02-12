@@ -82,19 +82,24 @@
             loggerFactory.AddNLog();
         }
 
-        protected virtual IApplicationBuilder AddMiddlewaresToPipeLine(IApplicationBuilder app, IHostingEnvironment env)
+        protected virtual Func<IApplicationBuilder, IApplicationBuilder> CreatePipelineConfigurator(
+            Func<IApplicationBuilder, IApplicationBuilder> pipelineBaseConfigurator, 
+            IHostingEnvironment env)
         {
-            return app;
+            return pipelineBaseConfigurator;
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             AddLoggerProviders(loggerFactory.AddConsole(Configuration.GetSection("Logging")));
 
-            AddMiddlewaresToPipeLine(app.UseUnhandledExceptionsLoggingMiddleware(), env)
-                .UseMvc()
-                .UseSwagger()
-                .UseSwaggerUi();
+            app.UseUnhandledExceptionsLoggingMiddleware();
+            var pipelineConfigurator = CreatePipelineConfigurator(
+                x => x.UseMvc()
+                    .UseSwagger()
+                    .UseSwaggerUi(),
+                env);
+            pipelineConfigurator(app);
         }
     }
 }

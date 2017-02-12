@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "description": "Tests for common extensions and objects",
   "authors": [ "dmitriy.litichevskiy" ],
@@ -22,7 +22,7 @@
   },
 
   "dependencies": {
-    "xunit": "2.2.0-*",
+    "xunit": "2.2.0-beta5-build3474",
     "dotnet-test-xunit": "2.2.0-*",
     "Moq": "4.6.38-*",
     "Microsoft.NETCore.Portable.Compatibility": "1.0.1",

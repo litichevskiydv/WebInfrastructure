@@ -1,12 +1,10 @@
 {
   "version": "1.0.0-*",
-  "description": "Library with serialization conventions and settings",
+  "description": "Library with authentication models implementations",
   "authors": [ "dmitriy.litichevskiy" ],
-
   "buildOptions": {
     "debugType": "portable"
   },
-
   "frameworks": {
     "netstandard1.6": {
       "dependencies": {
@@ -14,14 +12,9 @@
       }
     }
   },
-
-  "dependencies": {
-    "Newtonsoft.Json": "9.0.2-beta2"
-  },
-
   "packOptions": {
-    "summary": "Library with serialization conventions and settings",
-    "tags": [ "JSON conventions", "JSON serializer settings" ],
+    "summary": "Library with authentication models implementations",
+    "tags": [ "WebApi authentication" ],
     "projectUrl": "https://github.com/litichevskiydv/WebInfrastructure",
     "licenseUrl": "https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE",
     "owners": [ "dmitriy.litichevskiy" ],
@@ -29,5 +22,11 @@
       "type": "git",
       "url": "https://github.com/litichevskiydv/WebInfrastructure"
     }
+  },
+  "dependencies": {
+    "Microsoft.AspNetCore.Authentication.JwtBearer": "1.1.0",
+    "Microsoft.AspNetCore.Http.Abstractions": "1.1.0",
+    "Skeleton.Common": "1.0.0-*",
+    "Skeleton.Web.Serialization": "1.0.0-*"
   }
 }

@@ -42,7 +42,7 @@
             _exceptionsTypesByStatusCodes = new Dictionary<HttpStatusCode, Type>
                                             {
                                                 {HttpStatusCode.NotFound, typeof(NotFoundException)},
-                                                {HttpStatusCode.Unauthorized, typeof(UnauthorizedAccessException)},
+                                                {HttpStatusCode.Unauthorized, typeof(UnauthorizedException)},
                                                 {HttpStatusCode.BadRequest, typeof(BadRequestException)}
                                             };
         }
