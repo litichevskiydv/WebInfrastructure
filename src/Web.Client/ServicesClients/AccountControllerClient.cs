@@ -4,7 +4,7 @@
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
-    using Skeleton.Web.Authorisation.JwtBearer.Models;
+    using Skeleton.Web.Authentication.JwtBearer.Models;
     using Skeleton.Web.Integration;
 
     public class AccountControllerClient : BaseClient

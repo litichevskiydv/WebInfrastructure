@@ -2,8 +2,8 @@
 {
     using System.Security.Claims;
     using JetBrains.Annotations;
-    using Skeleton.Web.Authorisation.JwtBearer.UserClaimsProvider;
-    using Skeleton.Web.Authorisation.JwtBearer.UserClaimsProvider.Exceptions;
+    using Skeleton.Web.Authentication.JwtBearer.UserClaimsProvider;
+    using Skeleton.Web.Authentication.JwtBearer.UserClaimsProvider.Exceptions;
 
     [UsedImplicitly]
     public class UserClaimsProvider : IUserClaimsProvider

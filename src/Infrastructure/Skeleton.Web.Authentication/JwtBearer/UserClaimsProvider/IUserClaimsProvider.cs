@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Web.Authorisation.JwtBearer.UserClaimsProvider
+﻿namespace Skeleton.Web.Authentication.JwtBearer.UserClaimsProvider
 {
     using System.Security.Claims;
 

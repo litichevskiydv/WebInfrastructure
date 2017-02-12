@@ -3,7 +3,7 @@
     using Application.Services;
     using Autofac;
     using JetBrains.Annotations;
-    using Skeleton.Web.Authorisation.JwtBearer.UserClaimsProvider;
+    using Skeleton.Web.Authentication.JwtBearer.UserClaimsProvider;
 
     [UsedImplicitly]
     public class ServicesInstaller : Module

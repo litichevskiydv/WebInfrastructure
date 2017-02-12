@@ -12,8 +12,8 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
     using Skeleton.Web;
-    using Skeleton.Web.Authorisation.JwtBearer;
-    using Skeleton.Web.Authorisation.JwtBearer.Configuration;
+    using Skeleton.Web.Authentication.JwtBearer;
+    using Skeleton.Web.Authentication.JwtBearer.Configuration;
     using Skeleton.Web.Configuration;
     using Swashbuckle.Swagger.Model;
     using Swashbuckle.SwaggerGen.Application;

@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Web.Authorisation.JwtBearer.Configuration
+﻿namespace Skeleton.Web.Authentication.JwtBearer.Configuration
 {
     using System;
     using Microsoft.AspNetCore.Builder;

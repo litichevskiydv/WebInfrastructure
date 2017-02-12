@@ -1,4 +1,4 @@
-namespace Skeleton.Web.Authorisation.JwtBearer
+namespace Skeleton.Web.Authentication.JwtBearer
 {
     using System;
     using Microsoft.IdentityModel.Tokens;

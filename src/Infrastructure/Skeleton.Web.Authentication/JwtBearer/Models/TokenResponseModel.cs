@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Web.Authorisation.JwtBearer.Models
+﻿namespace Skeleton.Web.Authentication.JwtBearer.Models
 {
     using System;
 

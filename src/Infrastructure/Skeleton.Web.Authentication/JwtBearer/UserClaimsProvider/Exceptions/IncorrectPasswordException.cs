@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Web.Authorisation.JwtBearer.UserClaimsProvider.Exceptions
+﻿namespace Skeleton.Web.Authentication.JwtBearer.UserClaimsProvider.Exceptions
 {
     using System;
 
