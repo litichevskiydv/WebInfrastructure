@@ -3,6 +3,7 @@
 (Get-Content src\Infrastructure\Skeleton.CQRS.Implementations\project.json) -replace 'portable', 'full' | Set-Content src\Infrastructure\Skeleton.CQRS.Implementations\project.json
 (Get-Content src\Infrastructure\Skeleton.Dapper\project.json) -replace 'portable', 'full' | Set-Content src\Infrastructure\Skeleton.Dapper\project.json
 (Get-Content src\Infrastructure\Skeleton.Web\project.json) -replace 'portable', 'full' | Set-Content src\Infrastructure\Skeleton.Web\project.json
+(Get-Content src\Infrastructure\Skeleton.Web.Authentication\project.json) -replace 'portable', 'full' | Set-Content src\Infrastructure\Skeleton.Web.Authentication\project.json
 (Get-Content src\Infrastructure\Skeleton.Web.Conventions\project.json) -replace 'portable', 'full' | Set-Content src\Infrastructure\Skeleton.Web.Conventions\project.json
 (Get-Content src\Infrastructure\Skeleton.Web.Integration\project.json) -replace 'portable', 'full' | Set-Content src\Infrastructure\Skeleton.Web.Integration\project.json
 (Get-Content src\Infrastructure\Skeleton.Web.Serialization\project.json) -replace 'portable', 'full' | Set-Content src\Infrastructure\Skeleton.Web.Serialization\project.json
