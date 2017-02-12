@@ -38,7 +38,8 @@
     "Microsoft.Extensions.Logging.Console": "1.1.0",
     "Microsoft.Extensions.Logging.Debug": "1.1.0",
     "Web.DataAccess": "1.0.0-*",
-    "Skeleton.CQRS.Implementations": "1.0.0-*"
+    "Skeleton.CQRS.Implementations": "1.0.0-*",
+    "Skeleton.Web.Authentication": "1.0.0-*"
   },
 
   "runtimeOptions": {

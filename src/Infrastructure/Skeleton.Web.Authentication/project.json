@@ -26,6 +26,7 @@
   "dependencies": {
     "Microsoft.AspNetCore.Authentication.JwtBearer": "1.1.0",
     "Microsoft.AspNetCore.Http.Abstractions": "1.1.0",
-    "Skeleton.Common": "1.0.0-*"
+    "Skeleton.Common": "1.0.0-*",
+    "Skeleton.Web.Serialization": "1.0.0-*"
   }
 }

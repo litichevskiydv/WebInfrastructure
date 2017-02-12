@@ -18,11 +18,11 @@
             builder.RegisterType<AutofacQueriesFactory>().As<IQueriesFactory>().SingleInstance();
             builder.RegisterType<QueriesDispatcher>().As<IQueriesDispatcher>().SingleInstance();
 
-            var commandType = typeof(IQuery<,>);
+            var queryType = typeof(IQuery<,>);
             var dataAccess = typeof(GetValueQuery).GetTypeInfo().Assembly;
             builder.RegisterAssemblyTypes(dataAccess)
                 .Where(x => x.GetInterfaces()
-                                .SingleOrDefault(i => i.GetGenericArguments().Length > 0 && i.GetGenericTypeDefinition() == commandType) != null)
+                                .SingleOrDefault(i => i.GetGenericArguments().Length > 0 && i.GetGenericTypeDefinition() == queryType) != null)
                 .AsImplementedInterfaces()
                 .SingleInstance();
         }

@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "authors": [ "dmitriy.litichevskiy" ],
 
@@ -16,6 +16,7 @@
   },
 
   "dependencies": {
+    "Skeleton.Web.Authentication": "1.0.0-*",
     "Skeleton.Web.Integration": "1.0.0-*"
   }
 }
