@@ -26,6 +26,19 @@
         }
 
         /// <summary>
+        /// Converts sequence to array
+        /// </summary>
+        /// <typeparam name="T">The type of the elements of <paramref name="source" /></typeparam>
+        /// <param name="source">Sequence for convertation</param>
+        /// <returns>Result array</returns>
+        public static T[] AsArray<T>(this IEnumerable<T> source)
+        {
+            return source != null
+                ? (source as T[] ?? source.ToArray())
+                : new T[0];
+        }
+
+        /// <summary>
         /// Determines whether sequence <paramref name="first"/> equals to sequence <paramref name="second"/>
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of sequences</typeparam>

@@ -7,6 +7,7 @@
 
     public static class ConfigurationBuilderExtensions
     {
+        [ExcludeFromCodeCoverage]
         public static IConfigurationBuilder AddNLogConfig(this IConfigurationBuilder configurationBuilder, string relativeConfigPath)
         {
             var fullConfigPath = Path.Combine(configurationBuilder.GetFileProvider().GetFileInfo(relativeConfigPath).PhysicalPath);

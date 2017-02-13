@@ -10,8 +10,6 @@ assembly_info:
   assembly_version: 1.0.0
   assembly_file_version: '{version}'
   assembly_informational_version: 1.0
-environment:
-  Appveyor: true
 services: mssql2014
 nuget:
   project_feed: true
@@ -21,7 +19,7 @@ build_script:
 
     call build\CreatePackages.bat %CONFIGURATION% alpha-build%APPVEYOR_BUILD_NUMBER%
 test_script:
-- cmd: call build\RunTests.bat %CONFIGURATION%
+- cmd: call build\CalculateCoverage.bat
 artifacts:
 - path: src\Infrastructure\**\*.nupkg
 deploy: off

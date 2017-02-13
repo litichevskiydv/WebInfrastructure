@@ -42,7 +42,7 @@
             _exceptionsTypesByStatusCodes = new Dictionary<HttpStatusCode, Type>
                                             {
                                                 {HttpStatusCode.NotFound, typeof(NotFoundException)},
-                                                {HttpStatusCode.Unauthorized, typeof(UnauthorizedAccessException)},
+                                                {HttpStatusCode.Unauthorized, typeof(UnauthorizedException)},
                                                 {HttpStatusCode.BadRequest, typeof(BadRequestException)}
                                             };
         }
@@ -116,7 +116,10 @@
                     errorResponseReadingException = exception;
                 }
                 if (string.IsNullOrWhiteSpace(responseText) == false)
-                    exceptionMessage = DeserializeWithDefault<ApiErrorResponse>(responseText)?.ToString() ?? responseText;
+                {
+                    var deserializedMessage = DeserializeWithDefault<ApiErrorResponse>(responseText)?.ToString();
+                    exceptionMessage = string.IsNullOrWhiteSpace(deserializedMessage) ? responseText : deserializedMessage;
+                }
             }
 
             Type exceptionType;

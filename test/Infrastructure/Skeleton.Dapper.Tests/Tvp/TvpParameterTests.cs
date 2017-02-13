@@ -4,10 +4,10 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Dapper.Extensions;
     using Dapper.Tvp;
     using JetBrains.Annotations;
     using Xunit;
-    using global::Dapper;
 
     public class TvpParameterTests : DbUsingTestBase
     {
@@ -102,15 +102,9 @@
                                          };
         }
 
-        [Theory]
-        [MemberData(nameof(TvpParameterUsageTestsData))]
-        public void ShouldUseTvpInQueryWithAllTypes(TestEntityWithAllTypes[] expected)
+        private static QueryObject CreateTableQuery()
         {
-            // When
-            TestEntityWithAllTypes[] actual;
-            using (var connection = GetConnection())
-            {
-                connection.Execute(@"
+            return new QueryObject(@"
 if type_id (N'[dbo].[TestListWithAllTypes]') is null
 	create type [dbo].[TestListWithAllTypes] as table(
 	    [Id] [int] not null,
@@ -127,17 +121,30 @@ if type_id (N'[dbo].[TestListWithAllTypes]') is null
 		[Value12] [varbinary](max) null,
 		[Value14] [nvarchar](6) null,
 		[Value15] [nchar](1) null)");
+        }
 
-                actual = connection.Query<TestEntityWithAllTypes>(@"
-select * from @Param",
-                        new
-                        {
-                            Param = TvpParameter.Create("TestListWithAllTypes", expected,
-                                configurator => configurator
-                                    .SetAccuracy(x => x.Value6, 6, 3)
-                                    .SetMaxLength(x => x.Value14, 6))
-                        })
-                    .ToArray();
+        private static QueryObject GetAllValuesQuery(IEnumerable<TestEntityWithAllTypes> values)
+        {
+            return new QueryObject("select * from @Param",
+                new
+                {
+                    Param = TvpParameter.Create("TestListWithAllTypes", values,
+                        configurator => configurator
+                            .SetAccuracy(x => x.Value6, 6, 3)
+                            .SetMaxLength(x => x.Value14, 6))
+                });
+        }
+
+        [Theory]
+        [MemberData(nameof(TvpParameterUsageTestsData))]
+        public void ShouldUseTvpInQueryWithAllTypes(TestEntityWithAllTypes[] expected)
+        {
+            // When
+            TestEntityWithAllTypes[] actual;
+            using (var connection = ConnectionsFactory.Create())
+            {
+                connection.Execute(CreateTableQuery());
+                actual = connection.Query<TestEntityWithAllTypes>(GetAllValuesQuery(expected)).ToArray();
             }
 
             // Then

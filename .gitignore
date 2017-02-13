@@ -19,3 +19,5 @@ _UpgradeReport*
 /.vs/
 project.lock.json
 logs
+src/Infrastructure/Skeleton.Dapper/Extensions/CollectonReader.cs
+src/Infrastructure/Skeleton.Dapper/Extensions/CollectonReader.cs

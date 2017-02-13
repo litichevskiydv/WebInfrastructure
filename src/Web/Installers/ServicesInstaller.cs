@@ -1,16 +1,16 @@
 ﻿namespace Web.Installers
 {
     using Application.Services;
-    using Application.Services.Impl;
     using Autofac;
     using JetBrains.Annotations;
+    using Skeleton.Web.Authentication.JwtBearer.UserClaimsProvider;
 
     [UsedImplicitly]
-    public class CommonInstaller : Module
+    public class ServicesInstaller : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<SimpleValuesProvider>().As<IValuesProvider>().SingleInstance();
+            builder.RegisterType<UserClaimsProvider>().As<IUserClaimsProvider>().SingleInstance();
         }
     }
 }

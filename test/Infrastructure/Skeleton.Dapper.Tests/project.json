@@ -22,9 +22,9 @@
   },
 
   "dependencies": {
-    "xunit": "2.2.0-*",
+    "xunit": "2.2.0-beta5-build3474",
     "dotnet-test-xunit": "2.2.0-*",
-    "Dapper": "1.50.3-beta1",
+    "Dapper": "1.50.3-*",
     "Microsoft.NETCore.Portable.Compatibility": "1.0.1",
     "JetBrains.Annotations": "10.2.1",
     "Skeleton.Dapper": "1.0.0-*",

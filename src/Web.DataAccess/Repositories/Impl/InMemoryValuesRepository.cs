@@ -1,6 +1,8 @@
 ﻿namespace Web.DataAccess.Repositories.Impl
 {
     using System.Collections.Concurrent;
+    using System.Collections.Generic;
+    using System.Linq;
     using JetBrains.Annotations;
 
     [UsedImplicitly]
@@ -13,15 +15,25 @@
             _storage = new ConcurrentDictionary<int, TValue>();
         }
 
-        public TValue GetOrDefault(int key)
+        public IEnumerable<TValue> Get()
         {
-            TValue value;
-            return _storage.TryGetValue(key, out value) ? value : default(TValue);
+            return _storage.Values.ToArray();
+        }
+
+        public TValue Get(int key)
+        {
+            return _storage[key];
         }
 
         public void Set(int key, TValue value)
         {
             _storage.AddOrUpdate(key, value, (k, v) => value);
+        }
+
+        public void Delete(int key)
+        {
+            TValue value;
+            _storage.TryRemove(key, out value);
         }
     }
 }

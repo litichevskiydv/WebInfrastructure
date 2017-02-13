@@ -2,23 +2,27 @@
 {
     using System;
     using System.Data.SqlClient;
+    using ConnectionsFactory;
     using JetBrains.Annotations;
 
     [UsedImplicitly]
     public abstract class DbUsingTestBase
     {
-        private static readonly bool IsAppVeyor = Environment.GetEnvironmentVariable("Appveyor")?.ToUpperInvariant() == "TRUE";
-
-        protected static string ConnectionString =>
-            IsAppVeyor
+        private readonly bool _isAppVeyor;
+        private string ConnectionString =>
+            _isAppVeyor
                 ? @"Data Source = (local)\SQL2014;Initial Catalog=tempdb;User Id=sa;Password=Password12!"
                 : @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = tempdb; Integrated Security = True";
 
-        protected static SqlConnection GetConnection()
+        protected readonly IConnectionsFactory ConnectionsFactory;
+        protected readonly Func<SqlConnection> SqlConnectionsFactoryMethod;
+
+        protected DbUsingTestBase()
         {
-            var connection = new SqlConnection(ConnectionString);
-            connection.Open();
-            return connection;
+            _isAppVeyor = Environment.GetEnvironmentVariable("Appveyor")?.ToUpperInvariant() == "TRUE";
+
+            ConnectionsFactory = new SqlConnectionsFactory(ConnectionString);
+            SqlConnectionsFactoryMethod = () => (SqlConnection) ConnectionsFactory.Create();
         }
     }
 }

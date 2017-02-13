@@ -3,6 +3,10 @@
   "description": "Library with common extensions and helpers for use Dapper in code",
   "authors": [ "dmitriy.litichevskiy" ],
 
+  "buildOptions": {
+    "debugType": "portable"
+  },
+
   "frameworks": {
     "netstandard1.6": {
       "dependencies": {
@@ -12,7 +16,7 @@
   },
 
   "dependencies": {
-    "Dapper": "1.50.3-beta1"
+    "Dapper": "1.50.3-*"
   },
 
   "packOptions": {

@@ -16,14 +16,14 @@
         /// <summary>
         /// Collection of request processing errors
         /// </summary>
-        public IList<ApiResponseError> Errors { get; }
+        public IReadOnlyList<ApiResponseError> Errors { get; }
 
         /// <summary>
         /// Constructor for WebApi response
         /// </summary>
         /// <param name="data">Response data</param>
         /// <param name="errors">Request processing errors collection</param>
-        public ApiResponse(TData data, IList<ApiResponseError> errors)
+        public ApiResponse(TData data, IReadOnlyList<ApiResponseError> errors)
         {
             Data = data;
             Errors = errors;
@@ -41,7 +41,7 @@
         /// <typeparam name="TData">Type of respones data</typeparam>
         /// <param name="data">Respones data</param>
         /// <param name="errors">Errors that happened during request processing</param>
-        public static ApiResponse<TData> Create<TData>(TData data, IList<ApiResponseError> errors)
+        public static ApiResponse<TData> Create<TData>(TData data, IReadOnlyList<ApiResponseError> errors)
         {
             return new ApiResponse<TData>(data, errors);
         }
@@ -60,7 +60,7 @@
         /// Creates container for WebApi response with only errors list
         /// </summary>
         /// <param name="errors">Errors that happened during request processing</param>
-        public static ApiResponse<object> Error<TData>(IList<ApiResponseError> errors)
+        public static ApiResponse<object> Error(IReadOnlyList<ApiResponseError> errors)
         {
             return new ApiResponse<object>(null, errors);
         }

@@ -7,11 +7,12 @@
 
     public static class LoggerFactoryExtensions
     {
+        [ExcludeFromCodeCoverage]
         public static ILoggerFactory AddNLog(this ILoggerFactory factory)
         {
             LogManager.AddHiddenAssembly(Assembly.Load(new AssemblyName("Microsoft.Extensions.Logging")));
             LogManager.AddHiddenAssembly(Assembly.Load(new AssemblyName("Microsoft.Extensions.Logging.Abstractions")));
-            LogManager.AddHiddenAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
+            LogManager.AddHiddenAssembly(typeof(ConfigureExtensions).GetTypeInfo().Assembly);
             LogManager.AddHiddenAssembly(typeof(LoggerFactoryExtensions).GetTypeInfo().Assembly);
 
             factory.AddProvider(new NLogLoggerProvider());
