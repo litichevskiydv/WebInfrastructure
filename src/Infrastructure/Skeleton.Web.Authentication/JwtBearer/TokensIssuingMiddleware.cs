@@ -80,7 +80,7 @@
 
             try
             {
-                var claims = _userClaimsProvider.GetClaims(login, password);
+                var claims = await _userClaimsProvider.GetClaimsAsync(login, password);
                 var notBefore = DateTime.UtcNow;
                 var expires = _lifetime.HasValue ? notBefore.Add(_lifetime.Value) : (DateTime?) null;
                 var token = new JwtSecurityToken(claims: claims, notBefore: DateTime.UtcNow, expires: expires,
