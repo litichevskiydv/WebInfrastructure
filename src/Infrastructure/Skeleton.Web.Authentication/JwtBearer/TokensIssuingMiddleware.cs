@@ -4,6 +4,7 @@
     using System.IdentityModel.Tokens.Jwt;
     using System.IO;
     using System.Net;
+    using System.Security.Claims;
     using System.Text;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
@@ -66,14 +67,6 @@
                    && string.IsNullOrWhiteSpace(requestModel.Password) == false;
         }
 
-        private static void WriteErrorMessageToResponse(HttpResponse response, HttpStatusCode statusCode, string message)
-        {
-            response.StatusCode = (int)statusCode;
-            response.ContentType = "text/plain";
-            using (var output = new StreamWriter(response.Body, Encoding.UTF8, 4096, true))
-                output.WriteLine(message);
-        }
-
         public async Task Invoke(HttpContext context)
         {
             if (context.Request.Path.Equals(_getEndpointPath) == false)
@@ -89,27 +82,29 @@
                 return;
             }
 
+            Claim[] claims;
             try
             {
-                var claims = await _userClaimsProvider.GetClaimsAsync(requestModel.Login, requestModel.Password);
-                var notBefore = DateTime.UtcNow;
-                var expires = _lifetime.HasValue ? notBefore.Add(_lifetime.Value) : (DateTime?) null;
-                var token = new JwtSecurityToken(claims: claims, notBefore: DateTime.UtcNow, expires: expires,
-                    signingCredentials: _signingCredentials);
+                claims = await _userClaimsProvider.GetClaimsAsync(requestModel.Login, requestModel.Password);
+            }
+            catch (LoginNotFoundException)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                return;
+            }
+            catch (IncorrectPasswordException)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                return;
+            }
+            var notBefore = DateTime.UtcNow;
+            var expires = _lifetime.HasValue ? notBefore.Add(_lifetime.Value) : (DateTime?)null;
+            var token = new JwtSecurityToken(claims: claims, notBefore: notBefore, expires: expires, signingCredentials: _signingCredentials);
 
-                var response = new TokenResponseModel {Token = _tokenHandler.WriteToken(token), ExpirationDate = expires};
-                context.Response.ContentType = "application/json; charset=utf-8";
-                using (var output = new StreamWriter(context.Response.Body, Encoding.UTF8, 4096, true))
-                    output.WriteLine(JsonConvert.SerializeObject(response, _jsonSerializerSettings));
-            }
-            catch (LoginNotFoundException exception)
-            {
-                WriteErrorMessageToResponse(context.Response, HttpStatusCode.NotFound, exception.Message);
-            }
-            catch (IncorrectPasswordException exception)
-            {
-                WriteErrorMessageToResponse(context.Response, HttpStatusCode.Forbidden, exception.Message);
-            }
+            var response = new { Token = _tokenHandler.WriteToken(token), ExpirationDate = expires };
+            context.Response.ContentType = "application/json; charset=utf-8";
+            using (var output = new StreamWriter(context.Response.Body, Encoding.UTF8, 4096, true))
+                output.WriteLine(JsonConvert.SerializeObject(response, _jsonSerializerSettings));
         }
     }
 }
