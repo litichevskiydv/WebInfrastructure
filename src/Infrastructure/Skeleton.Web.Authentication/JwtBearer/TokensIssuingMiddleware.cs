@@ -8,7 +8,6 @@
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Options;
-    using Microsoft.Extensions.Primitives;
     using Microsoft.IdentityModel.Tokens;
     using Models;
     using Newtonsoft.Json;
@@ -54,6 +53,19 @@
             _jsonSerializerSettings = new JsonSerializerSettings().UseDefaultSettings();
         }
 
+        private async Task<TokenRequestModel> DeserializeModel(HttpRequest request)
+        {
+            using (var reader = new StreamReader(request.Body))
+                return JsonConvert.DeserializeObject<TokenRequestModel>(await reader.ReadToEndAsync(), _jsonSerializerSettings);
+        }
+
+        private static bool IsRequestValid(string requestMethod, TokenRequestModel requestModel)
+        {
+            return requestMethod == HttpMethods.Post
+                   && string.IsNullOrWhiteSpace(requestModel.Login) == false
+                   && string.IsNullOrWhiteSpace(requestModel.Password) == false;
+        }
+
         private static void WriteErrorMessageToResponse(HttpResponse response, HttpStatusCode statusCode, string message)
         {
             response.StatusCode = (int)statusCode;
@@ -64,23 +76,22 @@
 
         public async Task Invoke(HttpContext context)
         {
-            if (context.Request.Method != "POST" || context.Request.Path.Equals(_getEndpointPath) == false)
+            if (context.Request.Path.Equals(_getEndpointPath) == false)
             {
                 await _next(context);
                 return;
             }
 
-            StringValues login, password;
-            if (context.Request.Form.TryGetValue(nameof(TokenRequestModel.Login), out login) == false
-                || context.Request.Form.TryGetValue(nameof(TokenRequestModel.Password), out password) == false)
+            var requestModel = await DeserializeModel(context.Request);
+            if (IsRequestValid(context.Request.Method, requestModel) == false)
             {
-                context.Response.StatusCode = (int) HttpStatusCode.NotFound;
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return;
             }
 
             try
             {
-                var claims = await _userClaimsProvider.GetClaimsAsync(login, password);
+                var claims = await _userClaimsProvider.GetClaimsAsync(requestModel.Login, requestModel.Password);
                 var notBefore = DateTime.UtcNow;
                 var expires = _lifetime.HasValue ? notBefore.Add(_lifetime.Value) : (DateTime?) null;
                 var token = new JwtSecurityToken(claims: claims, notBefore: DateTime.UtcNow, expires: expires,

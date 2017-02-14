@@ -32,12 +32,12 @@
 
         public TokenResponseModel Token(string login, string password)
         {
-            return Post<TokenResponseModel>("/api/Account/Token", new FormUrlEncodedContent(new TokenRequestModel(login, password).Content));
+            return Post<TokenResponseModel>("/api/Account/Token", new TokenRequestModel {Login = login, Password = password});
         }
 
         public Task<TokenResponseModel> TokenAsync(string login, string password)
         {
-            return PostAsync<TokenResponseModel>("api/Account/Token", new FormUrlEncodedContent(new TokenRequestModel(login, password).Content));
+            return PostAsync<TokenResponseModel>("api/Account/Token", new TokenRequestModel {Login = login, Password = password});
         }
 
         public IEnumerable<string> UserInfo()
