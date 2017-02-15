@@ -36,7 +36,7 @@
             return serializerSettings
                 .UseNullValueHandling(NullValueHandling.Ignore)
                 .UseFormatting(Formatting.Indented)
-                .UseContractResolver(new DefaultContractResolver())
+                .UseContractResolver(new CamelCasePropertyNamesContractResolver())
                 .UseConverter(new DateTimeConverter())
                 .UseConverter(new StringEnumConverter());
         }
