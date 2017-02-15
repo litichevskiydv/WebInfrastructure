@@ -40,9 +40,10 @@
         }
 
         [Fact]
-        public void ShouldThrowNotFoundExceptionWhileWhenLoginIsIncorrect()
+        public void ShouldForbiddenWhenLoginIsIncorrect()
         {
-            Assert.Throws<NotFoundException>(() => ApiClient.Login("lhp1@lhp.com", "1234"));
+            var exception = Assert.Throws<ApiException>(() => ApiClient.Login("lhp1@lhp.com", "1234"));
+            Assert.Equal(HttpStatusCode.Forbidden, exception.StatusCode);
         }
 
         [Fact]

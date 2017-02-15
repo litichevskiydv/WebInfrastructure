@@ -4,11 +4,11 @@
     using System.IdentityModel.Tokens.Jwt;
     using System.IO;
     using System.Net;
+    using System.Security.Claims;
     using System.Text;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Options;
-    using Microsoft.Extensions.Primitives;
     using Microsoft.IdentityModel.Tokens;
     using Models;
     using Newtonsoft.Json;
@@ -55,30 +55,37 @@
             _jsonSerializerSettings = new JsonSerializerSettings().UseDefaultSettings();
         }
 
-        private static void WriteErrorMessageToResponse(HttpResponse response, HttpStatusCode statusCode, string message)
+        private async Task<TokenRequestModel> DeserializeModel(HttpRequest request)
         {
-            response.StatusCode = (int)statusCode;
-            response.ContentType = "text/plain";
-            using (var output = new StreamWriter(response.Body, Encoding.UTF8, 4096, true))
-                output.WriteLine(message);
+            using (var reader = new StreamReader(request.Body))
+                return JsonConvert.DeserializeObject<TokenRequestModel>(await reader.ReadToEndAsync(), _jsonSerializerSettings);
+        }
+
+        private static bool IsRequestValid(string requestMethod, TokenRequestModel requestModel)
+        {
+            return requestMethod == HttpMethods.Post
+                   && requestModel != null
+                   && string.IsNullOrWhiteSpace(requestModel.Login) == false
+                   && string.IsNullOrWhiteSpace(requestModel.Password) == false;
         }
 
         public async Task Invoke(HttpContext context)
         {
-            if (context.Request.Method != "POST" || context.Request.Path.Equals(_getEndpointPath) == false)
+            if (context.Request.Path.Equals(_getEndpointPath) == false)
             {
                 await _next(context);
                 return;
             }
 
-            StringValues login, password;
-            if (context.Request.Form.TryGetValue(nameof(TokenRequestModel.Login), out login) == false
-                || context.Request.Form.TryGetValue(nameof(TokenRequestModel.Password), out password) == false)
+            var requestModel = await DeserializeModel(context.Request);
+            if (IsRequestValid(context.Request.Method, requestModel) == false)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return;
             }
 
+            Claim[] claims;
             try
             {
                 var claims = _userClaimsProvider.GetClaims(login, password);
@@ -94,17 +101,30 @@
                 context.Response.ContentType = "application/json; charset=utf-8";
                 using (var output = new StreamWriter(context.Response.Body, Encoding.UTF8, 4096, true))
                     output.WriteLine(JsonConvert.SerializeObject(response, _jsonSerializerSettings));
+                claims = await _userClaimsProvider.GetClaimsAsync(requestModel.Login, requestModel.Password);
             }
-            catch (LoginNotFoundException exception)
+            catch (LoginNotFoundException)
             {
                 _tokenIssueEventHandler?.LoginNotFoundEventHandle(login);
                 WriteErrorMessageToResponse(context.Response, HttpStatusCode.NotFound, exception.Message);
+                context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                return;
             }
-            catch (IncorrectPasswordException exception)
+            catch (IncorrectPasswordException)
             {
                 _tokenIssueEventHandler?.IncorrectPasswordEventHandle(login, password);
                 WriteErrorMessageToResponse(context.Response, HttpStatusCode.Forbidden, exception.Message);
+                context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                return;
             }
+            var notBefore = DateTime.UtcNow;
+            var expires = _lifetime.HasValue ? notBefore.Add(_lifetime.Value) : (DateTime?)null;
+            var token = new JwtSecurityToken(claims: claims, notBefore: notBefore, expires: expires, signingCredentials: _signingCredentials);
+
+            var response = new { Token = _tokenHandler.WriteToken(token), ExpirationDate = expires };
+            context.Response.ContentType = "application/json; charset=utf-8";
+            using (var output = new StreamWriter(context.Response.Body, Encoding.UTF8, 4096, true))
+                output.WriteLine(JsonConvert.SerializeObject(response, _jsonSerializerSettings));
         }
     }
 }

@@ -1,9 +1,10 @@
 ﻿namespace Skeleton.Web.Authentication.JwtBearer.UserClaimsProvider
 {
     using System.Security.Claims;
+    using System.Threading.Tasks;
 
     public interface IUserClaimsProvider
     {
-        Claim[] GetClaims(string login, string password);
+        Task<Claim[]> GetClaimsAsync(string login, string password);
     }
 }
