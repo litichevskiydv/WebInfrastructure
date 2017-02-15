@@ -49,6 +49,7 @@
                         .ConfigureTokensIssuingOptions(
                             i => i
                                 .WithGetEndpotint("/api/Account/Token")
+                                //.WithTokenIssueEventHandler(ITokenIssueEventHandler)
                                 .WithLifetime(TimeSpan.FromHours(2)))
                         .ConfigureJwtBearerOptions(
                             o => o

@@ -25,6 +25,7 @@
         private readonly SigningCredentials _signingCredentials;
         private readonly PathString _getEndpointPath;
         private readonly TimeSpan? _lifetime;
+        private readonly ITokenIssueEventHandler _tokenIssueEventHandler;
 
         private readonly JsonSerializerSettings _jsonSerializerSettings;
 
@@ -46,7 +47,7 @@
             _next = next;
             _userClaimsProvider = userClaimsProvider;
             _tokenHandler = new JwtSecurityTokenHandler();
-
+            _tokenIssueEventHandler = options.Value.TokenIssueEventHandler;
             _getEndpointPath = new PathString(options.Value.GetEndpotint);
             _signingCredentials = new SigningCredentials(options.Value.SigningKey, options.Value.SigningAlgorithmName);
             _lifetime = options.Value.Lifetime;
@@ -74,7 +75,7 @@
             if (context.Request.Form.TryGetValue(nameof(TokenRequestModel.Login), out login) == false
                 || context.Request.Form.TryGetValue(nameof(TokenRequestModel.Password), out password) == false)
             {
-                context.Response.StatusCode = (int) HttpStatusCode.NotFound;
+                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 return;
             }
 
@@ -82,21 +83,26 @@
             {
                 var claims = _userClaimsProvider.GetClaims(login, password);
                 var notBefore = DateTime.UtcNow;
-                var expires = _lifetime.HasValue ? notBefore.Add(_lifetime.Value) : (DateTime?) null;
+                var expires = _lifetime.HasValue ? notBefore.Add(_lifetime.Value) : (DateTime?)null;
                 var token = new JwtSecurityToken(claims: claims, notBefore: DateTime.UtcNow, expires: expires,
                     signingCredentials: _signingCredentials);
 
-                var response = new TokenResponseModel {Token = _tokenHandler.WriteToken(token), ExpirationDate = expires};
+                var tokenResult = _tokenHandler.WriteToken(token);
+                var response = new TokenResponseModel { Token = tokenResult, ExpirationDate = expires };
+                _tokenIssueEventHandler?.IssueSuccessEventHandle(tokenResult, claims);
+
                 context.Response.ContentType = "application/json; charset=utf-8";
                 using (var output = new StreamWriter(context.Response.Body, Encoding.UTF8, 4096, true))
                     output.WriteLine(JsonConvert.SerializeObject(response, _jsonSerializerSettings));
             }
             catch (LoginNotFoundException exception)
             {
+                _tokenIssueEventHandler?.LoginNotFoundEventHandle(login);
                 WriteErrorMessageToResponse(context.Response, HttpStatusCode.NotFound, exception.Message);
             }
             catch (IncorrectPasswordException exception)
             {
+                _tokenIssueEventHandler?.IncorrectPasswordEventHandle(login, password);
                 WriteErrorMessageToResponse(context.Response, HttpStatusCode.Forbidden, exception.Message);
             }
         }
