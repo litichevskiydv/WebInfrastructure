@@ -5,7 +5,6 @@
     using System.IO;
     using System.Net;
     using System.Security.Claims;
-    using System.Text;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Options;
@@ -68,6 +67,13 @@
                    && string.IsNullOrWhiteSpace(requestModel.Password) == false;
         }
 
+        private async Task WriteResponse(HttpResponse response, HttpStatusCode statusCode, object payload)
+        {
+            response.StatusCode = (int)statusCode;
+            response.ContentType = "application/json; charset=utf-8";
+            await response.WriteAsync(JsonConvert.SerializeObject(payload, _jsonSerializerSettings));
+        }
+
         public async Task Invoke(HttpContext context)
         {
             if (context.Request.Path.Equals(_getEndpointPath) == false)
@@ -90,22 +96,22 @@
             }
             catch (LoginNotFoundException)
             {
-                context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                await WriteResponse(context.Response, HttpStatusCode.BadRequest,
+                    new TokenErrorResponseModel {ErrorMessage = "Login or passwor is incorrect"});
                 return;
             }
             catch (IncorrectPasswordException)
             {
-                context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                await WriteResponse(context.Response, HttpStatusCode.BadRequest,
+                    new TokenErrorResponseModel {ErrorMessage = "Login or passwor is incorrect"});
                 return;
             }
             var notBefore = DateTime.UtcNow;
             var expires = _lifetime.HasValue ? notBefore.Add(_lifetime.Value) : (DateTime?)null;
-            var token = new JwtSecurityToken(claims: claims, notBefore: notBefore, expires: expires, signingCredentials: _signingCredentials);
 
-            var response = new { Token = _tokenHandler.WriteToken(token), ExpirationDate = expires };
-            context.Response.ContentType = "application/json; charset=utf-8";
-            using (var output = new StreamWriter(context.Response.Body, Encoding.UTF8, 4096, true))
-                output.WriteLine(JsonConvert.SerializeObject(response, _jsonSerializerSettings));
+            var token = new JwtSecurityToken(claims: claims, notBefore: DateTime.UtcNow, expires: expires, signingCredentials: _signingCredentials);
+            await WriteResponse(context.Response, HttpStatusCode.OK,
+                new TokenResponseModel {Token = _tokenHandler.WriteToken(token), ExpirationDate = expires});
         }
     }
 }
