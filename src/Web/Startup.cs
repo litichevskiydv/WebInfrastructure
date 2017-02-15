@@ -3,6 +3,7 @@
     using System;
     using System.Reflection;
     using System.Text;
+    using Application.Services;
     using Autofac;
     using Domain.Dtos;
     using Installers;
@@ -10,6 +11,7 @@
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
     using Microsoft.IdentityModel.Tokens;
     using Skeleton.Web;
     using Skeleton.Web.Authentication.JwtBearer;
@@ -21,9 +23,11 @@
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public class Startup : WebApiBaseStartup
     {
-        public Startup(IHostingEnvironment env, CommandLineArgumentsProvider commandLineArgumentsProvider)
+        private ILoggerFactory _loggerFactory;
+        public Startup(IHostingEnvironment env, CommandLineArgumentsProvider commandLineArgumentsProvider, ILoggerFactory loggerFactory)
             : base(env, commandLineArgumentsProvider)
         {
+            _loggerFactory = loggerFactory;
         }
 
         protected override void ConfigureSwaggerDocumentator(SwaggerGenOptions options)
@@ -49,7 +53,7 @@
                         .ConfigureTokensIssuingOptions(
                             i => i
                                 .WithGetEndpotint("/api/Account/Token")
-                                //.WithTokenIssueEventHandler(ITokenIssueEventHandler)
+                                .WithTokenIssueEventHandler(new TokenIssueEventHandler(_loggerFactory.CreateLogger<TokenIssueEventHandler>()))
                                 .WithLifetime(TimeSpan.FromHours(2)))
                         .ConfigureJwtBearerOptions(
                             o => o

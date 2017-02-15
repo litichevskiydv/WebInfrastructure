@@ -87,20 +87,17 @@
             Claim[] claims;
             try
             {
-                //var tokenResult = _tokenHandler.WriteToken(token);
-                //_tokenIssueEventHandler?.IssueSuccessEventHandle(tokenResult, claims);
-
                 claims = await _userClaimsProvider.GetClaimsAsync(requestModel.Login, requestModel.Password);
             }
             catch (LoginNotFoundException)
             {
-//                _tokenIssueEventHandler?.LoginNotFoundEventHandle(login);
+                _tokenIssueEventHandler?.LoginNotFoundEventHandle(requestModel.Login);
                 context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                 return;
             }
             catch (IncorrectPasswordException)
             {
-//                _tokenIssueEventHandler?.IncorrectPasswordEventHandle(login, password);
+                _tokenIssueEventHandler?.IncorrectPasswordEventHandle(requestModel.Login, requestModel.Password);
                 context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                 return;
             }
@@ -108,7 +105,10 @@
             var expires = _lifetime.HasValue ? notBefore.Add(_lifetime.Value) : (DateTime?)null;
             var token = new JwtSecurityToken(claims: claims, notBefore: notBefore, expires: expires, signingCredentials: _signingCredentials);
 
-            var response = new { Token = _tokenHandler.WriteToken(token), ExpirationDate = expires };
+            var tokenResult = _tokenHandler.WriteToken(token);
+            _tokenIssueEventHandler?.IssueSuccessEventHandle(tokenResult, claims);
+
+            var response = new { Token = tokenResult, ExpirationDate = expires };
             context.Response.ContentType = "application/json; charset=utf-8";
             using (var output = new StreamWriter(context.Response.Body, Encoding.UTF8, 4096, true))
                 output.WriteLine(JsonConvert.SerializeObject(response, _jsonSerializerSettings));
