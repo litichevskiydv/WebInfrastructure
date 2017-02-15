@@ -80,7 +80,6 @@
             var requestModel = await DeserializeModel(context.Request);
             if (IsRequestValid(context.Request.Method, requestModel) == false)
             {
-                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return;
             }
@@ -88,32 +87,20 @@
             Claim[] claims;
             try
             {
-                var claims = _userClaimsProvider.GetClaims(login, password);
-                var notBefore = DateTime.UtcNow;
-                var expires = _lifetime.HasValue ? notBefore.Add(_lifetime.Value) : (DateTime?)null;
-                var token = new JwtSecurityToken(claims: claims, notBefore: DateTime.UtcNow, expires: expires,
-                    signingCredentials: _signingCredentials);
+                //var tokenResult = _tokenHandler.WriteToken(token);
+                //_tokenIssueEventHandler?.IssueSuccessEventHandle(tokenResult, claims);
 
-                var tokenResult = _tokenHandler.WriteToken(token);
-                var response = new TokenResponseModel { Token = tokenResult, ExpirationDate = expires };
-                _tokenIssueEventHandler?.IssueSuccessEventHandle(tokenResult, claims);
-
-                context.Response.ContentType = "application/json; charset=utf-8";
-                using (var output = new StreamWriter(context.Response.Body, Encoding.UTF8, 4096, true))
-                    output.WriteLine(JsonConvert.SerializeObject(response, _jsonSerializerSettings));
                 claims = await _userClaimsProvider.GetClaimsAsync(requestModel.Login, requestModel.Password);
             }
             catch (LoginNotFoundException)
             {
-                _tokenIssueEventHandler?.LoginNotFoundEventHandle(login);
-                WriteErrorMessageToResponse(context.Response, HttpStatusCode.NotFound, exception.Message);
+//                _tokenIssueEventHandler?.LoginNotFoundEventHandle(login);
                 context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                 return;
             }
             catch (IncorrectPasswordException)
             {
-                _tokenIssueEventHandler?.IncorrectPasswordEventHandle(login, password);
-                WriteErrorMessageToResponse(context.Response, HttpStatusCode.Forbidden, exception.Message);
+//                _tokenIssueEventHandler?.IncorrectPasswordEventHandle(login, password);
                 context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                 return;
             }
