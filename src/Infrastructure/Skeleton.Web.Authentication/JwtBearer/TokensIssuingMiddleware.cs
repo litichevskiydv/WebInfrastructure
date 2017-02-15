@@ -63,6 +63,7 @@
         private static bool IsRequestValid(string requestMethod, TokenRequestModel requestModel)
         {
             return requestMethod == HttpMethods.Post
+                   && requestModel != null
                    && string.IsNullOrWhiteSpace(requestModel.Login) == false
                    && string.IsNullOrWhiteSpace(requestModel.Password) == false;
         }
