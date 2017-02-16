@@ -40,17 +40,27 @@
         }
 
         [Fact]
-        public void ShouldForbiddenWhenLoginIsIncorrect()
+        public void ShouldReturnBadRequestWhenLoginNotProvided()
         {
-            var exception = Assert.Throws<ApiException>(() => ApiClient.Login("lhp1@lhp.com", "1234"));
-            Assert.Equal(HttpStatusCode.Forbidden, exception.StatusCode);
+            Assert.Throws<BadRequestException>(() => ApiClient.Login(null, "1234"));
         }
 
         [Fact]
-        public void ShouldReciveForbiddenWhenPasswordIsIncorrect()
+        public void ShouldReturnBadRequestWhenLoginIsIncorrect()
         {
-            var exception = Assert.Throws<ApiException>(() => ApiClient.Login("lhp@lhp.com", "12345"));
-            Assert.Equal(HttpStatusCode.Forbidden, exception.StatusCode);
+            Assert.Throws<BadRequestException>(() => ApiClient.Login("lhp1@lhp.com", "1234"));
+        }
+
+        [Fact]
+        public void ShouldReturnBadRequestWhenPasswordIsIncorrect()
+        {
+            Assert.Throws<BadRequestException>(() => ApiClient.Login("lhp@lhp.com", "12345"));
+        }
+
+        [Fact]
+        public void ShouldReturnBadRequestWhenPasswordNotProvided()
+        {
+            Assert.Throws<BadRequestException>(() => ApiClient.Login("lhp@lhp.com", null));
         }
     }
 }
