@@ -5,6 +5,7 @@
     using System.IO;
     using System.Net;
     using System.Security.Claims;
+    using System.Text;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Options;
@@ -114,6 +115,7 @@
             var notBefore = DateTime.UtcNow;
             var expires = _lifetime.HasValue ? notBefore.Add(_lifetime.Value) : (DateTime?)null;
 
+            var token = new JwtSecurityToken(claims: claims, notBefore: DateTime.UtcNow, expires: expires, signingCredentials: _signingCredentials);
             var tokenResult = _tokenHandler.WriteToken(token);
             _tokenIssueEventHandler?.IssueSuccessEventHandle(tokenResult, claims);
 
@@ -121,9 +123,9 @@
             context.Response.ContentType = "application/json; charset=utf-8";
             using (var output = new StreamWriter(context.Response.Body, Encoding.UTF8, 4096, true))
                 output.WriteLine(JsonConvert.SerializeObject(response, _jsonSerializerSettings));
-            var token = new JwtSecurityToken(claims: claims, notBefore: DateTime.UtcNow, expires: expires, signingCredentials: _signingCredentials);
+
             await WriteResponse(context.Response, HttpStatusCode.OK,
-                new TokenResponseModel {Token = _tokenHandler.WriteToken(token), ExpirationDate = expires});
+                new TokenResponseModel {Token = tokenResult, ExpirationDate = expires});
         }
     }
 }
