@@ -1,9 +1,7 @@
 ﻿namespace Skeleton.Web.ExceptionsHandling
 {
     using System;
-    using System.IO;
     using System.Net;
-    using System.Text;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -53,8 +51,7 @@
                 if (_hostingEnvironment.IsDevelopment() || _hostingEnvironment.IsStaging())
                 {
                     context.Response.ContentType = "application/json; charset=utf-8";
-                    using (var output = new StreamWriter(context.Response.Body, Encoding.UTF8, 4096, true))
-                        output.WriteLine(JsonConvert.SerializeObject(new ApiErrorResponse(message, exception), _jsonSerializerSettings));
+                    await context.Response.WriteAsync(JsonConvert.SerializeObject(new ApiErrorResponse(message, exception), _jsonSerializerSettings));
                 }
             }
         }
