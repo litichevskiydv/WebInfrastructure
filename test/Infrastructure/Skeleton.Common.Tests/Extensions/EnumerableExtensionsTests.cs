@@ -13,6 +13,8 @@
         [UsedImplicitly]
         public static IEnumerable<object[]> IsNotEmptyExtensionTests;
         [UsedImplicitly]
+        public static IEnumerable<object[]> AsArrayExtensionTests;
+        [UsedImplicitly]
         public static IEnumerable<object[]> IsEqualsExtensionTests;
 
         static EnumerableExtensionsTests()
@@ -29,6 +31,13 @@
                                            new object[] {Enumerable.Empty<int>(), false},
                                            new object[] {Enumerable.Repeat(1, 2), true}
                                        };
+            var arrayForTesting = new[] {1, 2, 3, 4, 5};
+            AsArrayExtensionTests = new[]
+                                    {
+                                        new object[] {null, new int[0]},
+                                        new object[] {Enumerable.Range(1, 3), new[] {1, 2, 3}},
+                                        new object[] {arrayForTesting, arrayForTesting}
+                                    };
             IsEqualsExtensionTests = new[]
                                      {
                                          new object[] {null, null, true},
@@ -52,6 +61,13 @@
         public void ShouldCheckCollectionsForNotEmptiness(IEnumerable<int> source, bool expected)
         {
             Assert.Equal(expected, source.IsNotEmpty());
+        }
+
+        [Theory]
+        [MemberData(nameof(AsArrayExtensionTests))]
+        public void ShouldCheckEnumerableToArrayConversion(IEnumerable<int> source, int[] expected)
+        {
+            Assert.Equal(expected, source.AsArray());
         }
 
         [Theory]
