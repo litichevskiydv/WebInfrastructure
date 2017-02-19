@@ -83,8 +83,8 @@
         }
 
         protected virtual Func<IApplicationBuilder, IApplicationBuilder> CreatePipelineConfigurator(
-            Func<IApplicationBuilder, IApplicationBuilder> pipelineBaseConfigurator, 
-            IHostingEnvironment env)
+            IHostingEnvironment env, ILoggerFactory loggerFactory,
+            Func<IApplicationBuilder, IApplicationBuilder> pipelineBaseConfigurator)
         {
             return pipelineBaseConfigurator;
         }
@@ -95,10 +95,10 @@
 
             app.UseUnhandledExceptionsLoggingMiddleware();
             var pipelineConfigurator = CreatePipelineConfigurator(
+                env, loggerFactory,
                 x => x.UseMvc()
                     .UseSwagger()
-                    .UseSwaggerUi(),
-                env);
+                    .UseSwaggerUi());
             pipelineConfigurator(app);
         }
     }

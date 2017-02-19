@@ -56,6 +56,8 @@
             }
         }
 
+        public JwtBearerOptions JwtBearerOptions => JwtBearerOptionsBuilder(new JwtBearerOptions());
+
         public Func<TokensIssuingOptions, TokensIssuingOptions> TokensIssuingOptionsBuilder
         {
             get
@@ -69,5 +71,7 @@
                           .WithSigningKey(_signingAlgorithmName, _signingKey);
             }
         }
+
+        public TokensIssuingOptions TokensIssuingOptions => TokensIssuingOptionsBuilder(new TokensIssuingOptions());
     }
 }

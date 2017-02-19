@@ -1,6 +1,7 @@
 ﻿namespace Skeleton.Web.Authentication.JwtBearer
 {
     using System;
+    using Configuration;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.Options;
 
@@ -29,6 +30,19 @@
             return applicationBuilder
                 .UseMiddleware<TokensIssuingMiddleware>(Options.Create(issuingOptions))
                 .UseJwtBearerAuthentication(verificationOptions);
+        }
+
+        public static IApplicationBuilder UseJwtBearerAuthorisationTokens(this IApplicationBuilder applicationBuilder,
+            Func<IJwtBearerAuthenticationConfigurator, IJwtBearerAuthenticationConfigurator> configurationBuilder)
+        {
+            if (applicationBuilder == null)
+                throw new ArgumentNullException(nameof(applicationBuilder));
+            if (configurationBuilder == null)
+                throw new ArgumentNullException(nameof(configurationBuilder));
+
+            var configurator = new JwtBearerAuthenticationConfigurator();
+            configurationBuilder(configurator);
+            return UseJwtBearerAuthorisationTokens(applicationBuilder, configurator.TokensIssuingOptions, configurator.JwtBearerOptions);
         }
     }
 }
