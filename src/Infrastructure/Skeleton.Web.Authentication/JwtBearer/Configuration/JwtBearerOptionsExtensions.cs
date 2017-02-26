@@ -41,11 +41,7 @@
 
         public static JwtBearerOptions WithoutErrorDetails(this JwtBearerOptions options)
         {
-            if (options == null)
-                throw new ArgumentNullException(nameof(options));
-
-            options.IncludeErrorDetails = false;
-            return options;
+            return options.WithErrorDetails(false);
         }
     }
 }
