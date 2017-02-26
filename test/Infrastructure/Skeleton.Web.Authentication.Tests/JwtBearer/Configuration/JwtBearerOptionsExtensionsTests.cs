@@ -59,5 +59,62 @@
         {
             Assert.Throws<ArgumentNullException>(() => options.WithErrorDetails(includeErrorDetails));
         }
+
+        [Fact]
+        public void ShouldConfigureTokenValidationParameters()
+        {
+            // Given
+            var options = new JwtBearerOptions();
+            const string expectedValidIssuer = "abd";
+
+            // When
+            options.WithTokenValidationParameters(x => x.WithIssuerValidation(expectedValidIssuer));
+
+            // Then
+            Assert.True(options.TokenValidationParameters.ValidateIssuer);
+            Assert.Equal(expectedValidIssuer, options.TokenValidationParameters.ValidIssuer);
+        }
+
+        [Fact]
+        public void ShouldSetEventsProcessor()
+        {
+            // Given
+            var options = new JwtBearerOptions();
+            var expectedEventsProcessor = new Mock<IJwtBearerEvents>().Object;
+
+            // When
+            options.WithEventsProcessor(expectedEventsProcessor);
+
+            // Then
+            Assert.Equal(expectedEventsProcessor, options.Events);
+        }
+
+        [Fact]
+        public void ShouldAllowErrorDetailsReturning()
+        {
+            // Given
+            var options = new JwtBearerOptions();
+
+            // When
+            options.WithErrorDetails();
+
+            // Then
+            Assert.True(options.IncludeErrorDetails);
+        }
+
+        [Fact]
+        public void ShouldDisableErrorDetailsReturning()
+        {
+            // Given
+            var options = new JwtBearerOptions();
+
+            // When
+            options
+                .WithErrorDetails()
+                .WithoutErrorDetails();
+
+            // Then
+            Assert.False(options.IncludeErrorDetails);
+        }
     }
 }

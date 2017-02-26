@@ -30,7 +30,7 @@
             return options;
         }
 
-        public static JwtBearerOptions WithErrorDetails(this JwtBearerOptions options, bool includeErrorDetails)
+        public static JwtBearerOptions WithErrorDetails(this JwtBearerOptions options, bool includeErrorDetails = true)
         {
             if (options == null)
                 throw new ArgumentNullException(nameof(options));
