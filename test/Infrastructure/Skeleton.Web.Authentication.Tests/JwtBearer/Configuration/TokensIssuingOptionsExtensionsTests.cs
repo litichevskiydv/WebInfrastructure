@@ -67,9 +67,53 @@
 
         [Theory]
         [MemberData(nameof(WithLifetimeValidationTestsData))]
-        public void WithLifetimeShouldValidateInput(TokensIssuingOptions options, TimeSpan? lifetime)
+        public void WithLifetimeShouldValidateInput(TokensIssuingOptions options, TimeSpan lifetime)
         {
             Assert.Throws<ArgumentNullException>(() => options.WithLifetime(lifetime));
+        }
+
+        [Fact]
+        public void ShouldSetGetEndpoint()
+        {
+            // Given
+            var options = new TokensIssuingOptions();
+            const string expectedGetEndpoint = "/api/Account/Token";
+
+            // When
+            options.WithGetEndpotint(expectedGetEndpoint);
+
+            // Then
+            Assert.Equal(expectedGetEndpoint, options.GetEndpotint);
+        }
+
+        [Fact]
+        public void ShouldSetSigningKey()
+        {
+            // Given
+            var options = new TokensIssuingOptions();
+            const string expectedSigningAlgorithmName = SecurityAlgorithms.HmacSha256;
+            var expectedSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("23j79h675s78T904gldUt0M5SftPg50H3W85s5A8u68zUV4AIJ"));
+
+            // When
+            options.WithSigningKey(expectedSigningAlgorithmName, expectedSigningKey);
+
+            // Then
+            Assert.Equal(expectedSigningAlgorithmName, options.SigningAlgorithmName);
+            Assert.Equal(expectedSigningKey, options.SigningKey);
+        }
+
+        [Fact]
+        public void ShouldSetLifetime()
+        {
+            // Given
+            var options = new TokensIssuingOptions();
+            var lifetime = TimeSpan.FromHours(2);
+
+            // When
+            options.WithLifetime(lifetime);
+
+            // Then
+            Assert.Equal(lifetime, options.Lifetime);
         }
     }
 }
