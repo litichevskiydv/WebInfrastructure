@@ -44,6 +44,7 @@
         protected override void ConfigureOptions(IServiceCollection services)
         {
             services
+<<<<<<< HEAD
                 .Configure<DefaultConfigurationValues>(Configuration.GetSection("DefaultConfigurationValues"))
                 .AddJwtBearerAuthorisationTokens(
                     x => x
@@ -62,6 +63,9 @@
                                         .WithLifetimeValidation()
                                         .WithoutAudienceValidation()
                                         .WithoutIssuerValidation())));
+=======
+                .Configure<DefaultConfigurationValues>(Configuration.GetSection("DefaultConfigurationValues"));
+>>>>>>> refs/remotes/litichevskiydv/master
         }
 
         protected override void RegisterDependencies(ContainerBuilder containerBuilder)
@@ -69,9 +73,29 @@
             containerBuilder.RegisterAssemblyModules(typeof(DataAccessInstaller).GetTypeInfo().Assembly);
         }
 
-        protected override Func<IApplicationBuilder, IApplicationBuilder> CreatePipelineConfigurator(Func<IApplicationBuilder, IApplicationBuilder> pipelineBaseConfigurator, IHostingEnvironment env)
+        protected override Func<IApplicationBuilder, IApplicationBuilder> CreatePipelineConfigurator(
+            IHostingEnvironment env, ILoggerFactory loggerFactory,
+            Func<IApplicationBuilder, IApplicationBuilder> pipelineBaseConfigurator)
         {
-            return x => pipelineBaseConfigurator(x.UseJwtBearerAuthorisationTokens());
+            return x => pipelineBaseConfigurator(x
+                       .UseJwtBearerAuthorisationTokens(
+                           b => b
+                               .ConfigureSigningKey(
+                                   SecurityAlgorithms.HmacSha256,
+                                   new SymmetricSecurityKey(
+                                       Encoding.UTF8.GetBytes(
+                                           "23j79h675s78T904gldUt0M5SftPg50H3W85s5A8u68zUV4AIJ")))
+                               .ConfigureTokensIssuingOptions(
+                                   i => i
+                                       .WithGetEndpotint("/api/Account/Token")
+                                       .WithLifetime(TimeSpan.FromHours(2)))
+                               .ConfigureJwtBearerOptions(
+                                   o => o
+                                       .WithTokenValidationParameters(
+                                           v => v
+                                               .WithLifetimeValidation()
+                                               .WithoutAudienceValidation()
+                                               .WithoutIssuerValidation()))));
         }
     }
 }

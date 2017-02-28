@@ -13,6 +13,12 @@
             return serializerSettings;
         }
 
+        public static JsonSerializerSettings UseDefaultValuesHandling(this JsonSerializerSettings serializerSettings, DefaultValueHandling option)
+        {
+            serializerSettings.DefaultValueHandling = option;
+            return serializerSettings;
+        }
+
         public static JsonSerializerSettings UseFormatting(this JsonSerializerSettings serializerSettings, Formatting option)
         {
             serializerSettings.Formatting = option;
@@ -35,6 +41,7 @@
         {
             return serializerSettings
                 .UseNullValueHandling(NullValueHandling.Ignore)
+                .UseDefaultValuesHandling(DefaultValueHandling.IgnoreAndPopulate)
                 .UseFormatting(Formatting.Indented)
                 .UseContractResolver(new CamelCasePropertyNamesContractResolver())
                 .UseConverter(new DateTimeConverter())

@@ -30,7 +30,7 @@
             return options;
         }
 
-        public static JwtBearerOptions WithErrorDetails(this JwtBearerOptions options, bool includeErrorDetails)
+        public static JwtBearerOptions WithErrorDetails(this JwtBearerOptions options, bool includeErrorDetails = true)
         {
             if (options == null)
                 throw new ArgumentNullException(nameof(options));
@@ -41,11 +41,7 @@
 
         public static JwtBearerOptions WithoutErrorDetails(this JwtBearerOptions options)
         {
-            if (options == null)
-                throw new ArgumentNullException(nameof(options));
-
-            options.IncludeErrorDetails = false;
-            return options;
+            return options.WithErrorDetails(false);
         }
     }
 }
