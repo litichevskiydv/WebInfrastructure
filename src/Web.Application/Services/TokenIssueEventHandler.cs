@@ -1,11 +1,10 @@
 ﻿namespace Web.Application.Services
 {
-    using System;
     using System.Security.Claims;
     using Microsoft.Extensions.Logging;
     using Skeleton.Web.Authentication.JwtBearer;
 
-    public class TokenIssueEventHandler: ITokenIssueEventHandler
+    public class TokenIssueEventHandler : ITokenIssueEventHandler
     {
         readonly ILogger<TokenIssueEventHandler> _logger;
 

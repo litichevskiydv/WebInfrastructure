@@ -43,6 +43,8 @@
         {
             if (options == null)
                 throw new ArgumentNullException(nameof(options));
+            if (eventHandler == null)
+                throw new ArgumentNullException(nameof(eventHandler));
 
             options.TokenIssueEventHandler = eventHandler;
             return options;

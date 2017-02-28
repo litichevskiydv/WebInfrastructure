@@ -16,8 +16,8 @@
         {
         }
 
-        public TestsStartup(IHostingEnvironment env, CommandLineArgumentsProvider commandLineArgumentsProvider, ILoggerFactory loggerFactory)
-            : base(env, commandLineArgumentsProvider, loggerFactory)
+        public TestsStartup(IHostingEnvironment env, CommandLineArgumentsProvider commandLineArgumentsProvider)
+            : base(env, commandLineArgumentsProvider)
         {
         }
     }
