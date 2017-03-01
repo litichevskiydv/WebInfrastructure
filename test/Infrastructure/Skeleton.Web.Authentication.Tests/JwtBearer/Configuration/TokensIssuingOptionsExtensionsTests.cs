@@ -2,56 +2,18 @@
 {
     using System;
     using System.Collections.Generic;
-<<<<<<< HEAD
-    using Authentication.JwtBearer;
-    using Authentication.JwtBearer.Configuration;
-    using JetBrains.Annotations;
-    using Moq;
-=======
     using System.Text;
     using Authentication.JwtBearer;
     using Authentication.JwtBearer.Configuration;
     using JetBrains.Annotations;
     using Microsoft.IdentityModel.Tokens;
->>>>>>> refs/remotes/litichevskiydv/master
+    using Moq;
     using Xunit;
 
     public class TokensIssuingOptionsExtensionsTests
     {
-<<<<<<< HEAD
-        static TokensIssuingOptionsExtensionsTests()
-        {
-            WithTokenIssueEventHandlerTestsData =
-                new[]
-                {
-                    new object[] {null, new Mock<ITokenIssueEventHandler>().Object},
-                    new object[] {new TokensIssuingOptions(), null}
-                };
-        }
-
         [UsedImplicitly]
         public static readonly IEnumerable<object[]> WithTokenIssueEventHandlerTestsData;
-
-        [Theory]
-        [MemberData(nameof(WithTokenIssueEventHandlerTestsData))]
-        public void SetTokenIssueEventHandlerFailTest(TokensIssuingOptions options, ITokenIssueEventHandler eventHandler)
-        {
-            Assert.Throws<ArgumentNullException>(() => options.WithTokenIssueEventHandler(eventHandler));
-        }
-
-        [Fact]
-        public void ShouldSetTokenIssueEventHandlerTest()
-        {
-            // Given
-            var options = new TokensIssuingOptions();
-            var tokenIssueEventHandler = new Mock<ITokenIssueEventHandler>().Object;
-
-            // When
-            options.WithTokenIssueEventHandler(tokenIssueEventHandler);
-
-            // Then
-            Assert.Equal(tokenIssueEventHandler, options.TokenIssueEventHandler);
-=======
         [UsedImplicitly]
         public static readonly IEnumerable<object[]> WithGetEndpotintValidationTestsData;
         [UsedImplicitly]
@@ -89,7 +51,21 @@
                         null
                     }
                 };
-            WithLifetimeValidationTestsData = new[] {new object[] {null, TimeSpan.FromHours(2)}};
+            WithLifetimeValidationTestsData = new[] { new object[] { null, TimeSpan.FromHours(2) } };
+
+            WithTokenIssueEventHandlerTestsData =
+                new[]
+                {
+                    new object[] {null, new Mock<ITokenIssueEventHandler>().Object},
+                    new object[] {new TokensIssuingOptions(), null}
+                };
+        }
+
+        [Theory]
+        [MemberData(nameof(WithTokenIssueEventHandlerTestsData))]
+        public void SetTokenIssueEventHandlerFailTest(TokensIssuingOptions options, ITokenIssueEventHandler eventHandler)
+        {
+            Assert.Throws<ArgumentNullException>(() => options.WithTokenIssueEventHandler(eventHandler));
         }
 
         [Theory]
@@ -128,6 +104,20 @@
         }
 
         [Fact]
+        public void ShouldSetLifetime()
+        {
+            // Given
+            var options = new TokensIssuingOptions();
+            var lifetime = TimeSpan.FromHours(2);
+
+            // When
+            options.WithLifetime(lifetime);
+
+            // Then
+            Assert.Equal(lifetime, options.Lifetime);
+        }
+
+        [Fact]
         public void ShouldSetSigningKey()
         {
             // Given
@@ -144,18 +134,17 @@
         }
 
         [Fact]
-        public void ShouldSetLifetime()
+        public void ShouldSetTokenIssueEventHandlerTest()
         {
             // Given
             var options = new TokensIssuingOptions();
-            var lifetime = TimeSpan.FromHours(2);
+            var tokenIssueEventHandler = new Mock<ITokenIssueEventHandler>().Object;
 
             // When
-            options.WithLifetime(lifetime);
+            options.WithTokenIssueEventHandler(tokenIssueEventHandler);
 
             // Then
-            Assert.Equal(lifetime, options.Lifetime);
->>>>>>> refs/remotes/litichevskiydv/master
+            Assert.Equal(tokenIssueEventHandler, options.TokenIssueEventHandler);
         }
     }
 }
