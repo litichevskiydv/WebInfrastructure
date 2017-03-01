@@ -5,7 +5,6 @@
     using System.IO;
     using System.Net;
     using System.Security.Claims;
-    using System.Text;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Options;
@@ -116,11 +115,6 @@
             var token = new JwtSecurityToken(claims: claims, notBefore: DateTime.UtcNow, expires: expires, signingCredentials: _signingCredentials);
             var tokenResult = _tokenHandler.WriteToken(token);
             _tokenIssueEventHandler?.IssueSuccessEventHandle(tokenResult, claims);
-
-            var response = new { Token = tokenResult, ExpirationDate = expires };
-            context.Response.ContentType = "application/json; charset=utf-8";
-            using (var output = new StreamWriter(context.Response.Body, Encoding.UTF8, 4096, true))
-                output.WriteLine(JsonConvert.SerializeObject(response, _jsonSerializerSettings));
 
             await WriteResponse(context.Response, HttpStatusCode.OK,
                 new TokenResponseModel {Token = tokenResult, ExpirationDate = expires});
