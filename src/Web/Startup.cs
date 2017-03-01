@@ -3,6 +3,7 @@
     using System;
     using System.Reflection;
     using System.Text;
+    using Application.Services;
     using Autofac;
     using Domain.Dtos;
     using Installers;
@@ -22,6 +23,7 @@
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public class Startup : WebApiBaseStartup
     {
+
         public Startup(IHostingEnvironment env, CommandLineArgumentsProvider commandLineArgumentsProvider)
             : base(env, commandLineArgumentsProvider)
         {
@@ -30,12 +32,12 @@
         protected override void ConfigureSwaggerDocumentator(SwaggerGenOptions options)
         {
             options.SingleApiVersion(new Info
-            {
-                Version = "v1",
-                Title = "Values providing API",
-                Description = "A dummy to get configuration values",
-                TermsOfService = "None"
-            });
+                                     {
+                                         Version = "v1",
+                                         Title = "Values providing API",
+                                         Description = "A dummy to get configuration values",
+                                         TermsOfService = "None"
+                                     });
         }
 
         protected override void ConfigureOptions(IServiceCollection services)
@@ -64,7 +66,8 @@
                                .ConfigureTokensIssuingOptions(
                                    i => i
                                        .WithGetEndpotint("/api/Account/Token")
-                                       .WithLifetime(TimeSpan.FromHours(2)))
+                                       .WithLifetime(TimeSpan.FromHours(2))
+                                       .WithTokenIssueEventHandler(new TokenIssueEventHandler(loggerFactory.CreateLogger<TokenIssueEventHandler>())))
                                .ConfigureJwtBearerOptions(
                                    o => o
                                        .WithTokenValidationParameters(

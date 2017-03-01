@@ -7,10 +7,13 @@
     using Authentication.JwtBearer.Configuration;
     using JetBrains.Annotations;
     using Microsoft.IdentityModel.Tokens;
+    using Moq;
     using Xunit;
 
     public class TokensIssuingOptionsExtensionsTests
     {
+        [UsedImplicitly]
+        public static readonly IEnumerable<object[]> WithTokenIssueEventHandlerTestsData;
         [UsedImplicitly]
         public static readonly IEnumerable<object[]> WithGetEndpotintValidationTestsData;
         [UsedImplicitly]
@@ -48,7 +51,21 @@
                         null
                     }
                 };
-            WithLifetimeValidationTestsData = new[] {new object[] {null, TimeSpan.FromHours(2)}};
+            WithLifetimeValidationTestsData = new[] { new object[] { null, TimeSpan.FromHours(2) } };
+
+            WithTokenIssueEventHandlerTestsData =
+                new[]
+                {
+                    new object[] {null, new Mock<ITokenIssueEventHandler>().Object},
+                    new object[] {new TokensIssuingOptions(), null}
+                };
+        }
+
+        [Theory]
+        [MemberData(nameof(WithTokenIssueEventHandlerTestsData))]
+        public void SetTokenIssueEventHandlerFailTest(TokensIssuingOptions options, ITokenIssueEventHandler eventHandler)
+        {
+            Assert.Throws<ArgumentNullException>(() => options.WithTokenIssueEventHandler(eventHandler));
         }
 
         [Theory]
@@ -87,6 +104,20 @@
         }
 
         [Fact]
+        public void ShouldSetLifetime()
+        {
+            // Given
+            var options = new TokensIssuingOptions();
+            var lifetime = TimeSpan.FromHours(2);
+
+            // When
+            options.WithLifetime(lifetime);
+
+            // Then
+            Assert.Equal(lifetime, options.Lifetime);
+        }
+
+        [Fact]
         public void ShouldSetSigningKey()
         {
             // Given
@@ -103,17 +134,17 @@
         }
 
         [Fact]
-        public void ShouldSetLifetime()
+        public void ShouldSetTokenIssueEventHandlerTest()
         {
             // Given
             var options = new TokensIssuingOptions();
-            var lifetime = TimeSpan.FromHours(2);
+            var tokenIssueEventHandler = new Mock<ITokenIssueEventHandler>().Object;
 
             // When
-            options.WithLifetime(lifetime);
+            options.WithTokenIssueEventHandler(tokenIssueEventHandler);
 
             // Then
-            Assert.Equal(lifetime, options.Lifetime);
+            Assert.Equal(tokenIssueEventHandler, options.TokenIssueEventHandler);
         }
     }
 }

@@ -38,5 +38,16 @@
             options.Lifetime = lifetime;
             return options;
         }
+
+        public static TokensIssuingOptions WithTokenIssueEventHandler(this TokensIssuingOptions options, ITokenIssueEventHandler eventHandler)
+        {
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
+            if (eventHandler == null)
+                throw new ArgumentNullException(nameof(eventHandler));
+
+            options.TokenIssueEventHandler = eventHandler;
+            return options;
+        }
     }
 }

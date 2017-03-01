@@ -24,6 +24,7 @@
         private readonly SigningCredentials _signingCredentials;
         private readonly PathString _getEndpointPath;
         private readonly TimeSpan? _lifetime;
+        private readonly ITokenIssueEventHandler _tokenIssueEventHandler;
 
         private readonly JsonSerializerSettings _jsonSerializerSettings;
 
@@ -45,7 +46,7 @@
             _next = next;
             _userClaimsProvider = userClaimsProvider;
             _tokenHandler = new JwtSecurityTokenHandler();
-
+            _tokenIssueEventHandler = options.Value.TokenIssueEventHandler;
             _getEndpointPath = new PathString(options.Value.GetEndpotint);
             _signingCredentials = new SigningCredentials(options.Value.SigningKey, options.Value.SigningAlgorithmName);
             _lifetime = options.Value.Lifetime;
@@ -96,12 +97,14 @@
             }
             catch (LoginNotFoundException)
             {
+                _tokenIssueEventHandler?.LoginNotFoundEventHandle(requestModel.Login);
                 await WriteResponse(context.Response, HttpStatusCode.BadRequest,
                     new TokenErrorResponseModel {ErrorMessage = "Login or passwor is incorrect"});
                 return;
             }
             catch (IncorrectPasswordException)
             {
+                _tokenIssueEventHandler?.IncorrectPasswordEventHandle(requestModel.Login, requestModel.Password);
                 await WriteResponse(context.Response, HttpStatusCode.BadRequest,
                     new TokenErrorResponseModel {ErrorMessage = "Login or passwor is incorrect"});
                 return;
@@ -110,8 +113,11 @@
             var expires = _lifetime.HasValue ? notBefore.Add(_lifetime.Value) : (DateTime?)null;
 
             var token = new JwtSecurityToken(claims: claims, notBefore: DateTime.UtcNow, expires: expires, signingCredentials: _signingCredentials);
+            var tokenResult = _tokenHandler.WriteToken(token);
+            _tokenIssueEventHandler?.IssueSuccessEventHandle(tokenResult, claims);
+
             await WriteResponse(context.Response, HttpStatusCode.OK,
-                new TokenResponseModel {Token = _tokenHandler.WriteToken(token), ExpirationDate = expires});
+                new TokenResponseModel {Token = tokenResult, ExpirationDate = expires});
         }
     }
 }
