@@ -99,7 +99,6 @@
             catch (LoginNotFoundException)
             {
                 _tokenIssueEventHandler?.LoginNotFoundEventHandle(requestModel.Login);
-                context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                 await WriteResponse(context.Response, HttpStatusCode.BadRequest,
                     new TokenErrorResponseModel {ErrorMessage = "Login or passwor is incorrect"});
                 return;
@@ -107,7 +106,6 @@
             catch (IncorrectPasswordException)
             {
                 _tokenIssueEventHandler?.IncorrectPasswordEventHandle(requestModel.Login, requestModel.Password);
-                context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                 await WriteResponse(context.Response, HttpStatusCode.BadRequest,
                     new TokenErrorResponseModel {ErrorMessage = "Login or passwor is incorrect"});
                 return;
