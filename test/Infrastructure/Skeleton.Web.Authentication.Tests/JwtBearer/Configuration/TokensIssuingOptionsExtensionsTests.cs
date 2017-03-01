@@ -13,7 +13,7 @@
     public class TokensIssuingOptionsExtensionsTests
     {
         [UsedImplicitly]
-        public static readonly IEnumerable<object[]> WithTokenIssueEventHandlerTestsData;
+        public static readonly IEnumerable<object[]> WithTokenIssueEventHandlerValidationTestsData;
         [UsedImplicitly]
         public static readonly IEnumerable<object[]> WithGetEndpotintValidationTestsData;
         [UsedImplicitly]
@@ -53,7 +53,7 @@
                 };
             WithLifetimeValidationTestsData = new[] { new object[] { null, TimeSpan.FromHours(2) } };
 
-            WithTokenIssueEventHandlerTestsData =
+            WithTokenIssueEventHandlerValidationTestsData =
                 new[]
                 {
                     new object[] {null, new Mock<ITokenIssueEventHandler>().Object},
@@ -62,7 +62,7 @@
         }
 
         [Theory]
-        [MemberData(nameof(WithTokenIssueEventHandlerTestsData))]
+        [MemberData(nameof(WithTokenIssueEventHandlerValidationTestsData))]
         public void SetTokenIssueEventHandlerFailTest(TokensIssuingOptions options, ITokenIssueEventHandler eventHandler)
         {
             Assert.Throws<ArgumentNullException>(() => options.WithTokenIssueEventHandler(eventHandler));
