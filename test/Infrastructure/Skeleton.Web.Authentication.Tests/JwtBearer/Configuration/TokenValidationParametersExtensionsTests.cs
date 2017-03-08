@@ -201,5 +201,193 @@
             // When, Then
             Assert.Throws<ArgumentNullException>(() => options.WithoutAudienceValidation());
         }
+
+        [Fact]
+        public void ShouldSetSecurityKey()
+        {
+            // Given
+            var options = new TokenValidationParameters();
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("23j79h675s78T904gldUt0M5SftPg50H3W85s5A8u68zUV4AIJ"));
+            var validator = new IssuerSigningKeyValidator((x, y, z) => true);
+
+            // When
+            options.WithIssuerKeyValidation(key, validator);
+
+            // Then
+            Assert.True(options.ValidateIssuerSigningKey);
+            Assert.Equal(key, options.IssuerSigningKey);
+            Assert.Equal(validator, options.IssuerSigningKeyValidator);
+        }
+
+        [Fact]
+        public void ShouldSetSecurityKeyResolver()
+        {
+            // Given
+            var options = new TokenValidationParameters();
+            var resolver = new IssuerSigningKeyResolver(
+                (w, x, y, z) =>
+                    new[] {new SymmetricSecurityKey(Encoding.UTF8.GetBytes("23j79h675s78T904gldUt0M5SftPg50H3W85s5A8u68zUV4AIJ"))});
+            var validator = new IssuerSigningKeyValidator((x, y, z) => true);
+
+            // When
+            options.WithIssuerKeyValidation(resolver, validator);
+
+            // Then
+            Assert.True(options.ValidateIssuerSigningKey);
+            Assert.Equal(resolver, options.IssuerSigningKeyResolver);
+            Assert.Equal(validator, options.IssuerSigningKeyValidator);
+        }
+
+        [Fact]
+        public void ShouldSetSecurityKeys()
+        {
+            // Given
+            var options = new TokenValidationParameters();
+            var keys = new[] {new SymmetricSecurityKey(Encoding.UTF8.GetBytes("23j79h675s78T904gldUt0M5SftPg50H3W85s5A8u68zUV4AIJ"))};
+            var validator = new IssuerSigningKeyValidator((x, y, z) => true);
+
+            // When
+            options.WithIssuerKeyValidation(keys, validator);
+
+            // Then
+            Assert.True(options.ValidateIssuerSigningKey);
+            Assert.Equal(keys, options.IssuerSigningKeys);
+            Assert.Equal(validator, options.IssuerSigningKeyValidator);
+        }
+
+        [Fact]
+        public void ShouldDeactivateIssuerKeyValidation()
+        {
+            // Given
+            var options = new TokenValidationParameters();
+
+            // When
+            options
+                .WithIssuerKeyValidation(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("23j79h675s78T904gldUt0M5SftPg50H3W85s5A8u68zUV4AIJ")))
+                .WithoutIssuerKeyValidation();
+
+            // Then
+            Assert.False(options.ValidateIssuerSigningKey);
+        }
+
+        [Fact]
+        public void ShouldActivateLifetimeValidation()
+        {
+            // Given
+            var options = new TokenValidationParameters();
+            var validator = new LifetimeValidator((w, x, y, z) => true);
+
+            // When
+            options.WithLifetimeValidation(validator);
+
+            // Then
+            Assert.True(options.ValidateLifetime);
+            Assert.Equal(validator, options.LifetimeValidator);
+        }
+
+        [Fact]
+        public void ShouldDeactivateLifetimeValidation()
+        {
+            // Given
+            var options = new TokenValidationParameters();
+
+            // When
+            options
+                .WithLifetimeValidation()
+                .WithoutLifetimeValidation();
+
+            // Then
+            Assert.False(options.ValidateLifetime);
+        }
+
+        [Fact]
+        public void ShouldSetValidIssuer()
+        {
+            // Given
+            var options = new TokenValidationParameters();
+            const string issuer = "https://issuer.example.com";
+
+            // When
+            options.WithIssuerValidation(issuer);
+
+            // Then
+            Assert.True(options.ValidateIssuer);
+            Assert.Equal(issuer, options.ValidIssuer);
+        }
+
+        [Fact]
+        public void ShouldSetValidIssuers()
+        {
+            // Given
+            var options = new TokenValidationParameters();
+            var issuers = new[] {"https://issuer.example.com"};
+
+            // When
+            options.WithIssuerValidation(issuers);
+
+            // Then
+            Assert.True(options.ValidateIssuer);
+            Assert.Equal(issuers, options.ValidIssuers);
+        }
+
+        [Fact]
+        public void ShouldDeactivateIssuerValidation()
+        {
+            // Given
+            var options = new TokenValidationParameters();
+
+            // When
+            options
+                .WithIssuerValidation("https://issuer.example.com")
+                .WithoutIssuerValidation();
+
+            // Then
+            Assert.False(options.ValidateIssuer);
+        }
+
+        [Fact]
+        public void ShouldSetValidAudience()
+        {
+            // Given
+            var options = new TokenValidationParameters();
+            const string audience = "https://yourapplication.example.com";
+
+            // When
+            options.WithAudienceValidation(audience);
+
+            // Then
+            Assert.True(options.ValidateAudience);
+            Assert.Equal(audience, options.ValidAudience);
+        }
+
+        [Fact]
+        public void ShouldSetValidAudiences()
+        {
+            // Given
+            var options = new TokenValidationParameters();
+            var audiences = new[] { "https://yourapplication.example.com" };
+
+            // When
+            options.WithAudienceValidation(audiences);
+
+            // Then
+            Assert.True(options.ValidateAudience);
+            Assert.Equal(audiences, options.ValidAudiences);
+        }
+
+        [Fact]
+        public void ShouldDeactivateAudienceValidation()
+        {
+            // Given
+            var options = new TokenValidationParameters();
+
+            // When
+            options
+                .WithAudienceValidation("https://yourapplication.example.com")
+                .WithoutAudienceValidation();
+
+            // Then
+            Assert.False(options.ValidateAudience);
+        }
     }
 }
