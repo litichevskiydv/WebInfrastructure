@@ -13,6 +13,7 @@ assembly_info:
 services: mssql2016
 nuget:
   project_feed: true
+  disable_publish_on_pr: true
 build_script:
 - cmd: >-
     call build\BuildSolution.bat %CONFIGURATION%
