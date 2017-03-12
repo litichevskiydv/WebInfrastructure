@@ -11,7 +11,7 @@
         private readonly bool _isAppVeyor;
         private string ConnectionString =>
             _isAppVeyor
-                ? @"Data Source = (local)\SQL2014;Initial Catalog=tempdb;User Id=sa;Password=Password12!"
+                ? @"Data Source = (local)\SQL2016;Initial Catalog=tempdb;User Id=sa;Password=Password12!"
                 : @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = tempdb; Integrated Security = True";
 
         protected readonly IConnectionsFactory ConnectionsFactory;
