@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Infrastructure\Skeleton.CQRS.Abstractions\Skeleton.CQRS.Abstractions.csproj" />
+    <ProjectReference Include="..\Infrastructure\CQRS.Abstractions\CQRS.Abstractions.csproj" />
     <ProjectReference Include="..\Web.Domain\Web.Domain.csproj" />
   </ItemGroup>
 

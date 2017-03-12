@@ -1,10 +1,10 @@
-dotnet pack "src\Infrastructure\Skeleton.Common" -c %1 --version-suffix %2
-dotnet pack "src\Infrastructure\Skeleton.CQRS.Abstractions" -c %1 --version-suffix %2
-dotnet pack "src\Infrastructure\Skeleton.CQRS.Implementations" -c %1 --version-suffix %2
-dotnet pack "src\Infrastructure\Skeleton.Dapper" -c %1 --version-suffix %2
-dotnet pack "src\Infrastructure\Skeleton.Web.Conventions" -c %1 --version-suffix %2
-dotnet pack "src\Infrastructure\Skeleton.Web.Serialization" -c %1 --version-suffix %2
-dotnet pack "src\Infrastructure\Skeleton.Web.Integration" -c %1 --version-suffix %2
-dotnet pack "src\Infrastructure\Skeleton.Web.Authentication" -c %1 --version-suffix %2
-dotnet pack "src\Infrastructure\Skeleton.Web" -c %1 --version-suffix %2
-dotnet pack "src\Infrastructure\Skeleton.Web.Testing" -c %1 --version-suffix %2
+dotnet pack "src\Infrastructure\Common" -c %1 --include-symbols --version-suffix %2
+dotnet pack "src\Infrastructure\CQRS.Abstractions" -c %1 --include-symbols --version-suffix %2
+dotnet pack "src\Infrastructure\CQRS.Implementations" -c %1 --include-symbols --version-suffix %2
+dotnet pack "src\Infrastructure\Dapper" -c %1 --include-symbols --version-suffix %2
+dotnet pack "src\Infrastructure\Web.Conventions" -c %1 --include-symbols --version-suffix %2
+dotnet pack "src\Infrastructure\Web.Serialization" -c %1 --include-symbols --version-suffix %2
+dotnet pack "src\Infrastructure\Web.Integration" -c %1 --include-symbols --version-suffix %2
+dotnet pack "src\Infrastructure\Web.Authentication" -c %1 --include-symbols --version-suffix %2
+dotnet pack "src\Infrastructure\Web" -c %1 --include-symbols --version-suffix %2
+dotnet pack "src\Infrastructure\Web.Testing" -c %1 --include-symbols --version-suffix %2

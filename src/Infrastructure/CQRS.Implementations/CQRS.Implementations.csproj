@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Library with abstractions for CQRS pattern</Description>
+    <Description>Library with implementations of CQRS pattern</Description>
     <Authors>dmitriy.litichevskiy</Authors>
     <TargetFramework>netstandard1.6</TargetFramework>
     <DebugType>portable</DebugType>
-    <AssemblyName>Skeleton.CQRS.Abstractions</AssemblyName>
-    <PackageId>Skeleton.CQRS.Abstractions</PackageId>
+    <AssemblyName>Skeleton.CQRS.Implementations</AssemblyName>
+    <PackageId>Skeleton.CQRS.Implementations</PackageId>
     <PackageTags>CQRS</PackageTags>
     <PackageProjectUrl>https://github.com/litichevskiydv/WebInfrastructure</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE</PackageLicenseUrl>
@@ -16,6 +16,15 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <RootNamespace>Skeleton.CQRS.Implementations</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CQRS.Abstractions\CQRS.Abstractions.csproj" />
+  </ItemGroup>
 
 </Project>

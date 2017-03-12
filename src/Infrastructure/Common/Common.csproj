@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Library with common extensions and helpers for use Dapper in code</Description>
+    <Description>Library with common extensions and objects for applications development</Description>
     <Authors>dmitriy.litichevskiy</Authors>
     <TargetFramework>netstandard1.6</TargetFramework>
     <DebugType>portable</DebugType>
-    <AssemblyName>Skeleton.Dapper</AssemblyName>
-    <PackageId>Skeleton.Dapper</PackageId>
-    <PackageTags>Helpers for Dapper;TVP;Bulk Copy</PackageTags>
+    <AssemblyName>Skeleton.Common</AssemblyName>
+    <PackageId>Skeleton.Common</PackageId>
+    <PackageTags>Common extensions</PackageTags>
     <PackageProjectUrl>https://github.com/litichevskiydv/WebInfrastructure</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
@@ -16,10 +16,7 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <RootNamespace>Skeleton.Common</RootNamespace>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Dapper" Version="1.50.3-*" />
-  </ItemGroup>
 
 </Project>

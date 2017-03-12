@@ -16,11 +16,12 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <RootNamespace>Skeleton.Web.Authentication</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Skeleton.Common\Skeleton.Common.csproj" />
-    <ProjectReference Include="..\Skeleton.Web.Serialization\Skeleton.Web.Serialization.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\Web.Serialization\Web.Serialization.csproj" />
   </ItemGroup>
 
   <ItemGroup>

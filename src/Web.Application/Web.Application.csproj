@@ -15,11 +15,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Infrastructure\Skeleton.CQRS.Abstractions\Skeleton.CQRS.Abstractions.csproj" />
+    <ProjectReference Include="..\Infrastructure\CQRS.Abstractions\CQRS.Abstractions.csproj" />
+    <ProjectReference Include="..\Infrastructure\Web.Authentication\Web.Authentication.csproj" />
+    <ProjectReference Include="..\Infrastructure\Web.Conventions\Web.Conventions.csproj" />
+    <ProjectReference Include="..\Infrastructure\Web\Web.csproj" />
     <ProjectReference Include="..\Web.Domain\Web.Domain.csproj" />
-    <ProjectReference Include="..\Infrastructure\Skeleton.Web\Skeleton.Web.csproj" />
-    <ProjectReference Include="..\Infrastructure\Skeleton.Web.Conventions\Skeleton.Web.Conventions.csproj" />
-    <ProjectReference Include="..\Infrastructure\Skeleton.Web.Authentication\Skeleton.Web.Authentication.csproj" />
   </ItemGroup>
 
   <ItemGroup>

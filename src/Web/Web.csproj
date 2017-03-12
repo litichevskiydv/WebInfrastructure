@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <Authors>dmitriy.litichevskiy</Authors>
@@ -19,11 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Infrastructure\Skeleton.Web\Skeleton.Web.csproj" />
+    <ProjectReference Include="..\Infrastructure\CQRS.Implementations\CQRS.Implementations.csproj" />
+    <ProjectReference Include="..\Infrastructure\Web.Authentication\Web.Authentication.csproj" />
+    <ProjectReference Include="..\Infrastructure\Web\Web.csproj" />
     <ProjectReference Include="..\Web.Application\Web.Application.csproj" />
     <ProjectReference Include="..\Web.DataAccess\Web.DataAccess.csproj" />
-    <ProjectReference Include="..\Infrastructure\Skeleton.CQRS.Implementations\Skeleton.CQRS.Implementations.csproj" />
-    <ProjectReference Include="..\Infrastructure\Skeleton.Web.Authentication\Skeleton.Web.Authentication.csproj" />
   </ItemGroup>
 
   <ItemGroup>

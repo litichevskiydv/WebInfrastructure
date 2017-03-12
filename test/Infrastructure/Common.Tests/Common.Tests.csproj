@@ -1,32 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Tests Dapper's extensions and helpers</Description>
+    <Description>Tests for common extensions and objects</Description>
     <Authors>dmitriy.litichevskiy</Authors>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <DebugType>portable</DebugType>
-    <AssemblyName>Skeleton.Dapper.Tests</AssemblyName>
-    <PackageId>Skeleton.Dapper.Tests</PackageId>
+    <AssemblyName>Skeleton.Common.Tests</AssemblyName>
+    <PackageId>Skeleton.Common.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8</PackageTargetFallback>
     <RuntimeFrameworkVersion>1.1.1</RuntimeFrameworkVersion>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <RootNamespace>Skeleton.Common.Tests</RootNamespace>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Infrastructure\Skeleton.Dapper\Skeleton.Dapper.csproj" />
-    <ProjectReference Include="..\..\..\src\Infrastructure\Skeleton.Common\Skeleton.Common.csproj" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0-beta5-build1225" />
     <PackageReference Include="xunit" Version="2.2.0-beta5-build3474" />
-    <PackageReference Include="Dapper" Version="1.50.3-*" />
+    <PackageReference Include="Moq" Version="4.6.38-*" />
     <PackageReference Include="Microsoft.NETCore.Portable.Compatibility" Version="1.0.1" />
     <PackageReference Include="JetBrains.Annotations" Version="10.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Infrastructure\Common\Common.csproj" />
   </ItemGroup>
 
 </Project>

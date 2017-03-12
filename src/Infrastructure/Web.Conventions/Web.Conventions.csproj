@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Library with common extensions and objects for applications development</Description>
+    <Description>Library with common conventions for web applications development</Description>
     <Authors>dmitriy.litichevskiy</Authors>
     <TargetFramework>netstandard1.6</TargetFramework>
     <DebugType>portable</DebugType>
-    <AssemblyName>Skeleton.Common</AssemblyName>
-    <PackageId>Skeleton.Common</PackageId>
-    <PackageTags>Common extensions</PackageTags>
+    <AssemblyName>Skeleton.Web.Conventions</AssemblyName>
+    <PackageId>Skeleton.Web.Conventions</PackageId>
+    <PackageTags>Web conventions</PackageTags>
     <PackageProjectUrl>https://github.com/litichevskiydv/WebInfrastructure</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
@@ -16,6 +16,7 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <RootNamespace>Skeleton.Web.Conventions</RootNamespace>
   </PropertyGroup>
 
 </Project>

@@ -1,23 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Tests for CQRS pattern implementations</Description>
+    <Description>Tests for authentication models implementations</Description>
     <Authors>dmitriy.litichevskiy</Authors>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <DebugType>portable</DebugType>
-    <AssemblyName>Skeleton.CQRS.Implementations.Tests</AssemblyName>
-    <PackageId>Skeleton.CQRS.Implementations.Tests</PackageId>
+    <AssemblyName>Skeleton.Web.Authentication.Tests</AssemblyName>
+    <PackageId>Skeleton.Web.Authentication.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8</PackageTargetFallback>
     <RuntimeFrameworkVersion>1.1.1</RuntimeFrameworkVersion>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <RootNamespace>Skeleton.Web.Authentication.Tests</RootNamespace>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Infrastructure\Skeleton.CQRS.Implementations\Skeleton.CQRS.Implementations.csproj" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
@@ -26,6 +23,10 @@
     <PackageReference Include="Moq" Version="4.6.38-*" />
     <PackageReference Include="Microsoft.NETCore.Portable.Compatibility" Version="1.0.1" />
     <PackageReference Include="JetBrains.Annotations" Version="10.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Infrastructure\Web.Authentication\Web.Authentication.csproj" />
   </ItemGroup>
 
 </Project>

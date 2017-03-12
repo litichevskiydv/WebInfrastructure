@@ -13,9 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{47FA2CFA-A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{E5F0B27F-A8E8-4EA5-A319-844261448637}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skeleton.Web", "src\Infrastructure\Skeleton.Web\Skeleton.Web.csproj", "{831E01BC-F4F2-44E3-AE5B-A171F4A028CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "src\Infrastructure\Web\Web.csproj", "{831E01BC-F4F2-44E3-AE5B-A171F4A028CE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skeleton.Web.Testing", "src\Infrastructure\Skeleton.Web.Testing\Skeleton.Web.Testing.csproj", "{0AC5E1D6-4913-4A67-AC7E-E4E691E25013}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Testing", "src\Infrastructure\Web.Testing\Web.Testing.csproj", "{0AC5E1D6-4913-4A67-AC7E-E4E691E25013}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "src\Web\Web.csproj", "{1CA80F6C-0261-4A43-BF96-D15E372FBDA3}"
 EndProject
@@ -25,35 +25,35 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Client", "src\Web.Clien
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Tests", "test\Web.Tests\Web.Tests.csproj", "{F3E20831-A3B5-4C08-95C8-E84F5858B0C7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skeleton.Web.Serialization", "src\Infrastructure\Skeleton.Web.Serialization\Skeleton.Web.Serialization.csproj", "{5F47AC99-30AD-4532-B995-610B16AE02B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Serialization", "src\Infrastructure\Web.Serialization\Web.Serialization.csproj", "{5F47AC99-30AD-4532-B995-610B16AE02B8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skeleton.Web.Conventions", "src\Infrastructure\Skeleton.Web.Conventions\Skeleton.Web.Conventions.csproj", "{9642F6C1-0856-453B-9DF9-56EC85646C2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Conventions", "src\Infrastructure\Web.Conventions\Web.Conventions.csproj", "{9642F6C1-0856-453B-9DF9-56EC85646C2E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skeleton.Common", "src\Infrastructure\Skeleton.Common\Skeleton.Common.csproj", "{EFABFABD-CF84-4E2F-BEA8-8D65634A1DE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "src\Infrastructure\Common\Common.csproj", "{EFABFABD-CF84-4E2F-BEA8-8D65634A1DE2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skeleton.Web.Integration", "src\Infrastructure\Skeleton.Web.Integration\Skeleton.Web.Integration.csproj", "{16C98CE8-B101-45A5-AE34-31069CB8A72E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Integration", "src\Infrastructure\Web.Integration\Web.Integration.csproj", "{16C98CE8-B101-45A5-AE34-31069CB8A72E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skeleton.Dapper", "src\Infrastructure\Skeleton.Dapper\Skeleton.Dapper.csproj", "{37B9A0ED-A83C-4137-A025-1DF8B22D0714}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dapper", "src\Infrastructure\Dapper\Dapper.csproj", "{37B9A0ED-A83C-4137-A025-1DF8B22D0714}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skeleton.Dapper.Tests", "test\Infrastructure\Skeleton.Dapper.Tests\Skeleton.Dapper.Tests.csproj", "{39C07ECC-CCBB-4072-BC29-323E36814697}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dapper.Tests", "test\Infrastructure\Dapper.Tests\Dapper.Tests.csproj", "{39C07ECC-CCBB-4072-BC29-323E36814697}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skeleton.CQRS.Abstractions", "src\Infrastructure\Skeleton.CQRS.Abstractions\Skeleton.CQRS.Abstractions.csproj", "{10C7DFFA-961C-4332-9C98-7AD1D8C6CCE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CQRS.Abstractions", "src\Infrastructure\CQRS.Abstractions\CQRS.Abstractions.csproj", "{10C7DFFA-961C-4332-9C98-7AD1D8C6CCE2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skeleton.CQRS.Implementations", "src\Infrastructure\Skeleton.CQRS.Implementations\Skeleton.CQRS.Implementations.csproj", "{9FB49689-0FC3-47E5-B349-E970B82D4EF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CQRS.Implementations", "src\Infrastructure\CQRS.Implementations\CQRS.Implementations.csproj", "{9FB49689-0FC3-47E5-B349-E970B82D4EF7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skeleton.CQRS.Implementations.Tests", "test\Infrastructure\Skeleton.CQRS.Implementations.Tests\Skeleton.CQRS.Implementations.Tests.csproj", "{454A5A21-3196-46E6-83E4-E77F69115E52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CQRS.Implementations.Tests", "test\Infrastructure\CQRS.Implementations.Tests\CQRS.Implementations.Tests.csproj", "{454A5A21-3196-46E6-83E4-E77F69115E52}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.DataAccess", "src\Web.DataAccess\Web.DataAccess.csproj", "{13F2AAC7-AF9D-4E1A-AC2D-86B011ED4450}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Domain", "src\Web.Domain\Web.Domain.csproj", "{26CBA7C3-0483-4D51-892B-94792C44183E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skeleton.Common.Tests", "test\Infrastructure\Skeleton.Common.Tests\Skeleton.Common.Tests.csproj", "{A65EA381-07DC-4893-88EE-3E2AE7AF35F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Tests", "test\Infrastructure\Common.Tests\Common.Tests.csproj", "{A65EA381-07DC-4893-88EE-3E2AE7AF35F1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skeleton.Web.Tests", "test\Infrastructure\Skeleton.Web.Tests\Skeleton.Web.Tests.csproj", "{5977FCE6-4904-4C24-9991-4FE7A53DB8D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Tests", "test\Infrastructure\Web.Tests\Web.Tests.csproj", "{5977FCE6-4904-4C24-9991-4FE7A53DB8D5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skeleton.Web.Authentication", "src\Infrastructure\Skeleton.Web.Authentication\Skeleton.Web.Authentication.csproj", "{B77B31A5-4760-488B-9ED0-B97EC8E13DF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Authentication", "src\Infrastructure\Web.Authentication\Web.Authentication.csproj", "{B77B31A5-4760-488B-9ED0-B97EC8E13DF6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skeleton.Web.Authentication.Tests", "test\Infrastructure\Skeleton.Web.Authentication.Tests\Skeleton.Web.Authentication.Tests.csproj", "{EB09EF4B-A08A-43F4-A9FA-502D0E7A8FC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Authentication.Tests", "test\Infrastructure\Web.Authentication.Tests\Web.Authentication.Tests.csproj", "{EB09EF4B-A08A-43F4-A9FA-502D0E7A8FC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

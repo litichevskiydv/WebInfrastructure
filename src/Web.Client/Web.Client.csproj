@@ -14,8 +14,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Infrastructure\Skeleton.Web.Authentication\Skeleton.Web.Authentication.csproj" />
-    <ProjectReference Include="..\Infrastructure\Skeleton.Web.Integration\Skeleton.Web.Integration.csproj" />
+    <ProjectReference Include="..\Infrastructure\Web.Authentication\Web.Authentication.csproj" />
+    <ProjectReference Include="..\Infrastructure\Web.Integration\Web.Integration.csproj" />
   </ItemGroup>
 
 </Project>

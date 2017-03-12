@@ -1,32 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Library contains base client for integration with WebApi</Description>
+    <Description>Library with abstractions for CQRS pattern</Description>
     <Authors>dmitriy.litichevskiy</Authors>
     <TargetFramework>netstandard1.6</TargetFramework>
     <DebugType>portable</DebugType>
-    <AssemblyName>Skeleton.Web.Integration</AssemblyName>
-    <PackageId>Skeleton.Web.Integration</PackageId>
-    <PackageTags>Integrations;WebApi client</PackageTags>
+    <AssemblyName>Skeleton.CQRS.Abstractions</AssemblyName>
+    <PackageId>Skeleton.CQRS.Abstractions</PackageId>
+    <PackageTags>CQRS</PackageTags>
     <PackageProjectUrl>https://github.com/litichevskiydv/WebInfrastructure</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/litichevskiydv/WebInfrastructure</RepositoryUrl>
-    <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8</PackageTargetFallback>
     <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <RootNamespace>Skeleton.CQRS.Abstractions</RootNamespace>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Skeleton.Web.Serialization\Skeleton.Web.Serialization.csproj" />
-    <ProjectReference Include="..\Skeleton.Web.Conventions\Skeleton.Web.Conventions.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.3" />
-    <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
-  </ItemGroup>
 
 </Project>

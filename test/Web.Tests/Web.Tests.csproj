@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Infrastructure\Skeleton.Web.Testing\Skeleton.Web.Testing.csproj" />
+    <ProjectReference Include="..\..\src\Infrastructure\Web.Testing\Web.Testing.csproj" />
     <ProjectReference Include="..\..\src\Web\Web.csproj" />
     <ProjectReference Include="..\..\src\Web.Application\Web.Application.csproj" />
     <ProjectReference Include="..\..\src\Web.Client\Web.Client.csproj" />
