@@ -50,6 +50,8 @@
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddUnhandledExceptionsStartupFilter();
+
             services
                 .AddMvc(x => x
                             .UseCentralRoutePrefix($"{Configuration.GetValue("api_route_preffix", "api")}/[controller]")
@@ -93,7 +95,6 @@
         {
             AddLoggerProviders(loggerFactory.AddConsole(Configuration.GetSection("Logging")));
 
-            app.UseUnhandledExceptionsLoggingMiddleware();
             var pipelineConfigurator = CreatePipelineConfigurator(
                 env, loggerFactory,
                 x => x.UseMvc()
