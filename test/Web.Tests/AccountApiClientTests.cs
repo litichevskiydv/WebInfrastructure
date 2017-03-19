@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net;
     using System.Security.Claims;
     using Client;
     using Skeleton.Web.Integration.Exceptions;
@@ -10,6 +9,7 @@
     using Skeleton.Web.Testing.Extensions;
     using Xunit;
 
+    [Collection(nameof(ApiTestsCollection))]
     public class AccountApiClientTests : BaseApiClientTests<BaseApiTestsFixture<TestsStartup>, ApiClient>
     {
         public AccountApiClientTests(BaseApiTestsFixture<TestsStartup> fixture) : base(fixture)

@@ -7,6 +7,7 @@
     using Skeleton.Web.Testing.Extensions;
     using Xunit;
 
+    [Collection(nameof(ApiTestsCollection))]
     public class ValuesControllerTests : BaseServiceClientTests<BaseApiTestsFixture<TestsStartup>, ValuesServiceClient>
     {
         public ValuesControllerTests(BaseApiTestsFixture<TestsStartup> fixture) : base(fixture)
