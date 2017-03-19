@@ -2,6 +2,7 @@
 (Get-Content src\Infrastructure\CQRS.Abstractions\CQRS.Abstractions.csproj) -replace 'portable', 'full' | Set-Content src\Infrastructure\CQRS.Abstractions\CQRS.Abstractions.csproj
 (Get-Content src\Infrastructure\CQRS.Implementations\CQRS.Implementations.csproj) -replace 'portable', 'full' | Set-Content src\Infrastructure\CQRS.Implementations\CQRS.Implementations.csproj
 (Get-Content src\Infrastructure\Dapper\Dapper.csproj) -replace 'portable', 'full' | Set-Content src\Infrastructure\Dapper\Dapper.csproj
+(Get-Content src\Infrastructure\Migrations\Migrations.csproj) -replace 'portable', 'full' | Set-Content src\Infrastructure\Migrations\Migrations.csproj
 (Get-Content src\Infrastructure\Web\Web.csproj) -replace 'portable', 'full' | Set-Content src\Infrastructure\Web\Web.csproj
 (Get-Content src\Infrastructure\Web.Authentication\Web.Authentication.csproj) -replace 'portable', 'full' | Set-Content src\Infrastructure\Web.Authentication\Web.Authentication.csproj
 (Get-Content src\Infrastructure\Web.Conventions\Web.Conventions.csproj) -replace 'portable', 'full' | Set-Content src\Infrastructure\Web.Conventions\Web.Conventions.csproj

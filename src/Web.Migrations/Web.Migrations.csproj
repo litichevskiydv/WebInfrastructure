@@ -4,9 +4,8 @@
     <Authors>dmitriy.litichevskiy</Authors>
     <TargetFramework>netstandard1.6</TargetFramework>
     <DebugType>portable</DebugType>
-    <AssemblyName>Web.DataAccess</AssemblyName>
-    <PackageId>Web.DataAccess</PackageId>
-    <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8</PackageTargetFallback>
+    <AssemblyName>Web.Migrations</AssemblyName>
+    <PackageId>Web.Migrations</PackageId>
     <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
@@ -14,12 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Web.Domain\Web.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="10.4.0" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="1.1.1" />
+    <ProjectReference Include="..\Infrastructure\Migrations\Migrations.csproj" />
   </ItemGroup>
 
 </Project>

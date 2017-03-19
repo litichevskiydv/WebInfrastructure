@@ -15,7 +15,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Infrastructure\CQRS.Abstractions\CQRS.Abstractions.csproj" />
     <ProjectReference Include="..\Infrastructure\Web.Authentication\Web.Authentication.csproj" />
     <ProjectReference Include="..\Infrastructure\Web.Conventions\Web.Conventions.csproj" />
     <ProjectReference Include="..\Infrastructure\Web\Web.csproj" />
@@ -25,7 +24,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.WebApiCompatShim" Version="1.1.2" />
-    <PackageReference Include="JetBrains.Annotations" Version="10.2.1" />
+    <PackageReference Include="JetBrains.Annotations" Version="10.4.0" />
   </ItemGroup>
 
 </Project>

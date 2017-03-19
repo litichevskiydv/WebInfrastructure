@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Library with implementations of CQRS pattern</Description>
+    <Description>Library with primitives for automatic environment migration</Description>
     <Authors>dmitriy.litichevskiy</Authors>
     <TargetFramework>netstandard1.6</TargetFramework>
     <DebugType>portable</DebugType>
-    <AssemblyName>Skeleton.CQRS.Implementations</AssemblyName>
-    <PackageId>Skeleton.CQRS.Implementations</PackageId>
-    <PackageTags>CQRS</PackageTags>
+    <PackageId>Skeleton.Migrations</PackageId>
+    <AssemblyName>Skeleton.Migrations</AssemblyName>
+    <PackageTags>Migrator</PackageTags>
     <PackageProjectUrl>https://github.com/litichevskiydv/WebInfrastructure</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
@@ -16,15 +16,15 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <RootNamespace>Skeleton.CQRS.Implementations</RootNamespace>
+    <RootNamespace>Skeleton.Migrations</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="4.4.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\CQRS.Abstractions\CQRS.Abstractions.csproj" />
+    <ProjectReference Include="..\Dapper\Dapper.csproj" />
   </ItemGroup>
 
 </Project>

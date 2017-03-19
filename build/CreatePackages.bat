@@ -2,6 +2,7 @@ dotnet pack "src\Infrastructure\Common" -c %1 --include-symbols --version-suffix
 dotnet pack "src\Infrastructure\CQRS.Abstractions" -c %1 --include-symbols --version-suffix %2
 dotnet pack "src\Infrastructure\CQRS.Implementations" -c %1 --include-symbols --version-suffix %2
 dotnet pack "src\Infrastructure\Dapper" -c %1 --include-symbols --version-suffix %2
+dotnet pack "src\Infrastructure\Migrations" -c %1 --include-symbols --version-suffix %2
 dotnet pack "src\Infrastructure\Web.Conventions" -c %1 --include-symbols --version-suffix %2
 dotnet pack "src\Infrastructure\Web.Serialization" -c %1 --include-symbols --version-suffix %2
 dotnet pack "src\Infrastructure\Web.Integration" -c %1 --include-symbols --version-suffix %2

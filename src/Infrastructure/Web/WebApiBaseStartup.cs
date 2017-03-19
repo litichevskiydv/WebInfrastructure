@@ -48,6 +48,8 @@
 
         protected abstract void RegisterDependencies(ContainerBuilder containerBuilder);
 
+        protected abstract void MigrateEnvironment(IContainer container);
+
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddUnhandledExceptionsStartupFilter();
@@ -75,7 +77,9 @@
             var containerBuilder = new ContainerBuilder();
             RegisterDependencies(containerBuilder);
             containerBuilder.Populate(services);
+
             var container = containerBuilder.Build();
+            MigrateEnvironment(container);
             return new AutofacServiceProvider(container);
         }
 

@@ -2,12 +2,14 @@ dotnet restore "src\Infrastructure\Common"
 dotnet restore "src\Infrastructure\CQRS.Abstractions"
 dotnet restore "src\Infrastructure\CQRS.Implementations"
 dotnet restore "src\Infrastructure\Dapper"
+dotnet restore "src\Infrastructure\Migrations"
 dotnet restore "src\Infrastructure\Web.Conventions"
 dotnet restore "src\Infrastructure\Web.Serialization"
 dotnet restore "src\Infrastructure\Web.Integration"
 dotnet restore "src\Infrastructure\Web.Authentication"
 dotnet restore "src\Infrastructure\Web"
 dotnet restore "src\Infrastructure\Web.Testing"
+dotnet restore "src\Web.Migrations"
 dotnet restore "src\Web.Domain"
 dotnet restore "src\Web.DataAccess"
 dotnet restore "src\Web.Application"
@@ -24,12 +26,14 @@ dotnet build "src\Infrastructure\Common" -c %1 --no-dependencies
 dotnet build "src\Infrastructure\CQRS.Abstractions" -c %1 --no-dependencies
 dotnet build "src\Infrastructure\CQRS.Implementations" -c %1 --no-dependencies
 dotnet build "src\Infrastructure\Dapper" -c %1 --no-dependencies
+dotnet build "src\Infrastructure\Migrations" -c %1 --no-dependencies
 dotnet build "src\Infrastructure\Web.Conventions" -c %1 --no-dependencies
 dotnet build "src\Infrastructure\Web.Serialization" -c %1 --no-dependencies
 dotnet build "src\Infrastructure\Web.Integration" -c %1 --no-dependencies
 dotnet build "src\Infrastructure\Web.Authentication" -c %1 --no-dependencies
 dotnet build "src\Infrastructure\Web" -c %1 --no-dependencies
 dotnet build "src\Infrastructure\Web.Testing" -c %1 --no-dependencies
+dotnet build "src\Web.Migrations" -c %1 --no-dependencies
 dotnet build "src\Web.Domain" -c %1 --no-dependencies
 dotnet build "src\Web.DataAccess" -c %1 --no-dependencies
 dotnet build "src\Web.Application" -c %1 --no-dependencies
