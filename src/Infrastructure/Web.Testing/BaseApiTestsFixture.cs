@@ -24,7 +24,7 @@
             MockLogger = MockLoggerExtensions.CreateMockLogger();
 
             var environment = Environment.GetEnvironmentVariable("Hosting:Environment")
-                              ?? Environment.GetEnvironmentVariable("ASPNET_ENV")
+                              ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
                               ?? EnvironmentName.Development;
             var currentDirectory = Path.GetDirectoryName(startupType.GetTypeInfo().Assembly.Location);
 
