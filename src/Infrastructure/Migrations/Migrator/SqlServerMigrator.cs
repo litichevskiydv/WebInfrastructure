@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Linq;
     using Dapper.SessionsFactory;
 
@@ -52,7 +53,7 @@ if object_id ('[dbo].[VersionInfo]') is null
         public void Migrate()
         {
             HashSet<long> appliedVersions;
-            using (var session = _sessionsFactory.Create())
+            using (var session = _sessionsFactory.Create(IsolationLevel.Snapshot))
             {
                 CheckAndCreateVersionTable(session);
                 appliedVersions = new HashSet<long>(GetAppliedVersions(session));
