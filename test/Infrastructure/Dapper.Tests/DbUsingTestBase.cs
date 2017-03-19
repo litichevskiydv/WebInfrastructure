@@ -4,6 +4,7 @@
     using System.Data.SqlClient;
     using ConnectionsFactory;
     using JetBrains.Annotations;
+    using Microsoft.Extensions.Options;
 
     [UsedImplicitly]
     public abstract class DbUsingTestBase
@@ -21,7 +22,7 @@
         {
             _isAppVeyor = Environment.GetEnvironmentVariable("Appveyor")?.ToUpperInvariant() == "TRUE";
 
-            ConnectionsFactory = new SqlConnectionsFactory(ConnectionString);
+            ConnectionsFactory = new SqlConnectionsFactory(Options.Create(new SqlConnectionsFactoryOptions {SqlServer = ConnectionString}));
             SqlConnectionsFactoryMethod = () => (SqlConnection) ConnectionsFactory.Create();
         }
     }

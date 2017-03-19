@@ -3,22 +3,25 @@
     using System;
     using System.Data;
     using System.Data.SqlClient;
+    using Microsoft.Extensions.Options;
 
     public class SqlConnectionsFactory : IConnectionsFactory
     {
-        private readonly string _connectionString;
+        private readonly SqlConnectionsFactoryOptions _options;
 
-        public SqlConnectionsFactory(string connectionString)
+        public SqlConnectionsFactory(IOptions<SqlConnectionsFactoryOptions> options) 
         {
-            if (string.IsNullOrWhiteSpace(connectionString))
-                throw new ArgumentNullException(nameof(connectionString));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
+            if (string.IsNullOrWhiteSpace(options.Value.SqlServer))
+                throw new ArgumentNullException(nameof(SqlConnectionsFactoryOptions.SqlServer));
 
-            _connectionString = connectionString;
+            _options = options.Value;
         }
 
         public IDbConnection Create()
         {
-            var sqlConnection = new SqlConnection(_connectionString);
+            var sqlConnection = new SqlConnection(_options.SqlServer);
             sqlConnection.Open();
             return sqlConnection;
         }
