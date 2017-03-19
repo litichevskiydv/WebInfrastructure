@@ -53,7 +53,7 @@ if object_id ('[dbo].[VersionInfo]') is null
         public void Migrate()
         {
             HashSet<long> appliedVersions;
-            using (var session = _sessionsFactory.Create(IsolationLevel.Snapshot))
+            using (var session = _sessionsFactory.Create(IsolationLevel.Serializable))
             {
                 CheckAndCreateVersionTable(session);
                 appliedVersions = new HashSet<long>(GetAppliedVersions(session));
