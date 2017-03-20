@@ -1,26 +1,26 @@
-dotnet restore "src\Infrastructure\Common"
-dotnet restore "src\Infrastructure\CQRS.Abstractions"
-dotnet restore "src\Infrastructure\CQRS.Implementations"
-dotnet restore "src\Infrastructure\Dapper"
-dotnet restore "src\Infrastructure\Migrations"
-dotnet restore "src\Infrastructure\Web.Conventions"
-dotnet restore "src\Infrastructure\Web.Serialization"
-dotnet restore "src\Infrastructure\Web.Integration"
-dotnet restore "src\Infrastructure\Web.Authentication"
-dotnet restore "src\Infrastructure\Web"
-dotnet restore "src\Infrastructure\Web.Testing"
-dotnet restore "src\Web.Migrations"
-dotnet restore "src\Web.Domain"
-dotnet restore "src\Web.DataAccess"
-dotnet restore "src\Web.Application"
-dotnet restore "src\Web"
-dotnet restore "src\Web.Client"
-dotnet restore "test\Infrastructure\Common.Tests"
-dotnet restore "test\Infrastructure\CQRS.Implementations.Tests"
-dotnet restore "test\Infrastructure\Dapper.Tests"
-dotnet restore "test\Infrastructure\Web.Authentication.Tests"
-dotnet restore "test\Infrastructure\Web.Tests"
-dotnet restore "test\Web.Tests"
+dotnet restore "src\Infrastructure\Common" --no-dependencies
+dotnet restore "src\Infrastructure\CQRS.Abstractions" --no-dependencies
+dotnet restore "src\Infrastructure\CQRS.Implementations" --no-dependencies
+dotnet restore "src\Infrastructure\Dapper" --no-dependencies
+dotnet restore "src\Infrastructure\Migrations" --no-dependencies
+dotnet restore "src\Infrastructure\Web.Conventions" --no-dependencies
+dotnet restore "src\Infrastructure\Web.Serialization" --no-dependencies
+dotnet restore "src\Infrastructure\Web.Integration" --no-dependencies
+dotnet restore "src\Infrastructure\Web.Authentication" --no-dependencies
+dotnet restore "src\Infrastructure\Web" --no-dependencies
+dotnet restore "src\Infrastructure\Web.Testing" --no-dependencies
+dotnet restore "src\Web.Migrations" --no-dependencies
+dotnet restore "src\Web.Domain" --no-dependencies
+dotnet restore "src\Web.DataAccess" --no-dependencies
+dotnet restore "src\Web.Application" --no-dependencies
+dotnet restore "src\Web" --no-dependencies
+dotnet restore "src\Web.Client" --no-dependencies
+dotnet restore "test\Infrastructure\Common.Tests" --no-dependencies
+dotnet restore "test\Infrastructure\CQRS.Implementations.Tests" --no-dependencies
+dotnet restore "test\Infrastructure\Dapper.Tests" --no-dependencies
+dotnet restore "test\Infrastructure\Web.Authentication.Tests" --no-dependencies
+dotnet restore "test\Infrastructure\Web.Tests" --no-dependencies
+dotnet restore "test\Web.Tests" --no-dependencies
 
 dotnet build "src\Infrastructure\Common" -c %1 --no-dependencies
 dotnet build "src\Infrastructure\CQRS.Abstractions" -c %1 --no-dependencies
