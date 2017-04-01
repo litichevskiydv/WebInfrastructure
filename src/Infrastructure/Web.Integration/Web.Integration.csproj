@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>Library contains base client for integration with WebApi</Description>
     <Authors>dmitriy.litichevskiy</Authors>
-    <TargetFramework>netstandard1.6</TargetFramework>
+    <TargetFramework>netstandard1.4</TargetFramework>
     <DebugType>portable</DebugType>
     <AssemblyName>Skeleton.Web.Integration</AssemblyName>
     <PackageId>Skeleton.Web.Integration</PackageId>
@@ -13,7 +13,6 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/litichevskiydv/WebInfrastructure</RepositoryUrl>
     <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8</PackageTargetFallback>
-    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
