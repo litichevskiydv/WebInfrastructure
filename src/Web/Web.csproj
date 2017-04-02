@@ -47,4 +47,14 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="NLog.Development.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DependentUpon>NLog.Staging.config</DependentUpon>
+    </None>
+    <None Update="NLog.Staging.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
