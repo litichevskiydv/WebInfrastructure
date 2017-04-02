@@ -19,4 +19,4 @@ _UpgradeReport*
 /.vs/
 project.lock.json
 logs
-/src/Web/Web.config
+web.config
