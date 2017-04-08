@@ -19,7 +19,7 @@
       "commandName": "Project",
       "commandLineArgs": "--environment Development --api_route_preffix api --xml_docs ..\\Web.Application\\bin\\Debug\\netstandard1.6\\Web.Application.xml",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:5000/api/values"
+      "launchUrl": "http://localhost:5000/swagger/ui"
     },
     "WebStaging": {
       "commandName": "Project",

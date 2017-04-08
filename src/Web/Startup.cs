@@ -19,6 +19,7 @@
     using Skeleton.Web.Authentication.JwtBearer;
     using Skeleton.Web.Authentication.JwtBearer.Configuration;
     using Skeleton.Web.Configuration;
+    using Skeleton.Web.Documentation;
     using Swashbuckle.Swagger.Model;
     using Swashbuckle.SwaggerGen.Application;
 
@@ -50,6 +51,7 @@
                         In = "header",
                         Type = "apiKey"
                     });
+            options.OperationFilter<AuthResponsesOperationFilter>();
         }
 
         protected override void ConfigureOptions(IServiceCollection services)
