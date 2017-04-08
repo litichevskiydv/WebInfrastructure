@@ -147,7 +147,7 @@
             item2.Name = "Second";
             item2.Value = 10;
 
-            var expected = new List<ExpandoObject>() { item1, item2 };
+            var expected = new[] { item1, item2 };
 
             // When
             dynamic[] actual;
