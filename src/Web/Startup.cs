@@ -33,13 +33,23 @@
 
         protected override void ConfigureSwaggerDocumentator(SwaggerGenOptions options)
         {
-            options.SingleApiVersion(new Info
-                                     {
-                                         Version = "v1",
-                                         Title = "Values providing API",
-                                         Description = "A dummy to get configuration values",
-                                         TermsOfService = "None"
-                                     });
+            options
+                .SingleApiVersion(new Info
+                                  {
+                                      Version = "v1",
+                                      Title = "Values providing API",
+                                      Description = "A dummy to get configuration values",
+                                      TermsOfService = "None"
+                                  });
+            options
+                .AddSecurityDefinition("Bearer",
+                    new ApiKeyScheme
+                    {
+                        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                        Name = "Authorization",
+                        In = "header",
+                        Type = "apiKey"
+                    });
         }
 
         protected override void ConfigureOptions(IServiceCollection services)
