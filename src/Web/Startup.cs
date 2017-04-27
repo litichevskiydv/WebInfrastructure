@@ -80,9 +80,7 @@
                            b => b
                                .ConfigureSigningKey(
                                    SecurityAlgorithms.HmacSha256,
-                                   new SymmetricSecurityKey(
-                                       Encoding.UTF8.GetBytes(
-                                           "23j79h675s78T904gldUt0M5SftPg50H3W85s5A8u68zUV4AIJ")))
+                                   new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokensSigningKey"])))
                                .ConfigureTokensIssuingOptions(
                                    i => i
                                        .WithGetEndpotint("/api/Account/Token")
