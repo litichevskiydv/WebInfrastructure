@@ -4,7 +4,7 @@
     using System.Net.Http;
     using System.Threading.Tasks;
     using Skeleton.Web.Conventions.Responses;
-    using Skeleton.Web.Integration;
+    using Skeleton.Web.Integration.BaseApiClient;
 
     public class ValuesServiceClient : BaseClient
     {

@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using Client;
     using Skeleton.Web.Conventions.Responses;
-    using Skeleton.Web.Integration.Exceptions;
+    using Skeleton.Web.Integration.BaseApiClient.Exceptions;
     using Skeleton.Web.Testing;
     using Skeleton.Web.Testing.Extensions;
     using Xunit;

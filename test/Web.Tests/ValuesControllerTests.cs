@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using Client.ServicesClients;
-    using Skeleton.Web.Integration.Exceptions;
+    using Skeleton.Web.Integration.BaseApiClient.Exceptions;
     using Skeleton.Web.Testing;
     using Skeleton.Web.Testing.Extensions;
     using Xunit;

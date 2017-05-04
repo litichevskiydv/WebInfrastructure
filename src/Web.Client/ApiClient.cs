@@ -2,7 +2,8 @@
 {
     using System.Net.Http;
     using ServicesClients;
-    using Skeleton.Web.Integration;
+    using Skeleton.Web.Integration.BaseApiClient;
+    using Skeleton.Web.Integration.BaseApiFluentClient;
 
     public partial class ApiClient : BaseFluentClient
     {

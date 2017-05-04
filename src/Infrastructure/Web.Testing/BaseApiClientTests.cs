@@ -1,7 +1,8 @@
 ﻿namespace Skeleton.Web.Testing
 {
     using System;
-    using Integration;
+    using Integration.BaseApiClient;
+    using Integration.BaseApiFluentClient;
     using Moq;
     using Xunit;
 

@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Web.Integration.Exceptions
+﻿namespace Skeleton.Web.Integration.BaseApiClient.Exceptions
 {
     using System;
 

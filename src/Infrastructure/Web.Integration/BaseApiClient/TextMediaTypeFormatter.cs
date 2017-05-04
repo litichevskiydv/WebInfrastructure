@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Web.Integration
+﻿namespace Skeleton.Web.Integration.BaseApiClient
 {
     using System;
     using System.IO;

@@ -4,7 +4,7 @@
     using System.Linq;
     using System.Security.Claims;
     using Client;
-    using Skeleton.Web.Integration.Exceptions;
+    using Skeleton.Web.Integration.BaseApiClient.Exceptions;
     using Skeleton.Web.Testing;
     using Skeleton.Web.Testing.Extensions;
     using Xunit;

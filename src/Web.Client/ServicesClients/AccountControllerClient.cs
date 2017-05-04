@@ -5,7 +5,7 @@
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
     using Skeleton.Web.Authentication.JwtBearer.Models;
-    using Skeleton.Web.Integration;
+    using Skeleton.Web.Integration.BaseApiClient;
 
     public class AccountControllerClient : BaseClient
     {

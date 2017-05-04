@@ -1,6 +1,7 @@
-﻿namespace Skeleton.Web.Integration
+﻿namespace Skeleton.Web.Integration.BaseApiFluentClient
 {
     using System.Collections.Generic;
+    using BaseApiClient;
 
     public abstract class BaseFluentClient
     {
