@@ -1,6 +1,7 @@
 ﻿namespace Skeleton.Web.Testing
 {
     using System;
+    using System.Threading.Tasks;
     using Integration.BaseApiClient;
     using Integration.BaseApiFluentClient;
     using Moq;
@@ -12,6 +13,7 @@
     {
         protected readonly TFixture Fixture;
         protected readonly TApiClient ApiClient;
+        protected dynamic AsyncApiClient => new FluentChainedTask<TApiClient>(Task.FromResult(ApiClient));
 
         public BaseApiClientTests(TFixture fixture)
         {

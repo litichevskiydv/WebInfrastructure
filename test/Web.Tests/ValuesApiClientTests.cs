@@ -1,6 +1,7 @@
 ﻿namespace Web.Tests
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Client;
     using Skeleton.Web.Conventions.Responses;
     using Skeleton.Web.Integration.BaseApiClient.Exceptions;
@@ -28,6 +29,18 @@
         }
 
         [Fact]
+        public async Task ShouldReturnValuesAsync()
+        {
+            // When
+            await AsyncApiClient
+                .GetValuesAsync();
+
+            // Then
+            Assert.NotEmpty((IEnumerable<string>)ApiClient.CurrentState);
+            Fixture.MockLogger.VerifyNoErrors();
+        }
+
+        [Fact]
         public void ShouldSetValue()
         {
             // Given
@@ -45,6 +58,23 @@
         }
 
         [Fact]
+        public async Task ShouldSetValueAsync()
+        {
+            // Given
+            const int id = 1;
+            const string expectedValue = "test";
+
+            // When
+            await AsyncApiClient
+                .SetValueAsync(id, expectedValue)
+                .GetValueAsync(id);
+
+            // Then
+            Assert.Equal(expectedValue, (string)ApiClient.CurrentState);
+            Fixture.MockLogger.VerifyNoErrors();
+        }
+
+        [Fact]
         public void ShouldValidatePositiveKeys()
         {
             // Given
@@ -54,6 +84,22 @@
             // When
             ApiClient
                 .PostValue(id, expectedValue);
+
+            // Then
+            Assert.Equal(id, ((ApiResponse<int>)ApiClient.CurrentState).Data);
+            Fixture.MockLogger.VerifyNoErrors();
+        }
+
+        [Fact]
+        public async Task ShouldValidatePositiveKeysAsync()
+        {
+            // Given
+            const int id = 1;
+            const string expectedValue = "test";
+
+            // When
+            await AsyncApiClient
+                .PostValueAsync(id, expectedValue);
 
             // Then
             Assert.Equal(id, ((ApiResponse<int>)ApiClient.CurrentState).Data);
@@ -86,6 +132,22 @@
 
             // When, Then
             Assert.Throws<ApiException>(() => ApiClient.GetValue(id));
+            Fixture.MockLogger.VerifyErrorWasLogged<KeyNotFoundException>();
+        }
+
+        [Fact]
+        public async Task ShouldDeleteValueAsync()
+        {
+            // Given
+            const int id = 2;
+
+            // When
+            await AsyncApiClient
+                .SetValueAsync(id, "test")
+                .DeleteValueAsync(id);
+
+            // When, Then
+            await Assert.ThrowsAsync<ApiException>(async () => await AsyncApiClient.GetValueAsync(id));
             Fixture.MockLogger.VerifyErrorWasLogged<KeyNotFoundException>();
         }
     }

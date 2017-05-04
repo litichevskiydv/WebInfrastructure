@@ -18,4 +18,14 @@
     <ProjectReference Include="..\Infrastructure\Web.Integration\Web.Integration.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="ApiClient.cs" />
+    <Compile Update="ApiClient.Values.cs">
+      <DependentUpon>ApiClient.cs</DependentUpon>
+    </Compile>
+    <Compile Update="ApiClient.Account.cs">
+      <DependentUpon>ApiClient.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
 </Project>
