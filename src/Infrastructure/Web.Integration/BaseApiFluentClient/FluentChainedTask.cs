@@ -1,7 +1,6 @@
 ﻿namespace Skeleton.Web.Integration.BaseApiFluentClient
 {
     using System.Dynamic;
-    using System.Linq;
     using System.Reflection;
     using System.Runtime.CompilerServices;
     using System.Runtime.ExceptionServices;
@@ -23,7 +22,7 @@
 
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
         {
-            var methodInfo = typeof(TApiFluentClient).GetRuntimeMethod(binder.Name, args.Select(x => x.GetType()).ToArray());
+            var methodInfo = typeof(TApiFluentClient).GetTypeInfo().GetDeclaredMethod(binder.Name);
             if (methodInfo == null)
                 return base.TryInvokeMember(binder, args, out result);
 
@@ -41,8 +40,7 @@
                                           ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
                                       }
                                       return null;
-                                  },
-                        TaskContinuationOptions.OnlyOnRanToCompletion)
+                                  })
                     .Unwrap());
             return true;
         }
