@@ -5,9 +5,8 @@
     using Integration.BaseApiClient;
     using Integration.BaseApiFluentClient;
     using Moq;
-    using Xunit;
 
-    public class BaseApiClientTests<TFixture, TApiClient> : IClassFixture<TFixture>
+    public class BaseApiClientTests<TFixture, TApiClient>
         where TFixture : BaseApiTestsFixture, new()
         where TApiClient : BaseFluentClient
     {
@@ -15,7 +14,7 @@
         protected readonly TApiClient ApiClient;
         protected dynamic AsyncApiClient => new FluentChainedTask<TApiClient>(Task.FromResult(ApiClient));
 
-        public BaseApiClientTests(TFixture fixture)
+        protected BaseApiClientTests(TFixture fixture)
         {
             Fixture = fixture;
             Fixture.MockLogger.ResetCalls();

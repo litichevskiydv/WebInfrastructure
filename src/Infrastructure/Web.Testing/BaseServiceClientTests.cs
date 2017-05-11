@@ -3,9 +3,8 @@
     using System;
     using Integration.BaseApiClient;
     using Moq;
-    using Xunit;
 
-    public class BaseServiceClientTests<TFixture, TServiceClient> : IClassFixture<TFixture>
+    public class BaseServiceClientTests<TFixture, TServiceClient>
         where TFixture : BaseApiTestsFixture, new()
         where TServiceClient : BaseClient
     {
