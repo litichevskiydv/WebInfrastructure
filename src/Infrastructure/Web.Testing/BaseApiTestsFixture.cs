@@ -13,6 +13,8 @@
 
     public abstract class BaseApiTestsFixture : IDisposable
     {
+        protected bool Disposed;
+
         public TestServer Server { get; }
         public Mock<ILogger> MockLogger { get; }
 
@@ -44,9 +46,25 @@
             TimeoutInMilliseconds = Configuration.GetValue<int>("ApiTimeoutInMilliseconds");
         }
 
+        protected virtual void Dispose(bool disposing)
+        {
+            if(Disposed)
+                return;
+
+            if (disposing)
+                Server?.Dispose();
+            Disposed = true;
+        }
+
         public void Dispose()
         {
-            Server.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        ~BaseApiTestsFixture()
+        {
+            Dispose(false);
         }
     }
 
