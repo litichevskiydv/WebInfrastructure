@@ -1,5 +1,6 @@
 ﻿namespace Skeleton.Dapper.Tests.SessionsFactory
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
     using Dapper.Extensions;
@@ -13,6 +14,19 @@
         public SessionsTests()
         {
             _sessionsFactory = new SessionsFactory(ConnectionsFactory);
+        }
+
+        [Fact]
+        public void ShouldGetExceptionOnAlreadyDisposedSession()
+        {
+            // Given
+            var session = _sessionsFactory.Create();
+
+            // When
+            session.Dispose();
+
+            // Then
+            Assert.Throws<ObjectDisposedException>(() => session.Commit());
         }
 
         [Fact]
