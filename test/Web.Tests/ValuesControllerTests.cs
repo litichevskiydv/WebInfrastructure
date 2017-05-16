@@ -22,7 +22,7 @@
         }
 
         [Fact]
-        public async void ShouldReturnValuesAsync()
+        public async Task ShouldReturnValuesAsync()
         {
             Assert.NotEmpty(await ServiceClient.GetAsync());
             Fixture.MockLogger.VerifyNoErrors();
@@ -45,7 +45,7 @@
         }
 
         [Fact]
-        public async void ShouldSetValueAsync()
+        public async Task ShouldSetValueAsync()
         {
             // Given
             const int id = 1;
@@ -67,7 +67,7 @@
         }
 
         [Fact]
-        public async void ShouldValidatePositiveKeys()
+        public async Task ShouldValidatePositiveKeys()
         {
             // Given
             const int id = 1;
@@ -98,7 +98,7 @@
         }
 
         [Fact]
-        public async void ShouldDeleteValueAsync()
+        public async Task ShouldDeleteValueAsync()
         {
             // Given
             const int id = 1;
@@ -124,7 +124,7 @@
         }
 
         [Fact]
-        public async void ShouldThrowExceptionWhileGettingValueByNonexistentKeyAsync()
+        public async Task ShouldThrowExceptionWhileGettingValueByNonexistentKeyAsync()
         {
             // Given
             const int id = 2;
