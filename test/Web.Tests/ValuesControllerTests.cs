@@ -1,6 +1,7 @@
 ﻿namespace Web.Tests
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Client.ServicesClients;
     using Skeleton.Web.Integration.BaseApiClient.Exceptions;
     using Skeleton.Web.Testing;
