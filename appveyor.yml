@@ -20,7 +20,7 @@ build_script:
 - cmd: >-
     call build\BuildSolution.bat %CONFIGURATION%
 
-    call build\CreatePackages.bat %CONFIGURATION% beta1-build%APPVEYOR_BUILD_NUMBER%
+    call build\CreatePackages.bat %CONFIGURATION% beta2-build%APPVEYOR_BUILD_NUMBER%
 test_script:
 - cmd: call build\CalculateCoverage.bat
 artifacts:
