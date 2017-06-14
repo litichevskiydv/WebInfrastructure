@@ -14,9 +14,9 @@
         /// <param name="queriesDispatcher">Queries dispatcher</param>
         /// <param name="criterion">Information needed for queries execution</param>
         /// <returns>Task for asynchronous operation</returns>
-        public static Task<TResult> ExecuteAsync<TResult>(this IQueriesDispatcher queriesDispatcher, ICriterion criterion)
+        public static Task<TResult> ExecuteAsync<TResult>(this IQueriesDispatcher queriesDispatcher, IAsyncCriterion<TResult> criterion)
         {
-            return queriesDispatcher.Execute<Task<TResult>>(criterion);
+            return queriesDispatcher.Execute(criterion);
         }
     }
 }

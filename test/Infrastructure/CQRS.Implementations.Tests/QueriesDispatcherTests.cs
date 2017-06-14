@@ -11,7 +11,7 @@
     public class QueriesDispatcherTests
     {
         [UsedImplicitly]
-        public class NameQueryCtiterion : ICriterion
+        public class NameQueryCtiterion : ICriterion<string>
         {
         }
 

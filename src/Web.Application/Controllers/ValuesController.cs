@@ -49,7 +49,7 @@
         public async Task<IEnumerable<string>> Get()
         {
             _logger.LogInformation("Get values request");
-            return await _queriesDispatcher.ExecuteAsync<string[]>(new GetAllValuesQueryCriterion());
+            return await _queriesDispatcher.ExecuteAsync(new GetAllValuesQueryCriterion());
         }
 
         /// <summary>
@@ -61,7 +61,7 @@
         public string Get(int id)
         {
             _logger.LogInformation("Get value request");
-            return _queriesDispatcher.Execute<string>(new GetValueQueryCriterion(id));
+            return _queriesDispatcher.Execute(new GetValueQueryCriterion(id));
         }
 
         /// <summary>
