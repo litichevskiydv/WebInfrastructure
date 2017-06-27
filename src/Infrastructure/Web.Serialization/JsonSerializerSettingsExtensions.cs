@@ -25,6 +25,12 @@
             return serializerSettings;
         }
 
+        public static JsonSerializerSettings UseTypeNameHandling(this JsonSerializerSettings serializerSettings, TypeNameHandling typeNameHandling)
+        {
+            serializerSettings.TypeNameHandling = typeNameHandling;
+            return serializerSettings;
+        }
+
         public static JsonSerializerSettings UseContractResolver(this JsonSerializerSettings serializerSettings, IContractResolver contractResolver)
         {
             serializerSettings.ContractResolver = contractResolver;
@@ -43,6 +49,7 @@
                 .UseNullValueHandling(NullValueHandling.Ignore)
                 .UseDefaultValuesHandling(DefaultValueHandling.IgnoreAndPopulate)
                 .UseFormatting(Formatting.Indented)
+                .UseTypeNameHandling(TypeNameHandling.Auto)
                 .UseContractResolver(new CamelCasePropertyNamesContractResolver())
                 .UseConverter(new DateTimeConverter())
                 .UseConverter(new StringEnumConverter());
