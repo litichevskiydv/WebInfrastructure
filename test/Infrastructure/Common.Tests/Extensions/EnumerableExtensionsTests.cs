@@ -93,17 +93,20 @@
         }
 
         [Theory]
+        [MemberData(nameof(IsEqualsExtensionTests))]
+        public void ShouldCheckCollectionsHashCode(IEnumerable<int> first, IEnumerable<int> second, bool expected)
+        {
+
+            Assert.True(
+                first.IsEquals(second) && first.GetHashCodeWithRespectToOrder() == second.GetHashCodeWithRespectToOrder()
+                || first.IsEquals(second) == false);
+        }
+
+        [Theory]
         [MemberData(nameof(IsSameExtensionTests))]
         public void ShouldCheckCollectionsIsSame(IEnumerable<int> first, IEnumerable<int> second, bool expected)
         {
             Assert.Equal(expected, first.IsSame(second));
-        }
-
-        [Theory]
-        [MemberData(nameof(IsEqualsExtensionTests))]
-        public void ShouldCheckCollectionsHashCode(IEnumerable<int> first, IEnumerable<int> second, bool expected)
-        {
-            Assert.Equal(expected, first.GetCollectionHashCode() == second.GetCollectionHashCode());
         }
     }
 }
