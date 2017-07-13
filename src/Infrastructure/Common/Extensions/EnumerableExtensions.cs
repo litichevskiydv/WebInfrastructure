@@ -80,5 +80,21 @@
             return firstArray.SequenceEqual(secondArray)
                    || firstArray.Length == secondArray.Length && firstArray.Except(secondArray).Any() == false;
         }
+
+        /// <summary>
+        /// Method for calculating collection <paramref name="items"/> hash code
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of sequences</typeparam>
+        public static int GetHashCodeWithoutRespectToOrder<TSource>(this IEnumerable<TSource> items)
+        {
+            unchecked
+            {
+                return items
+                           ?.Select(x => x.GetHashCode())
+                           .OrderBy(x => x)
+                           .Aggregate(1, (hash, x) => (hash * 31) ^ x)
+                       ?? 0;
+            }
+        }
     }
 }
