@@ -75,7 +75,10 @@
         /// <typeparam name="TSource">The type of the elements of sequences</typeparam>
         public static int GetCollectionHashCode<TSource>(this IEnumerable<TSource> items)
         {
-            return items?.Aggregate(1, (hash, x) => hash * 31 ^ x.GetHashCode()) ?? 0;
+            unchecked
+            {
+                return items?.Aggregate(1, (hash, x) => hash * 31 ^ x.GetHashCode()) ?? 0;
+            }
         }
     }
 }
