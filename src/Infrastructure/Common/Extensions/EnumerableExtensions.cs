@@ -48,7 +48,25 @@
                 return true;
             if (ReferenceEquals(first, null) || ReferenceEquals(second, null))
                 return false;
+
             return first.SequenceEqual(second);
+        }
+
+        /// <summary>
+        /// Determines whether sequence <paramref name="first"/> is same as sequence <paramref name="second"/>
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of sequences</typeparam>
+        public static bool IsSame<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second)
+        {
+            if (ReferenceEquals(first, second))
+                return true;
+            if (ReferenceEquals(first, null) || ReferenceEquals(second, null))
+                return false;
+
+            var firstArray = first as TSource[] ?? first.ToArray();
+            var secondArray = second as TSource[] ?? second.ToArray();
+            return firstArray.SequenceEqual(secondArray)
+                   || firstArray.Length == secondArray.Length && firstArray.Except(secondArray).Any() == false;
         }
     }
 }

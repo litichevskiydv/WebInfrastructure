@@ -16,6 +16,8 @@
         public static IEnumerable<object[]> AsArrayExtensionTests;
         [UsedImplicitly]
         public static IEnumerable<object[]> IsEqualsExtensionTests;
+        [UsedImplicitly]
+        public static IEnumerable<object[]> IsSameExtensionTests;
 
         static EnumerableExtensionsTests()
         {
@@ -47,6 +49,19 @@
                                          new object[] {Enumerable.Empty<int>(), Enumerable.Repeat(1, 2), false},
                                          new object[] {Enumerable.Repeat(1, 2), Enumerable.Repeat(1, 2), true}
                                      };
+
+            var array = new[] {1, 2, 3};
+            IsSameExtensionTests = new[]
+                                   {
+                                       new object[] {null, null, true},
+                                       new object[] {Enumerable.Empty<int>(), Enumerable.Empty<int>(), true},
+                                       new object[] {null, Enumerable.Empty<int>(), false},
+                                       new object[] {Enumerable.Empty<int>(), null, false},
+                                       new object[] {Enumerable.Empty<int>(), Enumerable.Repeat(1, 2), false},
+                                       new object[] {new[] {1, 2}, new[] {1, 2}, true},
+                                       new object[] {new[] {2, 1}, new[] {1, 2}, true},
+                                       new object[] {array, array, true}
+                                   };
         }
 
         [Theory]
@@ -72,9 +87,16 @@
 
         [Theory]
         [MemberData(nameof(IsEqualsExtensionTests))]
-        public void ShouldCheckCollectionsForEquals(IEnumerable<int> first, IEnumerable<int> second, bool expected)
+        public void ShouldCheckCollectionsIsEquals(IEnumerable<int> first, IEnumerable<int> second, bool expected)
         {
             Assert.Equal(expected, first.IsEquals(second));
+        }
+
+        [Theory]
+        [MemberData(nameof(IsSameExtensionTests))]
+        public void ShouldCheckCollectionsIsSame(IEnumerable<int> first, IEnumerable<int> second, bool expected)
+        {
+            Assert.Equal(expected, first.IsSame(second));
         }
     }
 }
