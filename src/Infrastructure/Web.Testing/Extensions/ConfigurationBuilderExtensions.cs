@@ -19,7 +19,7 @@
 
         public static IConfigurationBuilder AddCiDependentSettings(this IConfigurationBuilder configurationBuilder, string environment)
         {
-            var ciName = KnownCiNames.FirstOrDefault(x => Environment.GetEnvironmentVariable(x)?.ToUpperInvariant() == "TRUE");
+            var ciName = KnownCiNames.FirstOrDefault(x => Environment.GetEnvironmentVariable(x.ToUpper())?.ToUpperInvariant() == "TRUE");
             return configurationBuilder
                 .AddJsonFile($"appsettings.{environment}.{ciName ?? ""}.json", true, false);
         }

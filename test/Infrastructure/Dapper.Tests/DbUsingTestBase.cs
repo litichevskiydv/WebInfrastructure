@@ -30,7 +30,7 @@
         protected DbUsingTestBase()
         {
             _isAppVeyor = Environment.GetEnvironmentVariable("Appveyor")?.ToUpperInvariant() == "TRUE";
-            _isTravis = Environment.GetEnvironmentVariable("Travis")?.ToUpperInvariant() == "TRUE";
+            _isTravis = Environment.GetEnvironmentVariable("TRAVIS")?.ToUpperInvariant() == "TRUE";
 
             ConnectionsFactory = new SqlConnectionsFactory(Options.Create(new SqlConnectionsFactoryOptions {SqlServer = ConnectionString}));
             SqlConnectionsFactoryMethod = () => (SqlConnection) ConnectionsFactory.Create();
