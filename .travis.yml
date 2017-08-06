@@ -1,0 +1,17 @@
+language: csharp
+env:
+  global:
+    - CONFIGURATION=Release
+    - VERSIONSUFFIX=beta2
+    - ASPNETCORE_ENVIRONMENT=Staging
+services:
+  - docker
+mono: latest
+dotnet: 1.0.4
+script:
+ - set -e
+ - docker pull microsoft/mssql-server-linux
+ - docker run -p 1433:1433 -e 'SA_PASSWORD=Password12!' -e 'ACCEPT_EULA=Y' -d microsoft/mssql-server-linux
+ - sleep 180
+ - cd build
+ - ./build.sh
