@@ -21,7 +21,7 @@
         public IConfigurationRoot Configuration { get; }
         public int TimeoutInMilliseconds { get; }
 
-        public BaseApiTestsFixture(Type startupType)
+        protected BaseApiTestsFixture(Type startupType)
         {
             MockLogger = MockLoggerExtensions.CreateMockLogger();
 
@@ -42,6 +42,7 @@
                 .SetBasePath(currentDirectory)
                 .AddJsonFile("appsettings.json", false, false)
                 .AddJsonFile($"appsettings.{environment}.json", true, false)
+                .AddCiDependentSettings(environment)
                 .Build();
             TimeoutInMilliseconds = Configuration.GetValue<int>("ApiTimeoutInMilliseconds");
         }
