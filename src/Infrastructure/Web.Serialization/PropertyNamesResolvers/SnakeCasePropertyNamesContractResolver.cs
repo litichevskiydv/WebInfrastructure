@@ -4,7 +4,7 @@
 
     public class SnakeCasePropertyNamesContractResolver : DefaultContractResolver
     {
-        public SnakeCasePropertyNamesContractResolver() : base(true)
+        public SnakeCasePropertyNamesContractResolver()
         {
             NamingStrategy = new SnakeCaseNamingStrategy(true, true);
         }
