@@ -1,8 +1,9 @@
 language: csharp
 env:
   global:
-    - CONFIGURATION=Release
-    - VERSIONSUFFIX=beta2
+    - Configuration=Release
+    - ShortVersion=1.0.0
+    - VersionSuffix=beta2
     - ASPNETCORE_ENVIRONMENT=Staging
 services:
   - docker
