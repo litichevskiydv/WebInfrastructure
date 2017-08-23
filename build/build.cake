@@ -9,16 +9,6 @@ var configuration =
         ? Argument<string>("Configuration") 
         : EnvironmentVariable("Configuration") ?? "Release";
 
-// Packages version in format major.minor.patch
-var shortVersion = HasArgument("ShortVersion") 
-        ? Argument<string>("ShortVersion") 
-        : EnvironmentVariable("ShortVersion");
-
-// Text suffix of the package version
-var versionSuffix = HasArgument("VersionSuffix") 
-        ? Argument<string>("VersionSuffix") 
-        : EnvironmentVariable("VersionSuffix");
-
 // The build number to use in the version number of the built NuGet packages.
 // There are multiple ways this value can be passed, this is a common pattern.
 // 1. If command line parameter parameter passed, use that.
@@ -31,6 +21,15 @@ var buildNumber =
     AppVeyor.IsRunningOnAppVeyor ? AppVeyor.Environment.Build.Number :
     TravisCI.IsRunningOnTravisCI ? TravisCI.Environment.Build.BuildNumber :
     EnvironmentVariable("BuildNumber") != null ? int.Parse(EnvironmentVariable("BuildNumber")) : 0;
+
+// Packages version in format major.minor.patch
+var version = HasArgument("ShortVersion") ? Argument<string>("ShortVersion") : EnvironmentVariable("ShortVersion");
+version = !string.IsNullOrWhiteSpace(version) ? version : "1.0.0";
+var assemblyVersion = $"{version}.{buildNumber}";
+
+// Text suffix of the package version
+var versionSuffix = HasArgument("VersionSuffix") ? Argument<string>("VersionSuffix") : EnvironmentVariable("VersionSuffix");
+var packageVersion = version + (!string.IsNullOrWhiteSpace(versionSuffix) ? $"-{versionSuffix}-build{buildNumber}" : "");
  
 // A directory path to an Artifacts directory.
 var artifactsDirectory = MakeAbsolute(Directory("./artifacts"));
@@ -41,34 +40,10 @@ Task("Clean")
     {
         CleanDirectory(artifactsDirectory);
     });
-
-// Find all csproj projects and set versions to them.
- Task("SetVersion")
-    .IsDependentOn("Clean")
-    .Does(() =>
-    {
-        if(string.IsNullOrWhiteSpace(shortVersion) == false)
-        {
-            var packageVersion = shortVersion 
-            + (string.IsNullOrWhiteSpace(versionSuffix) == false 
-                 ? string.Format("-{0}-build{1}", versionSuffix, buildNumber)
-                 : "");
-            var fullVersion = string.Format("{0}.{1}", shortVersion, buildNumber);
-
-            var projects = GetFiles("../src/**/*.csproj").Concat(GetFiles("../test/**/*.csproj"));
-            foreach(var project in projects)
-            {
-                TransformTextFile(project.FullPath, ">", "<")
-                        .WithToken("1.0.0", ">" + packageVersion + "<")
-                        .WithToken("1.0.0.0", ">" + fullVersion + "<")
-                        .Save(project.FullPath);
-            }
-        }
-    });
  
 // Run dotnet restore to restore all package references.
 Task("Restore")
-    .IsDependentOn("SetVersion")
+    .IsDependentOn("Clean")
     .Does(() =>
     {
         DotNetCoreRestore("..");
@@ -86,7 +61,10 @@ Task("Restore")
                 project.GetDirectory().FullPath,
                 new DotNetCoreBuildSettings()
                 {
-                    Configuration = configuration
+                    Configuration = configuration,
+                    ArgumentCustomization = args => args
+                        .Append($"/p:Version={version}")
+                        .Append($"/p:AssemblyVersion={assemblyVersion}")
                 });
         }
     });
@@ -108,7 +86,9 @@ Task("Pack")
                     Configuration = configuration,
                     NoBuild = true,
                     OutputDirectory = artifactsDirectory,
-                    IncludeSymbols = true
+                    IncludeSymbols = true,
+                    ArgumentCustomization = args => args
+                        .Append($"/p:PackageVersion={packageVersion}")
                 });
         }
     });
@@ -128,7 +108,7 @@ Task("Test")
                 new ProcessArgumentBuilder() 
                     .Append("-configuration " + configuration)
                     .Append("-nobuild")
-                    .Append("-xml " + artifactsDirectory.CombineWithFilePath(project.GetFilenameWithoutExtension()).FullPath + ".xml")
+                    .Append($"-xml {artifactsDirectory.CombineWithFilePath(project.GetFilenameWithoutExtension()).FullPath}.xml")
                 );
         }
     });

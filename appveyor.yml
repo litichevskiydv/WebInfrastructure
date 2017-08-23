@@ -16,7 +16,7 @@ build_script:
 - ps: >-
     cd build
 
-    .\build.ps1 -target CalculateCoverage
+    .\build.ps1 -target CalculateCoverage -experimental
 artifacts:
 - path: build\artifacts\*.nupkg
 deploy: off
