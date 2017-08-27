@@ -1,5 +1,6 @@
 ﻿namespace Skeleton.Web.Logging
 {
+    using System.Diagnostics.CodeAnalysis;
     using System.Reflection;
     using Microsoft.Extensions.Logging;
     using NLog;
