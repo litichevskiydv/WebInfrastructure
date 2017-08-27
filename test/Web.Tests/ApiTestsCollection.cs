@@ -4,7 +4,7 @@
     using Xunit;
 
     [CollectionDefinition(nameof(ApiTestsCollection))]
-    public class ApiTestsCollection : ICollectionFixture<BaseApiTestsFixture<TestsStartup>>
+    public class ApiTestsCollection : ICollectionFixture<BaseApiTestsFixture<Startup>>
     {
     }
 }

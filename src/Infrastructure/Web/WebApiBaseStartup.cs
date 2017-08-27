@@ -3,9 +3,7 @@
     using System;
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
-    using Configuration;
     using ExceptionsHandling;
-    using Logging;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -18,24 +16,20 @@
 
     public abstract class WebApiBaseStartup
     {
-        protected virtual IConfigurationBuilder AddAdditionalConfigurations(IHostingEnvironment env, IConfigurationBuilder configurationBuilder)
+        protected IConfiguration Configuration { get; }
+        protected ILoggerFactory LoggerFactory { get; }
+
+        protected WebApiBaseStartup(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
-            return configurationBuilder.AddNLogConfig($"NLog.{env.EnvironmentName}.config");
+            if(configuration == null)
+                throw new ArgumentNullException(nameof(configuration));
+            if (loggerFactory == null)
+                throw new ArgumentNullException(nameof(loggerFactory));
+
+            Configuration = configuration;
+            LoggerFactory = loggerFactory;
         }
 
-        protected WebApiBaseStartup(IHostingEnvironment env, CommandLineArgumentsProvider commandLineArgumentsProvider)
-        {
-            var builder = new ConfigurationBuilder()
-                .AddEnvironmentVariables()
-                .AddCommandLine(commandLineArgumentsProvider.Arguments)
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", false, true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", false, true);
-
-            Configuration = AddAdditionalConfigurations(env, builder).Build();
-        }
-
-        protected IConfigurationRoot Configuration { get; }
 
         protected virtual void ConfigureJsonSerialization(JsonSerializerSettings serializerSettings)
         {
@@ -83,24 +77,17 @@
             return new AutofacServiceProvider(container);
         }
 
-        protected virtual void AddLoggerProviders(ILoggerFactory loggerFactory)
-        {
-            loggerFactory.AddNLog();
-        }
-
         protected virtual Func<IApplicationBuilder, IApplicationBuilder> CreatePipelineConfigurator(
-            IHostingEnvironment env, ILoggerFactory loggerFactory,
+            IHostingEnvironment env,
             Func<IApplicationBuilder, IApplicationBuilder> pipelineBaseConfigurator)
         {
             return pipelineBaseConfigurator;
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            AddLoggerProviders(loggerFactory.AddConsole(Configuration.GetSection("Logging")));
-
             var pipelineConfigurator = CreatePipelineConfigurator(
-                env, loggerFactory,
+                env,
                 x => x.UseMvc()
                     .UseSwagger()
                     .UseSwaggerUi());

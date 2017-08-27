@@ -26,25 +26,23 @@
             MockLogger = MockLoggerExtensions.CreateMockLogger();
 
             var environment = Environment.GetEnvironmentVariable("Hosting:Environment")
-                              ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
-                              ?? EnvironmentName.Development;
+                                  ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
+                                  ?? EnvironmentName.Development;
             var currentDirectory = Path.GetDirectoryName(startupType.GetTypeInfo().Assembly.Location);
 
-            Server = new TestServer(
-                         new WebHostBuilder()
-                             .UseContentRoot(currentDirectory)
-                             .UseEnvironment(environment)
-                             .ConfigureServices(services => services.CaptureCommandLineArguments(new string[0]))
-                             .UseMockLogger(MockLogger)
-                             .UseStartup(startupType));
-
-            Configuration = new ConfigurationBuilder()
-                .SetBasePath(currentDirectory)
-                .AddJsonFile("appsettings.json", false, false)
-                .AddJsonFile($"appsettings.{environment}.json", true, false)
-                .AddCiDependentSettings(environment)
-                .Build();
+            Func<IConfigurationBuilder, string, string, IConfigurationBuilder> configurationSetup =
+                (builder, configsPath, environmentName) =>
+                    builder
+                        .AddDefaultConfigs(configsPath, environmentName)
+                        .AddCiDependentSettings(environmentName);
+            Configuration = configurationSetup(new ConfigurationBuilder(), currentDirectory, environment).Build();
             TimeoutInMilliseconds = Configuration.GetValue<int>("ApiTimeoutInMilliseconds");
+
+            Server = new TestServer(
+                new WebHostBuilder()
+                    .ConfigureAppConfiguration(builder => configurationSetup(builder, currentDirectory, environment))
+                    .UseMockLogger(MockLogger)
+                    .UseStartup(startupType));
         }
 
         protected virtual void Dispose(bool disposing)

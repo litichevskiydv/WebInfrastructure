@@ -10,9 +10,9 @@
     using Xunit;
 
     [Collection(nameof(ApiTestsCollection))]
-    public class AccountApiClientTests : BaseApiClientTests<BaseApiTestsFixture<TestsStartup>, ApiClient>
+    public class AccountApiClientTests : BaseApiClientTests<BaseApiTestsFixture<Startup>, ApiClient>
     {
-        public AccountApiClientTests(BaseApiTestsFixture<TestsStartup> fixture) : base(fixture)
+        public AccountApiClientTests(BaseApiTestsFixture<Startup> fixture) : base(fixture)
         {
         }
 

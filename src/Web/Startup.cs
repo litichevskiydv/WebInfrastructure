@@ -10,6 +10,7 @@
     using JetBrains.Annotations;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Microsoft.IdentityModel.Tokens;
@@ -18,7 +19,6 @@
     using Skeleton.Web;
     using Skeleton.Web.Authentication.JwtBearer;
     using Skeleton.Web.Authentication.JwtBearer.Configuration;
-    using Skeleton.Web.Configuration;
     using Skeleton.Web.Documentation;
     using Swashbuckle.Swagger.Model;
     using Swashbuckle.SwaggerGen.Application;
@@ -26,9 +26,7 @@
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public class Startup : WebApiBaseStartup
     {
-
-        public Startup(IHostingEnvironment env, CommandLineArgumentsProvider commandLineArgumentsProvider)
-            : base(env, commandLineArgumentsProvider)
+        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory) : base(configuration, loggerFactory)
         {
         }
 
@@ -58,7 +56,25 @@
         {
             services
                 .Configure<DefaultConfigurationValues>(Configuration.GetSection("DefaultConfigurationValues"))
-                .Configure<SqlConnectionsFactoryOptions>(Configuration.GetSection("ConnectionStrings"));
+                .Configure<SqlConnectionsFactoryOptions>(Configuration.GetSection("ConnectionStrings"))
+                .AddJwtBearerAuthorisationTokens(
+                    b => b
+                        .ConfigureSigningKey(
+                            SecurityAlgorithms.HmacSha256,
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokensSigningKey"])))
+                        .ConfigureTokensIssuingOptions(
+                            i => i
+                                .WithGetEndpotint("/api/Account/Token")
+                                .WithLifetime(TimeSpan.FromHours(2))
+                                .WithTokenIssueEventHandler(
+                                    new TokenIssueEventHandler(LoggerFactory.CreateLogger<TokenIssueEventHandler>())))
+                        .ConfigureJwtBearerOptions(
+                            o => o
+                                .WithTokenValidationParameters(
+                                    v => v
+                                        .WithLifetimeValidation()
+                                        .WithoutAudienceValidation()
+                                        .WithoutIssuerValidation())));
         }
 
         protected override void RegisterDependencies(ContainerBuilder containerBuilder)
@@ -72,27 +88,10 @@
         }
 
         protected override Func<IApplicationBuilder, IApplicationBuilder> CreatePipelineConfigurator(
-            IHostingEnvironment env, ILoggerFactory loggerFactory,
+            IHostingEnvironment env,
             Func<IApplicationBuilder, IApplicationBuilder> pipelineBaseConfigurator)
         {
-            return x => pipelineBaseConfigurator(x
-                       .UseJwtBearerAuthorisationTokens(
-                           b => b
-                               .ConfigureSigningKey(
-                                   SecurityAlgorithms.HmacSha256,
-                                   new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokensSigningKey"])))
-                               .ConfigureTokensIssuingOptions(
-                                   i => i
-                                       .WithGetEndpotint("/api/Account/Token")
-                                       .WithLifetime(TimeSpan.FromHours(2))
-                                       .WithTokenIssueEventHandler(new TokenIssueEventHandler(loggerFactory.CreateLogger<TokenIssueEventHandler>())))
-                               .ConfigureJwtBearerOptions(
-                                   o => o
-                                       .WithTokenValidationParameters(
-                                           v => v
-                                               .WithLifetimeValidation()
-                                               .WithoutAudienceValidation()
-                                               .WithoutIssuerValidation()))));
+            return x => pipelineBaseConfigurator(x.UseJwtBearerAuthorisationTokens());
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace Skeleton.Web.Authentication.JwtBearer.Configuration
 {
     using System;
-    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.Extensions.DependencyInjection;
 
     public static class ServiceCollectionExtensions
@@ -16,10 +16,13 @@
 
             var configurator = new JwtBearerAuthenticationConfigurator();
             configurationBuilder(configurator);
-            return services
+            services
                 .AddOptions()
-                .Configure<JwtBearerOptions>(x => configurator.JwtBearerOptionsBuilder(x))
-                .Configure<TokensIssuingOptions>(x => configurator.TokensIssuingOptionsBuilder(x));
+                .Configure<TokensIssuingOptions>(x => configurator.TokensIssuingOptionsBuilder(x))
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(x => configurator.JwtBearerOptionsBuilder(x));
+
+            return services;
         }
     }
 }

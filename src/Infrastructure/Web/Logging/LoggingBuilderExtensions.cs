@@ -8,15 +8,15 @@
     public static class LoggerFactoryExtensions
     {
         [ExcludeFromCodeCoverage]
-        public static ILoggerFactory AddNLog(this ILoggerFactory factory)
+        public static ILoggingBuilder AddNLog(this ILoggingBuilder loggingBuilder)
         {
             LogManager.AddHiddenAssembly(Assembly.Load(new AssemblyName("Microsoft.Extensions.Logging")));
             LogManager.AddHiddenAssembly(Assembly.Load(new AssemblyName("Microsoft.Extensions.Logging.Abstractions")));
             LogManager.AddHiddenAssembly(typeof(ConfigureExtensions).GetTypeInfo().Assembly);
             LogManager.AddHiddenAssembly(typeof(LoggerFactoryExtensions).GetTypeInfo().Assembly);
 
-            factory.AddProvider(new NLogLoggerProvider());
-            return factory;
+            loggingBuilder.AddProvider(new NLogLoggerProvider());
+            return loggingBuilder;
         }
     }
 }

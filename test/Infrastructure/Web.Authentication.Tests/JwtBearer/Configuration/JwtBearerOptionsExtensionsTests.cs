@@ -5,7 +5,6 @@
     using Authentication.JwtBearer.Configuration;
     using JetBrains.Annotations;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
-    using Microsoft.AspNetCore.Builder;
     using Microsoft.IdentityModel.Tokens;
     using Moq;
     using Xunit;
@@ -30,7 +29,7 @@
             WithEventsProcessorValidationTestsData =
                 new[]
                 {
-                    new object[] {null, new Mock<IJwtBearerEvents>().Object},
+                    new object[] {null, new Mock<JwtBearerEvents>().Object},
                     new object[] {new JwtBearerOptions(), null}
                 };
             WithErrorDetailsValidationTestsData = new[] {new object[] {null, true}};
@@ -47,7 +46,7 @@
         [Theory]
         [MemberData(nameof(WithEventsProcessorValidationTestsData))]
         public void WithEventsProcessorShouldValidateInput(JwtBearerOptions options,
-            IJwtBearerEvents eventsProcessor)
+            JwtBearerEvents eventsProcessor)
         {
             Assert.Throws<ArgumentNullException>(() => options.WithEventsProcessor(eventsProcessor));
         }
@@ -80,7 +79,7 @@
         {
             // Given
             var options = new JwtBearerOptions();
-            var expectedEventsProcessor = new Mock<IJwtBearerEvents>().Object;
+            var expectedEventsProcessor = new Mock<JwtBearerEvents>().Object;
 
             // When
             options.WithEventsProcessor(expectedEventsProcessor);

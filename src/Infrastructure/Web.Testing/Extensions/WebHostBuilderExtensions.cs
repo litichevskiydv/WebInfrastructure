@@ -1,6 +1,8 @@
 ﻿namespace Skeleton.Web.Testing.Extensions
 {
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.DependencyInjection.Extensions;
     using Microsoft.Extensions.Logging;
     using Moq;
 
@@ -11,7 +13,7 @@
             var mockLoggerFactory = new Mock<ILoggerFactory>();
             mockLoggerFactory.Setup(x => x.CreateLogger(It.IsAny<string>())).Returns(mockLogger.Object);
 
-            return builder.UseLoggerFactory(mockLoggerFactory.Object);
+            return builder.ConfigureLogging(x => x.Services.Replace(ServiceDescriptor.Singleton(mockLoggerFactory.Object)));
         }
     }
 }

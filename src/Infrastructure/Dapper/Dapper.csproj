@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>Library with common extensions and helpers for use Dapper in code</Description>
     <Authors>dmitriy.litichevskiy</Authors>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <DebugType>portable</DebugType>
     <AssemblyName>Skeleton.Dapper</AssemblyName>
     <PackageId>Skeleton.Dapper</PackageId>
@@ -20,7 +20,8 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="1.50.2" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.0.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.4.0" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿namespace Skeleton.Web.Authentication.JwtBearer.Configuration
 {
     using System;
-    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.IdentityModel.Tokens;
 
     internal class JwtBearerAuthenticationConfigurator : IJwtBearerAuthenticationConfigurator

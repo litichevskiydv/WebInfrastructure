@@ -2,7 +2,6 @@
 {
     using System;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
-    using Microsoft.AspNetCore.Builder;
     using Microsoft.IdentityModel.Tokens;
 
     public static class JwtBearerOptionsExtensions
@@ -19,7 +18,7 @@
             return options;
         }
 
-        public static JwtBearerOptions WithEventsProcessor(this JwtBearerOptions options, IJwtBearerEvents eventsProcessor)
+        public static JwtBearerOptions WithEventsProcessor(this JwtBearerOptions options, JwtBearerEvents eventsProcessor)
         {
             if (options == null)
                 throw new ArgumentNullException(nameof(options));
