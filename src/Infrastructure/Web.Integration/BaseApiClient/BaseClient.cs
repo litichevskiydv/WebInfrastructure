@@ -36,8 +36,11 @@
             _timeout = TimeSpan.FromMilliseconds(configuration.TimeoutInMilliseconds);
 
             _defaultFormatter = new JsonMediaTypeFormatter {SerializerSettings = configuration.SerializerSettings};
-            _supportedFormatters = new[] {new TextMediaTypeFormatter(), _defaultFormatter};
-            _supportedMediaTypes = _supportedFormatters.SelectMany(x => x.SupportedMediaTypes.Select(type => type.MediaType)).ToArray();
+            _supportedFormatters = new[] {_defaultFormatter};
+            _supportedMediaTypes = _supportedFormatters
+                .SelectMany(x => x.SupportedMediaTypes.Select(type => type.MediaType))
+                .Where(x => x.Equals("text/plain", StringComparison.InvariantCultureIgnoreCase) == false)
+                .ToArray();
 
             _exceptionsTypesByStatusCodes = new Dictionary<HttpStatusCode, Type>
                                             {
