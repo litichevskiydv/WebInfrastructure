@@ -40,12 +40,19 @@
             {
                 await _next(context);
             }
+            catch (OperationCanceledException)
+            {
+                _logger.LogWarning("Request was cancelled");
+
+                context.Response.Clear();
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
             catch (Exception exception)
             {
-                context.Response.Clear();
-
                 const string message = "Unhandled exception has occurred";
-                _logger.LogError(0, exception, message);
+                _logger.LogError(exception, message);
+
+                context.Response.Clear();
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
                 if (_hostingEnvironment.IsDevelopment() || _hostingEnvironment.IsStaging())

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Net;
+    using System.Threading;
     using System.Threading.Tasks;
     using ExceptionsHandling;
     using JetBrains.Annotations;
@@ -87,6 +88,37 @@
                 Assert.Empty(content);
 
                 _mockLogger.VerifyErrorWasLogged<InvalidOperationException>();
+            }
+        }
+
+        [Fact]
+        public async Task ShouldLogWarningAndReturnBadRequestOnTaskCancellation()
+        {
+            // Given
+            var hostBuilder = new WebHostBuilder()
+                .UseMockLogger(_mockLogger)
+                .Configure(app =>
+                           {
+                               app.UseUnhandledExceptionsLoggingMiddleware();
+                               app.Run(context =>
+                                       {
+                                           var source = new CancellationTokenSource();
+                                           source.CancelAfter(TimeSpan.FromMilliseconds(100));
+
+                                           return Task.Delay(TimeSpan.FromSeconds(5), source.Token);
+                                       });
+                           });
+
+            // When, Then
+            using (var server = new TestServer(hostBuilder))
+            {
+                var response = await server.CreateRequest("/").SendAsync("GET");
+                Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+                var content = await response.Content.ReadAsStringAsync();
+                Assert.Empty(content);
+
+                _mockLogger.VerifyWarningWasLogged();
             }
         }
     }

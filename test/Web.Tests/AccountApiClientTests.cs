@@ -29,7 +29,7 @@
                 .UserInfo();
 
             // Then
-            Fixture.MockLogger.VerifyNoErrors();
+            Fixture.MockLogger.VerifyNoErrorsWasLogged();
             Assert.Equal($"{ClaimTypes.Email}:{login}", ((IEnumerable<string>) ApiClient.CurrentState).First());
         }
 

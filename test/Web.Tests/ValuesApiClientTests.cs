@@ -25,7 +25,7 @@
 
             // Then
             Assert.NotEmpty((IEnumerable<string>)ApiClient.CurrentState);
-            Fixture.MockLogger.VerifyNoErrors();
+            Fixture.MockLogger.VerifyNoErrorsWasLogged();
         }
 
         [Fact]
@@ -37,7 +37,7 @@
 
             // Then
             Assert.NotEmpty((IEnumerable<string>)ApiClient.CurrentState);
-            Fixture.MockLogger.VerifyNoErrors();
+            Fixture.MockLogger.VerifyNoErrorsWasLogged();
         }
 
         [Fact]
@@ -54,7 +54,7 @@
 
             // Then
             Assert.Equal(expectedValue, (string)ApiClient.CurrentState);
-            Fixture.MockLogger.VerifyNoErrors();
+            Fixture.MockLogger.VerifyNoErrorsWasLogged();
         }
 
         [Fact]
@@ -71,7 +71,7 @@
 
             // Then
             Assert.Equal(expectedValue, (string)ApiClient.CurrentState);
-            Fixture.MockLogger.VerifyNoErrors();
+            Fixture.MockLogger.VerifyNoErrorsWasLogged();
         }
 
         [Fact]
@@ -87,7 +87,7 @@
 
             // Then
             Assert.Equal(id, ((ApiResponse<int>)ApiClient.CurrentState).Data);
-            Fixture.MockLogger.VerifyNoErrors();
+            Fixture.MockLogger.VerifyNoErrorsWasLogged();
         }
 
         [Fact]
@@ -103,7 +103,7 @@
 
             // Then
             Assert.Equal(id, ((ApiResponse<int>)ApiClient.CurrentState).Data);
-            Fixture.MockLogger.VerifyNoErrors();
+            Fixture.MockLogger.VerifyNoErrorsWasLogged();
         }
 
         [Fact]

@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Client.ServicesClients;
+    using Skeleton.Web.Integration.BaseApiClient;
     using Skeleton.Web.Integration.BaseApiClient.Exceptions;
     using Skeleton.Web.Testing;
     using Skeleton.Web.Testing.Extensions;
@@ -19,14 +20,29 @@
         public void ShouldReturnValues()
         {
             Assert.NotEmpty(ServiceClient.Get());
-            Fixture.MockLogger.VerifyNoErrors();
+            Fixture.MockLogger.VerifyNoErrorsWasLogged();
+        }
+
+        [Fact]
+        public void ShouldReturnBadRequestIfOperationWasCancelled()
+        {
+            // Given
+            var client = new ValuesServiceClient(Fixture.Server.CreateHandler(), 
+                new ClientConfiguration
+                {
+                    BaseUrl = Fixture.Server.BaseAddress.ToString(),
+                    TimeoutInMilliseconds = 100
+                });
+
+            Assert.Throws<BadRequestException>(() => client.Get());
+            Fixture.MockLogger.VerifyWarningWasLogged();
         }
 
         [Fact]
         public async Task ShouldReturnValuesAsync()
         {
             Assert.NotEmpty(await ServiceClient.GetAsync());
-            Fixture.MockLogger.VerifyNoErrors();
+            Fixture.MockLogger.VerifyNoErrorsWasLogged();
         }
 
         [Fact]
@@ -42,7 +58,7 @@
 
             // Then
             Assert.Equal(expectedValue, actualValue);
-            Fixture.MockLogger.VerifyNoErrors();
+            Fixture.MockLogger.VerifyNoErrorsWasLogged();
         }
 
         [Fact]
@@ -58,7 +74,7 @@
 
             // Then
             Assert.Equal(expectedValue, actualValue);
-            Fixture.MockLogger.VerifyNoErrors();
+            Fixture.MockLogger.VerifyNoErrorsWasLogged();
         }
 
         [Fact]
@@ -80,7 +96,7 @@
 
             // Then
             Assert.Equal(expectedValue, actualValue);
-            Fixture.MockLogger.VerifyNoErrors();
+            Fixture.MockLogger.VerifyNoErrorsWasLogged();
         }
 
         [Fact]

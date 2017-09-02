@@ -76,7 +76,7 @@
                 var request = new HttpRequestMessage(method, url);
                 if (method != HttpMethod.Get && data != null)
                     request.Content = data as HttpContent ??
-                                      new ObjectContent(data.GetType(), data, _defaultFormatter, Enumerable.FirstOrDefault<MediaTypeHeaderValue>(_defaultFormatter.SupportedMediaTypes));
+                                      new ObjectContent(data.GetType(), data, _defaultFormatter, _defaultFormatter.SupportedMediaTypes.FirstOrDefault());
                 return await httpClient.SendAsync(request).ConfigureAwait(false);
             }
         }
@@ -88,7 +88,7 @@
 
         private async Task<T> ReadAsAsyncWithAwaitConfiguration<T>(HttpContent httpContent)
         {
-            return await HttpContentExtensions.ReadAsAsync<T>(httpContent, (IEnumerable<MediaTypeFormatter>) _supportedFormatters).ConfigureAwait(false);
+            return await httpContent.ReadAsAsync<T>(_supportedFormatters).ConfigureAwait(false);
         }
 
         private static T DeserializeWithDefault<T>(string value)
