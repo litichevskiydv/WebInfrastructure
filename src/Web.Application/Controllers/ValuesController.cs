@@ -50,7 +50,7 @@
         public async Task<IEnumerable<string>> Get(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Get values request");
-            await Task.Delay(5000, cancellationToken);
+            await Task.Delay(500, cancellationToken);
             return await _queriesDispatcher.ExecuteAsync(new GetAllValuesQueryCriterion());
         }
 
