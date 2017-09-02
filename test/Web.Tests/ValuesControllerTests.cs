@@ -20,7 +20,9 @@
         public void ShouldReturnValues()
         {
             Assert.NotEmpty(ServiceClient.Get());
-            Fixture.MockLogger.VerifyNoErrorsWasLogged();
+            Fixture.MockLogger
+                .VerifyNoErrorsWasLogged()
+                .VerifyNoWarningsWasLogged();
         }
 
         [Fact]
@@ -35,14 +37,18 @@
                 });
 
             Assert.Throws<BadRequestException>(() => client.Get());
-            Fixture.MockLogger.VerifyWarningWasLogged();
+            Fixture.MockLogger
+                .VerifyNoErrorsWasLogged()
+                .VerifyWarningWasLogged();
         }
 
         [Fact]
         public async Task ShouldReturnValuesAsync()
         {
             Assert.NotEmpty(await ServiceClient.GetAsync());
-            Fixture.MockLogger.VerifyNoErrorsWasLogged();
+            Fixture.MockLogger
+                .VerifyNoErrorsWasLogged()
+                .VerifyNoWarningsWasLogged();
         }
 
         [Fact]
@@ -58,7 +64,9 @@
 
             // Then
             Assert.Equal(expectedValue, actualValue);
-            Fixture.MockLogger.VerifyNoErrorsWasLogged();
+            Fixture.MockLogger
+                .VerifyNoErrorsWasLogged()
+                .VerifyNoWarningsWasLogged();
         }
 
         [Fact]
@@ -74,13 +82,19 @@
 
             // Then
             Assert.Equal(expectedValue, actualValue);
-            Fixture.MockLogger.VerifyNoErrorsWasLogged();
+            Fixture.MockLogger
+                .VerifyNoErrorsWasLogged()
+                .VerifyNoWarningsWasLogged();
         }
 
         [Fact]
         public void ShouldNotValidateNegativeKeys()
         {
             Assert.Throws<BadRequestException>(() => ServiceClient.Post(-1, "test"));
+
+            Fixture.MockLogger
+                .VerifyNoErrorsWasLogged()
+                .VerifyNoWarningsWasLogged();
         }
 
         [Fact]
@@ -96,7 +110,9 @@
 
             // Then
             Assert.Equal(expectedValue, actualValue);
-            Fixture.MockLogger.VerifyNoErrorsWasLogged();
+            Fixture.MockLogger
+                .VerifyNoErrorsWasLogged()
+                .VerifyNoWarningsWasLogged();
         }
 
         [Fact]
@@ -111,7 +127,9 @@
 
             // Then
             Assert.Throws<ApiException>(() => ServiceClient.Get(id));
-            Fixture.MockLogger.VerifyErrorWasLogged<KeyNotFoundException>();
+            Fixture.MockLogger
+                .VerifyErrorWasLogged<KeyNotFoundException>()
+                .VerifyNoWarningsWasLogged();
         }
 
         [Fact]
@@ -126,7 +144,9 @@
 
             // Then
             Assert.Throws<ApiException>(() => ServiceClient.Get(id));
-            Fixture.MockLogger.VerifyErrorWasLogged<KeyNotFoundException>();
+            Fixture.MockLogger
+                .VerifyErrorWasLogged<KeyNotFoundException>()
+                .VerifyNoWarningsWasLogged();
         }
 
         [Fact]
@@ -137,7 +157,9 @@
 
             // When, Then
             Assert.Throws<ApiException>(() => ServiceClient.Get(id));
-            Fixture.MockLogger.VerifyErrorWasLogged<KeyNotFoundException>();
+            Fixture.MockLogger
+                .VerifyErrorWasLogged<KeyNotFoundException>()
+                .VerifyNoWarningsWasLogged();
         }
 
         [Fact]
@@ -148,7 +170,9 @@
 
             // When, Then
             await Assert.ThrowsAsync<ApiException>(async () => await ServiceClient.GetAsync(id));
-            Fixture.MockLogger.VerifyErrorWasLogged<KeyNotFoundException>();
+            Fixture.MockLogger
+                .VerifyErrorWasLogged<KeyNotFoundException>()
+                .VerifyNoWarningsWasLogged();
         }
     }
 }
