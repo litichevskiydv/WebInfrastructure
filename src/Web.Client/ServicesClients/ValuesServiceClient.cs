@@ -6,7 +6,7 @@
     using Skeleton.Web.Conventions.Responses;
     using Skeleton.Web.Integration.BaseApiClient;
 
-    public class ValuesServiceClient : BaseClient
+    public class ValuesServiceClient : FlurlBasedClient
     {
         public ValuesServiceClient(ClientConfiguration configuration) : base(configuration)
         {

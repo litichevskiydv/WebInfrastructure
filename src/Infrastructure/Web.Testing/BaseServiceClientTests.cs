@@ -6,7 +6,7 @@
 
     public class BaseServiceClientTests<TFixture, TServiceClient>
         where TFixture : BaseApiTestsFixture, new()
-        where TServiceClient : BaseClient
+        where TServiceClient : FlurlBasedClient
     {
         protected readonly TFixture Fixture;
         protected readonly TServiceClient ServiceClient;

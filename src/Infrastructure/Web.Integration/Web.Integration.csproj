@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Flurl.Http" Version="2.0.0-pre2" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.3" NoWarn="NU1701" />
     <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" NoWarn="NU1701" />
     <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
