@@ -2,12 +2,11 @@
 {
     using System.Collections.Generic;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading.Tasks;
     using Skeleton.Web.Authentication.JwtBearer.Models;
     using Skeleton.Web.Integration.BaseApiClient;
 
-    public class AccountControllerClient : BaseClient
+    public class AccountControllerClient : FlurlBasedClient
     {
         private string _token;
 
@@ -24,10 +23,10 @@
             _token = token;
         }
 
-        protected override void RequestHeadersConfigurator(HttpRequestHeaders requestHeaders)
+        protected override void ConfigureRequestHeaders(IDictionary<string, object> headers)
         {
             if (string.IsNullOrWhiteSpace(_token) == false)
-                requestHeaders.WithBearerToken(_token);
+                headers.WithBearerToken(_token);
         }
 
         public TokenResponseModel Token(string login, string password)
