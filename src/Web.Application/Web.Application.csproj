@@ -7,9 +7,6 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>Web.Application</AssemblyName>
     <PackageId>Web.Application</PackageId>
-    <DisableImplicitAssetTargetFallback>true</DisableImplicitAssetTargetFallback>
-    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8</AssetTargetFallback>
-    <NoWarn>1701;1702;1705;NU1701</NoWarn>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
@@ -30,7 +27,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.WebApiCompatShim" Version="2.0.0" />
     <PackageReference Include="JetBrains.Annotations" Version="11.0.0" />
   </ItemGroup>
 

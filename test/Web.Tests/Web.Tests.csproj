@@ -5,9 +5,6 @@
     <DebugType>portable</DebugType>
     <IsPackable>false</IsPackable>
     <AssemblyName>Web.Tests</AssemblyName>
-    <DisableImplicitAssetTargetFallback>true</DisableImplicitAssetTargetFallback>
-    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8</AssetTargetFallback>
-    <NoWarn>1701;1702;1705;NU1701</NoWarn>
   </PropertyGroup>
 
   <Target Name="CopyAditionalFiles" AfterTargets="Build" Condition="'$(TargetFramework)'!=''">

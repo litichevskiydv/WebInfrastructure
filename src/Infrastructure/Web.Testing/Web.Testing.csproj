@@ -12,9 +12,6 @@
     <PackageLicenseUrl>https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/litichevskiydv/WebInfrastructure</RepositoryUrl>
-    <DisableImplicitAssetTargetFallback>true</DisableImplicitAssetTargetFallback>
-    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8</AssetTargetFallback>
-    <NoWarn>1701;1702;1705;NU1701</NoWarn>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
