@@ -11,8 +11,9 @@
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
     using Routing;
-    using Swashbuckle.SwaggerGen.Application;
     using Serialization;
+    using Swashbuckle.AspNetCore.SwaggerGen;
+    using Swashbuckle.AspNetCore.SwaggerUI;
 
     public abstract class WebApiBaseStartup
     {
@@ -38,6 +39,8 @@
 
         protected abstract void ConfigureSwaggerDocumentator(SwaggerGenOptions options);
 
+        protected abstract void ConfigureSwaggerUi(SwaggerUIOptions options);
+
         protected abstract void ConfigureOptions(IServiceCollection services);
 
         protected abstract void RegisterDependencies(ContainerBuilder containerBuilder);
@@ -54,17 +57,16 @@
                             .UseUnhandledExceptionFilter())
                 .AddJsonOptions(x => ConfigureJsonSerialization(x.SerializerSettings));
 
-            services.AddSwaggerGen();
-            services.ConfigureSwaggerGen(options =>
-                                         {
-                                             ConfigureSwaggerDocumentator(options);
+            services.AddSwaggerGen(options =>
+                                   {
+                                       ConfigureSwaggerDocumentator(options);
 
-                                             var xmlDocsPath = Configuration.GetValue<string>("xml_docs");
-                                             if (string.IsNullOrWhiteSpace(xmlDocsPath) == false)
-                                                 options.IncludeXmlComments(xmlDocsPath);
+                                       var xmlDocsPath = Configuration.GetValue<string>("xml_docs");
+                                       if (string.IsNullOrWhiteSpace(xmlDocsPath) == false)
+                                           options.IncludeXmlComments(xmlDocsPath);
 
-                                             options.DescribeAllEnumsAsStrings();
-                                         });
+                                       options.DescribeAllEnumsAsStrings();
+                                   });
 
             ConfigureOptions(services.AddOptions());
 
@@ -88,9 +90,10 @@
         {
             var pipelineConfigurator = CreatePipelineConfigurator(
                 env,
-                x => x.UseMvc()
+                x => x.UseStaticFiles()
                     .UseSwagger()
-                    .UseSwaggerUi());
+                    .UseSwaggerUI(ConfigureSwaggerUi)
+                    .UseMvc());
             pipelineConfigurator(app);
         }
     }

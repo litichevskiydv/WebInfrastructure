@@ -20,8 +20,9 @@
     using Skeleton.Web.Authentication.JwtBearer;
     using Skeleton.Web.Authentication.JwtBearer.Configuration;
     using Skeleton.Web.Documentation;
-    using Swashbuckle.Swagger.Model;
-    using Swashbuckle.SwaggerGen.Application;
+    using Swashbuckle.AspNetCore.Swagger;
+    using Swashbuckle.AspNetCore.SwaggerGen;
+    using Swashbuckle.AspNetCore.SwaggerUI;
 
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public class Startup : WebApiBaseStartup
@@ -33,13 +34,15 @@
         protected override void ConfigureSwaggerDocumentator(SwaggerGenOptions options)
         {
             options
-                .SingleApiVersion(new Info
-                                  {
-                                      Version = "v1",
-                                      Title = "Values providing API",
-                                      Description = "A dummy to get configuration values",
-                                      TermsOfService = "None"
-                                  });
+                .SwaggerDoc("v1",
+                    new Info
+                    {
+                        Version = "v1",
+                        Title = "Values providing API",
+                        Description = "A dummy to get configuration values",
+                        TermsOfService = "None"
+                    });
+
             options
                 .AddSecurityDefinition("Bearer",
                     new ApiKeyScheme
@@ -50,6 +53,11 @@
                         Type = "apiKey"
                     });
             options.OperationFilter<AuthResponsesOperationFilter>();
+        }
+
+        protected override void ConfigureSwaggerUi(SwaggerUIOptions options)
+        {
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Values providing API v1");
         }
 
         protected override void ConfigureOptions(IServiceCollection services)

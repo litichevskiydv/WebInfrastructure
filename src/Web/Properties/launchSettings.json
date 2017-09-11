@@ -17,13 +17,13 @@
     },
     "WebDevelopment": {
       "commandName": "Project",
-      "commandLineArgs": "--environment Development --api_route_preffix api --xml_docs ..\\Web.Application\\bin\\Debug\\netstandard1.6\\Web.Application.xml",
+      "commandLineArgs": "--environment Development --api_route_preffix api --xml_docs ..\\Web.Application\\bin\\Debug\\netstandard2.0\\Web.Application.xml",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:5000/swagger/ui"
+      "launchUrl": "http://localhost:5000/swagger/"
     },
     "WebStaging": {
       "commandName": "Project",
-      "commandLineArgs": "--environment Staging --api_route_preffix api --xml_docs ..\\Web.Application\\bin\\Debug\\netstandard1.6\\Web.Application.xml",
+      "commandLineArgs": "--environment Staging --api_route_preffix api --xml_docs ..\\Web.Application\\bin\\Debug\\netstandard2.0\\Web.Application.xml",
       "launchBrowser": true,
       "launchUrl": "http://localhost:5000/api/values"
     }
