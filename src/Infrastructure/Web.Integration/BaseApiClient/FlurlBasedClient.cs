@@ -14,6 +14,14 @@
 
     public abstract class FlurlBasedClient
     {
+        private class HttpClientFactoryWithDecompressionEnabled : DefaultHttpClientFactory
+        {
+            public override HttpMessageHandler CreateMessageHandler()
+            {
+                return new HttpClientHandler {AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate};
+            }
+        }
+
         private class HttpClientFactoryWithPredefinedHandler : IHttpClientFactory
         {
             private readonly HttpMessageHandler _messageHandler;
@@ -48,20 +56,25 @@
                 throw new ArgumentNullException(nameof(configuration));
 
             _baseUrl = configuration.BaseUrl;
-            _clientSettings = new ClientFlurlHttpSettings(
-                new FlurlHttpSettings
+            _clientSettings =
+                new ClientFlurlHttpSettings(
+                        new FlurlHttpSettings
+                        {
+                            Timeout = TimeSpan.FromMilliseconds(configuration.TimeoutInMilliseconds),
+                            JsonSerializer = new NewtonsoftJsonSerializer(configuration.SerializerSettings)
+
+                        })
+                    {
+                        HttpClientFactory = new HttpClientFactoryWithDecompressionEnabled()
+                    };
+
+            _exceptionsTypesByStatusCodes =
+                new Dictionary<HttpStatusCode, Type>
                 {
-                    Timeout = TimeSpan.FromMilliseconds(configuration.TimeoutInMilliseconds),
-                    JsonSerializer = new NewtonsoftJsonSerializer(configuration.SerializerSettings)
-
-                });
-
-            _exceptionsTypesByStatusCodes = new Dictionary<HttpStatusCode, Type>
-                                            {
-                                                {HttpStatusCode.NotFound, typeof(NotFoundException)},
-                                                {HttpStatusCode.Unauthorized, typeof(UnauthorizedException)},
-                                                {HttpStatusCode.BadRequest, typeof(BadRequestException)}
-                                            };
+                    {HttpStatusCode.NotFound, typeof(NotFoundException)},
+                    {HttpStatusCode.Unauthorized, typeof(UnauthorizedException)},
+                    {HttpStatusCode.BadRequest, typeof(BadRequestException)}
+                };
         }
 
         protected FlurlBasedClient(HttpMessageHandler messageHandler, ClientConfiguration configuration) : this(configuration)
