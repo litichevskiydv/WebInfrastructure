@@ -3,33 +3,76 @@
     using System;
     using System.Linq;
     using System.Net;
+    using System.Text;
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http.Extensions;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
     using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Primitives;
+    using Newtonsoft.Json;
+    using Serialization;
 
-    public class UnhandledExceptionsFilterAttribute : ExceptionFilterAttribute
+    public class UnhandledExceptionsFilterAttribute : ActionFilterAttribute
     {
+        private class ExceptionHandlingContext
+        {
+            public ActionExecutingContext ExecutingContext { get; }
+            public ActionExecutedContext ExecutedContext { get; }
+
+            public ExceptionHandlingContext(ActionExecutingContext executingContext, ActionExecutedContext executedContext)
+            {
+                ExecutingContext = executingContext;
+                ExecutedContext = executedContext;
+            }
+        }
+
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly ILogger _logger;
 
-        private readonly (Type, Action<ExceptionContext>)[] _handlers;
+        private readonly (Type, Action<ExceptionHandlingContext>)[] _handlers;
+        private readonly JsonSerializerSettings _jsonSerializerSettings;
 
-        private void HandleOperationCanceledException(ExceptionContext context)
+        private void HandleOperationCanceledException(ExceptionHandlingContext context)
         {
             _logger.LogWarning("Request was cancelled");
 
-            context.ExceptionHandled = true;
-            context.Result = new StatusCodeResult((int)HttpStatusCode.BadRequest);
+            context.ExecutedContext.ExceptionHandled = true;
+            context.ExecutedContext.Result = new StatusCodeResult((int)HttpStatusCode.BadRequest);
         }
 
-        private void HandleException(ExceptionContext context)
+        private void HandleException(ExceptionHandlingContext context)
         {
             const string message = "Unhandled exception has occurred";
-            _logger.LogError(context.Exception, message);
 
-            context.Result = _hostingEnvironment.IsDevelopment() || _hostingEnvironment.IsStaging()
-                ? new ObjectResult(new ApiErrorResponse(message, context.Exception))
+            var messageBuilder = new StringBuilder().AppendLine(message);
+            if (context.ExecutingContext.HttpContext?.Request != null)
+            {
+                var request = context.ExecutingContext.HttpContext.Request;
+                messageBuilder.AppendLine($"Method: {request.Method}");
+                messageBuilder.AppendLine($"Uri: {request.GetDisplayUrl()}");
+                if (request.Headers != null && request.Headers.Count > 0)
+                {
+                    messageBuilder.AppendLine("Headers:");
+                    foreach (var header in request.Headers)
+                        messageBuilder.AppendLine($"\t{header.Key}:{header.Value}");
+                }
+            }
+            if (context.ExecutingContext.ActionArguments != null && context.ExecutingContext.ActionArguments.Count > 0)
+            {
+                messageBuilder.AppendLine("Parameters:");
+                foreach (var argument in context.ExecutingContext.ActionArguments)
+                {
+                    messageBuilder.AppendLine($"\t{argument.Key}:");
+                    messageBuilder.AppendLine($"{JsonConvert.SerializeObject(argument.Value, _jsonSerializerSettings)}");
+                }
+            }
+            _logger.LogError(context.ExecutedContext.Exception, messageBuilder.ToString());
+
+            context.ExecutedContext.ExceptionHandled = true;
+            context.ExecutedContext.Result = _hostingEnvironment.IsDevelopment() || _hostingEnvironment.IsStaging()
+                ? new ObjectResult(new ApiErrorResponse(message, context.ExecutedContext.Exception))
                   {
                       DeclaredType = typeof(ApiErrorResponse),
                       StatusCode = (int)HttpStatusCode.InternalServerError
@@ -51,14 +94,21 @@
                 new[]
                 {
                     (typeof(OperationCanceledException), HandleOperationCanceledException),
-                    (typeof(Exception), new Action<ExceptionContext>(HandleException))
+                    (typeof(Exception), new Action<ExceptionHandlingContext>(HandleException))
                 };
+            _jsonSerializerSettings = new JsonSerializerSettings().UseDefaultSettings();
         }
 
-        public override void OnException(ExceptionContext context)
+        public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var exceptionType = context.Exception.GetType();
-            _handlers.FirstOrDefault(x => x.Item1.IsAssignableFrom(exceptionType)).Item2(context);
+            var actionExecutedContext = await next();
+            if(actionExecutedContext.Exception == null)
+                return;
+
+            var exceptionType = actionExecutedContext.Exception.GetType();
+            _handlers
+                .FirstOrDefault(x => x.Item1.IsAssignableFrom(exceptionType))
+                .Item2(new ExceptionHandlingContext(context, actionExecutedContext));
         }
     }
 }
