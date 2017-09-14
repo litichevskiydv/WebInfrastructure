@@ -16,7 +16,7 @@ build_script:
 - ps: >-
     cd build
 
-    .\build.ps1 -target CalculateCoverage -experimental
+    .\build.ps1 -target CalculateCoverage -experimental --settings_skipverification=true
 artifacts:
 - path: build\artifacts\*.nupkg
 deploy: off
