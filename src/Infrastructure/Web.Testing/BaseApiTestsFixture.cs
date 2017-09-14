@@ -40,6 +40,7 @@
 
             Server = new TestServer(
                 new WebHostBuilder()
+                    .UseEnvironment(environment)
                     .ConfigureAppConfiguration(builder => configurationSetup(builder, currentDirectory, environment))
                     .UseMockLogger(MockLogger)
                     .UseStartup(startupType));
