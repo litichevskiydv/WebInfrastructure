@@ -11,7 +11,7 @@
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
     using Routing;
-    using Serialization;
+    using Serialization.JsonNet;
     using Swashbuckle.AspNetCore.SwaggerGen;
     using Swashbuckle.AspNetCore.SwaggerUI;
 

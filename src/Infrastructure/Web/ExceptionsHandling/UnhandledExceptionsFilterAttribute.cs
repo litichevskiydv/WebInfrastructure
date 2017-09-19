@@ -10,9 +10,8 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
     using Microsoft.Extensions.Logging;
-    using Microsoft.Extensions.Primitives;
     using Newtonsoft.Json;
-    using Serialization;
+    using Serialization.JsonNet;
 
     public class UnhandledExceptionsFilterAttribute : ActionFilterAttribute
     {

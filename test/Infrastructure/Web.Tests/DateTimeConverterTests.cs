@@ -4,9 +4,9 @@
     using System.Collections.Generic;
     using JetBrains.Annotations;
     using Newtonsoft.Json;
-    using Serialization.JsonConverters;
     using Xunit;
-    using Serialization;
+    using Serialization.JsonNet;
+    using Serialization.JsonNet.JsonConverters;
 
     public class DateTimeConverterTests
     {

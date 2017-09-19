@@ -2,8 +2,8 @@
 {
     using JetBrains.Annotations;
     using Newtonsoft.Json;
-    using Serialization;
-    using Serialization.PropertyNamesResolvers;
+    using Serialization.JsonNet;
+    using Serialization.JsonNet.PropertyNamesResolvers;
     using Xunit;
 
     public class SnakeCasePropertyNamesContractResolverTests

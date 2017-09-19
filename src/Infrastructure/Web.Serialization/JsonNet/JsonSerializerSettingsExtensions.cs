@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Web.Serialization
+﻿namespace Skeleton.Web.Serialization.JsonNet
 {
     using JsonConverters;
     using Newtonsoft.Json;

@@ -1,7 +1,7 @@
 ﻿namespace Skeleton.Web.Integration.BaseApiClient
 {
     using Newtonsoft.Json;
-    using Serialization;
+    using Serialization.JsonNet;
 
     public class ClientConfiguration
     {
