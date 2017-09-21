@@ -11,6 +11,7 @@
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
     using Routing;
+    using Serialization.Jil.Configuration;
     using Serialization.JsonNet;
     using Swashbuckle.AspNetCore.SwaggerGen;
     using Swashbuckle.AspNetCore.SwaggerUI;
@@ -31,10 +32,9 @@
             LoggerFactory = loggerFactory;
         }
 
-
-        protected virtual void ConfigureJsonSerialization(JsonSerializerSettings serializerSettings)
+        protected virtual void ConfigureFormatters(IMvcBuilder mvcBuilder)
         {
-            serializerSettings.UseDefaultSettings();
+            mvcBuilder.WithJsonFormattersBasedOnJil();
         }
 
         protected abstract void ConfigureSwaggerDocumentator(SwaggerGenOptions options);
@@ -51,22 +51,23 @@
         {
             services.AddUnhandledExceptionsStartupFilter();
 
-            services
+            var mvcBuilder = services
                 .AddMvc(x => x
                             .UseCentralRoutePrefix($"{Configuration.GetValue("api_route_preffix", "api")}/[controller]")
-                            .UseUnhandledExceptionFilter())
-                .AddJsonOptions(x => ConfigureJsonSerialization(x.SerializerSettings));
+                            .UseUnhandledExceptionFilter());
+            ConfigureFormatters(mvcBuilder);
 
-            services.AddSwaggerGen(options =>
-                                   {
-                                       ConfigureSwaggerDocumentator(options);
+            services
+                .AddSwaggerGen(options =>
+                               {
+                                   ConfigureSwaggerDocumentator(options);
 
-                                       var xmlDocsPath = Configuration.GetValue<string>("xml_docs");
-                                       if (string.IsNullOrWhiteSpace(xmlDocsPath) == false)
-                                           options.IncludeXmlComments(xmlDocsPath);
+                                   var xmlDocsPath = Configuration.GetValue<string>("xml_docs");
+                                   if (string.IsNullOrWhiteSpace(xmlDocsPath) == false)
+                                       options.IncludeXmlComments(xmlDocsPath);
 
-                                       options.DescribeAllEnumsAsStrings();
-                                   });
+                                   options.DescribeAllEnumsAsStrings();
+                               });
 
             ConfigureOptions(services.AddOptions());
 
