@@ -43,7 +43,7 @@
                 }
                 catch (DeserializationException exception)
                 {
-                    _logger.LogError(exception, "Exception was occurred during deserialization");
+                    _logger.LogDebug(exception, "Exception was occurred during deserialization");
                     return InputFormatterResult.FailureAsync();
                 }
 

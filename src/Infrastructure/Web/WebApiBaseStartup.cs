@@ -9,10 +9,8 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-    using Newtonsoft.Json;
     using Routing;
     using Serialization.Jil.Configuration;
-    using Serialization.JsonNet;
     using Swashbuckle.AspNetCore.SwaggerGen;
     using Swashbuckle.AspNetCore.SwaggerUI;
 
