@@ -7,7 +7,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
-    using Serialization.JsonNet;
+    using Serialization.JsonNet.Configuration;
 
     public class UnhandledExceptionsLoggingMiddleware
     {

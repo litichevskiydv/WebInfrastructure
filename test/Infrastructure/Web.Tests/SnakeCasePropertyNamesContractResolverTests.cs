@@ -2,7 +2,7 @@
 {
     using JetBrains.Annotations;
     using Newtonsoft.Json;
-    using Serialization.JsonNet;
+    using Serialization.JsonNet.Configuration;
     using Serialization.JsonNet.PropertyNamesResolvers;
     using Xunit;
 

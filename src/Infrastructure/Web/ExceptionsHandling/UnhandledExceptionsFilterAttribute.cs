@@ -11,7 +11,7 @@
     using Microsoft.AspNetCore.Mvc.Filters;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
-    using Serialization.JsonNet;
+    using Serialization.JsonNet.Configuration;
 
     public class UnhandledExceptionsFilterAttribute : ActionFilterAttribute
     {

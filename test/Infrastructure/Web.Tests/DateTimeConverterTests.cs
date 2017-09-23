@@ -5,7 +5,7 @@
     using JetBrains.Annotations;
     using Newtonsoft.Json;
     using Xunit;
-    using Serialization.JsonNet;
+    using Serialization.JsonNet.Configuration;
     using Serialization.JsonNet.JsonConverters;
 
     public class DateTimeConverterTests

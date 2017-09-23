@@ -11,7 +11,7 @@
     using Microsoft.IdentityModel.Tokens;
     using Models;
     using Newtonsoft.Json;
-    using Serialization.JsonNet;
+    using Serialization.JsonNet.Configuration;
     using UserClaimsProvider;
     using UserClaimsProvider.Exceptions;
 
