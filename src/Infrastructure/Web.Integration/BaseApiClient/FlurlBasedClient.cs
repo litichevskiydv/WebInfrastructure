@@ -10,41 +10,10 @@
     using Flurl.Http;
     using Flurl.Http.Configuration;
     using Flurl.Http.Content;
-    using Flurl.Http.Testing;
+    using HttpClientFactories;
 
     public abstract class FlurlBasedClient
     {
-        private class HttpClientFactoryWithDecompressionEnabled : DefaultHttpClientFactory
-        {
-            public override HttpMessageHandler CreateMessageHandler()
-            {
-                return new HttpClientHandler {AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate};
-            }
-        }
-
-        private class HttpClientFactoryWithPredefinedHandler : IHttpClientFactory
-        {
-            private readonly HttpMessageHandler _messageHandler;
-
-            public HttpClientFactoryWithPredefinedHandler(HttpMessageHandler messageHandler)
-            {
-                if (messageHandler == null)
-                    throw new ArgumentNullException(nameof(messageHandler));
-
-                _messageHandler = messageHandler;
-            }
-
-            public HttpClient CreateHttpClient(HttpMessageHandler handler)
-            {
-                return new HttpClient(_messageHandler, false);
-            }
-
-            public HttpMessageHandler CreateMessageHandler()
-            {
-                return new FakeHttpMessageHandler();
-            }
-        }
-
         private readonly string _baseUrl;
         private readonly ClientFlurlHttpSettings _clientSettings;
 
