@@ -1,10 +1,12 @@
 ﻿namespace Web.Tests
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Client.ServicesClients;
-    using Skeleton.Web.Integration.BaseApiClient;
+    using Skeleton.Web.Integration.BaseApiClient.Configuration;
     using Skeleton.Web.Integration.BaseApiClient.Exceptions;
+    using Skeleton.Web.Serialization.Jil.Configuration;
     using Skeleton.Web.Testing;
     using Skeleton.Web.Testing.Extensions;
     using Xunit;
@@ -29,12 +31,12 @@
         public void ShouldReturnBadRequestIfOperationWasCancelled()
         {
             // Given
-            var client = new ValuesServiceClient(Fixture.Server.CreateHandler(), 
-                new ClientConfiguration
-                {
-                    BaseUrl = Fixture.Server.BaseAddress.ToString(),
-                    TimeoutInMilliseconds = 100
-                });
+            var client = new ValuesServiceClient(
+                x => x.WithBaseUrl(Fixture.Server.BaseAddress.ToString())
+                    .WithTimeout(TimeSpan.FromMilliseconds(100))
+                    .WithHttpMessageHandler(Fixture.Server.CreateHandler())
+                    .WithJilSerializer(OptionsExtensions.Default)
+            );
 
             Assert.Throws<BadRequestException>(() => client.Get());
             Fixture.MockLogger

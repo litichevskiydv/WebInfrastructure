@@ -33,15 +33,7 @@
 
         protected virtual void ConfigureFormatters(IMvcBuilder mvcBuilder)
         {
-            mvcBuilder.WithJsonFormattersBasedOnJil(
-                new Options(
-                    prettyPrint: false,
-                    excludeNulls: true,
-                    jsonp: false,
-                    dateFormat: DateTimeFormat.ISO8601,
-                    includeInherited: true,
-                    unspecifiedDateTimeKindBehavior: UnspecifiedDateTimeKindBehavior.IsUTC,
-                    serializationNameFormat: SerializationNameFormat.CamelCase));
+            mvcBuilder.WithJsonFormattersBasedOnJil(OptionsExtensions.Default);
         }
 
         protected abstract void ConfigureSwaggerDocumentator(SwaggerGenOptions options);

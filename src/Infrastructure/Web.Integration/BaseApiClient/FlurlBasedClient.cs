@@ -6,11 +6,11 @@
     using System.Net.Http;
     using System.Runtime.ExceptionServices;
     using System.Threading.Tasks;
+    using Configuration;
     using Exceptions;
     using Flurl.Http;
     using Flurl.Http.Configuration;
     using Flurl.Http.Content;
-    using HttpClientFactories;
 
     public abstract class FlurlBasedClient
     {
@@ -19,23 +19,15 @@
 
         private readonly Dictionary<HttpStatusCode, Type> _exceptionsTypesByStatusCodes;
 
-        protected FlurlBasedClient(ClientConfiguration configuration)
+        protected FlurlBasedClient(Func<IClientConfigurator, IClientConfigurator> configurationBuilder)
         {
-            if (configuration == null)
-                throw new ArgumentNullException(nameof(configuration));
+            if (configurationBuilder == null)
+                throw new ArgumentNullException(nameof(configurationBuilder));
 
-            _baseUrl = configuration.BaseUrl;
-            _clientSettings =
-                new ClientFlurlHttpSettings(
-                        new FlurlHttpSettings
-                        {
-                            Timeout = TimeSpan.FromMilliseconds(configuration.TimeoutInMilliseconds),
-                            JsonSerializer = new NewtonsoftJsonSerializer(configuration.SerializerSettings)
-
-                        })
-                    {
-                        HttpClientFactory = new HttpClientFactoryWithDecompressionEnabled()
-                    };
+            var clientConfigurator = new ClientConfigurator();
+            configurationBuilder(clientConfigurator);
+            _baseUrl = clientConfigurator.BaseUrl;
+            _clientSettings = clientConfigurator.ClientSettings;
 
             _exceptionsTypesByStatusCodes =
                 new Dictionary<HttpStatusCode, Type>
@@ -44,14 +36,6 @@
                     {HttpStatusCode.Unauthorized, typeof(UnauthorizedException)},
                     {HttpStatusCode.BadRequest, typeof(BadRequestException)}
                 };
-        }
-
-        protected FlurlBasedClient(HttpMessageHandler messageHandler, ClientConfiguration configuration) : this(configuration)
-        {
-            if(messageHandler == null)
-                throw new ArgumentNullException(nameof(messageHandler));
-
-            _clientSettings.HttpClientFactory = new HttpClientFactoryWithPredefinedHandler(messageHandler);
         }
 
         protected virtual void ConfigureRequestHeaders(IDictionary<string, object> headers)

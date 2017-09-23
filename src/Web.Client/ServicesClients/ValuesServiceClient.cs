@@ -1,18 +1,15 @@
 ﻿namespace Web.Client.ServicesClients
 {
+    using System;
     using System.Collections.Generic;
-    using System.Net.Http;
     using System.Threading.Tasks;
     using Skeleton.Web.Conventions.Responses;
     using Skeleton.Web.Integration.BaseApiClient;
+    using Skeleton.Web.Integration.BaseApiClient.Configuration;
 
     public class ValuesServiceClient : FlurlBasedClient
     {
-        public ValuesServiceClient(ClientConfiguration configuration) : base(configuration)
-        {
-        }
-
-        public ValuesServiceClient(HttpMessageHandler messageHandler, ClientConfiguration configuration) : base(messageHandler, configuration)
+        public ValuesServiceClient(Func<IClientConfigurator, IClientConfigurator> configurationBuilder) : base(configurationBuilder)
         {
         }
 

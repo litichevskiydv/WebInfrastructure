@@ -1,20 +1,17 @@
 ﻿namespace Web.Client.ServicesClients
 {
+    using System;
     using System.Collections.Generic;
-    using System.Net.Http;
     using System.Threading.Tasks;
     using Skeleton.Web.Authentication.JwtBearer.Models;
     using Skeleton.Web.Integration.BaseApiClient;
+    using Skeleton.Web.Integration.BaseApiClient.Configuration;
 
     public class AccountControllerClient : FlurlBasedClient
     {
         private string _token;
 
-        public AccountControllerClient(ClientConfiguration configuration) : base(configuration)
-        {
-        }
-
-        public AccountControllerClient(HttpMessageHandler messageHandler, ClientConfiguration configuration) : base(messageHandler, configuration)
+        public AccountControllerClient(Func<IClientConfigurator, IClientConfigurator> configurationBuilder) : base(configurationBuilder)
         {
         }
 
