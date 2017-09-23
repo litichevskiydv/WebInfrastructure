@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>Library with serialization conventions and settings</Description>
     <Authors>dmitriy.litichevskiy</Authors>
-    <TargetFramework>netstandard1.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <DebugType>portable</DebugType>
     <AssemblyName>Skeleton.Web.Serialization</AssemblyName>
     <PackageId>Skeleton.Web.Serialization</PackageId>
@@ -19,6 +19,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Jil" Version="2.15.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Net.Http.Headers" Version="2.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
 

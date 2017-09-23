@@ -2,7 +2,10 @@
 {
     using System;
     using Integration.BaseApiClient;
+    using Integration.BaseApiClient.Configuration;
     using Moq;
+    using Newtonsoft.Json;
+    using Serialization.JsonNet.Configuration;
 
     public class BaseServiceClientTests<TFixture, TServiceClient>
         where TFixture : BaseApiTestsFixture, new()
@@ -17,12 +20,13 @@
             Fixture.MockLogger.ResetCalls();
 
             ServiceClient = (TServiceClient) Activator.CreateInstance(typeof(TServiceClient),
-                Fixture.Server.CreateHandler(),
-                new ClientConfiguration
-                {
-                    BaseUrl = Fixture.Server.BaseAddress.ToString(),
-                    TimeoutInMilliseconds = Fixture.TimeoutInMilliseconds
-                });
+                new Func<IClientConfigurator, IClientConfigurator>(
+                    x => x.WithBaseUrl(Fixture.Server.BaseAddress.ToString())
+                        .WithTimeout(TimeSpan.FromMilliseconds(Fixture.TimeoutInMilliseconds))
+                        .WithHttpMessageHandler(Fixture.Server.CreateHandler())
+                        .WithJsonNetSerializer(new JsonSerializerSettings().UseDefaultSettings())
+                )
+            );
         }
     }
 }

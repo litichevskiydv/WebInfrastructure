@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Web.Serialization.PropertyNamesResolvers
+﻿namespace Skeleton.Web.Serialization.JsonNet.PropertyNamesResolvers
 {
     using Newtonsoft.Json.Serialization;
 

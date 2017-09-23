@@ -2,9 +2,10 @@
 {
     using System;
     using System.Threading.Tasks;
-    using Integration.BaseApiClient;
+    using Integration.BaseApiClient.Configuration;
     using Integration.BaseApiFluentClient;
     using Moq;
+    using Serialization.Jil.Configuration;
 
     public class BaseApiClientTests<TFixture, TApiClient>
         where TFixture : BaseApiTestsFixture, new()
@@ -19,13 +20,14 @@
             Fixture = fixture;
             Fixture.MockLogger.ResetCalls();
 
-            ApiClient = (TApiClient)Activator.CreateInstance(typeof(TApiClient),
-                new ClientConfiguration
-                {
-                    BaseUrl = Fixture.Server.BaseAddress.ToString(),
-                    TimeoutInMilliseconds = Fixture.TimeoutInMilliseconds
-                },
-                Fixture.Server.CreateHandler());
+            ApiClient = (TApiClient) Activator.CreateInstance(typeof(TApiClient),
+                new Func<IClientConfigurator, IClientConfigurator>(
+                    x => x.WithBaseUrl(Fixture.Server.BaseAddress.ToString())
+                        .WithTimeout(TimeSpan.FromMilliseconds(Fixture.TimeoutInMilliseconds))
+                        .WithHttpMessageHandler(Fixture.Server.CreateHandler())
+                        .WithJilSerializer(OptionsExtensions.Default)
+                )
+            );
         }
     }
 }

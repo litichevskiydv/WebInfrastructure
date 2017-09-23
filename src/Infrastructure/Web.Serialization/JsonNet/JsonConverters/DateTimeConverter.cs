@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Web.Serialization.JsonConverters
+﻿namespace Skeleton.Web.Serialization.JsonNet.JsonConverters
 {
     using System;
     using System.Globalization;

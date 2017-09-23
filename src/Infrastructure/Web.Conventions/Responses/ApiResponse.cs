@@ -11,19 +11,26 @@
         /// <summary>
         /// Response data
         /// </summary>
-        public TData Data { get; }
+        public TData Data { get; set; }
 
         /// <summary>
         /// Collection of request processing errors
         /// </summary>
-        public IReadOnlyList<ApiResponseError> Errors { get; }
+        public IReadOnlyList<ApiResponseError> Errors { get; set; }
+
+        /// <summary>
+        /// Constructor for serialization
+        /// </summary>
+        public ApiResponse()
+        {
+        }
 
         /// <summary>
         /// Constructor for WebApi response
         /// </summary>
         /// <param name="data">Response data</param>
         /// <param name="errors">Request processing errors collection</param>
-        public ApiResponse(TData data, IReadOnlyList<ApiResponseError> errors)
+        internal ApiResponse(TData data, IReadOnlyList<ApiResponseError> errors) : this()
         {
             Data = data;
             Errors = errors;

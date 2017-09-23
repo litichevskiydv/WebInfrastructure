@@ -1,27 +1,18 @@
 ﻿namespace Web.Client
 {
-    using System.Net.Http;
+    using System;
     using ServicesClients;
-    using Skeleton.Web.Integration.BaseApiClient;
+    using Skeleton.Web.Integration.BaseApiClient.Configuration;
     using Skeleton.Web.Integration.BaseApiFluentClient;
 
     public partial class ApiClient : BaseFluentClient
     {
-        public ApiClient(ClientConfiguration configuration)
+        public ApiClient(Func<IClientConfigurator, IClientConfigurator> configurationBuilder)
         {
-            _valuesServiceClient = new ValuesServiceClient(configuration);
+            _valuesServiceClient = new ValuesServiceClient(configurationBuilder);
             ServicesClients.Add(_valuesServiceClient);
 
-            _accountControllerClient = new AccountControllerClient(configuration);
-            ServicesClients.Add(_accountControllerClient);
-        }
-
-        public ApiClient(ClientConfiguration configuration, HttpMessageHandler messageHandler)
-        {
-            _valuesServiceClient = new ValuesServiceClient(messageHandler, configuration);
-            ServicesClients.Add(_valuesServiceClient);
-
-            _accountControllerClient = new AccountControllerClient(messageHandler, configuration);
+            _accountControllerClient = new AccountControllerClient(configurationBuilder);
             ServicesClients.Add(_accountControllerClient);
         }
     }
