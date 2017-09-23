@@ -4,6 +4,7 @@
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
     using ExceptionsHandling;
+    using Jil;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -32,7 +33,15 @@
 
         protected virtual void ConfigureFormatters(IMvcBuilder mvcBuilder)
         {
-            mvcBuilder.WithJsonFormattersBasedOnJil();
+            mvcBuilder.WithJsonFormattersBasedOnJil(
+                new Options(
+                    prettyPrint: false,
+                    excludeNulls: true,
+                    jsonp: false,
+                    dateFormat: DateTimeFormat.ISO8601,
+                    includeInherited: true,
+                    unspecifiedDateTimeKindBehavior: UnspecifiedDateTimeKindBehavior.IsUTC,
+                    serializationNameFormat: SerializationNameFormat.CamelCase));
         }
 
         protected abstract void ConfigureSwaggerDocumentator(SwaggerGenOptions options);

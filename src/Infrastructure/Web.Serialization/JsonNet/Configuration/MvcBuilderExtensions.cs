@@ -8,7 +8,7 @@
     {
         public static IMvcBuilder WithJsonFormattersBasedOnJsonNet(
             this IMvcBuilder builder, 
-            Func<JsonSerializerSettings, JsonSerializerSettings> settingsConfigurator)
+            Action<JsonSerializerSettings> settingsConfigurator)
         {
             if(builder == null)
                 throw new ArgumentNullException(nameof(builder));

@@ -10,13 +10,17 @@
     public class JilInputFormatter : TextInputFormatter
     {
         private readonly ILogger<JilInputFormatter> _logger;
+        private readonly Options _options;
 
-        public JilInputFormatter(ILogger<JilInputFormatter> logger)
+        public JilInputFormatter(ILogger<JilInputFormatter> logger, Options options)
         {
             if(logger == null)
                 throw new ArgumentNullException(nameof(logger));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
 
             _logger = logger;
+            _options = options;
 
             SupportedEncodings.Add(UTF8EncodingWithoutBOM);
             SupportedEncodings.Add(UTF16EncodingLittleEndian);
@@ -39,7 +43,7 @@
 
                 try
                 {
-                    model = JSON.Deserialize(reader, context.ModelType);
+                    model = JSON.Deserialize(reader, context.ModelType, _options);
                 }
                 catch (DeserializationException exception)
                 {

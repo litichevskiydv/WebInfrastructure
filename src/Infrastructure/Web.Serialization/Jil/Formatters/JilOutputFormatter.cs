@@ -8,8 +8,15 @@
 
     public class JilOutputFormatter : TextOutputFormatter
     {
-        public JilOutputFormatter()
+        private readonly Options _options;
+
+        public JilOutputFormatter(Options options)
         {
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
+
+            _options = options;
+
             SupportedEncodings.Add(Encoding.UTF8);
             SupportedEncodings.Add(Encoding.Unicode);
             SupportedMediaTypes.Add(MediaTypeHeaderValues.ApplicationJson);
@@ -27,7 +34,7 @@
             var response = context.HttpContext.Response;
             using (var writer = context.WriterFactory(response.Body, selectedEncoding))
             {
-                JSON.Serialize(context.Object, writer);
+                JSON.Serialize(context.Object, writer, _options);
                 await writer.FlushAsync();
             }
         }
