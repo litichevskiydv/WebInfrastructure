@@ -4,8 +4,7 @@
     using Integration.BaseApiClient;
     using Integration.BaseApiClient.Configuration;
     using Moq;
-    using Newtonsoft.Json;
-    using Serialization.JsonNet.Configuration;
+    using Serialization.Jil.Configuration;
 
     public class BaseServiceClientTests<TFixture, TServiceClient>
         where TFixture : BaseApiTestsFixture, new()
@@ -24,7 +23,7 @@
                     x => x.WithBaseUrl(Fixture.Server.BaseAddress.ToString())
                         .WithTimeout(TimeSpan.FromMilliseconds(Fixture.TimeoutInMilliseconds))
                         .WithHttpMessageHandler(Fixture.Server.CreateHandler())
-                        .WithJsonNetSerializer(new JsonSerializerSettings().UseDefaultSettings())
+                        .WithJilSerializer(OptionsExtensions.Default)
                 )
             );
         }

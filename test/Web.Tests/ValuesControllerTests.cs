@@ -4,9 +4,10 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Client.ServicesClients;
+    using Newtonsoft.Json;
     using Skeleton.Web.Integration.BaseApiClient.Configuration;
     using Skeleton.Web.Integration.BaseApiClient.Exceptions;
-    using Skeleton.Web.Serialization.Jil.Configuration;
+    using Skeleton.Web.Serialization.JsonNet.Configuration;
     using Skeleton.Web.Testing;
     using Skeleton.Web.Testing.Extensions;
     using Xunit;
@@ -35,7 +36,7 @@
                 x => x.WithBaseUrl(Fixture.Server.BaseAddress.ToString())
                     .WithTimeout(TimeSpan.FromMilliseconds(100))
                     .WithHttpMessageHandler(Fixture.Server.CreateHandler())
-                    .WithJilSerializer(OptionsExtensions.Default)
+                    .WithJsonNetSerializer(new JsonSerializerSettings().UseDefaultSettings())
             );
 
             Assert.Throws<BadRequestException>(() => client.Get());
