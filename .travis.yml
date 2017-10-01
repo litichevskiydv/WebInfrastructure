@@ -7,7 +7,7 @@ env:
     - ASPNETCORE_ENVIRONMENT=Staging
 services:
   - docker
-mono: latest
+mono: none
 dotnet: 2.0.0
 script:
  - set -e
