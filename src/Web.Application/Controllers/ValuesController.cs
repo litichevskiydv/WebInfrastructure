@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
     using Domain.CommandContexts;
@@ -60,10 +59,12 @@
         /// <param name="id">Value index</param>
         /// <returns>Configuration value</returns>
         [HttpGet("{id}")]
-        public string Get(int id)
+        [Produces(typeof(string))]
+        public IActionResult Get(int id)
         {
             _logger.LogInformation("Get value request");
-            return _queriesDispatcher.Execute(new GetValueQueryCriterion(id));
+            var value = _queriesDispatcher.Execute(new GetValueQueryCriterion(id));
+            return string.IsNullOrWhiteSpace(value) ? (IActionResult) NotFound() : Ok(value);
         }
 
         /// <summary>
@@ -78,14 +79,10 @@
             _logger.LogInformation("Validation and post value request");
 
             if (id < 0)
-                return new ObjectResult(ApiResponse.Error(new[] {new ApiResponseError {Code = "01", Title = "Id shouldn't be negative"}}))
-                       {
-                           StatusCode = (int) HttpStatusCode.BadRequest,
-                           DeclaredType = typeof(ApiResponse<object>)
-                       };
+                return BadRequest(ApiResponse.Error(new[] {new ApiResponseError {Code = "01", Title = "Id shouldn't be negative"}}));
 
             _commandsDispatcher.Execute(new SetValueCommandContext(id, value));
-            return new OkObjectResult(ApiResponse.Success(id)) {DeclaredType = typeof(ApiResponse<int>)};
+            return Ok(ApiResponse.Success(id));
         }
 
         /// <summary>

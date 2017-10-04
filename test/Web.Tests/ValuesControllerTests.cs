@@ -177,5 +177,16 @@
                 .VerifyErrorWasLogged<KeyNotFoundException>()
                 .VerifyNoWarningsWasLogged();
         }
+
+        [Fact]
+        public async Task ShouldReturnNotFoundAsync()
+        {
+            // Given
+            const int id = 2;
+
+            // When, Then
+            ServiceClient.Set(id, "  ");
+            await Assert.ThrowsAsync<NotFoundException>(async () => await ServiceClient.GetAsync(id));
+        }
     }
 }
