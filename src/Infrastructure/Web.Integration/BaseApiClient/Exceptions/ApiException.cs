@@ -11,10 +11,5 @@
         {
             StatusCode = statusCode;
         }
-
-        public ApiException(HttpStatusCode statusCode, string message, Exception innerException) : base(message, innerException)
-        {
-            StatusCode = statusCode;
-        }
     }
 }
