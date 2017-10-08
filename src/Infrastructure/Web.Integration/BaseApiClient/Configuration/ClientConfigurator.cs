@@ -2,6 +2,7 @@
 {
     using System;
     using System.Net.Http;
+    using Flurl.Http;
     using Flurl.Http.Configuration;
     using HttpClientFactories;
 
@@ -10,7 +11,7 @@
         public ClientConfigurator()
         {
             ClientSettings =
-                new ClientFlurlHttpSettings(new FlurlHttpSettings())
+                new ClientFlurlHttpSettings(FlurlHttp.GlobalSettings)
                 {
                     HttpClientFactory = new HttpClientFactoryWithDecompressionEnabled()
                 };

@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Flurl.Http" Version="2.0.0-pre2" />
+    <PackageReference Include="Flurl.Http" Version="2.0.0" />
     <PackageReference Include="Jil" Version="2.15.4" />
   </ItemGroup>
 
