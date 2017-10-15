@@ -1,9 +1,9 @@
-﻿namespace Skeleton.Web.Tests
+﻿namespace Skeleton.Web.Tests.Serialization.JsonNet
 {
     using JetBrains.Annotations;
     using Newtonsoft.Json;
-    using Serialization.JsonNet.Configuration;
-    using Serialization.JsonNet.PropertyNamesResolvers;
+    using Web.Serialization.JsonNet.Configuration;
+    using Web.Serialization.JsonNet.PropertyNamesResolvers;
     using Xunit;
 
     public class SnakeCasePropertyNamesContractResolverTests

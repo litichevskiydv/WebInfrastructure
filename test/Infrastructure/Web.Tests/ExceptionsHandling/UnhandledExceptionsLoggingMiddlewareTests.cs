@@ -1,11 +1,10 @@
-﻿namespace Skeleton.Web.Tests
+﻿namespace Skeleton.Web.Tests.ExceptionsHandling
 {
     using System;
     using System.Collections.Generic;
     using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
-    using ExceptionsHandling;
     using JetBrains.Annotations;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -13,6 +12,7 @@
     using Microsoft.Extensions.Logging;
     using Moq;
     using Testing.Extensions;
+    using Web.ExceptionsHandling;
     using Xunit;
 
     public class UnhandledExceptionsLoggingMiddlewareTests

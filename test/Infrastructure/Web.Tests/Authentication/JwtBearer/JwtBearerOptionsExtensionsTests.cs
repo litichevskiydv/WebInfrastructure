@@ -1,12 +1,12 @@
-﻿namespace Skeleton.Web.Authentication.Tests.JwtBearer.Configuration
+﻿namespace Skeleton.Web.Tests.Authentication.JwtBearer
 {
     using System;
     using System.Collections.Generic;
-    using Authentication.JwtBearer.Configuration;
     using JetBrains.Annotations;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.IdentityModel.Tokens;
     using Moq;
+    using Web.Authentication.JwtBearer.Configuration;
     using Xunit;
 
     public class JwtBearerOptionsExtensionsTests
@@ -70,8 +70,8 @@
             options.WithTokenValidationParameters(x => x.WithIssuerValidation(expectedValidIssuer));
 
             // Then
-            Assert.True(options.TokenValidationParameters.ValidateIssuer);
-            Assert.Equal(expectedValidIssuer, options.TokenValidationParameters.ValidIssuer);
+            Assert.True((bool) options.TokenValidationParameters.ValidateIssuer);
+            Assert.Equal((string) expectedValidIssuer, (string) options.TokenValidationParameters.ValidIssuer);
         }
 
         [Fact]
@@ -98,7 +98,7 @@
             options.WithErrorDetails();
 
             // Then
-            Assert.True(options.IncludeErrorDetails);
+            Assert.True((bool) options.IncludeErrorDetails);
         }
 
         [Fact]
@@ -113,7 +113,7 @@
                 .WithoutErrorDetails();
 
             // Then
-            Assert.False(options.IncludeErrorDetails);
+            Assert.False((bool) options.IncludeErrorDetails);
         }
     }
 }

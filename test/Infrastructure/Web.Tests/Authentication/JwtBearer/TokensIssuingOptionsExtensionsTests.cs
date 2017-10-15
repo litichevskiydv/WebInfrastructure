@@ -1,13 +1,13 @@
-﻿namespace Skeleton.Web.Authentication.Tests.JwtBearer.Configuration
+﻿namespace Skeleton.Web.Tests.Authentication.JwtBearer
 {
     using System;
     using System.Collections.Generic;
     using System.Text;
-    using Authentication.JwtBearer;
-    using Authentication.JwtBearer.Configuration;
     using JetBrains.Annotations;
     using Microsoft.IdentityModel.Tokens;
     using Moq;
+    using Web.Authentication.JwtBearer;
+    using Web.Authentication.JwtBearer.Configuration;
     using Xunit;
 
     public class TokensIssuingOptionsExtensionsTests
@@ -100,7 +100,7 @@
             options.WithGetEndpotint(expectedGetEndpoint);
 
             // Then
-            Assert.Equal(expectedGetEndpoint, options.GetEndpotint);
+            Assert.Equal((string) expectedGetEndpoint, (string) options.GetEndpotint);
         }
 
         [Fact]
@@ -129,7 +129,7 @@
             options.WithSigningKey(expectedSigningAlgorithmName, expectedSigningKey);
 
             // Then
-            Assert.Equal(expectedSigningAlgorithmName, options.SigningAlgorithmName);
+            Assert.Equal((string) expectedSigningAlgorithmName, (string) options.SigningAlgorithmName);
             Assert.Equal(expectedSigningKey, options.SigningKey);
         }
 

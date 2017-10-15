@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.9
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DE1BE141-BE1D-4C36-BF58-E4747EE33A30}"
 EndProject
@@ -53,11 +53,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Tests", "test\Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Authentication", "src\Infrastructure\Web.Authentication\Web.Authentication.csproj", "{B77B31A5-4760-488B-9ED0-B97EC8E13DF6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Authentication.Tests", "test\Infrastructure\Web.Authentication.Tests\Web.Authentication.Tests.csproj", "{EB09EF4B-A08A-43F4-A9FA-502D0E7A8FC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Migrations", "src\Infrastructure\Migrations\Migrations.csproj", "{AED1D024-2923-4B8E-BC26-F3E041CEB382}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migrations", "src\Infrastructure\Migrations\Migrations.csproj", "{AED1D024-2923-4B8E-BC26-F3E041CEB382}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Migrations", "src\Web.Migrations\Web.Migrations.csproj", "{D72290BD-7421-4833-83E2-1D3C21D35C28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Migrations", "src\Web.Migrations\Web.Migrations.csproj", "{D72290BD-7421-4833-83E2-1D3C21D35C28}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -145,10 +143,6 @@ Global
 		{B77B31A5-4760-488B-9ED0-B97EC8E13DF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B77B31A5-4760-488B-9ED0-B97EC8E13DF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B77B31A5-4760-488B-9ED0-B97EC8E13DF6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EB09EF4B-A08A-43F4-A9FA-502D0E7A8FC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EB09EF4B-A08A-43F4-A9FA-502D0E7A8FC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EB09EF4B-A08A-43F4-A9FA-502D0E7A8FC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EB09EF4B-A08A-43F4-A9FA-502D0E7A8FC7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AED1D024-2923-4B8E-BC26-F3E041CEB382}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AED1D024-2923-4B8E-BC26-F3E041CEB382}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AED1D024-2923-4B8E-BC26-F3E041CEB382}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -184,8 +178,10 @@ Global
 		{A65EA381-07DC-4893-88EE-3E2AE7AF35F1} = {E5F0B27F-A8E8-4EA5-A319-844261448637}
 		{5977FCE6-4904-4C24-9991-4FE7A53DB8D5} = {E5F0B27F-A8E8-4EA5-A319-844261448637}
 		{B77B31A5-4760-488B-9ED0-B97EC8E13DF6} = {DB312248-D325-4521-8EE6-852CD9B44CAA}
-		{EB09EF4B-A08A-43F4-A9FA-502D0E7A8FC7} = {E5F0B27F-A8E8-4EA5-A319-844261448637}
 		{AED1D024-2923-4B8E-BC26-F3E041CEB382} = {DB312248-D325-4521-8EE6-852CD9B44CAA}
 		{D72290BD-7421-4833-83E2-1D3C21D35C28} = {DE1BE141-BE1D-4C36-BF58-E4747EE33A30}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FED0BA88-864C-49D0-97EC-4F57DD17574C}
 	EndGlobalSection
 EndGlobal

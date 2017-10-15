@@ -1,12 +1,12 @@
-﻿namespace Skeleton.Web.Tests
+﻿namespace Skeleton.Web.Tests.Serialization.JsonNet
 {
     using System;
     using System.Collections.Generic;
     using JetBrains.Annotations;
     using Newtonsoft.Json;
+    using Web.Serialization.JsonNet.Configuration;
+    using Web.Serialization.JsonNet.JsonConverters;
     using Xunit;
-    using Serialization.JsonNet.Configuration;
-    using Serialization.JsonNet.JsonConverters;
 
     public class DateTimeConverterTests
     {
