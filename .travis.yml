@@ -3,7 +3,7 @@ env:
   global:
     - Configuration=Release
     - ShortVersion=1.0.0
-    - VersionSuffix=beta2
+    - VersionSuffix=rc1
     - ASPNETCORE_ENVIRONMENT=Staging
 services:
   - docker

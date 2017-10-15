@@ -6,7 +6,7 @@ image: Visual Studio 2017
 configuration: Release
 environment:
   ASPNETCORE_ENVIRONMENT: Staging
-  VersionSuffix: beta2
+  VersionSuffix: rc1
   ShortVersion: 1.0.0
 services: mssql2016
 nuget:
