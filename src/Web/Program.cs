@@ -4,9 +4,8 @@
     using JetBrains.Annotations;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.Logging;
     using Skeleton.Web.Configuration;
-    using Skeleton.Web.Logging;
+    using Skeleton.Web.Logging.Serilog;
 
     [UsedImplicitly(ImplicitUseTargetFlags.Members)]
     public static class Program
@@ -25,15 +24,9 @@
 
                         builder
                             .AddDefaultConfigs(env)
-                            .AddNLogConfig($"NLog.{env.EnvironmentName}.config")
                             .AddCommandLine(args);
                     })
-                .ConfigureLogging(
-                    (context, builder) =>
-                        builder
-                            .AddConfiguration(context.Configuration.GetSection("Logging"))
-                            .AddNLog()
-                            .AddConsole())
+                .UseSerilog(configuration => configuration.Enrich.FromLogContext())
                 .UseStartup<Startup>()
                 .Build();
 

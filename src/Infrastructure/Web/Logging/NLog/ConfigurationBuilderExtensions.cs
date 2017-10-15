@@ -1,10 +1,10 @@
-﻿namespace Skeleton.Web.Logging
+﻿namespace Skeleton.Web.Logging.NLog
 {
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
+    using global::NLog;
+    using global::NLog.Config;
     using Microsoft.Extensions.Configuration;
-    using NLog;
-    using NLog.Config;
 
     public static class ConfigurationBuilderExtensions
     {
