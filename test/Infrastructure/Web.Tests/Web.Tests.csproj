@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Infrastructure\Web.Authentication\Web.Authentication.csproj" />
+    <ProjectReference Include="..\..\..\src\Infrastructure\Web.Integration\Web.Integration.csproj" />
     <ProjectReference Include="..\..\..\src\Infrastructure\Web.Serialization\Web.Serialization.csproj" />
     <ProjectReference Include="..\..\..\src\Infrastructure\Web.Testing\Web.Testing.csproj" />
     <ProjectReference Include="..\..\..\src\Infrastructure\Web\Web.csproj" />
