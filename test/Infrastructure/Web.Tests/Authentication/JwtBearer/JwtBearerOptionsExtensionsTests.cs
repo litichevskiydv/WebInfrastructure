@@ -70,8 +70,8 @@
             options.WithTokenValidationParameters(x => x.WithIssuerValidation(expectedValidIssuer));
 
             // Then
-            Assert.True((bool) options.TokenValidationParameters.ValidateIssuer);
-            Assert.Equal((string) expectedValidIssuer, (string) options.TokenValidationParameters.ValidIssuer);
+            Assert.True(options.TokenValidationParameters.ValidateIssuer);
+            Assert.Equal(expectedValidIssuer, options.TokenValidationParameters.ValidIssuer);
         }
 
         [Fact]
@@ -98,7 +98,7 @@
             options.WithErrorDetails();
 
             // Then
-            Assert.True((bool) options.IncludeErrorDetails);
+            Assert.True(options.IncludeErrorDetails);
         }
 
         [Fact]
@@ -113,7 +113,7 @@
                 .WithoutErrorDetails();
 
             // Then
-            Assert.False((bool) options.IncludeErrorDetails);
+            Assert.False(options.IncludeErrorDetails);
         }
     }
 }

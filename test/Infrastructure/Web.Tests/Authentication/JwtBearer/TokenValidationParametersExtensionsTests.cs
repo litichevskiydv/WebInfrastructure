@@ -214,7 +214,7 @@
             options.WithIssuerKeyValidation(key, validator);
 
             // Then
-            Assert.True((bool) options.ValidateIssuerSigningKey);
+            Assert.True(options.ValidateIssuerSigningKey);
             Assert.Equal(key, options.IssuerSigningKey);
             Assert.Equal(validator, options.IssuerSigningKeyValidator);
         }
@@ -233,7 +233,7 @@
             options.WithIssuerKeyValidation(resolver, validator);
 
             // Then
-            Assert.True((bool) options.ValidateIssuerSigningKey);
+            Assert.True(options.ValidateIssuerSigningKey);
             Assert.Equal(resolver, options.IssuerSigningKeyResolver);
             Assert.Equal(validator, options.IssuerSigningKeyValidator);
         }
@@ -250,7 +250,7 @@
             options.WithIssuerKeyValidation(keys, validator);
 
             // Then
-            Assert.True((bool) options.ValidateIssuerSigningKey);
+            Assert.True(options.ValidateIssuerSigningKey);
             Assert.Equal(keys, options.IssuerSigningKeys);
             Assert.Equal(validator, options.IssuerSigningKeyValidator);
         }
@@ -267,7 +267,7 @@
                 .WithoutIssuerKeyValidation();
 
             // Then
-            Assert.False((bool) options.ValidateIssuerSigningKey);
+            Assert.False(options.ValidateIssuerSigningKey);
         }
 
         [Fact]
@@ -281,7 +281,7 @@
             options.WithLifetimeValidation(validator);
 
             // Then
-            Assert.True((bool) options.ValidateLifetime);
+            Assert.True(options.ValidateLifetime);
             Assert.Equal(validator, options.LifetimeValidator);
         }
 
@@ -297,7 +297,7 @@
                 .WithoutLifetimeValidation();
 
             // Then
-            Assert.False((bool) options.ValidateLifetime);
+            Assert.False(options.ValidateLifetime);
         }
 
         [Fact]
@@ -311,8 +311,8 @@
             options.WithIssuerValidation(issuer);
 
             // Then
-            Assert.True((bool) options.ValidateIssuer);
-            Assert.Equal((string) issuer, (string) options.ValidIssuer);
+            Assert.True(options.ValidateIssuer);
+            Assert.Equal(issuer, options.ValidIssuer);
         }
 
         [Fact]
@@ -326,8 +326,8 @@
             options.WithIssuerValidation(issuers);
 
             // Then
-            Assert.True((bool) options.ValidateIssuer);
-            Assert.Equal<string>(issuers, options.ValidIssuers);
+            Assert.True(options.ValidateIssuer);
+            Assert.Equal(issuers, options.ValidIssuers);
         }
 
         [Fact]
@@ -342,7 +342,7 @@
                 .WithoutIssuerValidation();
 
             // Then
-            Assert.False((bool) options.ValidateIssuer);
+            Assert.False(options.ValidateIssuer);
         }
 
         [Fact]
@@ -356,8 +356,8 @@
             options.WithAudienceValidation(audience);
 
             // Then
-            Assert.True((bool) options.ValidateAudience);
-            Assert.Equal((string) audience, (string) options.ValidAudience);
+            Assert.True(options.ValidateAudience);
+            Assert.Equal(audience, options.ValidAudience);
         }
 
         [Fact]
@@ -365,14 +365,14 @@
         {
             // Given
             var options = new TokenValidationParameters();
-            var audiences = new[] { "https://yourapplication.example.com" };
+            var audiences = new[] {"https://yourapplication.example.com"};
 
             // When
             options.WithAudienceValidation(audiences);
 
             // Then
-            Assert.True((bool) options.ValidateAudience);
-            Assert.Equal<string>(audiences, options.ValidAudiences);
+            Assert.True(options.ValidateAudience);
+            Assert.Equal(audiences, options.ValidAudiences);
         }
 
         [Fact]
@@ -387,7 +387,7 @@
                 .WithoutAudienceValidation();
 
             // Then
-            Assert.False((bool) options.ValidateAudience);
+            Assert.False(options.ValidateAudience);
         }
     }
 }

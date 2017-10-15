@@ -100,7 +100,7 @@
             options.WithGetEndpotint(expectedGetEndpoint);
 
             // Then
-            Assert.Equal((string) expectedGetEndpoint, (string) options.GetEndpotint);
+            Assert.Equal(expectedGetEndpoint, options.GetEndpotint);
         }
 
         [Fact]
@@ -129,7 +129,7 @@
             options.WithSigningKey(expectedSigningAlgorithmName, expectedSigningKey);
 
             // Then
-            Assert.Equal((string) expectedSigningAlgorithmName, (string) options.SigningAlgorithmName);
+            Assert.Equal(expectedSigningAlgorithmName, options.SigningAlgorithmName);
             Assert.Equal(expectedSigningKey, options.SigningKey);
         }
 
