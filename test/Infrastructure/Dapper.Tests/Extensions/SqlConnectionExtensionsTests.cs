@@ -3,6 +3,7 @@
     using System;
     using System.Dynamic;
     using System.Collections.Generic;
+    using System.Data.SqlClient;
     using System.Linq;
     using global::Dapper;
     using JetBrains.Annotations;
@@ -65,6 +66,29 @@
             {
                 connection.Execute(@"create table #TestEntities (Id int identity(1, 1) not null, Name nvarchar(max) not null, Value int not null)");
                 connection.BulkInsert("#TestEntities", expected, new StrictTypePropertyInfoProvider(typeof(TestEntity)));
+                actual = connection.Query<TestEntity>("select * from #TestEntities").ToArray();
+            }
+
+            // Then
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [MemberData(nameof(BulkInsertUsageTestsData))]
+        public void ShouldPerformBulkInsertInExternalTransaction(TestEntity[] expected)
+        {
+            // When
+            TestEntity[] actual;
+            using (var connection = SqlConnectionsFactoryMethod())
+            {
+                connection.Execute(@"create table #TestEntities (Id int identity(1, 1) not null, Name nvarchar(max) not null, Value int not null)");
+
+                using (var transaction = connection.BeginTransaction())
+                {
+                    connection.BulkInsert("#TestEntities", expected, new StrictTypePropertyInfoProvider(typeof(TestEntity)), transaction);
+                    transaction.Commit();
+                }
+
                 actual = connection.Query<TestEntity>("select * from #TestEntities").ToArray();
             }
 

@@ -8,31 +8,53 @@
 
     public static class SqlConnectionExtensions
     {
-        public static void BulkInsert(this SqlConnection connection, string tableName,
-            IReadOnlyCollection<object> source, IPropertyInfoProvider provider,
-            int? batchSize = null, int? timeout = null)
+        public static void BulkInsert(
+            this SqlConnection connection,
+            string tableName,
+            IReadOnlyCollection<object> source,
+            IPropertyInfoProvider provider,
+            SqlTransaction transaction = null,
+            int? batchSize = null,
+            int? timeout = null)
         {
-            BulkInsertInternal(connection, tableName, source, provider, batchSize, timeout);
+            BulkInsertInternal(connection, tableName, source, provider, transaction, batchSize, timeout);
         }
 
-        public static void BulkInsert<TSource>(this SqlConnection connection, string tableName,
-           IReadOnlyCollection<TSource> source, int? batchSize = null, int? timeout = null)
+        public static void BulkInsert<TSource>(
+            this SqlConnection connection,
+            string tableName,
+            IReadOnlyCollection<TSource> source,
+            SqlTransaction transaction = null,
+            int? batchSize = null,
+            int? timeout = null)
             where TSource : class
         {
             if (source.Any() == false)
                 return;
             if (typeof(TSource) == typeof(ExpandoObject))
-                BulkInsertInternal(connection, tableName, source,
-                new ExpandoObjectPropertyInfoProvider(source.First() as Dictionary<string, object>), batchSize, timeout);
+                BulkInsertInternal(
+                    connection,
+                    tableName, source, new ExpandoObjectPropertyInfoProvider(source.First() as Dictionary<string, object>),
+                    transaction, batchSize, timeout);
             else
-                BulkInsertInternal(connection, tableName, source, new StrictTypePropertyInfoProvider(source.First().GetType()), batchSize, timeout);
+                BulkInsertInternal(
+                    connection,
+                    tableName, source, new StrictTypePropertyInfoProvider(source.First().GetType()),
+                    transaction, batchSize, timeout);
         }
 
-        private static void BulkInsertInternal(SqlConnection connection, string tableName,
-            IReadOnlyCollection<object> source, IPropertyInfoProvider provider,
-            int? batchSize = null, int? timeout = null)
+        private static void BulkInsertInternal(
+            SqlConnection connection, 
+            string tableName,
+            IReadOnlyCollection<object> source, 
+            IPropertyInfoProvider provider,
+            SqlTransaction transaction = null,
+            int? batchSize = null, 
+            int? timeout = null)
         {
-            using (var bulkCopy = new SqlBulkCopy(connection))
+            using (var bulkCopy = transaction == null
+                ? new SqlBulkCopy(connection)
+                : new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
             {
                 bulkCopy.DestinationTableName = tableName;
                 bulkCopy.BatchSize = batchSize ?? 4096;
