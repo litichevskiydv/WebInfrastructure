@@ -20,6 +20,7 @@
         }
 
         public int FieldCount => _itemProperties.Length;
+
         public string GetName(int ordinal)
         {
             return _itemProperties[ordinal].Name;

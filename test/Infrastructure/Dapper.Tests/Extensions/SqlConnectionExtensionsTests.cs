@@ -3,7 +3,6 @@
     using System;
     using System.Dynamic;
     using System.Collections.Generic;
-    using System.Data.SqlClient;
     using System.Linq;
     using global::Dapper;
     using JetBrains.Annotations;
@@ -113,7 +112,22 @@
             Assert.Equal(expected, actual);
         }
 
+        [Theory]
+        [MemberData(nameof(BulkInsertUsageTestsData))]
+        public void ShouldPerformBulkInsertWithManuallyConfiguredMapping(TestEntity[] expected)
+        {
+            // When
+            TestEntity[] actual;
+            using (var connection = SqlConnectionsFactoryMethod())
+            {
+                connection.Execute(@"create table #TestEntities (Id int identity(1, 1) not null, Name nvarchar(max) not null)");
+                connection.BulkInsert("#TestEntities", expected, x => x.WithMapping(entity => entity.Name));
+                actual = connection.Query<TestEntity>("select * from #TestEntities").ToArray();
+            }
 
+            // Then
+            Assert.Equal(expected.Select(x => x.Name), actual.Select(x => x.Name));
+        }
 
         [Fact]
         public void StrictTypePropertyInfoProviderTest()
