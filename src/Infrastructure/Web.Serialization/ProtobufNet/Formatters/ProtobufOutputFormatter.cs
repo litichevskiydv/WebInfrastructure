@@ -31,10 +31,17 @@
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
 
-            var response = context.HttpContext.Response;
-            _runtimeTypeModel.Serialize(response.Body, context.Object);
-
-            return Task.FromResult(0);
+            var tcs = new TaskCompletionSource<object>();
+            try
+            {
+                _runtimeTypeModel.Serialize(context.HttpContext.Response.Body, context.Object);
+                tcs.SetResult(null);
+            }
+            catch (Exception ex)
+            {
+                tcs.SetException(ex);
+            }
+            return tcs.Task;
         }
     }
 }
