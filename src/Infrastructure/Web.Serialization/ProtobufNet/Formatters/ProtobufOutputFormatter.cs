@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc.Formatters;
     using ProtoBuf.Meta;
+    using Surrogates;
 
     public class ProtobufOutputFormatter : OutputFormatter
     {
@@ -12,7 +13,9 @@
         private static RuntimeTypeModel CreateRuntimeTypeModel()
         {
             var runtimeTypeModel = TypeModel.Create();
+
             runtimeTypeModel.UseImplicitZeroDefaults = false;
+            runtimeTypeModel.Add(typeof(DateTimeOffset), false).SetSurrogate(typeof(DateTimeOffsetSurrogate));
 
             return runtimeTypeModel;
         }

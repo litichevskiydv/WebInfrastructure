@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Mvc.Formatters;
     using Microsoft.Extensions.Logging;
     using ProtoBuf.Meta;
+    using Surrogates;
 
     public class ProtobufInputFormatter : InputFormatter
     {
@@ -14,7 +15,9 @@
         private static RuntimeTypeModel CreateRuntimeTypeModel()
         {
             var runtimeTypeModel = TypeModel.Create();
+
             runtimeTypeModel.UseImplicitZeroDefaults = false;
+            runtimeTypeModel.Add(typeof(DateTimeOffset), false).SetSurrogate(typeof(DateTimeOffsetSurrogate));
 
             return runtimeTypeModel;
         }
