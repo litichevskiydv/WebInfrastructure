@@ -3,12 +3,14 @@
     using System;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc.Formatters;
+    using Microsoft.Extensions.Logging;
     using ProtoBuf.Meta;
     using Surrogates;
 
     public class ProtobufOutputFormatter : OutputFormatter
     {
         private readonly RuntimeTypeModel _runtimeTypeModel;
+        private readonly ILogger<ProtobufOutputFormatter> _logger;
 
         private static RuntimeTypeModel CreateRuntimeTypeModel()
         {
@@ -20,9 +22,13 @@
             return runtimeTypeModel;
         }
 
-        public ProtobufOutputFormatter()
+        public ProtobufOutputFormatter(ILogger<ProtobufOutputFormatter> logger)
         {
+            if (logger == null)
+                throw new ArgumentNullException(nameof(logger));
+
             _runtimeTypeModel = CreateRuntimeTypeModel();
+            _logger = logger;
 
             SupportedMediaTypes.Add(MediaTypeHeaderValues.ApplicationProtobuf);
             SupportedMediaTypes.Add(MediaTypeHeaderValues.ApplicationProtobufSynonym);
@@ -40,9 +46,10 @@
                 _runtimeTypeModel.Serialize(context.HttpContext.Response.Body, context.Object);
                 tcs.SetResult(null);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                tcs.SetException(ex);
+                _logger.LogDebug(exception, "Exception was occurred during serialization");
+                tcs.SetException(exception);
             }
             return tcs.Task;
         }

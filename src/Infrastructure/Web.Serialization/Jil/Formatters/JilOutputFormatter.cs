@@ -9,18 +9,24 @@
     using System.Threading.Tasks;
     using global::Jil;
     using Microsoft.AspNetCore.Mvc.Formatters;
+    using Microsoft.Extensions.Logging;
 
     public class JilOutputFormatter : TextOutputFormatter
     {
+        private readonly ILogger<JilOutputFormatter> _logger;
         private readonly Options _options;
+
         private readonly MethodInfo _serializeGenericDefinition;
 
-        public JilOutputFormatter(Options options)
+        public JilOutputFormatter(ILogger<JilOutputFormatter> logger, Options options)
         {
+            if (logger == null)
+                throw new ArgumentNullException(nameof(logger));
             if (options == null)
                 throw new ArgumentNullException(nameof(options));
 
             _options = options;
+            _logger = logger;
 
             Expression<Action<object, TextWriter, Options>> fakeSerializeCall =
                 (data, writer, settings) => JSON.Serialize(data, writer, settings);
@@ -49,9 +55,10 @@
                         .MakeGenericMethod(context.ObjectType)
                         .Invoke(null, new[] {context.Object, writer, _options});
                 }
-                catch (TargetInvocationException ex)
+                catch (TargetInvocationException exception)
                 {
-                    ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                    _logger.LogDebug(exception.InnerException, "Exception was occurred during serialization");
+                    ExceptionDispatchInfo.Capture(exception.InnerException).Throw();
                 }
                 await writer.FlushAsync();
             }

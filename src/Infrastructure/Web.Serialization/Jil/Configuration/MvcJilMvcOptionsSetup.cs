@@ -29,7 +29,7 @@
             options.InputFormatters.Add(new JilInputFormatter(_loggerFactory.CreateLogger<JilInputFormatter>(), _serializerSettings));
 
             options.OutputFormatters.RemoveType<JsonOutputFormatter>();
-            options.OutputFormatters.Add(new JilOutputFormatter(_serializerSettings));
+            options.OutputFormatters.Add(new JilOutputFormatter(_loggerFactory.CreateLogger<JilOutputFormatter>(), _serializerSettings));
         }
     }
 }
