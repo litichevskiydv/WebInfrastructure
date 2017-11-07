@@ -7,12 +7,12 @@
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
 
-    public class MvcJilMvcOptionsSetup : IConfigureOptions<MvcOptions>
+    public class MvcOptionsSetup : IConfigureOptions<MvcOptions>
     {
         private readonly ILoggerFactory _loggerFactory;
         private readonly global::Jil.Options _serializerSettings;
 
-        public MvcJilMvcOptionsSetup(ILoggerFactory loggerFactory, IOptions<MvcJilOptions> jilOptions)
+        public MvcOptionsSetup(ILoggerFactory loggerFactory, IOptions<MvcJilOptions> jilOptions)
         {
             if(loggerFactory == null)
                 throw new ArgumentNullException(nameof(loggerFactory));
