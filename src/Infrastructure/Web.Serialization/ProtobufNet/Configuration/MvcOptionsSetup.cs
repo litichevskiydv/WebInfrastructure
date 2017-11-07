@@ -2,6 +2,7 @@
 {
     using System;
     using Formatters;
+    using Formatters.Surrogates;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
@@ -10,7 +11,7 @@
     public class MvcOptionsSetup : IConfigureOptions<MvcOptions>
     {
         private readonly ILoggerFactory _loggerFactory;
-        private readonly Func<RuntimeTypeModel, RuntimeTypeModel> _userSerializerConfigurator;
+        private readonly Func<RuntimeTypeModel, RuntimeTypeModel> _serializerConfigurator;
 
         public MvcOptionsSetup(ILoggerFactory loggerFactory, IOptions<MvcProtobufOptions> protobufOptions)
         {
@@ -20,13 +21,21 @@
                 throw new ArgumentNullException(nameof(protobufOptions));
 
             _loggerFactory = loggerFactory;
-            _userSerializerConfigurator = protobufOptions.Value.SerializerConfigurator;
+            _serializerConfigurator =
+                x =>
+                    protobufOptions.Value.SerializerConfigurator(x)
+                        .WithDefaultValuesHandling(false)
+                        .WithTypeSurrogate<DateTimeOffset, DateTimeOffsetSurrogate>();
         }
 
         public void Configure(MvcOptions options)
         {
-            options.InputFormatters.Add(new ProtobufInputFormatter(_loggerFactory.CreateLogger<ProtobufInputFormatter>()));
-            options.OutputFormatters.Add(new ProtobufOutputFormatter(_loggerFactory.CreateLogger<ProtobufOutputFormatter>()));
+            options.InputFormatters.Add(
+                new ProtobufInputFormatter(_loggerFactory.CreateLogger<ProtobufInputFormatter>(), _serializerConfigurator)
+            );
+            options.OutputFormatters.Add(
+                new ProtobufOutputFormatter(_loggerFactory.CreateLogger<ProtobufOutputFormatter>(), _serializerConfigurator)
+            );
             options.FormatterMappings.SetMediaTypeMappingForFormat("protobuf", MediaTypeHeaderValues.ApplicationProtobuf);
         }
     }

@@ -5,30 +5,23 @@
     using Microsoft.AspNetCore.Mvc.Formatters;
     using Microsoft.Extensions.Logging;
     using ProtoBuf.Meta;
-    using Surrogates;
 
     public class ProtobufInputFormatter : InputFormatter
     {
-        private readonly RuntimeTypeModel _runtimeTypeModel;
         private readonly ILogger<ProtobufInputFormatter> _logger;
+        private readonly RuntimeTypeModel _runtimeTypeModel;
 
-        private static RuntimeTypeModel CreateRuntimeTypeModel()
-        {
-            var runtimeTypeModel = TypeModel.Create();
-
-            runtimeTypeModel.UseImplicitZeroDefaults = false;
-            runtimeTypeModel.Add(typeof(DateTimeOffset), false).SetSurrogate(typeof(DateTimeOffsetSurrogate));
-
-            return runtimeTypeModel;
-        }
-
-        public ProtobufInputFormatter(ILogger<ProtobufInputFormatter> logger)
+        public ProtobufInputFormatter(
+            ILogger<ProtobufInputFormatter> logger, 
+            Func<RuntimeTypeModel, RuntimeTypeModel> serializerConfigurator)
         {
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
+            if (serializerConfigurator == null)
+                throw new ArgumentNullException(nameof(serializerConfigurator));
 
-            _runtimeTypeModel = CreateRuntimeTypeModel();
             _logger = logger;
+            _runtimeTypeModel = serializerConfigurator(TypeModel.Create());
 
             SupportedMediaTypes.Add(MediaTypeHeaderValues.ApplicationProtobuf);
             SupportedMediaTypes.Add(MediaTypeHeaderValues.ApplicationProtobufSynonym);
