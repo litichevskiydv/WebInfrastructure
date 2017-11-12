@@ -89,16 +89,15 @@
         [MemberData(nameof(IsEqualsExtensionTests))]
         public void ShouldCheckCollectionsIsEquals(IEnumerable<int> first, IEnumerable<int> second, bool expected)
         {
-            Assert.Equal(expected, first.IsEquals(second));
+            Assert.Equal(expected, first.IsEquals(second, EqualityComparer<int>.Default));
         }
 
         [Theory]
         [MemberData(nameof(IsEqualsExtensionTests))]
         public void ShouldCheckCollectionsHashCodeWithRespectToOrder(IEnumerable<int> first, IEnumerable<int> second, bool expected)
         {
-
             Assert.True(
-                first.IsEquals(second) && first.GetHashCodeWithRespectToOrder() == second.GetHashCodeWithRespectToOrder()
+                first.IsEquals(second) && first.GetHashCodeWithRespectToOrder(x => x) == second.GetHashCodeWithRespectToOrder(x => x)
                 || first.IsEquals(second) == false);
         }
 
@@ -106,7 +105,7 @@
         [MemberData(nameof(IsSameExtensionTests))]
         public void ShouldCheckCollectionsIsSame(IEnumerable<int> first, IEnumerable<int> second, bool expected)
         {
-            Assert.Equal(expected, first.IsSame(second));
+            Assert.Equal(expected, first.IsSame(second, EqualityComparer<int>.Default));
         }
 
         [Theory]
@@ -115,7 +114,7 @@
         {
 
             Assert.True(
-                first.IsSame(second) && first.GetHashCodeWithoutRespectToOrder() == second.GetHashCodeWithoutRespectToOrder()
+                first.IsSame(second) && first.GetHashCodeWithoutRespectToOrder(x => x) == second.GetHashCodeWithoutRespectToOrder(x => x)
                 || first.IsSame(second) == false);
         }
     }

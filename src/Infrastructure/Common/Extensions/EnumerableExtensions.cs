@@ -1,5 +1,6 @@
 ﻿namespace Skeleton.Common.Extensions
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -42,25 +43,32 @@
         /// Determines whether sequence <paramref name="first"/> equals to sequence <paramref name="second"/>
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of sequences</typeparam>
-        public static bool IsEquals<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second)
+        public static bool IsEquals<TSource>(
+            this IEnumerable<TSource> first, 
+            IEnumerable<TSource> second,
+            IEqualityComparer<TSource> comparer = null)
         {
             if (ReferenceEquals(first, second))
                 return true;
             if (ReferenceEquals(first, null) || ReferenceEquals(second, null))
                 return false;
 
-            return first.SequenceEqual(second);
+            var equalityComparer = comparer ?? EqualityComparer<TSource>.Default;
+            return first.SequenceEqual(second, equalityComparer);
         }
 
         /// <summary>
         /// Method for calculating collection <paramref name="items"/> hash code
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of sequences</typeparam>
-        public static int GetHashCodeWithRespectToOrder<TSource>(this IEnumerable<TSource> items)
+        public static int GetHashCodeWithRespectToOrder<TSource>(
+            this IEnumerable<TSource> items,
+            Func<TSource, int> hashCodeCalculator = null)
         {
+            int GetHashCode(TSource x) => hashCodeCalculator?.Invoke(x) ?? x.GetHashCode();
             unchecked
             {
-                return items?.Aggregate(1, (hash, x) => (hash * 31) ^ x.GetHashCode()) ?? 0;
+                return items?.Aggregate(1, (hash, x) => (hash * 31) ^ GetHashCode(x)) ?? 0;
             }
         }
 
@@ -68,7 +76,10 @@
         /// Determines whether sequence <paramref name="first"/> is same as sequence <paramref name="second"/>
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of sequences</typeparam>
-        public static bool IsSame<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second)
+        public static bool IsSame<TSource>(
+            this IEnumerable<TSource> first, 
+            IEnumerable<TSource> second,
+            IEqualityComparer<TSource> comparer = null)
         {
             if (ReferenceEquals(first, second))
                 return true;
@@ -77,20 +88,25 @@
 
             var firstArray = first as TSource[] ?? first.ToArray();
             var secondArray = second as TSource[] ?? second.ToArray();
-            return firstArray.SequenceEqual(secondArray)
-                   || firstArray.Length == secondArray.Length && firstArray.Except(secondArray).Any() == false;
+            var equalityComparer = comparer ?? EqualityComparer<TSource>.Default;
+
+            return firstArray.SequenceEqual(secondArray, equalityComparer)
+                   || firstArray.Length == secondArray.Length && firstArray.Except(secondArray, equalityComparer).Any() == false;
         }
 
         /// <summary>
         /// Method for calculating collection <paramref name="items"/> hash code
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of sequences</typeparam>
-        public static int GetHashCodeWithoutRespectToOrder<TSource>(this IEnumerable<TSource> items)
+        public static int GetHashCodeWithoutRespectToOrder<TSource>(
+            this IEnumerable<TSource> items,
+            Func<TSource, int> hashCodeCalculator = null)
         {
+            int GetHashCode(TSource x) => hashCodeCalculator?.Invoke(x) ?? x.GetHashCode();
             unchecked
             {
                 return items
-                           ?.Select(x => x.GetHashCode())
+                           ?.Select(GetHashCode)
                            .OrderBy(x => x)
                            .Aggregate(1, (hash, x) => (hash * 31) ^ x)
                        ?? 0;
