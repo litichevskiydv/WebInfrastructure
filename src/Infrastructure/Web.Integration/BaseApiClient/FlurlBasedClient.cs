@@ -7,6 +7,7 @@
     using System.Runtime.ExceptionServices;
     using System.Threading.Tasks;
     using Configuration;
+    using Conventions.Responses;
     using Exceptions;
     using Flurl.Http;
     using Flurl.Http.Configuration;
@@ -61,7 +62,7 @@
             if(string.IsNullOrWhiteSpace(errorResponseText) == false)
                 try
                 {
-                    var deserializerMessage = captureException.GetResponseJson<ApiErrorResponse>()?.ToString();
+                    var deserializerMessage = captureException.GetResponseJson<ApiExceptionResponse>()?.ToString();
                     exceptionMessage = string.IsNullOrWhiteSpace(deserializerMessage) ? errorResponseText : deserializerMessage;
                 }
                 catch

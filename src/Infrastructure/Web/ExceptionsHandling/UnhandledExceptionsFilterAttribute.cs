@@ -5,6 +5,7 @@
     using System.Net;
     using System.Text;
     using System.Threading.Tasks;
+    using Conventions.Responses;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http.Extensions;
     using Microsoft.AspNetCore.Mvc;
@@ -71,12 +72,12 @@
 
             context.ExecutedContext.ExceptionHandled = true;
             context.ExecutedContext.Result = _hostingEnvironment.IsDevelopment() || _hostingEnvironment.IsStaging()
-                ? new ObjectResult(new ApiErrorResponse(message, context.ExecutedContext.Exception))
+                ? new ObjectResult(new ApiExceptionResponse(message, context.ExecutedContext.Exception))
                   {
-                      DeclaredType = typeof(ApiErrorResponse),
-                      StatusCode = (int)HttpStatusCode.InternalServerError
+                      DeclaredType = typeof(ApiExceptionResponse),
+                      StatusCode = (int) HttpStatusCode.InternalServerError
                   }
-                : new ObjectResult(message) { DeclaredType = typeof(string), StatusCode = (int)HttpStatusCode.InternalServerError };
+                : new ObjectResult(message) {DeclaredType = typeof(string), StatusCode = (int) HttpStatusCode.InternalServerError};
         }
 
         public UnhandledExceptionsFilterAttribute(IHostingEnvironment hostingEnvironment, ILogger<UnhandledExceptionsFilterAttribute> logger)
