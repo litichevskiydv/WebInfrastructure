@@ -1,13 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Library with serialization conventions and settings</Description>
-    <Authors>dmitriy.litichevskiy</Authors>
-    <TargetFramework>netstandard2.0</TargetFramework>
     <DebugType>portable</DebugType>
-    <AssemblyName>Skeleton.Web.Serialization</AssemblyName>
-    <PackageId>Skeleton.Web.Serialization</PackageId>
-    <PackageTags>JSON conventions;JSON serializer settings</PackageTags>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Skeleton.Web.Serialization.Protobuf</AssemblyName>
+    <PackageId>Skeleton.Web.Serialization.Protobuf</PackageId>
+    <Authors>dmitriy.litichevskiy</Authors>
+    <Description>Library for protobuf-net serializer integration</Description>
+    <PackageTags>protobuf-net;InputFormatter;OutputFormatter</PackageTags>
     <PackageProjectUrl>https://github.com/litichevskiydv/WebInfrastructure</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
@@ -15,15 +15,12 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <RootNamespace>Skeleton.Web.Serialization</RootNamespace>
+    <RootNamespace>Skeleton.Web.Serialization.Protobuf</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Jil" Version="2.15.4" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.0.0" />
     <PackageReference Include="Microsoft.Net.Http.Headers" Version="2.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="protobuf-net" Version="2.3.2" />
   </ItemGroup>
 

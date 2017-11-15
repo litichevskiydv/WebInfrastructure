@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Web.Serialization.ProtobufNet.Formatters
+﻿namespace Skeleton.Web.Serialization.Protobuf.Formatters
 {
     using System;
     using System.Threading.Tasks;

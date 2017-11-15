@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Web.Serialization.ProtobufNet.Formatters.Surrogates
+﻿namespace Skeleton.Web.Serialization.Protobuf.Formatters.Surrogates
 {
     using System;
     using ProtoBuf;

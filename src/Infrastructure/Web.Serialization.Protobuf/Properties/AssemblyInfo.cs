@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Skeleton.Web.Serialization")]
+[assembly: AssemblyProduct("Skeleton.Web.Serialization.Protobuf")]
 [assembly: AssemblyTrademark("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
@@ -16,4 +16,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("5f47ac99-30ad-4532-b995-610b16ae02b8")]
+[assembly: Guid("8778757D-756A-4405-9DE7-92C8250B865B")]

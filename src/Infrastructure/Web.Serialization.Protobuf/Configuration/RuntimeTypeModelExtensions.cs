@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Web.Serialization.ProtobufNet.Configuration
+﻿namespace Skeleton.Web.Serialization.Protobuf.Configuration
 {
     using System;
     using ProtoBuf.Meta;
