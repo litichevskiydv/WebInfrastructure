@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2008
+VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DE1BE141-BE1D-4C36-BF58-E4747EE33A30}"
 EndProject
@@ -55,11 +55,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Migrations", "src\Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Migrations", "src\Web.Migrations\Web.Migrations.csproj", "{D72290BD-7421-4833-83E2-1D3C21D35C28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Serialization.Jil", "src\Infrastructure\Web.Serialization.Jil\Web.Serialization.Jil.csproj", "{7C68561B-728F-4E70-808C-D69ACFBE8276}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Serialization.Jil", "src\Infrastructure\Web.Serialization.Jil\Web.Serialization.Jil.csproj", "{7C68561B-728F-4E70-808C-D69ACFBE8276}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Serialization.Protobuf", "src\Infrastructure\Web.Serialization.Protobuf\Web.Serialization.Protobuf.csproj", "{B5A5242F-6647-463F-B357-AD82393D0871}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Serialization.Protobuf", "src\Infrastructure\Web.Serialization.Protobuf\Web.Serialization.Protobuf.csproj", "{B5A5242F-6647-463F-B357-AD82393D0871}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Serialization.JsonNet", "src\Infrastructure\Web.Serialization.JsonNet\Web.Serialization.JsonNet.csproj", "{742ADD16-0221-4655-8388-C43F0D3C7728}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Serialization.JsonNet", "src\Infrastructure\Web.Serialization.JsonNet\Web.Serialization.JsonNet.csproj", "{742ADD16-0221-4655-8388-C43F0D3C7728}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Serialization.Abstractions", "src\Infrastructure\Web.Serialization.Abstractions\Web.Serialization.Abstractions.csproj", "{06903337-947F-4705-96ED-FB1DF6EE61F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -163,6 +165,10 @@ Global
 		{742ADD16-0221-4655-8388-C43F0D3C7728}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{742ADD16-0221-4655-8388-C43F0D3C7728}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{742ADD16-0221-4655-8388-C43F0D3C7728}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06903337-947F-4705-96ED-FB1DF6EE61F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06903337-947F-4705-96ED-FB1DF6EE61F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06903337-947F-4705-96ED-FB1DF6EE61F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06903337-947F-4705-96ED-FB1DF6EE61F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -194,6 +200,7 @@ Global
 		{7C68561B-728F-4E70-808C-D69ACFBE8276} = {DB312248-D325-4521-8EE6-852CD9B44CAA}
 		{B5A5242F-6647-463F-B357-AD82393D0871} = {DB312248-D325-4521-8EE6-852CD9B44CAA}
 		{742ADD16-0221-4655-8388-C43F0D3C7728} = {DB312248-D325-4521-8EE6-852CD9B44CAA}
+		{06903337-947F-4705-96ED-FB1DF6EE61F3} = {DB312248-D325-4521-8EE6-852CD9B44CAA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FED0BA88-864C-49D0-97EC-4F57DD17574C}

@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  
+  <PropertyGroup>
+    <Description>Library with abstractions for content serialization in Web API</Description>
+    <Authors>dmitriy.litichevskiy</Authors>
+    <TargetFramework>netstandard1.1</TargetFramework>
+    <DebugType>portable</DebugType>
+    <AssemblyName>Skeleton.Web.Serialization.Abstractions</AssemblyName>
+    <PackageId>Skeleton.Web.Serialization.Abstractions</PackageId>
+    <PackageTags>Serialization</PackageTags>
+    <PackageProjectUrl>https://github.com/litichevskiydv/WebInfrastructure</PackageProjectUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/litichevskiydv/WebInfrastructure</RepositoryUrl>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <RootNamespace>Skeleton.Web.Serialization.Abstractions</RootNamespace>
+  </PropertyGroup>
+
+</Project>
