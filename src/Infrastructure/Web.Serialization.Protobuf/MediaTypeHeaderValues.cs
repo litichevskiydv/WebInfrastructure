@@ -1,8 +1,8 @@
-﻿namespace Skeleton.Web.Serialization.Protobuf.Formatters
+﻿namespace Skeleton.Web.Serialization.Protobuf
 {
     using Microsoft.Net.Http.Headers;
 
-    public class MediaTypeHeaderValues
+    public static class MediaTypeHeaderValues
     {
         public static readonly MediaTypeHeaderValue ApplicationProtobuf = MediaTypeHeaderValue.Parse("application/x-protobuf").CopyAsReadOnly();
         public static readonly MediaTypeHeaderValue ApplicationProtobufSynonym = MediaTypeHeaderValue.Parse("application/protobuf").CopyAsReadOnly();
