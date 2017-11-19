@@ -24,5 +24,9 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.0.0" />
     <PackageReference Include="Microsoft.Net.Http.Headers" Version="2.0.0" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Web.Serialization.Abstractions\Web.Serialization.Abstractions.csproj" />
+  </ItemGroup>
 
 </Project>
