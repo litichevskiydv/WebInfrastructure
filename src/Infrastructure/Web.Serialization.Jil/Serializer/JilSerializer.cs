@@ -49,7 +49,7 @@
 
         public HttpContent Serialize(object obj)
         {
-            return new StringContent(SerializeInternal(obj), Encoding.UTF8, MediaTypeHeaderValues.ApplicationJson.MediaType.ToString());
+            return new StringContent(SerializeInternal(obj), Encoding.UTF8, MediaType.MediaType.ToString());
         }
 
         public T Deserialize<T>(Stream stream)
