@@ -2,7 +2,7 @@
 {
     using System.IO;
     using System.Net.Http;
-    using Microsoft.Net.Http.Headers;
+    using System.Net.Http.Headers;
 
     public interface ISerializer
     {

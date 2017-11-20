@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Web.Serialization.Protobuf
+﻿namespace Skeleton.Web.Serialization.Protobuf.Formatters
 {
     using Microsoft.Net.Http.Headers;
 

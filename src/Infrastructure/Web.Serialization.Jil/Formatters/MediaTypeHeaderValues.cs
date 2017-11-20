@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Web.Serialization.Jil
+﻿namespace Skeleton.Web.Serialization.Jil.Formatters
 {
     using Microsoft.Net.Http.Headers;
 
