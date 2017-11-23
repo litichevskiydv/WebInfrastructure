@@ -20,7 +20,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Web.Conventions\Web.Conventions.csproj" />
-    <ProjectReference Include="..\Web.Serialization\Web.Serialization.csproj" />
+    <ProjectReference Include="..\Web.Serialization.Jil\Web.Serialization.Jil.csproj" />
+    <ProjectReference Include="..\Web.Serialization.JsonNet\Web.Serialization.JsonNet.csproj" />
+    <ProjectReference Include="..\Web.Serialization.Protobuf\Web.Serialization.Protobuf.csproj" />
   </ItemGroup>
 
   <ItemGroup>

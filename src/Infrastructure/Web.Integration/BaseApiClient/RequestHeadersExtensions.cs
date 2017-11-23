@@ -1,23 +1,23 @@
 ﻿namespace Skeleton.Web.Integration.BaseApiClient
 {
     using System;
-    using System.Collections.Generic;
+    using System.Net.Http.Headers;
     using System.Text;
 
     public static class HttpRequestHeadersExtensions
     {
-        public static IDictionary<string, object> WithBearerToken(this IDictionary<string, object> headers, string token)
+        public static HttpRequestHeaders WithBearerToken(this HttpRequestHeaders headers, string token)
         {
-            if(headers == null)
+            if (headers == null)
                 throw new ArgumentNullException(nameof(headers));
-            if(string.IsNullOrWhiteSpace(token))
+            if (string.IsNullOrWhiteSpace(token))
                 throw new ArgumentNullException(nameof(token));
 
-            headers["Authorization"] = $"Bearer {token}";
+            headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
             return headers;
         }
 
-        public static IDictionary<string, object> WithBasicAuth(this IDictionary<string, object> headers, string login, string password)
+        public static HttpRequestHeaders WithBasicAuth(this HttpRequestHeaders headers, string login, string password)
         {
             if (headers == null)
                 throw new ArgumentNullException(nameof(headers));
@@ -26,7 +26,8 @@
             if (string.IsNullOrWhiteSpace(password))
                 throw new ArgumentNullException(nameof(password));
 
-            headers["Authorization"] = $"Basic {Convert.ToBase64String(Encoding.UTF8.GetBytes($"{login}:{password}"))}";
+            var value = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{login}:{password}"));
+            headers.Authorization = new AuthenticationHeaderValue("Basic", value);
             return headers;
         }
     }

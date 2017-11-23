@@ -3,6 +3,7 @@
     using System;
     using System.Net;
     using System.Threading.Tasks;
+    using Conventions.Responses;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Logging;
@@ -58,7 +59,7 @@
                 if (_hostingEnvironment.IsDevelopment() || _hostingEnvironment.IsStaging())
                 {
                     context.Response.ContentType = "application/json; charset=utf-8";
-                    await context.Response.WriteAsync(JsonConvert.SerializeObject(new ApiErrorResponse(message, exception), _jsonSerializerSettings));
+                    await context.Response.WriteAsync(JsonConvert.SerializeObject(new ApiExceptionResponse(message, exception), _jsonSerializerSettings));
                 }
             }
         }

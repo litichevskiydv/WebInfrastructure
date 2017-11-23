@@ -18,4 +18,8 @@
     <RootNamespace>Skeleton.Web.Conventions</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
+  </ItemGroup>
+
 </Project>

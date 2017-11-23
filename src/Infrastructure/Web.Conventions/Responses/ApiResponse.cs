@@ -1,22 +1,26 @@
 ﻿namespace Skeleton.Web.Conventions.Responses
 {
-    using System.Collections.Generic;
+    using System.Runtime.Serialization;
 
     /// <summary>
     /// Contract for WebApi response transmition
     /// </summary>
-    /// <typeparam name="TData">The type of response data</typeparam>
-    public class ApiResponse<TData>
+    /// <typeparam name="TData">Type of response data</typeparam>
+    /// <typeparam name="TError">Type of the response error</typeparam>
+    [DataContract]
+    public class ApiResponse<TData, TError>
     {
         /// <summary>
         /// Response data
         /// </summary>
+        [DataMember(EmitDefaultValue = false, IsRequired = false, Order = 1)]
         public TData Data { get; set; }
 
         /// <summary>
         /// Collection of request processing errors
         /// </summary>
-        public IReadOnlyList<ApiResponseError> Errors { get; set; }
+        [DataMember(EmitDefaultValue = false, IsRequired = false, Order = 2)]
+        public TError[] Errors { get; set; }
 
         /// <summary>
         /// Constructor for serialization
@@ -30,7 +34,7 @@
         /// </summary>
         /// <param name="data">Response data</param>
         /// <param name="errors">Request processing errors collection</param>
-        internal ApiResponse(TData data, IReadOnlyList<ApiResponseError> errors) : this()
+        internal ApiResponse(TData data, TError[] errors) : this()
         {
             Data = data;
             Errors = errors;
@@ -45,12 +49,13 @@
         /// <summary>
         /// Creates container for WebApi response with filled fields
         /// </summary>
-        /// <typeparam name="TData">Type of respones data</typeparam>
+        /// <typeparam name="TData">Type of the respone data</typeparam>
+        /// <typeparam name="TError">Type of the response error </typeparam>
         /// <param name="data">Respones data</param>
         /// <param name="errors">Errors that happened during request processing</param>
-        public static ApiResponse<TData> Create<TData>(TData data, IReadOnlyList<ApiResponseError> errors)
+        public static ApiResponse<TData, TError> Create<TData, TError>(TData data, TError[] errors)
         {
-            return new ApiResponse<TData>(data, errors);
+            return new ApiResponse<TData, TError>(data, errors);
         }
 
         /// <summary>
@@ -58,18 +63,19 @@
         /// </summary>
         /// <typeparam name="TData">Type of respones data</typeparam>
         /// <param name="data">Respones data</param>
-        public static ApiResponse<TData> Success<TData>(TData data)
+        public static ApiResponse<TData, object> Success<TData>(TData data)
         {
-            return new ApiResponse<TData>(data, null);
+            return new ApiResponse<TData, object>(data, null);
         }
 
         /// <summary>
         /// Creates container for WebApi response with only errors list
         /// </summary>
+        /// <typeparam name="TError">Type of respones error</typeparam>
         /// <param name="errors">Errors that happened during request processing</param>
-        public static ApiResponse<object> Error(IReadOnlyList<ApiResponseError> errors)
+        public static ApiResponse<object, TError> Error<TError>(TError[] errors)
         {
-            return new ApiResponse<object>(null, errors);
+            return new ApiResponse<object, TError>(null, errors);
         }
     }
 }

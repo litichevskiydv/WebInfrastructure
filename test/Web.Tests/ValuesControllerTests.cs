@@ -8,6 +8,9 @@
     using Skeleton.Web.Integration.BaseApiClient.Configuration;
     using Skeleton.Web.Integration.BaseApiClient.Exceptions;
     using Skeleton.Web.Serialization.JsonNet.Configuration;
+    using Skeleton.Web.Serialization.JsonNet.Serializer;
+    using Skeleton.Web.Serialization.Protobuf.Configuration;
+    using Skeleton.Web.Serialization.Protobuf.Serializer;
     using Skeleton.Web.Testing;
     using Skeleton.Web.Testing.Extensions;
     using Xunit;
@@ -36,7 +39,7 @@
                 x => x.WithBaseUrl(Fixture.Server.BaseAddress.ToString())
                     .WithTimeout(TimeSpan.FromMilliseconds(100))
                     .WithHttpMessageHandler(Fixture.Server.CreateHandler())
-                    .WithJsonNetSerializer(new JsonSerializerSettings().UseDefaultSettings())
+                    .WithSerializer(new JsonNetSerializer(new JsonSerializerSettings().UseDefaultSettings()))
             );
 
             Assert.Throws<BadRequestException>(() => client.Get());
@@ -64,6 +67,33 @@
             // When
             ServiceClient.Set(id, expectedValue);
             var actualValue = ServiceClient.Get(id);
+
+            // Then
+            Assert.Equal(expectedValue, actualValue);
+            Fixture.MockLogger
+                .VerifyNoErrorsWasLogged()
+                .VerifyNoWarningsWasLogged();
+        }
+
+        [Fact]
+        public void ShouldSetValueUsingProtobufFormatters()
+        {
+            // Given
+            const int id = 1;
+            const string expectedValue = "test";
+
+            var client = new ValuesServiceClient(
+                x => x.WithBaseUrl(Fixture.Server.BaseAddress.ToString())
+                    .WithTimeout(TimeSpan.FromMilliseconds(Fixture.TimeoutInMilliseconds))
+                    .WithHttpMessageHandler(Fixture.Server.CreateHandler())
+                    .WithSerializer(
+                        new ProtobufSerializer(s => s.WithDefaultSettings())
+                    )
+            );
+
+            // When
+            client.Set(id, expectedValue);
+            var actualValue = client.Get(id);
 
             // Then
             Assert.Equal(expectedValue, actualValue);

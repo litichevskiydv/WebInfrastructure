@@ -73,7 +73,7 @@
         /// <param name="id">Configuration value index</param>
         /// <param name="value">New value</param>
         [HttpPost("{id}")]
-        [Produces(typeof(ApiResponse<int>))]
+        [Produces(typeof(ApiResponse<int, ApiResponseError>))]
         public IActionResult Post(int id, [FromBody] string value)
         {
             _logger.LogInformation("Validation and post value request");

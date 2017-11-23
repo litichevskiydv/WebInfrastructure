@@ -4,7 +4,6 @@
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
     using ExceptionsHandling;
-    using Jil;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -12,6 +11,7 @@
     using Microsoft.Extensions.Logging;
     using Routing;
     using Serialization.Jil.Configuration;
+    using Serialization.Protobuf.Configuration;
     using Swashbuckle.AspNetCore.SwaggerGen;
     using Swashbuckle.AspNetCore.SwaggerUI;
 
@@ -33,7 +33,9 @@
 
         protected virtual void ConfigureFormatters(IMvcBuilder mvcBuilder)
         {
-            mvcBuilder.WithJsonFormattersBasedOnJil(OptionsExtensions.Default);
+            mvcBuilder
+                .WithJsonFormattersBasedOnJil(OptionsExtensions.Default)
+                .WithProtobufFormatters();
         }
 
         protected abstract void ConfigureSwaggerDocumentator(SwaggerGenOptions options);

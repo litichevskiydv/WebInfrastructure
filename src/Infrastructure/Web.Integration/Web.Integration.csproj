@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>Library contains base client for integration with WebApi</Description>
     <Authors>dmitriy.litichevskiy</Authors>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard1.1</TargetFramework>
     <DebugType>portable</DebugType>
     <AssemblyName>Skeleton.Web.Integration</AssemblyName>
     <PackageId>Skeleton.Web.Integration</PackageId>
@@ -20,12 +20,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Web.Conventions\Web.Conventions.csproj" />
-    <ProjectReference Include="..\Web.Serialization\Web.Serialization.csproj" />
+    <ProjectReference Include="..\Web.Serialization.Abstractions\Web.Serialization.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Flurl.Http" Version="2.0.0" />
-    <PackageReference Include="Jil" Version="2.15.4" />
+    <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
   </ItemGroup>
 
 </Project>

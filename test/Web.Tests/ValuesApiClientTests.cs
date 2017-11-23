@@ -86,7 +86,7 @@
                 .PostValue(id, expectedValue);
 
             // Then
-            Assert.Equal(id, ((ApiResponse<int>)ApiClient.CurrentState).Data);
+            Assert.Equal(id, ((ApiResponse<int, ApiResponseError>) ApiClient.CurrentState).Data);
             Fixture.MockLogger.VerifyNoErrorsWasLogged();
         }
 
@@ -102,7 +102,7 @@
                 .PostValueAsync(id, expectedValue);
 
             // Then
-            Assert.Equal(id, ((ApiResponse<int>)ApiClient.CurrentState).Data);
+            Assert.Equal(id, ((ApiResponse<int, ApiResponseError>) ApiClient.CurrentState).Data);
             Fixture.MockLogger.VerifyNoErrorsWasLogged();
         }
 

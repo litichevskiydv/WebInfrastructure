@@ -7,9 +7,9 @@
     using Skeleton.Web.Integration.BaseApiClient;
     using Skeleton.Web.Integration.BaseApiClient.Configuration;
 
-    public class ValuesServiceClient : FlurlBasedClient
+    public class ValuesServiceClient : BaseClient
     {
-        public ValuesServiceClient(Func<IClientConfigurator, IClientConfigurator> configurationBuilder) : base(configurationBuilder)
+        public ValuesServiceClient(Func<ClientConfiguration, ClientConfiguration> configurationBuilder) : base(configurationBuilder)
         {
         }
 
@@ -43,14 +43,14 @@
             return PutAsync($"api/values/{id}", value);
         }
 
-        public ApiResponse<int> Post(int id, string value)
+        public ApiResponse<int, ApiResponseError> Post(int id, string value)
         {
-            return Post<ApiResponse<int>>($"api/values/{id}", value);
+            return Post<ApiResponse<int, ApiResponseError>>($"api/values/{id}", value);
         }
 
-        public Task<ApiResponse<int>> PostAsync(int id, string value)
+        public Task<ApiResponse<int, ApiResponseError>> PostAsync(int id, string value)
         {
-            return PostAsync<ApiResponse<int>>($"api/values/{id}", value);
+            return PostAsync<ApiResponse<int, ApiResponseError>>($"api/values/{id}", value);
         }
 
         public void Delete(int id)

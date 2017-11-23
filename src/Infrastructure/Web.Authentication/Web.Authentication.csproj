@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
-    <ProjectReference Include="..\Web.Serialization\Web.Serialization.csproj" />
+    <ProjectReference Include="..\Web.Serialization.JsonNet\Web.Serialization.JsonNet.csproj" />
   </ItemGroup>
 
   <ItemGroup>
