@@ -50,11 +50,16 @@
                 httpClient.BaseAddress = new Uri(_configuration.BaseUrl);
                 httpClient.Timeout = _configuration.Timeout;
 
+                RequestHeadersConfigurator(httpClient.DefaultRequestHeaders);
                 httpClient.DefaultRequestHeaders.Accept.Clear();
                 httpClient.DefaultRequestHeaders.Accept.Add(
-                    new MediaTypeWithQualityHeaderValue(_configuration.Serializer.MediaType.MediaType)
-                );
-                RequestHeadersConfigurator(httpClient.DefaultRequestHeaders);
+                    new MediaTypeWithQualityHeaderValue(_configuration.Serializer.MediaType.MediaType));
+                if (string.IsNullOrWhiteSpace(_configuration.Serializer.MediaType.CharSet) == false)
+                {
+                    httpClient.DefaultRequestHeaders.AcceptCharset.Clear();
+                    httpClient.DefaultRequestHeaders.AcceptCharset.Add(
+                        new StringWithQualityHeaderValue(_configuration.Serializer.MediaType.CharSet));
+                }
 
                 var request = new HttpRequestMessage(method, url);
                 if (method != HttpMethod.Get && data != null)

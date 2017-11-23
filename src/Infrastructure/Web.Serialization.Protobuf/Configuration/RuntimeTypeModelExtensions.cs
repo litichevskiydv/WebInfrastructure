@@ -1,6 +1,7 @@
 ﻿namespace Skeleton.Web.Serialization.Protobuf.Configuration
 {
     using System;
+    using Formatters.Surrogates;
     using ProtoBuf.Meta;
 
     public static class RuntimeTypeModelExtensions
@@ -39,6 +40,13 @@
 
             model.Add(typeof(TType), false).SetSurrogate(typeof(TTypeSurrogate));
             return model;
+        }
+
+        public static RuntimeTypeModel WithDefaultSettings(this RuntimeTypeModel model)
+        {
+            return model
+                .WithDefaultValuesHandling(false)
+                .WithTypeSurrogate<DateTimeOffset, DateTimeOffsetSurrogate>();
         }
     }
 }

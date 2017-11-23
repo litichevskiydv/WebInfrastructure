@@ -2,7 +2,6 @@
 {
     using System;
     using Formatters;
-    using Formatters.Surrogates;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
@@ -21,11 +20,7 @@
                 throw new ArgumentNullException(nameof(protobufOptions));
 
             _loggerFactory = loggerFactory;
-            _serializerConfigurator =
-                x =>
-                    protobufOptions.Value.SerializerConfigurator(x)
-                        .WithDefaultValuesHandling(false)
-                        .WithTypeSurrogate<DateTimeOffset, DateTimeOffsetSurrogate>();
+            _serializerConfigurator = x => protobufOptions.Value.SerializerConfigurator(x).WithDefaultSettings();
         }
 
         public void Configure(MvcOptions options)
