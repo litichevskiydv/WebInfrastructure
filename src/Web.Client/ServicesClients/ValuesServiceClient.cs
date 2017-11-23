@@ -7,9 +7,9 @@
     using Skeleton.Web.Integration.BaseApiClient;
     using Skeleton.Web.Integration.BaseApiClient.Configuration;
 
-    public class ValuesServiceClient : FlurlBasedClient
+    public class ValuesServiceClient : BaseClient
     {
-        public ValuesServiceClient(Func<IClientConfigurator, IClientConfigurator> configurationBuilder) : base(configurationBuilder)
+        public ValuesServiceClient(Func<ClientConfiguration, ClientConfiguration> configurationBuilder) : base(configurationBuilder)
         {
         }
 

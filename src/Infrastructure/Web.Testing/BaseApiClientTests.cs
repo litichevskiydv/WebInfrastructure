@@ -6,6 +6,7 @@
     using Integration.BaseApiFluentClient;
     using Moq;
     using Serialization.Jil.Configuration;
+    using Serialization.Jil.Serializer;
 
     public class BaseApiClientTests<TFixture, TApiClient>
         where TFixture : BaseApiTestsFixture, new()
@@ -21,11 +22,11 @@
             Fixture.MockLogger.ResetCalls();
 
             ApiClient = (TApiClient) Activator.CreateInstance(typeof(TApiClient),
-                new Func<IClientConfigurator, IClientConfigurator>(
+                new Func<ClientConfiguration, ClientConfiguration>(
                     x => x.WithBaseUrl(Fixture.Server.BaseAddress.ToString())
                         .WithTimeout(TimeSpan.FromMilliseconds(Fixture.TimeoutInMilliseconds))
                         .WithHttpMessageHandler(Fixture.Server.CreateHandler())
-                        .WithJilSerializer(OptionsExtensions.Default)
+                        .WithSerializer(new JilSerializer(OptionsExtensions.Default))
                 )
             );
         }

@@ -7,7 +7,7 @@
 
     public partial class ApiClient : BaseFluentClient
     {
-        public ApiClient(Func<IClientConfigurator, IClientConfigurator> configurationBuilder)
+        public ApiClient(Func<ClientConfiguration, ClientConfiguration> configurationBuilder)
         {
             _valuesServiceClient = new ValuesServiceClient(configurationBuilder);
             ServicesClients.Add(_valuesServiceClient);

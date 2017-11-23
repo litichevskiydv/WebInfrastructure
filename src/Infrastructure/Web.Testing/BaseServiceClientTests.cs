@@ -5,10 +5,11 @@
     using Integration.BaseApiClient.Configuration;
     using Moq;
     using Serialization.Jil.Configuration;
+    using Serialization.Jil.Serializer;
 
     public class BaseServiceClientTests<TFixture, TServiceClient>
         where TFixture : BaseApiTestsFixture, new()
-        where TServiceClient : FlurlBasedClient
+        where TServiceClient : BaseClient
     {
         protected readonly TFixture Fixture;
         protected readonly TServiceClient ServiceClient;
@@ -19,11 +20,11 @@
             Fixture.MockLogger.ResetCalls();
 
             ServiceClient = (TServiceClient) Activator.CreateInstance(typeof(TServiceClient),
-                new Func<IClientConfigurator, IClientConfigurator>(
+                new Func<ClientConfiguration, ClientConfiguration>(
                     x => x.WithBaseUrl(Fixture.Server.BaseAddress.ToString())
                         .WithTimeout(TimeSpan.FromMilliseconds(Fixture.TimeoutInMilliseconds))
                         .WithHttpMessageHandler(Fixture.Server.CreateHandler())
-                        .WithJilSerializer(OptionsExtensions.Default)
+                        .WithSerializer(new JilSerializer(OptionsExtensions.Default))
                 )
             );
         }
