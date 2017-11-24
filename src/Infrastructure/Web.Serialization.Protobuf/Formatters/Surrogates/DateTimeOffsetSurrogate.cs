@@ -14,7 +14,7 @@
 
         public static implicit operator DateTimeOffsetSurrogate(DateTimeOffset value)
         {
-            return new DateTimeOffsetSurrogate()
+            return new DateTimeOffsetSurrogate
                    {
                        DateTimeTicks = value.Ticks,
                        OffsetMinutes = (short)value.Offset.TotalMinutes
