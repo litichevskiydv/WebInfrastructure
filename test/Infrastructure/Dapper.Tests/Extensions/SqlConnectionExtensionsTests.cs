@@ -137,9 +137,6 @@
             IPropertyInfoProvider provider = new StrictTypePropertyInfoProvider(typeof(TestEntity));
 
             Assert.Equal(3, provider.FieldCount);
-            Assert.Equal("Name", provider.GetName(1));
-            Assert.Equal(typeof(int), provider.GetFieldType(2));
-            Assert.Equal(0, provider.GetOrdinal("Id"));
             Assert.Equal("First", provider.GetValue(1, expected));
         }
 
@@ -160,9 +157,6 @@
             IPropertyInfoProvider provider = new ExpandoObjectPropertyInfoProvider(expected);
 
             Assert.Equal(3, provider.FieldCount);
-            Assert.Equal("Name", provider.GetName(1));
-            Assert.Equal(typeof(int), provider.GetFieldType(2));
-            Assert.Equal(0, provider.GetOrdinal("Id"));
             Assert.Equal("First", provider.GetValue(1, expected));
         }
 

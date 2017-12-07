@@ -41,7 +41,7 @@
         [ExcludeFromCodeCoverage]
         public override int GetOrdinal(string name)
         {
-            return _propertyInfoProvider.GetOrdinal(name);
+            throw new NotImplementedException();
         }
 
         [ExcludeFromCodeCoverage]
@@ -53,13 +53,13 @@
         [ExcludeFromCodeCoverage]
         public override Type GetFieldType(int ordinal)
         {
-            return _propertyInfoProvider.GetFieldType(ordinal);
+            throw new NotImplementedException();
         }
 
         [ExcludeFromCodeCoverage]
         public override string GetDataTypeName(int ordinal)
         {
-            return _propertyInfoProvider.GetFieldType(ordinal).Name;
+            throw new NotImplementedException();
         }
 
 
