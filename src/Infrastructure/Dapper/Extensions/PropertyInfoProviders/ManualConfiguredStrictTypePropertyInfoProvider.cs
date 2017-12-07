@@ -9,29 +9,41 @@
     public class ManualConfiguredStrictTypePropertyInfoProvider<TEntity> : IPropertyInfoProvider, IColumnsMappingConfigurator<TEntity>
         where TEntity : class
     {
+        private class ValuesSource
+        {
+            public string Name { get; }
+            public Func<object, object> ValuesProvider { get; }
+
+            public ValuesSource(string name, Func<object, object> valuesProvider)
+            {
+                Name = name;
+                ValuesProvider = valuesProvider;
+            }
+        }
+
         private readonly SqlBulkCopyColumnMappingCollection _mappingsCollection;
-        private readonly List<PropertyInfo> _itemProperties;
+        private readonly List<ValuesSource> _valuesSources;
 
         public ManualConfiguredStrictTypePropertyInfoProvider(SqlBulkCopyColumnMappingCollection mappingsCollection)
         {
             _mappingsCollection = mappingsCollection;
 
-            _itemProperties = new List<PropertyInfo>();
+            _valuesSources = new List<ValuesSource>();
         }
 
-        public int FieldCount => _itemProperties.Count;
+        public int FieldCount => _valuesSources.Count;
 
         public string GetName(int ordinal)
         {
-            return _itemProperties[ordinal].Name;
+            return _valuesSources[ordinal].Name;
         }
 
         public object GetValue(int ordinal, object current)
         {
-            return _itemProperties[ordinal].GetValue(current);
+            return _valuesSources[ordinal].ValuesProvider(current);
         }
 
-        public IColumnsMappingConfigurator<TEntity> WithMapping<TProperty>(
+        public IColumnsMappingConfigurator<TEntity> WithProperty<TProperty>(
             Expression<Func<TEntity, TProperty>> member,
             string tableColumnName = null)
         {
@@ -42,8 +54,18 @@
             if(propertyInfo == null || propertyInfo.CanRead == false)
                 throw new InvalidOperationException("Member was configured uncorrectly");
 
-            _itemProperties.Add(propertyInfo);
-            _mappingsCollection.Add(new SqlBulkCopyColumnMapping(_itemProperties.Count - 1, tableColumnName ?? propertyInfo.Name));
+            _valuesSources.Add(new ValuesSource(propertyInfo.Name, x => propertyInfo.GetValue(x)));
+            _mappingsCollection.Add(new SqlBulkCopyColumnMapping(_valuesSources.Count - 1, tableColumnName ?? propertyInfo.Name));
+
+            return this;
+        }
+
+        public IColumnsMappingConfigurator<TEntity> WithFunction<TValue>(
+            Func<TEntity, TValue> valuesProvider, 
+            string tableColumnName)
+        {
+            _valuesSources.Add(new ValuesSource(tableColumnName, x => valuesProvider((TEntity) x)));
+            _mappingsCollection.Add(new SqlBulkCopyColumnMapping(_valuesSources.Count - 1, tableColumnName));
 
             return this;
         }

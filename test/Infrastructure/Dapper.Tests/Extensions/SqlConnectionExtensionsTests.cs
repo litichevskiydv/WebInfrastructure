@@ -4,6 +4,7 @@
     using System.Dynamic;
     using System.Collections.Generic;
     using System.Linq;
+    using Common.Extensions;
     using global::Dapper;
     using JetBrains.Annotations;
     using Tests;
@@ -35,24 +36,65 @@
             }
         }
 
+        public class Totals
+        {
+            public int Id { get; [UsedImplicitly] set; }
+
+            public int First { get; set; }
+
+            public int Second { get; set; }
+
+            public int Sum { get; set; }
+
+            protected bool Equals(Totals other)
+            {
+                return First == other.First && Second == other.Second && Sum == other.Sum;
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (ReferenceEquals(null, obj)) return false;
+                if (ReferenceEquals(this, obj)) return true;
+                if (obj.GetType() != this.GetType()) return false;
+                return Equals((Totals) obj);
+            }
+        }
+
         [UsedImplicitly]
         public static IEnumerable<object[]> BulkInsertUsageTestsData;
+        [UsedImplicitly]
+        public static IEnumerable<object[]> ManualConfiguredBulkInsertUsageTestsData;
 
         static SqlConnectionExtensionsTests()
         {
-            BulkInsertUsageTestsData = new[]
-                                       {
-                                           new object[]
-                                           {
-                                               new[]
-                                               {
-                                                   new TestEntity {Name = "First", Value = 1},
-                                                   new TestEntity {Name = "Second", Value = 2},
-                                                   new TestEntity {Name = "Third", Value = 3}
-                                               }
-                                           },
-                                           new object[] {new TestEntity[0]}
-                                       };
+            BulkInsertUsageTestsData =
+                new[]
+                {
+                    new object[]
+                    {
+                        new[]
+                        {
+                            new TestEntity {Name = "First", Value = 1},
+                            new TestEntity {Name = "Second", Value = 2},
+                            new TestEntity {Name = "Third", Value = 3}
+                        }
+                    },
+                    new object[] {new TestEntity[0]}
+                };
+            ManualConfiguredBulkInsertUsageTestsData =
+                new[]
+                {
+                    new object[]
+                    {
+                        new[]
+                        {
+                            new Totals {First = 1, Second = 2, Sum = 3},
+                            new Totals {First = -1, Second = 1, Sum = 0},
+                            new Totals {First = 100, Second = 12, Sum = 112}
+                        }
+                    },
+                    new object[] {new Totals[0]}
+                };
         }
 
         [Theory]
@@ -113,20 +155,26 @@
         }
 
         [Theory]
-        [MemberData(nameof(BulkInsertUsageTestsData))]
-        public void ShouldPerformBulkInsertWithManuallyConfiguredMapping(TestEntity[] expected)
+        [MemberData(nameof(ManualConfiguredBulkInsertUsageTestsData))]
+        public void ShouldPerformBulkInsertWithManuallyConfiguredMapping(Totals[] expected)
         {
             // When
-            TestEntity[] actual;
+            Totals[] actual;
             using (var connection = SqlConnectionsFactoryMethod())
             {
-                connection.Execute(@"create table #TestEntities (Id int identity(1, 1) not null, Name nvarchar(max) not null)");
-                connection.BulkInsert("#TestEntities", expected, x => x.WithMapping(entity => entity.Name));
-                actual = connection.Query<TestEntity>("select * from #TestEntities").ToArray();
+                connection.Execute(@"create table #TestEntities (Id int identity(1, 1) not null, First int not null, Second int not null, Sum int not null)");
+                connection.BulkInsert(
+                    "#TestEntities",
+                    expected,
+                    x => x.WithProperty(entity => entity.First)
+                        .WithProperty(entity => entity.Second)
+                        .WithFunction(entity => entity.First + entity.Second, "Sum")
+                );
+                actual = connection.Query<Totals>("select * from #TestEntities").ToArray();
             }
 
             // Then
-            Assert.Equal(expected.Select(x => x.Name), actual.Select(x => x.Name));
+            Assert.True(expected.IsSame(actual));
         }
 
         [Fact]
