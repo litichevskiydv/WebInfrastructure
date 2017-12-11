@@ -27,9 +27,8 @@
         [ExcludeFromCodeCoverage]
         public override int RecordsAffected => 0;
 
-        [ExcludeFromCodeCoverage]
         public override int FieldCount => _propertyInfoProvider.FieldCount;
-
+        [ExcludeFromCodeCoverage]
         public override bool HasRows { get; }
 
         [ExcludeFromCodeCoverage]
@@ -44,7 +43,6 @@
             throw new NotImplementedException();
         }
 
-        [ExcludeFromCodeCoverage]
         public override string GetName(int ordinal)
         {
             return _propertyInfoProvider.GetName(ordinal);
@@ -62,7 +60,7 @@
             throw new NotImplementedException();
         }
 
-
+        [ExcludeFromCodeCoverage]
         public override IEnumerator GetEnumerator()
         {
             return _collectionEnumerator;
