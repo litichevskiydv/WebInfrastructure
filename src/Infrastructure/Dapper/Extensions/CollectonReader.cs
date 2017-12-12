@@ -8,17 +8,17 @@
 
     public class CollectonReader : DbDataReader
     {
+        private readonly IMappingInfoProvider _mappingInfoProvider;
         private readonly IEnumerator<object> _collectionEnumerator;
         private bool _disposed;
 
-        private readonly IPropertyInfoProvider _propertyInfoProvider;
-
-        public CollectonReader(IReadOnlyCollection<object> collection, IPropertyInfoProvider propertyInfoProvider)
+        public CollectonReader(IReadOnlyCollection<object> collection, IMappingInfoProvider mappingInfoProvider)
         {
-            _propertyInfoProvider = propertyInfoProvider;
-
+            _mappingInfoProvider = mappingInfoProvider;
             _collectionEnumerator = collection.GetEnumerator();
+
             HasRows = collection.Count > 0;
+            FieldCount = _mappingInfoProvider.MappingsCollection.Count;
         }
 
         [ExcludeFromCodeCoverage]
@@ -27,7 +27,7 @@
         [ExcludeFromCodeCoverage]
         public override int RecordsAffected => 0;
 
-        public override int FieldCount => _propertyInfoProvider.FieldCount;
+        public override int FieldCount { get; }
         [ExcludeFromCodeCoverage]
         public override bool HasRows { get; }
 
@@ -43,9 +43,10 @@
             throw new NotImplementedException();
         }
 
+        [ExcludeFromCodeCoverage]
         public override string GetName(int ordinal)
         {
-            return _propertyInfoProvider.GetName(ordinal);
+            throw new NotImplementedException();
         }
 
         [ExcludeFromCodeCoverage]
@@ -72,7 +73,6 @@
             return _collectionEnumerator.MoveNext();
         }
 
-        [ExcludeFromCodeCoverage]
         public override bool Read()
         {
             return _collectionEnumerator.MoveNext();
@@ -89,7 +89,7 @@
 
         public override object GetValue(int ordinal)
         {
-            return _propertyInfoProvider.GetValue(ordinal, _collectionEnumerator.Current);
+            return _mappingInfoProvider.GetValue(ordinal, _collectionEnumerator.Current);
         }
 
         [ExcludeFromCodeCoverage]

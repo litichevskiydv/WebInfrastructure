@@ -20,16 +20,40 @@
         {
             if (source.Any() == false)
                 return;
+
             if (typeof(TSource) == typeof(ExpandoObject))
                 BulkInsert(
-                    connection,
-                    tableName, source, new ExpandoObjectPropertyInfoProvider(source.First() as Dictionary<string, object>),
-                    transaction, batchSize, timeout);
+                    connection, tableName, source,
+                    x => new ExpandoObjectMappingInfoProvider(source.First() as Dictionary<string, object>, x),
+                    transaction, batchSize, timeout
+                );
             else
-                BulkInsert(
-                    connection,
-                    tableName, source, new StrictTypePropertyInfoProvider(source.First().GetType()),
-                    transaction, batchSize, timeout);
+                BulkInsert(connection, tableName, source,
+                    x => new StrictTypeMappingInfoProvider(source.First().GetType(), x),
+                    transaction, batchSize, timeout
+                );
+        }
+
+        public static void BulkInsert<TSource>(
+            this SqlConnection connection,
+            string tableName,
+            IReadOnlyCollection<TSource> source,
+            Func<IColumnsMappingConfigurator<TSource>, IColumnsMappingConfigurator<TSource>> columnsMappingSetup,
+            SqlTransaction transaction = null,
+            int? batchSize = null,
+            int? timeout = null)
+            where TSource : class
+        {
+            BulkInsert(
+                connection, tableName, source,
+                x =>
+                {
+                    var provider = new ManualConfiguredStrictTypeMappingInfoProvider<TSource>(x);
+                    columnsMappingSetup(provider);
+                    return provider;
+                },
+                transaction, batchSize, timeout
+            );
         }
 
         private static SqlBulkCopy CreateSqlBulkCopy(
@@ -54,35 +78,14 @@
             this SqlConnection connection,
             string tableName,
             IReadOnlyCollection<object> source,
-            IPropertyInfoProvider provider,
+            Func<SqlBulkCopyColumnMappingCollection, IMappingInfoProvider> providerBuilder,
             SqlTransaction transaction = null,
             int? batchSize = null,
             int? timeout = null)
         {
             using (var bulkCopy = CreateSqlBulkCopy(connection, tableName, transaction, batchSize, timeout))
-            using (var reader = new CollectonReader(source, provider))
             {
-                for (var i = 0; i < reader.FieldCount; i++)
-                    bulkCopy.ColumnMappings.Add(new SqlBulkCopyColumnMapping(i, reader.GetName(i)));
-                bulkCopy.WriteToServer(reader);
-            }
-        }
-
-        public static void BulkInsert<TSource>(
-            this SqlConnection connection,
-            string tableName,
-            IReadOnlyCollection<TSource> source,
-            Func<IColumnsMappingConfigurator<TSource>, IColumnsMappingConfigurator<TSource>> columnsMappingSetup,
-            SqlTransaction transaction = null,
-            int? batchSize = null,
-            int? timeout = null)
-            where TSource : class
-        {
-            using (var bulkCopy = CreateSqlBulkCopy(connection, tableName, transaction, batchSize, timeout))
-            {
-                var provider = new ManualConfiguredStrictTypePropertyInfoProvider<TSource>(bulkCopy.ColumnMappings);
-                columnsMappingSetup(provider);
-
+                var provider = providerBuilder(bulkCopy.ColumnMappings);
                 using (var reader = new CollectonReader(source, provider))
                     bulkCopy.WriteToServer(reader);
             }

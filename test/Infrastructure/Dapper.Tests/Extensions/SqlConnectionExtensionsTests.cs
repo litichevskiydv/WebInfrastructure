@@ -106,7 +106,7 @@
             using (var connection = SqlConnectionsFactoryMethod())
             {
                 connection.Execute(@"create table #TestEntities (Id int identity(1, 1) not null, Name nvarchar(max) not null, Value int not null)");
-                connection.BulkInsert("#TestEntities", expected, new StrictTypePropertyInfoProvider(typeof(TestEntity)));
+                connection.BulkInsert("#TestEntities", expected, x => new StrictTypeMappingInfoProvider(typeof(TestEntity), x));
                 actual = connection.Query<TestEntity>("select * from #TestEntities").ToArray();
             }
 
@@ -126,7 +126,7 @@
 
                 using (var transaction = connection.BeginTransaction())
                 {
-                    connection.BulkInsert("#TestEntities", expected, new StrictTypePropertyInfoProvider(typeof(TestEntity)), transaction);
+                    connection.BulkInsert("#TestEntities", expected, x => new StrictTypeMappingInfoProvider(typeof(TestEntity), x), transaction);
                     transaction.Commit();
                 }
 
@@ -178,40 +178,31 @@
         }
 
         [Fact]
-        public void StrictTypePropertyInfoProviderTest()
-        {
-            var expected = new TestEntity { Name = "First", Value = 1, Id = 1 };
-
-            IPropertyInfoProvider provider = new StrictTypePropertyInfoProvider(typeof(TestEntity));
-
-            Assert.Equal(3, provider.FieldCount);
-            Assert.Equal("First", provider.GetValue(1, expected));
-        }
-
-        [Fact]
         public void SimpleTypePropertyInfoProviderFailTest()
         {
-            Assert.Throws<InvalidOperationException>(() => new StrictTypePropertyInfoProvider(typeof(object)));
-        }
-
-        [Fact]
-        public void ExpandoObjectPropertyInfoProviderTest()
-        {
-            dynamic expected = new ExpandoObject();
-            expected.Id = 1;
-            expected.Name = "First";
-            expected.Value = 5;
-
-            IPropertyInfoProvider provider = new ExpandoObjectPropertyInfoProvider(expected);
-
-            Assert.Equal(3, provider.FieldCount);
-            Assert.Equal("First", provider.GetValue(1, expected));
+            Assert.Throws<InvalidOperationException>(
+                () =>
+                {
+                    using (var connection = SqlConnectionsFactoryMethod())
+                        connection.BulkInsert(
+                            "#TestEntities", new object[] {2},
+                            x => new StrictTypeMappingInfoProvider(typeof(object), x)
+                        );
+                });
         }
 
         [Fact]
         public void NullExpandoObjectPropertyInfoProviderFailTest()
         {
-            Assert.Throws<InvalidOperationException>(() => new ExpandoObjectPropertyInfoProvider(new ExpandoObject()));
+            Assert.Throws<InvalidOperationException>(
+                () =>
+                {
+                    using (var connection = SqlConnectionsFactoryMethod())
+                        connection.BulkInsert(
+                            "#TestEntities", new ExpandoObject[0],
+                            x => new ExpandoObjectMappingInfoProvider(new ExpandoObject(), x)
+                        );
+                });
         }
 
         [Fact]
@@ -234,7 +225,7 @@
             using (var connection = SqlConnectionsFactoryMethod())
             {
                 connection.Execute(@"create table #TestEntities (Id int identity(1, 1) not null, Name nvarchar(max) not null, Value int not null)");
-                connection.BulkInsert("#TestEntities", expected, new ExpandoObjectPropertyInfoProvider(item1));
+                connection.BulkInsert("#TestEntities", expected, x => new ExpandoObjectMappingInfoProvider(item1, x));
                 actual = connection.Query("select * from #TestEntities").ToArray();
             }
             // Then
