@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Threading;
     using System.Threading.Tasks;
     using Domain.CommandContexts;
@@ -91,7 +92,7 @@
         /// </summary>
         /// <param name="request">Request for values modification</param>
         [HttpPut]
-        public void Put([FromBody] ValuesModificationRequest request)
+        public void Put([FromBody] [Required] ValuesModificationRequest request)
         {
             _logger.LogInformation("Set values request");
             foreach (var configurationValue in request.Values)

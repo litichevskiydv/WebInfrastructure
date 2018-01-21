@@ -50,7 +50,7 @@
 
             // When
             ApiClient
-                .SetValue(new ConfigurationValue {Id = id, Value = expectedValue})
+                .SetValue(new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = expectedValue}}})
                 .GetValue(id);
 
             // Then
@@ -67,7 +67,7 @@
 
             // When
             await AsyncApiClient
-                .SetValueAsync(new[] {new ConfigurationValue {Id = id, Value = expectedValue}})
+                .SetValueAsync(new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = expectedValue}}})
                 .GetValueAsync(id);
 
             // Then
@@ -128,7 +128,7 @@
 
             // When
             ApiClient
-                .SetValue(new ConfigurationValue {Id = id, Value = "test"})
+                .SetValue(new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = "test"}}})
                 .DeleteValue(id);
 
             // When, Then
@@ -144,7 +144,7 @@
 
             // When
             await AsyncApiClient
-                .SetValueAsync(new[] {new ConfigurationValue {Id = id, Value = "test"}})
+                .SetValueAsync(new ValuesModificationRequest { Values = new[] { new ConfigurationValue { Id = id, Value = "test" } } })
                 .DeleteValueAsync(id);
 
             // When, Then

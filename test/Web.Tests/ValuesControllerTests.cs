@@ -66,7 +66,7 @@
             const string expectedValue = "test";
 
             // When
-            ServiceClient.Set(new ConfigurationValue {Id = id, Value = expectedValue});
+            ServiceClient.Set(new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = expectedValue}}});
             var actualValue = ServiceClient.Get(id);
 
             // Then
@@ -78,6 +78,12 @@
 
         [Fact]
         public void ShouldNotSetValuesBecauseOfEmptyCollection()
+        {
+            Assert.Throws<BadRequestException>(() => ServiceClient.Set(new ValuesModificationRequest()));
+        }
+
+        [Fact]
+        public void ShouldNotSetValuesBecauseOfEmptyRequest()
         {
             Assert.Throws<BadRequestException>(() => ServiceClient.Set(null));
         }
@@ -99,7 +105,7 @@
             );
 
             // When
-            client.Set(new ConfigurationValue {Id = id, Value = expectedValue});
+            client.Set(new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = expectedValue}}});
             var actualValue = client.Get(id);
 
             // Then
@@ -117,7 +123,9 @@
             const string expectedValue = "test";
 
             // When
-            await ServiceClient.SetAsync(new ConfigurationValue {Id = id, Value = expectedValue});
+            await ServiceClient.SetAsync(
+                new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = expectedValue}}}
+            );
             var actualValue = await ServiceClient.GetAsync(id);
 
             // Then
@@ -162,7 +170,7 @@
             const int id = 1;
 
             // When
-            ServiceClient.Set(new ConfigurationValue {Id = id, Value = "test"});
+            ServiceClient.Set(new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = "test"}}});
             ServiceClient.Delete(id);
 
             // Then
@@ -179,7 +187,7 @@
             const int id = 1;
 
             // When
-            await ServiceClient.SetAsync(new ConfigurationValue {Id = id, Value = "test"});
+            await ServiceClient.SetAsync(new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = "trst"}}});
             await ServiceClient.DeleteAsync(id);
 
             // Then
@@ -222,7 +230,7 @@
             const int id = 2;
 
             // When, Then
-            ServiceClient.Set(new ConfigurationValue {Id = id, Value = "   "});
+            ServiceClient.Set(new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = "   "}}});
             await Assert.ThrowsAsync<NotFoundException>(async () => await ServiceClient.GetAsync(id));
         }
     }

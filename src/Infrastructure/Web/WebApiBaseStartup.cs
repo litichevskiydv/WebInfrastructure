@@ -58,6 +58,7 @@
                             .UseCentralRoutePrefix($"{Configuration.GetValue("api_route_preffix", "api")}/[controller]")
                             .UseUnhandledExceptionFilter()
                             .UseModelValidationFilter()
+                            .UseParametersValidationFilter()
                 );
             ConfigureFormatters(mvcBuilder);
 

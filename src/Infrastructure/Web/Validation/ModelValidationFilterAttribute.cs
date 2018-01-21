@@ -9,19 +9,15 @@
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            if(context.ModelState.IsValid)
+            if (context.ModelState.IsValid)
+            {
+                base.OnActionExecuting(context);
                 return;
+            }
 
             var modelErrors = context.ModelState.Values
                 .SelectMany(x => x.Errors)
-                .Select(x =>
-                            new ApiResponseError
-                            {
-                                Detail = string.IsNullOrWhiteSpace(x.Exception?.Message) == false
-                                    ? x.Exception.Message
-                                    : x.ErrorMessage
-                            }
-                )
+                .Select(x => new ApiResponseError {Title = x.ErrorMessage, Detail = x.Exception?.Message})
                 .ToArray();
             context.Result = new BadRequestObjectResult(ApiResponse.Error(modelErrors));
         }

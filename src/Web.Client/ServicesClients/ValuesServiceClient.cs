@@ -34,14 +34,14 @@
             return GetAsync<string>($"api/values/{id}");
         }
 
-        public void Set(params ConfigurationValue[] configurationValues)
+        public void Set(ValuesModificationRequest request)
         {
-            Put("api/values", new ValuesModificationRequest {Values = configurationValues});
+            Put("api/values", request);
         }
 
-        public Task SetAsync(params ConfigurationValue[] configurationValues)
+        public Task SetAsync(ValuesModificationRequest request)
         {
-            return PutAsync("api/values", new ValuesModificationRequest {Values = configurationValues});
+            return PutAsync("api/values", request);
         }
 
         public ApiResponse<int, ApiResponseError> Post(int id, string value)

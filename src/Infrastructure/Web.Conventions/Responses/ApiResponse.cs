@@ -1,5 +1,7 @@
 ﻿namespace Skeleton.Web.Conventions.Responses
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Runtime.Serialization;
     using System.Text;
 
@@ -74,9 +76,9 @@
         /// <typeparam name="TError">Type of the response error </typeparam>
         /// <param name="data">Respones data</param>
         /// <param name="errors">Errors that happened during request processing</param>
-        public static ApiResponse<TData, TError> Create<TData, TError>(TData data, TError[] errors)
+        public static ApiResponse<TData, TError> Create<TData, TError>(TData data, IReadOnlyCollection<TError> errors)
         {
-            return new ApiResponse<TData, TError>(data, errors);
+            return new ApiResponse<TData, TError>(data, errors.ToArray());
         }
 
         /// <summary>
@@ -94,9 +96,9 @@
         /// </summary>
         /// <typeparam name="TError">Type of respones error</typeparam>
         /// <param name="errors">Errors that happened during request processing</param>
-        public static ApiResponse<object, TError> Error<TError>(TError[] errors)
+        public static ApiResponse<object, TError> Error<TError>(IReadOnlyCollection<TError> errors)
         {
-            return new ApiResponse<object, TError>(null, errors);
+            return new ApiResponse<object, TError>(null, errors.ToArray());
         }
     }
 }

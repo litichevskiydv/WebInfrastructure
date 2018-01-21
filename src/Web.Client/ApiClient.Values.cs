@@ -32,15 +32,15 @@
             return this;
         }
 
-        public ApiClient SetValue(params ConfigurationValue[] configurationValues)
+        public ApiClient SetValue(ValuesModificationRequest request)
         {
-            _valuesServiceClient.Set(configurationValues);
+            _valuesServiceClient.Set(request);
             return this;
         }
 
-        public async Task<ApiClient> SetValueAsync(params ConfigurationValue[] configurationValues)
+        public async Task<ApiClient> SetValueAsync(ValuesModificationRequest request)
         {
-            await _valuesServiceClient.SetAsync(configurationValues);
+            await _valuesServiceClient.SetAsync(request);
             return this;
         }
 

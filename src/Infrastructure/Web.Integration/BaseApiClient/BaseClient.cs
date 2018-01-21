@@ -63,7 +63,7 @@
                 }
 
                 var request = new HttpRequestMessage(method, url);
-                if (method != HttpMethod.Get && data != null)
+                if (method != HttpMethod.Get)
                     request.Content = data as HttpContent ?? _configuration.Serializer.Serialize(data);
                 return await httpClient.SendAsync(request).ConfigureAwait(false);
             }

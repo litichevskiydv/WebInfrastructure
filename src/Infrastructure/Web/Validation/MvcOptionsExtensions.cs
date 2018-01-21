@@ -6,7 +6,13 @@
     {
         public static MvcOptions UseModelValidationFilter(this MvcOptions mvcOptions)
         {
-            mvcOptions.Filters.Add(typeof(ModelValidationFilterAttribute));
+            mvcOptions.Filters.Add<ModelValidationFilterAttribute>();
+            return mvcOptions;
+        }
+
+        public static MvcOptions UseParametersValidationFilter(this MvcOptions mvcOptions)
+        {
+            mvcOptions.Filters.Add(new ParametersValidationFilterAttribute());
             return mvcOptions;
         }
     }
