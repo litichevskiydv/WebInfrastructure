@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Client.ServicesClients;
+    using Models.Input;
     using Newtonsoft.Json;
     using Skeleton.Web.Integration.BaseApiClient.Configuration;
     using Skeleton.Web.Integration.BaseApiClient.Exceptions;
@@ -65,7 +66,7 @@
             const string expectedValue = "test";
 
             // When
-            ServiceClient.Set(id, expectedValue);
+            ServiceClient.Set(new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = expectedValue}}});
             var actualValue = ServiceClient.Get(id);
 
             // Then
@@ -73,6 +74,18 @@
             Fixture.MockLogger
                 .VerifyNoErrorsWasLogged()
                 .VerifyNoWarningsWasLogged();
+        }
+
+        [Fact]
+        public void ShouldNotSetValuesBecauseOfEmptyCollection()
+        {
+            Assert.Throws<BadRequestException>(() => ServiceClient.Set(new ValuesModificationRequest()));
+        }
+
+        [Fact]
+        public void ShouldNotSetValuesBecauseOfEmptyRequest()
+        {
+            Assert.Throws<BadRequestException>(() => ServiceClient.Set(null));
         }
 
         [Fact]
@@ -92,7 +105,7 @@
             );
 
             // When
-            client.Set(id, expectedValue);
+            client.Set(new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = expectedValue}}});
             var actualValue = client.Get(id);
 
             // Then
@@ -110,7 +123,9 @@
             const string expectedValue = "test";
 
             // When
-            await ServiceClient.SetAsync(id, expectedValue);
+            await ServiceClient.SetAsync(
+                new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = expectedValue}}}
+            );
             var actualValue = await ServiceClient.GetAsync(id);
 
             // Then
@@ -155,7 +170,7 @@
             const int id = 1;
 
             // When
-            ServiceClient.Set(id, "test");
+            ServiceClient.Set(new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = "test"}}});
             ServiceClient.Delete(id);
 
             // Then
@@ -172,7 +187,7 @@
             const int id = 1;
 
             // When
-            await ServiceClient.SetAsync(id, "test");
+            await ServiceClient.SetAsync(new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = "trst"}}});
             await ServiceClient.DeleteAsync(id);
 
             // Then
@@ -215,7 +230,7 @@
             const int id = 2;
 
             // When, Then
-            ServiceClient.Set(id, "  ");
+            ServiceClient.Set(new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = "   "}}});
             await Assert.ThrowsAsync<NotFoundException>(async () => await ServiceClient.GetAsync(id));
         }
     }

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
@@ -62,7 +63,7 @@
                 }
 
                 var request = new HttpRequestMessage(method, url);
-                if (method != HttpMethod.Get && data != null)
+                if (method != HttpMethod.Get)
                     request.Content = data as HttpContent ?? _configuration.Serializer.Serialize(data);
                 return await httpClient.SendAsync(request).ConfigureAwait(false);
             }
@@ -73,17 +74,19 @@
             return GetResponseMessageAsync(url, method, data).GetAwaiter().GetResult();
         }
 
-        private async Task<T> ReadAsAsyncWithAwaitConfiguration<T>(HttpContent httpContent)
+        private async Task<TResponse> ReadAsAsyncWithAwaitConfiguration<TResponse>(HttpContent httpContent)
         {
             using (var stream = await httpContent.ReadAsStreamAsync().ConfigureAwait(false))
-                return _configuration.Serializer.Deserialize<T>(stream);
+                return _configuration.Serializer.Deserialize<TResponse>(stream);
         }
 
-        private async Task<ApiExceptionResponse> ReadApiExceptionResponse(HttpContent httpContent)
+        private string ReadSpecialApiResponseMessage<TResponse>(Stream stream)
         {
             try
             {
-                return await ReadAsAsyncWithAwaitConfiguration<ApiExceptionResponse>(httpContent);
+                stream.Position = 0;
+                var message = _configuration.Serializer.Deserialize<TResponse>(stream)?.ToString();
+                return string.IsNullOrWhiteSpace(message) ? null : message;
             }
             catch (Exception)
             {
@@ -100,8 +103,11 @@
                 string responseText = null;
                 try
                 {
-                    responseText = (await ReadApiExceptionResponse(responseMessage.Content))?.ToString()
-                                   ?? await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    using (var stream = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                        responseText =
+                            ReadSpecialApiResponseMessage<ApiExceptionResponse>(stream)
+                            ?? ReadSpecialApiResponseMessage<ApiResponse<object, ApiResponseError>>(stream)
+                            ?? await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
                 catch (Exception exception)
                 {

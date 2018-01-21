@@ -32,7 +32,7 @@
 
         public T Deserialize<T>(Stream stream)
         {
-            using (var streamReader = new StreamReader(stream))
+            using (var streamReader = new StreamReader(stream, Encoding.UTF8, true, 4096, true))
             using (var jsonTextReader = new JsonTextReader(streamReader))
                 return JsonSerializer.CreateDefault(_settings).Deserialize<T>(jsonTextReader);
         }

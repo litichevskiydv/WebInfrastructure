@@ -2,12 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Threading;
     using System.Threading.Tasks;
     using Domain.CommandContexts;
     using Domain.Criteria;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+    using Models.Input;
     using Skeleton.CQRS.Abstractions.Commands;
     using Skeleton.CQRS.Abstractions.Queries;
     using Skeleton.Web.Conventions.Responses;
@@ -86,15 +88,15 @@
         }
 
         /// <summary>
-        /// Dummy put configuration value to config
+        /// Dummy put configuration values to config
         /// </summary>
-        /// <param name="id">Configuration value index</param>
-        /// <param name="value">New value</param>
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        /// <param name="request">Request for values modification</param>
+        [HttpPut]
+        public void Put([FromBody] [Required] ValuesModificationRequest request)
         {
-            _logger.LogInformation("Set value request");
-            _commandsDispatcher.Execute(new SetValueCommandContext(id, value));
+            _logger.LogInformation("Set values request");
+            foreach (var configurationValue in request.Values)
+                _commandsDispatcher.Execute(new SetValueCommandContext(configurationValue.Id, configurationValue.Value));
         }
 
         /// <summary>
