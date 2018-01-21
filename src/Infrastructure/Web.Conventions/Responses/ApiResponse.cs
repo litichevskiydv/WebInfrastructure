@@ -1,6 +1,7 @@
 ﻿namespace Skeleton.Web.Conventions.Responses
 {
     using System.Runtime.Serialization;
+    using System.Text;
 
     /// <summary>
     /// Contract for WebApi response transmition
@@ -38,6 +39,26 @@
         {
             Data = data;
             Errors = errors;
+        }
+
+        public override string ToString()
+        {
+            var builder = new StringBuilder();
+
+            if (Data != null)
+            {
+                builder.AppendLine("Data:");
+                builder.AppendLine($"\t{Data.ToString()}");
+            }
+
+            if (Errors != null)
+            {
+                builder.AppendLine("Errors:");
+                foreach (var error in Errors)
+                    builder.AppendLine($"\t{error.ToString()}");
+            }
+
+            return builder.ToString();
         }
     }
 

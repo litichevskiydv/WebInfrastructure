@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Client;
+    using Models.Input;
     using Skeleton.Web.Conventions.Responses;
     using Skeleton.Web.Integration.BaseApiClient.Exceptions;
     using Skeleton.Web.Testing;
@@ -49,7 +50,7 @@
 
             // When
             ApiClient
-                .SetValue(id, expectedValue)
+                .SetValue(new ConfigurationValue {Id = id, Value = expectedValue})
                 .GetValue(id);
 
             // Then
@@ -66,7 +67,7 @@
 
             // When
             await AsyncApiClient
-                .SetValueAsync(id, expectedValue)
+                .SetValueAsync(new[] {new ConfigurationValue {Id = id, Value = expectedValue}})
                 .GetValueAsync(id);
 
             // Then
@@ -127,7 +128,7 @@
 
             // When
             ApiClient
-                .SetValue(id, "test")
+                .SetValue(new ConfigurationValue {Id = id, Value = "test"})
                 .DeleteValue(id);
 
             // When, Then
@@ -143,7 +144,7 @@
 
             // When
             await AsyncApiClient
-                .SetValueAsync(id, "test")
+                .SetValueAsync(new[] {new ConfigurationValue {Id = id, Value = "test"}})
                 .DeleteValueAsync(id);
 
             // When, Then

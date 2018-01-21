@@ -1,6 +1,7 @@
 ﻿namespace Web.Client
 {
     using System.Threading.Tasks;
+    using Models.Input;
     using ServicesClients;
 
     public partial class ApiClient
@@ -31,15 +32,15 @@
             return this;
         }
 
-        public ApiClient SetValue(int id, string value)
+        public ApiClient SetValue(params ConfigurationValue[] configurationValues)
         {
-            _valuesServiceClient.Set(id, value);
+            _valuesServiceClient.Set(configurationValues);
             return this;
         }
 
-        public async Task<ApiClient> SetValueAsync(int id, string value)
+        public async Task<ApiClient> SetValueAsync(params ConfigurationValue[] configurationValues)
         {
-            await _valuesServiceClient.SetAsync(id, value);
+            await _valuesServiceClient.SetAsync(configurationValues);
             return this;
         }
 

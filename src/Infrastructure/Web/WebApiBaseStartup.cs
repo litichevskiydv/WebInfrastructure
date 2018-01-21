@@ -14,6 +14,7 @@
     using Serialization.Protobuf.Configuration;
     using Swashbuckle.AspNetCore.SwaggerGen;
     using Swashbuckle.AspNetCore.SwaggerUI;
+    using Validation;
 
     public abstract class WebApiBaseStartup
     {
@@ -55,7 +56,9 @@
             var mvcBuilder = services
                 .AddMvc(x => x
                             .UseCentralRoutePrefix($"{Configuration.GetValue("api_route_preffix", "api")}/[controller]")
-                            .UseUnhandledExceptionFilter());
+                            .UseUnhandledExceptionFilter()
+                            .UseModelValidationFilter()
+                );
             ConfigureFormatters(mvcBuilder);
 
             services

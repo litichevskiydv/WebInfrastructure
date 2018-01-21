@@ -23,6 +23,7 @@
     <ProjectReference Include="..\Infrastructure\Web.Conventions\Web.Conventions.csproj" />
     <ProjectReference Include="..\Infrastructure\Web\Web.csproj" />
     <ProjectReference Include="..\Web.Domain\Web.Domain.csproj" />
+    <ProjectReference Include="..\Web.Models\Web.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>

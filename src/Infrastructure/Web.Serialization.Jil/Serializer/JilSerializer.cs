@@ -59,7 +59,7 @@
 
         public T Deserialize<T>(Stream stream)
         {
-            using (var reader = new StreamReader(stream))
+            using (var reader = new StreamReader(stream, Encoding.UTF8, true, 4096, true))
                 return JSON.Deserialize<T>(reader, _options);
         }
 

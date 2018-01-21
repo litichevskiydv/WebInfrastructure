@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Models.Input;
     using Skeleton.Web.Conventions.Responses;
     using Skeleton.Web.Integration.BaseApiClient;
     using Skeleton.Web.Integration.BaseApiClient.Configuration;
@@ -33,14 +34,14 @@
             return GetAsync<string>($"api/values/{id}");
         }
 
-        public void Set(int id, string value)
+        public void Set(params ConfigurationValue[] configurationValues)
         {
-            Put($"api/values/{id}", value);
+            Put("api/values", new ValuesModificationRequest {Values = configurationValues});
         }
 
-        public Task SetAsync(int id, string value)
+        public Task SetAsync(params ConfigurationValue[] configurationValues)
         {
-            return PutAsync($"api/values/{id}", value);
+            return PutAsync("api/values", new ValuesModificationRequest {Values = configurationValues});
         }
 
         public ApiResponse<int, ApiResponseError> Post(int id, string value)
