@@ -2,6 +2,7 @@
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.Reflection;
     using global::Serilog;
     using Microsoft.AspNetCore.Hosting;
 
@@ -10,23 +11,22 @@
         [ExcludeFromCodeCoverage]
         public static IWebHostBuilder UseSerilog(
             this IWebHostBuilder hostBuilder,
-            Action<LoggerConfiguration> configureLogging
+            string versionString
         )
         {
             if(hostBuilder == null)
                 throw new ArgumentNullException(nameof(hostBuilder));
-            if (configureLogging == null)
-                throw new ArgumentNullException(nameof(configureLogging));
+            if (string.IsNullOrWhiteSpace(versionString))
+                throw new ArgumentNullException(nameof(versionString));
 
-            var loggerConfiguration = new LoggerConfiguration();
-            hostBuilder.ConfigureServices((context, collection) =>
-                                          {
-                                              configureLogging(loggerConfiguration);
-                                              loggerConfiguration.ReadFrom.Configuration(context.Configuration);
-
-                                              Log.Logger = loggerConfiguration.CreateLogger();
-                                          });
-            return hostBuilder.UseSerilog();
+            return hostBuilder.UseSerilog(
+                (context, configuration) =>
+                    configuration
+                        .Enrich.FromLogContext()
+                        .Enrich.WithProperty("Version", versionString)
+                        .ReadFrom.Configuration(context.Configuration),
+                true
+            );
         }
     }
 }
