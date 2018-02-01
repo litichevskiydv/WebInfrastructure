@@ -9,22 +9,33 @@
     public static class WebHostBuilderExtensions
     {
         [ExcludeFromCodeCoverage]
-        public static IWebHostBuilder UseSerilog(
-            this IWebHostBuilder hostBuilder,
-            string versionString
-        )
+        public static IWebHostBuilder UseSerilog(this IWebHostBuilder hostBuilder)
         {
             if(hostBuilder == null)
                 throw new ArgumentNullException(nameof(hostBuilder));
-            if (string.IsNullOrWhiteSpace(versionString))
-                throw new ArgumentNullException(nameof(versionString));
+
+            return hostBuilder.UseSerilog(
+                x => x.Enrich.WithApplicationVersion(
+                    Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion
+                )
+            );
+        }
+
+        [ExcludeFromCodeCoverage]
+        public static IWebHostBuilder UseSerilog(
+            this IWebHostBuilder hostBuilder, 
+            Func<LoggerConfiguration, LoggerConfiguration> loggerConfigurator)
+        {
+            if (hostBuilder == null)
+                throw new ArgumentNullException(nameof(hostBuilder));
+            if (loggerConfigurator == null)
+                throw new ArgumentNullException(nameof(loggerConfigurator));
 
             return hostBuilder.UseSerilog(
                 (context, configuration) =>
-                    configuration
-                        .Enrich.FromLogContext()
-                        .Enrich.WithProperty("Version", versionString)
-                        .ReadFrom.Configuration(context.Configuration),
+                    loggerConfigurator(configuration)
+                        .ReadFrom.Configuration(context.Configuration)
+                        .Enrich.FromLogContext(),
                 true
             );
         }

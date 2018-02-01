@@ -1,7 +1,6 @@
 ﻿namespace Web
 {
     using System.IO;
-    using System.Reflection;
     using JetBrains.Annotations;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -28,7 +27,7 @@
                             .AddCommandLine(args);
                     }
                 )
-                .UseSerilog(typeof(Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion)
+                .UseSerilog()
                 .UseStartup<Startup>()
                 .Build();
 
