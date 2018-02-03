@@ -14,11 +14,6 @@
             if(hostBuilder == null)
                 throw new ArgumentNullException(nameof(hostBuilder));
 
-            return hostBuilder.UseSerilog(
-                x => x.Enrich.WithApplicationVersion(
-                    Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion
-                )
-            );
         }
 
         [ExcludeFromCodeCoverage]
