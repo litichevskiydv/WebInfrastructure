@@ -14,6 +14,7 @@
             if(hostBuilder == null)
                 throw new ArgumentNullException(nameof(hostBuilder));
 
+            return hostBuilder.UseSerilog(x => x.Enrich.WithApplicationInformationalVersion());
         }
 
         [ExcludeFromCodeCoverage]
