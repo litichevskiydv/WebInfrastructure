@@ -3,16 +3,13 @@
     using System;
     using System.Linq;
     using System.Net;
-    using System.Text;
     using System.Threading.Tasks;
     using Conventions.Responses;
+    using Logging.ContextsCapturing;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http.Extensions;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
     using Microsoft.Extensions.Logging;
-    using Newtonsoft.Json;
-    using Serialization.JsonNet.Configuration;
 
     public class UnhandledExceptionsFilterAttribute : ActionFilterAttribute
     {
@@ -32,7 +29,6 @@
         private readonly ILogger _logger;
 
         private readonly (Type, Action<ExceptionHandlingContext>)[] _handlers;
-        private readonly JsonSerializerSettings _jsonSerializerSettings;
 
         private void HandleOperationCanceledException(ExceptionHandlingContext context)
         {
@@ -46,29 +42,8 @@
         {
             const string message = "Unhandled exception has occurred";
 
-            var messageBuilder = new StringBuilder().AppendLine(message);
-            if (context.ExecutingContext.HttpContext?.Request != null)
-            {
-                var request = context.ExecutingContext.HttpContext.Request;
-                messageBuilder.AppendLine($"Method: {request.Method}");
-                messageBuilder.AppendLine($"Uri: {request.GetDisplayUrl()}");
-                if (request.Headers != null && request.Headers.Count > 0)
-                {
-                    messageBuilder.AppendLine("Headers:");
-                    foreach (var header in request.Headers)
-                        messageBuilder.AppendLine($"\t{header.Key}:{header.Value}");
-                }
-            }
-            if (context.ExecutingContext.ActionArguments != null && context.ExecutingContext.ActionArguments.Count > 0)
-            {
-                messageBuilder.AppendLine("Parameters:");
-                foreach (var argument in context.ExecutingContext.ActionArguments)
-                {
-                    messageBuilder.AppendLine($"\t{argument.Key}:");
-                    messageBuilder.AppendLine($"{JsonConvert.SerializeObject(argument.Value, _jsonSerializerSettings)}");
-                }
-            }
-            _logger.LogError(context.ExecutedContext.Exception, messageBuilder.ToString());
+            using (_logger.CaptureActionExecutingContext(context.ExecutingContext))
+                _logger.LogError(context.ExecutedContext.Exception, message);
 
             context.ExecutedContext.ExceptionHandled = true;
             context.ExecutedContext.Result = _hostingEnvironment.IsDevelopment() || _hostingEnvironment.IsStaging()
@@ -96,7 +71,6 @@
                     (typeof(OperationCanceledException), HandleOperationCanceledException),
                     (typeof(Exception), new Action<ExceptionHandlingContext>(HandleException))
                 };
-            _jsonSerializerSettings = new JsonSerializerSettings().UseDefaultSettings();
         }
 
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
