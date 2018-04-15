@@ -26,17 +26,17 @@
         {
             session.Execute(@"
 if object_id ('[dbo].[VersionInfo]') is null
-	begin
-		create table [dbo].[VersionInfo](
-			[Version] [bigint] NOT NULL,
-			[AppliedOn] [datetime] NOT NULL CONSTRAINT [DF_VersionInfo_AppliedOn] DEFAULT (getutcdate())
-		) on [PRIMARY]		
+    begin
+        create table [dbo].[VersionInfo](
+            [Version] [bigint] NOT NULL,
+            [AppliedOn] [datetime] NOT NULL CONSTRAINT [DF_VersionInfo_AppliedOn] DEFAULT (getutcdate())
+        ) on [PRIMARY]		
 
-		create unique clustered index [UC_dbo_VersionInfo_Version] ON [dbo].[VersionInfo]
-		(
-			[Version] asc
-		)with (pad_index = off, statistics_norecompute = off, sort_in_tempdb = off, ignore_dup_key = off, drop_existing = off, online = off, allow_row_locks = on, allow_page_locks = on)
-	end");
+        create unique clustered index [UC_dbo_VersionInfo_Version] ON [dbo].[VersionInfo]
+        (
+            [Version] asc
+        )with (pad_index = off, statistics_norecompute = off, sort_in_tempdb = off, ignore_dup_key = off, drop_existing = off, online = off, allow_row_locks = on, allow_page_locks = on)
+    end");
         }
 
         private static IEnumerable<long> GetAppliedVersions(ISession session)
@@ -61,7 +61,10 @@ if object_id ('[dbo].[VersionInfo]') is null
                 session.Commit();
             }
 
-            var newMigrations = _migrations.Where(x => appliedVersions.Contains(x.Version) == false).ToArray();
+            var newMigrations = _migrations
+                .Where(x => appliedVersions.Contains(x.Version) == false)
+                .OrderBy(k => k.Version)
+                .ToArray();
             foreach (var newMigration in newMigrations)
                 using (var session = _sessionsFactory.Create())
                 {
