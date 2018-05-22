@@ -23,7 +23,11 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="appsettings.Staging.Appveyor.json">
+    <None Update="appsettings.Staging.Appveyor.Windows.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DependentUpon>appsettings.Staging.json</DependentUpon>
+    </None>
+    <None Update="appsettings.Staging.Appveyor.Linux.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>appsettings.Staging.json</DependentUpon>
     </None>

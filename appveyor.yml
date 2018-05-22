@@ -23,7 +23,7 @@ for:
       - ps: >-
           cd build
 
-          .\build.ps1 -target CalculateCoverage
+          .\build.ps1 -target CalculateCoverage --settings_skipverification=true
         
   -
     matrix:

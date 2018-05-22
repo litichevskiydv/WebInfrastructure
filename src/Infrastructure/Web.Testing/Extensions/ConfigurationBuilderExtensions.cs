@@ -21,7 +21,9 @@
         {
             var ciName = KnownCiNames.FirstOrDefault(x => Environment.GetEnvironmentVariable(x.ToUpper())?.ToUpperInvariant() == "TRUE");
             return configurationBuilder
-                .AddJsonFile($"appsettings.{environment}.{ciName ?? ""}.json", true, false);
+                .AddJsonFile($"appsettings.{environment}.{ciName ?? ""}.json", true, false)
+                .AddJsonFile($"appsettings.{environment}.{ciName ?? ""}.Windows.json", true, false)
+                .AddJsonFile($"appsettings.{environment}.{ciName ?? ""}.Linux.json", true, false);
         }
     }
 }
