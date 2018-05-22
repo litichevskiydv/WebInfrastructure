@@ -7,21 +7,32 @@ environment:
   ASPNETCORE_ENVIRONMENT: Staging
   VersionSuffix: rc1
   ShortVersion: 1.0.0
-services: 
-  - mssql
 nuget:
   project_feed: true
   disable_publish_on_pr: true
-build_script:
-- ps: |
-    if ($isWindows) {
-      cd build
-      .\build.ps1 -target CalculateCoverage
-    }
-- sh: >-
-    cd build
-    
-    ./build.sh
 artifacts:
 - path: build\artifacts\*.nupkg
 deploy: off
+for:
+-
+  matrix:
+    only:
+      - image: Visual Studio 2017
+  services: 
+    - mssql2017
+  build_script:
+  - ps: >-
+    cd build
+
+    .\build.ps1 -target CalculateCoverage
+-
+  matrix:
+    only:
+      - image: Ubuntu
+  services: 
+    - mssql
+  build_script:
+  - sh: >-
+    cd build
+    
+    ./build.sh
