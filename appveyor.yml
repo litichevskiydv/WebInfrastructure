@@ -25,6 +25,7 @@ for:
     cd build
 
     .\build.ps1 -target CalculateCoverage
+
 -
   matrix:
     only:
