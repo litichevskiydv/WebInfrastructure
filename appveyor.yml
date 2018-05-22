@@ -7,7 +7,7 @@ environment:
   ASPNETCORE_ENVIRONMENT: Staging
   VersionSuffix: rc1
   ShortVersion: 1.0.0
-services: mssql2017
+services: mssql
 nuget:
   project_feed: true
   disable_publish_on_pr: true
