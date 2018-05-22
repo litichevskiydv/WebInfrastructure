@@ -9,7 +9,6 @@ environment:
   ShortVersion: 1.0.0
 services: 
   - mssql
-  - mssql2017
 nuget:
   project_feed: true
   disable_publish_on_pr: true
