@@ -18,8 +18,7 @@ for:
     matrix:
       only:
         - image: Visual Studio 2017
-    services: 
-      - mssql2017
+    services: mssql2016
     build_script:
       - ps: >-
           cd build
@@ -30,8 +29,7 @@ for:
     matrix:
       only:
         - image: Ubuntu
-    services: 
-      - mssql
+    services: mssql
     build_script:
       - sh: >-
           cd build
