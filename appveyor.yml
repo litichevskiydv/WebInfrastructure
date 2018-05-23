@@ -30,10 +30,10 @@ for:
       only:
         - image: Ubuntu
     services: mssql
-    init:
-      - sh: sqlcmd -S localhost -U SA -P Password12! -Q 'select @@VERSION'
     build_script:
       - sh: >-
+          sqlcmd -S localhost -U SA -P Password12! -Q 'select @@VERSION'
+          
           cd build
 
           ./build.sh
