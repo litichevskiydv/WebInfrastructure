@@ -34,7 +34,7 @@
 
         protected DbUsingTestBase()
         {
-            var isAppVeyor = Environment.GetEnvironmentVariable("Appveyor")?.ToUpperInvariant() == "TRUE";
+            var isAppVeyor = Environment.GetEnvironmentVariable("APPVEYOR")?.ToUpperInvariant() == "TRUE";
             _isAppVeyorWindows = isAppVeyor && Environment.GetEnvironmentVariable("CI_WINDOWS")?.ToUpperInvariant() == "TRUE";
             _isAppVeyorLinux = isAppVeyor && Environment.GetEnvironmentVariable("CI_LINUX")?.ToUpperInvariant() == "TRUE";
 
