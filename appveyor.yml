@@ -32,8 +32,6 @@ for:
     services: mssql
     build_script:
       - sh: >-
-          sqlcmd -S localhost -U SA -P Password12! -Q 'select @@VERSION'
-          
           cd build
 
           ./build.sh
