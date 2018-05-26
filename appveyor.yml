@@ -13,6 +13,12 @@ nuget:
 artifacts:
 - path: build\artifacts\*.nupkg
 deploy: off
+skip_commits:
+  files:
+  - LICENSE
+  - README.md
+  - .travis.yml
+  - WebInfrastructure.sln.DotSettings
 for:
   -
     matrix:
