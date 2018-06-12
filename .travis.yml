@@ -8,7 +8,7 @@ env:
 services:
   - docker
 mono: none
-dotnet: 2.0.0
+dotnet: 2.1.300
 script:
  - set -e
  - docker pull microsoft/mssql-server-linux:2017-latest

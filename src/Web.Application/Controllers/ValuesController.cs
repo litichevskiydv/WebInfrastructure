@@ -48,7 +48,7 @@
         /// </summary>
         /// <returns>Configuration values</returns>
         [HttpGet]
-        public async Task<IEnumerable<string>> Get(CancellationToken cancellationToken)
+        public async Task<ActionResult<IEnumerable<string>>> Get(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Get values request");
             await Task.Delay(500, cancellationToken);
