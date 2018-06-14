@@ -3,6 +3,8 @@
     using System;
     using System.IO;
     using System.Reflection;
+    using Autofac;
+    using Autofac.Extensions.DependencyInjection;
     using Configuration;
     using Extensions;
     using Microsoft.AspNetCore.Hosting;
@@ -21,6 +23,10 @@
         public IConfigurationRoot Configuration { get; }
         public int TimeoutInMilliseconds { get; }
 
+        protected virtual void OverrideRegisteredDependencies(ContainerBuilder containerBuilder)
+        {
+        }
+
         protected BaseApiTestsFixture(Type startupType)
         {
             MockLogger = MockLoggerExtensions.CreateMockLogger();
@@ -30,20 +36,23 @@
                                   ?? EnvironmentName.Development;
             var currentDirectory = Path.GetDirectoryName(startupType.GetTypeInfo().Assembly.Location);
 
-            Func<IConfigurationBuilder, string, string, IConfigurationBuilder> configurationSetup =
-                (builder, configsPath, environmentName) =>
-                    builder
-                        .AddDefaultConfigs(configsPath, environmentName)
-                        .AddCiDependentSettings(environmentName);
-            Configuration = configurationSetup(new ConfigurationBuilder(), currentDirectory, environment).Build();
+            IConfigurationBuilder ConfigurationSetup(IConfigurationBuilder builder, string configsPath, string environmentName) =>
+                builder
+                    .AddDefaultConfigs(configsPath, environmentName)
+                    .AddCiDependentSettings(environmentName);
+
+            Configuration = ConfigurationSetup(new ConfigurationBuilder(), currentDirectory, environment).Build();
             TimeoutInMilliseconds = Configuration.GetValue<int>("ApiTimeoutInMilliseconds");
 
             Server = new TestServer(
                 new WebHostBuilder()
                     .UseEnvironment(environment)
-                    .ConfigureAppConfiguration(builder => configurationSetup(builder, currentDirectory, environment))
+                    .ConfigureAppConfiguration(builder => ConfigurationSetup(builder, currentDirectory, environment))
+                    .ConfigureServices(services => services.AddAutofac())
                     .UseMockLogger(MockLogger)
-                    .UseStartup(startupType));
+                    .UseStartup(startupType)
+                    .ConfigureTestContainer<ContainerBuilder>(OverrideRegisteredDependencies)
+            );
         }
 
         protected virtual void Dispose(bool disposing)

@@ -15,7 +15,6 @@
     using Microsoft.Extensions.Logging;
     using Microsoft.IdentityModel.Tokens;
     using Skeleton.Dapper.ConnectionsFactory;
-    using Skeleton.Migrations.Migrator;
     using Skeleton.Web;
     using Skeleton.Web.Authentication.JwtBearer;
     using Skeleton.Web.Authentication.JwtBearer.Configuration;
@@ -88,11 +87,6 @@
         protected override void RegisterDependencies(ContainerBuilder containerBuilder)
         {
             containerBuilder.RegisterAssemblyModules(typeof(DataAccessInstaller).GetTypeInfo().Assembly);
-        }
-
-        protected override void MigrateEnvironment(IContainer container)
-        {
-            container.Resolve<IMigrator>().Migrate();
         }
 
         protected override Func<IApplicationBuilder, IApplicationBuilder> CreatePipelineConfigurator(

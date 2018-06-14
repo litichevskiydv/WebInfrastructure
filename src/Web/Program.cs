@@ -1,6 +1,7 @@
 ﻿namespace Web
 {
     using System.IO;
+    using Autofac.Extensions.DependencyInjection;
     using JetBrains.Annotations;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -14,6 +15,7 @@
         {
             var host = new WebHostBuilder()
                 .UseKestrel()
+                .ConfigureServices(services => services.AddAutofac())
                 .UseIISIntegration()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseConfiguration(new ConfigurationBuilder().AddCommandLine(args).Build())

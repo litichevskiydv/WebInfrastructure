@@ -2,7 +2,6 @@
 {
     using System;
     using Autofac;
-    using Autofac.Extensions.DependencyInjection;
     using ExceptionsHandling;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -45,11 +44,7 @@
 
         protected abstract void ConfigureOptions(IServiceCollection services);
 
-        protected abstract void RegisterDependencies(ContainerBuilder containerBuilder);
-
-        protected abstract void MigrateEnvironment(IContainer container);
-
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddUnhandledExceptionsStartupFilter();
 
@@ -75,14 +70,13 @@
                                });
 
             ConfigureOptions(services.AddOptions());
+        }
 
-            var containerBuilder = new ContainerBuilder();
+        protected abstract void RegisterDependencies(ContainerBuilder containerBuilder);
+
+        public void ConfigureContainer(ContainerBuilder containerBuilder)
+        {
             RegisterDependencies(containerBuilder);
-            containerBuilder.Populate(services);
-
-            var container = containerBuilder.Build();
-            MigrateEnvironment(container);
-            return new AutofacServiceProvider(container);
         }
 
         protected virtual Func<IApplicationBuilder, IApplicationBuilder> CreatePipelineConfigurator(
