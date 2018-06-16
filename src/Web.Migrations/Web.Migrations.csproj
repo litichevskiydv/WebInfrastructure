@@ -12,7 +12,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Infrastructure\Migrations\Migrations.csproj" />
+    <PackageReference Include="FluentMigrator" Version="3.1.1" />
+    <PackageReference Include="JetBrains.Annotations" Version="11.1.0" />
   </ItemGroup>
 
 </Project>

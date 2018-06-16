@@ -1,11 +1,15 @@
 ﻿namespace Web.Migrations
 {
-    using Skeleton.Migrations;
+    using FluentMigrator;
+    using JetBrains.Annotations;
 
-    public class Migration201703191215 : IMigration
+    [UsedImplicitly]
+    [Migration(201703191215)]
+    public class Migration201703191215 : ForwardOnlyMigration
     {
-        public long Version => 201703191215L;
-
-        public string SqlSourceCode => "select 0";
+        public override void Up()
+        {
+            Execute.Sql("select 0");
+        }
     }
 }

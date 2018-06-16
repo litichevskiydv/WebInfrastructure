@@ -10,7 +10,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Infrastructure\CQRS.Implementations\CQRS.Implementations.csproj" />
     <ProjectReference Include="..\Infrastructure\Dapper\Dapper.csproj" />
-    <ProjectReference Include="..\Infrastructure\Migrations\Migrations.csproj" />
     <ProjectReference Include="..\Infrastructure\Web.Authentication\Web.Authentication.csproj" />
     <ProjectReference Include="..\Infrastructure\Web\Web.csproj" />
     <ProjectReference Include="..\Web.Application\Web.Application.csproj" />
