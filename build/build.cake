@@ -47,18 +47,16 @@ Task("Clean")
     .Does(() =>
     {
         var projects = GetFiles("../src/**/*.csproj").Concat(GetFiles("../test/**/*.csproj"));
-        foreach(var project in projects)
-        {
-            DotNetCoreBuild(
-                project.GetDirectory().FullPath,
-                new DotNetCoreBuildSettings()
+        var settings = new DotNetCoreBuildSettings
                 {
                     Configuration = configuration,
                     ArgumentCustomization = args => args
                         .Append($"/p:Version={version}")
                         .Append($"/p:AssemblyVersion={assemblyVersion}")
-                });
-        }
+                };
+
+        foreach(var project in projects)
+            DotNetCoreBuild(project.GetDirectory().FullPath, settings);
     });
 
 // Run dotnet pack to produce NuGet packages from our projects. Versions the package
@@ -69,11 +67,7 @@ Task("Pack")
     .Does(() =>
     {
         var projects = GetFiles("../src/Infrastructure/**/*.csproj");
-        foreach (var project in projects)
-        {
-            DotNetCorePack(
-                project.GetDirectory().FullPath,
-                new DotNetCorePackSettings()
+        var settings = new DotNetCorePackSettings
                 {
                     Configuration = configuration,
                     NoRestore = true,
@@ -82,8 +76,10 @@ Task("Pack")
                     IncludeSymbols = true,
                     ArgumentCustomization = args => args
                         .Append($"/p:PackageVersion={packageVersion}")
-                });
-        }
+                };
+
+        foreach (var project in projects)
+            DotNetCorePack(project.GetDirectory().FullPath, settings);
     });
 
 // Look under a 'Tests' folder and run dotnet test against all of those projects.
@@ -93,17 +89,13 @@ Task("Test")
     .Does(() =>
     {
         var projects = GetFiles("../test/**/*.csproj");
-        foreach(var project in projects)
-        {
-            DotNetCoreTool(
-                project.FullPath,
-                "xunit",
-                new ProcessArgumentBuilder() 
+        var argumentsBuilder = new ProcessArgumentBuilder() 
                     .Append("-configuration " + configuration)
                     .Append("-nobuild")
-                    .Append($"-xml {artifactsDirectory.CombineWithFilePath(project.GetFilenameWithoutExtension()).FullPath}.xml")
-                );
-        }
+                    .Append($"-xml {artifactsDirectory.CombineWithFilePath(project.GetFilenameWithoutExtension()).FullPath}.xml");
+
+        foreach(var project in projects)
+            DotNetCoreTool(project.FullPath, "xunit", argumentsBuilder);
     });
 
 // Look under a 'test' folder and calculate tests against all of those projects.
@@ -125,15 +117,7 @@ Task("CalculateCoverage")
 
         projects = GetFiles("../test/**/*.csproj");
         var resultsFile = artifactsDirectory.CombineWithFilePath("coverage.xml");
-        foreach(var project in projects)
-        {
-            OpenCover(
-                x => x.DotNetCoreTest(
-                     project.FullPath,
-                     new DotNetCoreTestSettings() { Configuration = "Debug" }
-                ),
-                resultsFile,
-                new OpenCoverSettings()
+        var settings = new OpenCoverSettings
                 {
                     ArgumentCustomization = args => args
                         .Append("-threshold:100")
@@ -143,11 +127,19 @@ Task("CalculateCoverage")
                     OldStyle = true,
                     MergeOutput = true
                 }
-                    .WithFilter("+[Skeleton*]*")
-                    .WithFilter("-[xunit*]*")
-                    .ExcludeByAttribute("*.ExcludeFromCodeCoverage*")
+                .WithFilter("+[Skeleton*]*")
+                .WithFilter("-[xunit*]*")
+                .ExcludeByAttribute("*.ExcludeFromCodeCoverage*");
+
+        foreach(var project in projects)
+            OpenCover(
+                x => x.DotNetCoreTest(
+                     project.FullPath,
+                     new DotNetCoreTestSettings() { Configuration = "Debug" }
+                ),
+                resultsFile,
+                settings
             );
-        }
 
         Codecov(resultsFile.FullPath);
     });
