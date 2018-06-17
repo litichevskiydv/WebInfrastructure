@@ -4,6 +4,7 @@
     using System.IO;
     using System.Net.Http;
     using Abstractions;
+    using Configuration;
     using ProtoBuf.Meta;
     using MediaTypeHeaderValue = System.Net.Http.Headers.MediaTypeHeaderValue;
 
@@ -35,5 +36,7 @@
         }
 
         public MediaTypeHeaderValue MediaType { get; }
+
+        public static ProtobufSerializer Default => new ProtobufSerializer(x => x.WithDefaultSettings());
     }
 }

@@ -9,6 +9,7 @@
     using System.Runtime.ExceptionServices;
     using System.Text;
     using Abstractions;
+    using Configuration;
     using global::Jil;
 
     public class JilSerializer : ISerializer
@@ -64,5 +65,7 @@
         }
 
         public MediaTypeHeaderValue MediaType { get; }
+
+        public static JilSerializer Default => new JilSerializer(OptionsExtensions.Default);
     }
 }

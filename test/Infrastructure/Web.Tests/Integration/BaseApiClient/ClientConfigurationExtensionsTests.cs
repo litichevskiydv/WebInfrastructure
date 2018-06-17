@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Net.Http;
     using JetBrains.Annotations;
-    using Jil;
     using Web.Integration.BaseApiClient.Configuration;
     using Web.Serialization.Jil.Serializer;
     using Xunit;
@@ -75,7 +74,7 @@
         public void ShouldSetSerializer()
         {
             // Given
-            var serializer = new JilSerializer(Options.Default);
+            var serializer = JilSerializer.Default;
             var configuration = new ClientConfiguration();
 
             // When

@@ -6,6 +6,7 @@
     using System.Net.Http.Headers;
     using System.Text;
     using Abstractions;
+    using Configuration;
     using Newtonsoft.Json;
 
     public class JsonNetSerializer : ISerializer
@@ -38,5 +39,7 @@
         }
 
         public MediaTypeHeaderValue MediaType { get; }
+
+        public static JsonNetSerializer Default => new JsonNetSerializer(new JsonSerializerSettings().UseDefaultSettings());
     }
 }
