@@ -170,13 +170,13 @@
             const int id = 1;
 
             // When
-            ServiceClient.Set(new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = "test"}}});
+            ServiceClient.Set(new ValuesModificationRequest { Values = new[] { new ConfigurationValue { Id = id, Value = "test" } } });
             ServiceClient.Delete(id);
 
             // Then
             Assert.Throws<ApiException>(() => ServiceClient.Get(id));
             Fixture.MockLogger
-                .VerifyErrorWasLogged<KeyNotFoundException>()
+                .VerifyErrorWasLogged(typeof(KeyNotFoundException))
                 .VerifyNoWarningsWasLogged();
         }
 
