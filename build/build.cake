@@ -89,13 +89,15 @@ Task("Test")
     .Does(() =>
     {
         var projects = GetFiles("../test/**/*.csproj");
-        var argumentsBuilder = new ProcessArgumentBuilder() 
+        foreach(var project in projects)
+            DotNetCoreTool(
+                project.FullPath, 
+                "xunit", 
+                new ProcessArgumentBuilder() 
                     .Append("-configuration " + configuration)
                     .Append("-nobuild")
-                    .Append($"-xml {artifactsDirectory.CombineWithFilePath(project.GetFilenameWithoutExtension()).FullPath}.xml");
-
-        foreach(var project in projects)
-            DotNetCoreTool(project.FullPath, "xunit", argumentsBuilder);
+                    .Append($"-xml {artifactsDirectory.CombineWithFilePath(project.GetFilenameWithoutExtension()).FullPath}.xml")
+            );
     });
 
 // Look under a 'test' folder and calculate tests against all of those projects.
