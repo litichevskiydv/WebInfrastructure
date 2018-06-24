@@ -86,9 +86,9 @@
         /// </summary>
         /// <typeparam name="TData">Type of respones data</typeparam>
         /// <param name="data">Respones data</param>
-        public static ApiResponse<TData, object> Success<TData>(TData data)
+        public static ApiResponse<TData, int?> Success<TData>(TData data)
         {
-            return new ApiResponse<TData, object>(data, null);
+            return new ApiResponse<TData, int?>(data, null);
         }
 
         /// <summary>
@@ -96,9 +96,9 @@
         /// </summary>
         /// <typeparam name="TError">Type of respones error</typeparam>
         /// <param name="errors">Errors that happened during request processing</param>
-        public static ApiResponse<object, TError> Error<TError>(IReadOnlyCollection<TError> errors)
+        public static ApiResponse<int?, TError> Error<TError>(IReadOnlyCollection<TError> errors)
         {
-            return new ApiResponse<object, TError>(null, errors.ToArray());
+            return new ApiResponse<int?, TError>(null, errors.ToArray());
         }
     }
 }
