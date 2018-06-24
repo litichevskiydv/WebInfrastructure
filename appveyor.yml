@@ -11,6 +11,11 @@ nuget:
 artifacts:
 - path: build\artifacts\*.nupkg
 deploy: off
+branches:
+  only:
+    - develop
+    - /release.*/ 
+    - master
 skip_commits:
   files:
   - LICENSE

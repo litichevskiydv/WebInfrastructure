@@ -7,6 +7,11 @@ services:
   - docker
 mono: none
 dotnet: 2.1.300
+branches:
+  only:
+  - master
+  - /^release\/.*$/
+  - develop
 script:
  - set -e
  - docker pull microsoft/mssql-server-linux:2017-latest
