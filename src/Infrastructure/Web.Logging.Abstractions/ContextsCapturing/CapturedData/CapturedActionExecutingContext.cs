@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Web.Logging.ContextsCapturing.CapturedData
+﻿namespace Skeleton.Web.Logging.Abstractions.ContextsCapturing.CapturedData
 {
     using System.Collections.Generic;
 

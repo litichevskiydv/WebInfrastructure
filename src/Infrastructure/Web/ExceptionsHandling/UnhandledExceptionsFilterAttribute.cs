@@ -5,7 +5,7 @@
     using System.Net;
     using System.Threading.Tasks;
     using Conventions.Responses;
-    using Logging.ContextsCapturing;
+    using Logging.Abstractions.ContextsCapturing;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;

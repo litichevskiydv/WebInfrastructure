@@ -13,6 +13,7 @@
     <ProjectReference Include="..\Infrastructure\CQRS.Implementations\CQRS.Implementations.csproj" />
     <ProjectReference Include="..\Infrastructure\Dapper\Dapper.csproj" />
     <ProjectReference Include="..\Infrastructure\Web.Authentication\Web.Authentication.csproj" />
+    <ProjectReference Include="..\Infrastructure\Web.Logging.Serilog\Web.Logging.Serilog.csproj" />
     <ProjectReference Include="..\Infrastructure\Web\Web.csproj" />
     <ProjectReference Include="..\Web.Application\Web.Application.csproj" />
     <ProjectReference Include="..\Web.DataAccess\Web.DataAccess.csproj" />

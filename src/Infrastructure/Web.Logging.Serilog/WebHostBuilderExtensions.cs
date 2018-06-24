@@ -3,6 +3,7 @@
     using System;
     using System.Diagnostics.CodeAnalysis;
     using global::Serilog;
+    using global::Serilog.Exceptions;
     using Microsoft.AspNetCore.Hosting;
 
     public static class WebHostBuilderExtensions
@@ -13,7 +14,12 @@
             if(hostBuilder == null)
                 throw new ArgumentNullException(nameof(hostBuilder));
 
-            return hostBuilder.UseSerilog(x => x.Enrich.WithApplicationInformationalVersion());
+            return UseSerilog(
+                hostBuilder,
+                configuration => configuration
+                    .Enrich.WithApplicationInformationalVersion()
+                    .Enrich.WithExceptionDetails()
+            );
         }
 
         [ExcludeFromCodeCoverage]

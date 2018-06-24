@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Web.Logging.ContextsCapturing
+﻿namespace Skeleton.Web.Logging.Abstractions.ContextsCapturing
 {
     using System;
     using System.Linq;

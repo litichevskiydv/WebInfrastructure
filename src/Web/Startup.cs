@@ -26,17 +26,20 @@
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public class Startup : WebApiBaseStartup
     {
+        private string _versionString;
+
         public Startup(IConfiguration configuration, ILoggerFactory loggerFactory) : base(configuration, loggerFactory)
         {
+            _versionString = GetType().Assembly.GetName().Version.ToString(4);
         }
 
         protected override void ConfigureSwaggerDocumentator(SwaggerGenOptions options)
         {
             options
-                .SwaggerDoc("v1",
+                .SwaggerDoc($"v{_versionString}",
                     new Info
                     {
-                        Version = "v1",
+                        Version = $"v{_versionString}",
                         Title = "Values providing API",
                         Description = "A dummy to get configuration values",
                         TermsOfService = "None"
@@ -56,7 +59,7 @@
 
         protected override void ConfigureSwaggerUi(SwaggerUIOptions options)
         {
-            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Values providing API v1");
+            options.SwaggerEndpoint($"/swagger/v{_versionString}/swagger.json", $"Values providing API v{_versionString}");
         }
 
         protected override void ConfigureOptions(IServiceCollection services)
