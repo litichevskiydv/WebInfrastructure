@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DE1BE141-BE1D-4C36-BF58-E4747EE33A30}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AD1BE457-3E79-406B-9DB1-62AB74E17463}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{DB312248-D325-4521-8EE6-852CD9B44CAA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{47FA2CFA-AE7F-4DC7-8C8A-965FB2FA12EE}"
@@ -62,6 +60,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Serialization.Abstractions", "src\Infrastructure\Web.Serialization.Abstractions\Web.Serialization.Abstractions.csproj", "{06903337-947F-4705-96ED-FB1DF6EE61F3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Models", "src\Web.Models\Web.Models.csproj", "{3F9CA696-F1B0-4A09-8C4B-D8E0E2CE193B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{45F8DBC0-4FAB-41A2-B8E6-0AE85C7DFE63}"
+	ProjectSection(SolutionItems) = preProject
+		common.props = common.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

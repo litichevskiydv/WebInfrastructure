@@ -1,3 +1,8 @@
+#tool "nuget:?package=OpenCover"
+#tool "nuget:?package=Codecov&version=1.0.3"
+#addin "nuget:?package=Cake.Codecov"
+using System.Text.RegularExpressions;
+
 // Target - The task you want to start. Runs the Default task if not specified.
 var target = Argument("Target", "Default");
 
@@ -22,14 +27,23 @@ var buildNumber =
     TravisCI.IsRunningOnTravisCI ? TravisCI.Environment.Build.BuildNumber :
     EnvironmentVariable("BuildNumber") != null ? int.Parse(EnvironmentVariable("BuildNumber")) : 0;
 
-// Packages version in format major.minor.patch
-var version = HasArgument("ShortVersion") ? Argument<string>("ShortVersion") : EnvironmentVariable("ShortVersion");
-version = !string.IsNullOrWhiteSpace(version) ? version : "1.0.0";
-var assemblyVersion = $"{version}.{buildNumber}";
+// The branch name use in version suffix
+var branch = 
+    AppVeyor.IsRunningOnAppVeyor ? AppVeyor.Environment.Repository.Branch :
+    TravisCI.IsRunningOnTravisCI ? TravisCI.Environment.Build.Branch : (string)null;
 
 // Text suffix of the package version
-var versionSuffix = HasArgument("VersionSuffix") ? Argument<string>("VersionSuffix") : EnvironmentVariable("VersionSuffix");
-var packageVersion = version + (!string.IsNullOrWhiteSpace(versionSuffix) ? $"-{versionSuffix}-build{buildNumber}" : "");
+string versionSuffix = null;
+if(string.IsNullOrWhiteSpace(branch) == false && branch != "master")
+{
+    versionSuffix = $"-dev-build{buildNumber:00000}";
+
+    var match = Regex.Match(branch, "release\\/\\d+\\.\\d+\\.\\d+\\-?(.*)", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
+    if(match.Success)
+        versionSuffix = string.IsNullOrWhiteSpace(match.Groups[1].Value) == false
+            ? $"-{match.Groups[1].Value}-build{buildNumber:00000}"
+            : $"-build{buildNumber:00000}";
+}
  
 // A directory path to an Artifacts directory.
 var artifactsDirectory = MakeAbsolute(Directory("./artifacts"));
@@ -50,10 +64,10 @@ Task("Clean")
         var settings = new DotNetCoreBuildSettings
                 {
                     Configuration = configuration,
-                    ArgumentCustomization = args => args
-                        .Append($"/p:Version={version}")
-                        .Append($"/p:AssemblyVersion={assemblyVersion}")
+                    VersionSuffix = versionSuffix
                 };
+        if(buildNumber != 0)
+            settings.ArgumentCustomization = x => x.Append($"/p:Build={buildNumber}");
 
         foreach(var project in projects)
             DotNetCoreBuild(project.GetDirectory().FullPath, settings);
@@ -74,8 +88,7 @@ Task("Pack")
                     NoBuild = true,
                     OutputDirectory = artifactsDirectory,
                     IncludeSymbols = true,
-                    ArgumentCustomization = args => args
-                        .Append($"/p:PackageVersion={packageVersion}")
+                    VersionSuffix = versionSuffix
                 };
 
         foreach (var project in projects)
@@ -89,22 +102,19 @@ Task("Test")
     .Does(() =>
     {
         var projects = GetFiles("../test/**/*.csproj");
+        var settings = new DotNetCoreTestSettings
+        {
+            Configuration = configuration,
+            NoRestore = true,
+            NoBuild = true,
+        };
+
         foreach(var project in projects)
-            DotNetCoreTool(
-                project.FullPath, 
-                "xunit", 
-                new ProcessArgumentBuilder() 
-                    .Append("-configuration " + configuration)
-                    .Append("-nobuild")
-                    .Append($"-xml {artifactsDirectory.CombineWithFilePath(project.GetFilenameWithoutExtension()).FullPath}.xml")
-            );
+            DotNetCoreTest(project.FullPath, settings);
     });
 
 // Look under a 'test' folder and calculate tests against all of those projects.
 // Then drop the XML test results file in the artifacts folder at the root.
-#tool "nuget:?package=OpenCover"
-#tool "nuget:?package=Codecov&version=1.0.3"
-#addin "nuget:?package=Cake.Codecov"
 Task("CalculateCoverage")
     .IsDependentOn("Pack")
     .Does(() =>
@@ -137,7 +147,7 @@ Task("CalculateCoverage")
             OpenCover(
                 x => x.DotNetCoreTest(
                      project.FullPath,
-                     new DotNetCoreTestSettings() { Configuration = "Debug" }
+                     new DotNetCoreTestSettings { Configuration = "Debug" }
                 ),
                 resultsFile,
                 settings

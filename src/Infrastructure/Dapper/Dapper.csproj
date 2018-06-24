@@ -1,5 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), common.props))\common.props" />
+
   <PropertyGroup>
     <Description>Library with common extensions and helpers for use Dapper in code</Description>
     <Authors>dmitriy.litichevskiy</Authors>

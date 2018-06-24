@@ -1,12 +1,10 @@
-version: $(ShortVersion).{build}
+version: '{build}'
 image:
 - Visual Studio 2017
 - Ubuntu
 configuration: Release
 environment:
   ASPNETCORE_ENVIRONMENT: Staging
-  VersionSuffix: rc1
-  ShortVersion: 1.0.0
 nuget:
   project_feed: true
   disable_publish_on_pr: true
