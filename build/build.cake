@@ -41,8 +41,8 @@ if(string.IsNullOrWhiteSpace(branch) == false && branch != "master")
     var match = Regex.Match(branch, "release\\/\\d+\\.\\d+\\.\\d+\\-?(.*)", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
     if(match.Success)
         versionSuffix = string.IsNullOrWhiteSpace(match.Groups[1].Value) == false
-            ? $"-{match.Groups[1].Value}-build{buildNumber:00000}"
-            : $"-build{buildNumber:00000}";
+            ? $"{match.Groups[1].Value}-build{buildNumber:00000}"
+            : $"build{buildNumber:00000}";
 }
  
 // A directory path to an Artifacts directory.
