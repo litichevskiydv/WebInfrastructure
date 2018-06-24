@@ -36,7 +36,8 @@
             var tcs = new TaskCompletionSource<object>();
             try
             {
-                _runtimeTypeModel.Serialize(context.HttpContext.Response.Body, context.Object);
+                if (context.Object != null)
+                    _runtimeTypeModel.Serialize(context.HttpContext.Response.Body, context.Object);
                 tcs.SetResult(null);
             }
             catch (Exception exception)

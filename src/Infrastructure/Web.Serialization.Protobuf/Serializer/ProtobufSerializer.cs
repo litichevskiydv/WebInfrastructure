@@ -25,7 +25,8 @@
         {
             using (var stream = new MemoryStream())
             {
-                _runtimeTypeModel.Serialize(stream, obj);
+                if (obj != null)
+                    _runtimeTypeModel.Serialize(stream, obj);
                 return new ByteArrayContent(stream.ToArray()) {Headers = {ContentType = MediaType}};
             }
         }
