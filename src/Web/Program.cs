@@ -6,7 +6,7 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Skeleton.Web.Configuration;
-    using Skeleton.Web.Logging.Serilog;
+    using Skeleton.Web.Logging.Serilog.Configuration;
 
     [UsedImplicitly(ImplicitUseTargetFlags.Members)]
     public static class Program

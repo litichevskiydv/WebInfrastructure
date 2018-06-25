@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Web.Logging.Serilog
+﻿namespace Skeleton.Web.Logging.Serilog.Configuration
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
