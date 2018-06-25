@@ -8,16 +8,13 @@
     <TargetFramework>netstandard1.6</TargetFramework>
     <DebugType>portable</DebugType>
     <AssemblyName>Skeleton.Common</AssemblyName>
+    <RootNamespace>Skeleton.Common</RootNamespace>
     <PackageId>Skeleton.Common</PackageId>
     <PackageTags>Common extensions</PackageTags>
     <PackageProjectUrl>https://github.com/litichevskiydv/WebInfrastructure</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/litichevskiydv/WebInfrastructure</RepositoryUrl>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <RootNamespace>Skeleton.Common</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

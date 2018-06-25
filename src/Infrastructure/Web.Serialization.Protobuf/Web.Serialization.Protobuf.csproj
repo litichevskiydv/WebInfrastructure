@@ -6,6 +6,7 @@
     <DebugType>portable</DebugType>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Skeleton.Web.Serialization.Protobuf</AssemblyName>
+    <RootNamespace>Skeleton.Web.Serialization.Protobuf</RootNamespace>
     <PackageId>Skeleton.Web.Serialization.Protobuf</PackageId>
     <Authors>dmitriy.litichevskiy</Authors>
     <Description>Library for protobuf-net serializer integration</Description>
@@ -14,10 +15,6 @@
     <PackageLicenseUrl>https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/litichevskiydv/WebInfrastructure</RepositoryUrl>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <RootNamespace>Skeleton.Web.Serialization.Protobuf</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

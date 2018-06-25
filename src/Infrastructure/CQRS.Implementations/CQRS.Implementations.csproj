@@ -8,16 +8,13 @@
     <TargetFramework>netstandard1.1</TargetFramework>
     <DebugType>portable</DebugType>
     <AssemblyName>Skeleton.CQRS.Implementations</AssemblyName>
+    <RootNamespace>Skeleton.CQRS.Implementations</RootNamespace>
     <PackageId>Skeleton.CQRS.Implementations</PackageId>
     <PackageTags>CQRS</PackageTags>
     <PackageProjectUrl>https://github.com/litichevskiydv/WebInfrastructure</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/litichevskiydv/WebInfrastructure</RepositoryUrl>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <RootNamespace>Skeleton.CQRS.Implementations</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

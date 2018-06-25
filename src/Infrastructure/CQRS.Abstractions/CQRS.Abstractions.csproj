@@ -8,16 +8,13 @@
     <TargetFramework>netstandard1.1</TargetFramework>
     <DebugType>portable</DebugType>
     <AssemblyName>Skeleton.CQRS.Abstractions</AssemblyName>
+    <RootNamespace>Skeleton.CQRS.Abstractions</RootNamespace>
     <PackageId>Skeleton.CQRS.Abstractions</PackageId>
     <PackageTags>CQRS</PackageTags>
     <PackageProjectUrl>https://github.com/litichevskiydv/WebInfrastructure</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/litichevskiydv/WebInfrastructure</RepositoryUrl>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <RootNamespace>Skeleton.CQRS.Abstractions</RootNamespace>
   </PropertyGroup>
 
 </Project>

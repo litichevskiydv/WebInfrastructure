@@ -6,6 +6,7 @@
     <DebugType>portable</DebugType>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Skeleton.Web.Serialization.JsonNet</AssemblyName>
+    <RootNamespace>Skeleton.Web.Serialization.JsonNet</RootNamespace>
     <PackageId>Skeleton.Web.Serialization.JsonNet</PackageId>
     <Authors>dmitriy.litichevskiy</Authors>
     <Description>Library with serialization conventions and settings for Newtonsoft.Json</Description>
@@ -14,10 +15,6 @@
     <PackageLicenseUrl>https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/litichevskiydv/WebInfrastructure</RepositoryUrl>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <RootNamespace>Skeleton.Web.Serialization.JsonNet</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

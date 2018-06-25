@@ -6,6 +6,7 @@
     <DebugType>portable</DebugType>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Skeleton.Web.Serialization.Jil</AssemblyName>
+    <RootNamespace>Skeleton.Web.Serialization.Jil</RootNamespace>
     <PackageId>Skeleton.Web.Serialization.Jil</PackageId>
     <Authors>dmitriy.litichevskiy</Authors>
     <Description>Library for Jil serializer integration</Description>
@@ -14,10 +15,6 @@
     <PackageLicenseUrl>https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/litichevskiydv/WebInfrastructure</RepositoryUrl>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <RootNamespace>Skeleton.Web.Serialization.Jil</RootNamespace>
   </PropertyGroup>
   
   <ItemGroup>
