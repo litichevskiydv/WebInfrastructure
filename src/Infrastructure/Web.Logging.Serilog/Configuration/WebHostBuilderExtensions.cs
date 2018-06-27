@@ -2,6 +2,7 @@
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using Enrichers;
     using global::Serilog;
     using global::Serilog.Exceptions;
     using Microsoft.AspNetCore.Hosting;
@@ -19,6 +20,7 @@
                 configuration => configuration
                     .Enrich.WithApplicationInformationalVersion()
                     .Enrich.WithExceptionDetails()
+                    .Enrich.WithMessageTemplateHash()
             );
         }
 

@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Web.Logging.Serilog.Configuration
+﻿namespace Skeleton.Web.Logging.Serilog.Enrichers
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
@@ -43,6 +43,16 @@
             return enrichmentConfiguration.WithApplicationVersion(
                 Assembly.GetEntryAssembly().GetName().Version.ToString(4)
             );
+        }
+
+        [ExcludeFromCodeCoverage]
+        public static LoggerConfiguration WithMessageTemplateHash(
+            this LoggerEnrichmentConfiguration enrichmentConfiguration)
+        {
+            if (enrichmentConfiguration == null)
+                throw new ArgumentNullException(nameof(enrichmentConfiguration));
+
+            return enrichmentConfiguration.With<MessageTemplateHashEnricher>();
         }
     }
 }
