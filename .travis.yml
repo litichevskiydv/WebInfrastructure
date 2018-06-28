@@ -6,7 +6,7 @@ env:
 services:
   - docker
 mono: none
-dotnet: 2.1.300
+dotnet: 2.1.301
 branches:
   only:
   - master
