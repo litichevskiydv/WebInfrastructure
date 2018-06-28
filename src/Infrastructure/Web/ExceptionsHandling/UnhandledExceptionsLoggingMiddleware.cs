@@ -1,11 +1,15 @@
 ﻿namespace Skeleton.Web.ExceptionsHandling
 {
     using System;
+    using System.Collections.Generic;
     using System.Net;
     using System.Threading.Tasks;
     using Conventions.Responses;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc.Formatters;
+    using Microsoft.AspNetCore.Mvc.Infrastructure;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
     using Serialization.JsonNet.Configuration;
@@ -58,8 +62,34 @@
 
                 if (_hostingEnvironment.IsDevelopment() || _hostingEnvironment.IsStaging())
                 {
-                    context.Response.ContentType = "application/json; charset=utf-8";
-                    await context.Response.WriteAsync(JsonConvert.SerializeObject(new ApiExceptionResponse(message, exception), _jsonSerializerSettings));
+                    var content = new ApiExceptionResponse(message, exception);
+
+                    var outputFormatterSelector = context.RequestServices.GetService<OutputFormatterSelector>();
+                    var writersFactory = context.RequestServices.GetService<IHttpResponseStreamWriterFactory>();
+                    if (outputFormatterSelector != null && writersFactory != null)
+                    {
+                        var formatterContext = new OutputFormatterWriteContext(
+                            context,
+                            writersFactory.CreateWriter,
+                            content.GetType(),
+                            content
+                        );
+                        var selectedFormatter = outputFormatterSelector.SelectFormatter(
+                            formatterContext,
+                            new List<IOutputFormatter>(),
+                            new MediaTypeCollection()
+                        );
+
+                        if (selectedFormatter != null)
+                            await selectedFormatter.WriteAsync(formatterContext);
+                    }
+                    else
+                    {
+                        context.Response.ContentType = "application/json; charset=utf-8";
+                        await context.Response.WriteAsync(
+                            JsonConvert.SerializeObject(new ApiExceptionResponse(message, exception), _jsonSerializerSettings)
+                        );
+                    }
                 }
             }
         }

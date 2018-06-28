@@ -2,21 +2,37 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
+    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
     using JetBrains.Annotations;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Mvc.Infrastructure;
     using Microsoft.AspNetCore.TestHost;
+    using Microsoft.AspNetCore.WebUtilities;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Moq;
     using Testing.Extensions;
     using Web.ExceptionsHandling;
+    using Web.Serialization.Jil.Configuration;
     using Xunit;
 
     public class UnhandledExceptionsLoggingMiddlewareTests
     {
+        public class TestHttpResponseStreamWriterFactory : IHttpResponseStreamWriterFactory
+        {
+            public const int DefaultBufferSize = 16 * 1024;
+
+            public TextWriter CreateWriter(Stream stream, Encoding encoding)
+            {
+                return new HttpResponseStreamWriter(stream, encoding, DefaultBufferSize);
+            }
+        }
+
         private readonly Mock<ILogger> _mockLogger;
 
         [UsedImplicitly]
@@ -119,6 +135,39 @@
                 Assert.Empty(content);
 
                 _mockLogger.VerifyWarningWasLogged();
+            }
+        }
+
+        [Fact]
+        public async Task ShouldSendExceptionToClientViaConfiguredFormatters()
+        {
+            // Given
+            var hostBuilder = new WebHostBuilder()
+                .UseEnvironment(EnvironmentName.Development)
+                .UseMockLogger(_mockLogger)
+                .ConfigureServices(services => services
+                                       .AddSingleton<OutputFormatterSelector, DefaultOutputFormatterSelector>()
+                                       .AddSingleton<IHttpResponseStreamWriterFactory, TestHttpResponseStreamWriterFactory>()
+                                       .AddMvc(x => { })
+                                       .WithJsonFormattersBasedOnJil(OptionsExtensions.Default)
+                )
+                .Configure(app =>
+                           {
+                               app.UseUnhandledExceptionsLoggingMiddleware();
+                               app.Run(context => throw new InvalidOperationException("Wrong state"));
+                           }
+                );
+
+            // When, Then
+            using (var server = new TestServer(hostBuilder))
+            {
+                var response = await server.CreateRequest("/").AddHeader("accept", "application/json").SendAsync("GET");
+                Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+
+                var content = await response.Content.ReadAsStringAsync();
+                Assert.Contains("Wrong state", content);
+
+                _mockLogger.VerifyErrorWasLogged<InvalidOperationException>();
             }
         }
     }
