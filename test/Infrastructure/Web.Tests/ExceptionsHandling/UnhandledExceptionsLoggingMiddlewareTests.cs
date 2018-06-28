@@ -146,7 +146,6 @@
                 .UseEnvironment(EnvironmentName.Development)
                 .UseMockLogger(_mockLogger)
                 .ConfigureServices(services => services
-                                       .AddSingleton<OutputFormatterSelector, DefaultOutputFormatterSelector>()
                                        .AddSingleton<IHttpResponseStreamWriterFactory, TestHttpResponseStreamWriterFactory>()
                                        .AddMvc(x => { })
                                        .WithJsonFormattersBasedOnJil(OptionsExtensions.Default)
