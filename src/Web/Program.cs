@@ -5,6 +5,7 @@
     using JetBrains.Annotations;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
+    using Serilog;
     using Skeleton.Web.Configuration;
     using Skeleton.Web.Logging.Serilog.Configuration;
 
@@ -29,7 +30,7 @@
                             .AddCommandLine(args);
                     }
                 )
-                .UseSerilog()
+                .UseSerilog((context, configuration) => configuration.UseDefaultSettings(context.Configuration))
                 .UseStartup<Startup>()
                 .Build();
 

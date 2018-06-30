@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <PackageReference Include="murmurhash" Version="1.0.2" />
-    <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Serilog.Exceptions" Version="4.1.0" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="2.6.1" />
   </ItemGroup>
