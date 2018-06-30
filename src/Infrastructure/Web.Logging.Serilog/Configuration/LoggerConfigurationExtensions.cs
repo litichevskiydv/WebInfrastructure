@@ -1,6 +1,7 @@
 ﻿namespace Skeleton.Web.Logging.Serilog.Configuration
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using Enrichers;
     using global::Serilog;
     using global::Serilog.Exceptions;
@@ -8,6 +9,7 @@
 
     public static class LoggerConfigurationExtensions
     {
+        [ExcludeFromCodeCoverage]
         public static LoggerConfiguration UseDefaultSettings(
             this LoggerConfiguration loggerConfiguration,
             IConfiguration configuration)
