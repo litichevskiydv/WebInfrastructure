@@ -43,9 +43,9 @@ if(string.IsNullOrWhiteSpace(branch) == false && branch != "master")
         versionSuffix = string.IsNullOrWhiteSpace(match.Groups[1].Value) == false
             ? $"{match.Groups[1].Value}-build{buildNumber:00000}"
             : $"build{buildNumber:00000}";
-    Information($"Version suffix:{versionSuffix}")
+    Information($"Version suffix:{versionSuffix}");
 }
-Information($"Branch name:{branch}")
+Information($"Branch name:{branch}");
  
 // A directory path to an Artifacts directory.
 var artifactsDirectory = MakeAbsolute(Directory("./artifacts"));
