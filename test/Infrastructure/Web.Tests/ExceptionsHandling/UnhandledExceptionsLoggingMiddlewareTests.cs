@@ -23,9 +23,9 @@
 
     public class UnhandledExceptionsLoggingMiddlewareTests
     {
-        public class TestHttpResponseStreamWriterFactory : IHttpResponseStreamWriterFactory
+        private class TestHttpResponseStreamWriterFactory : IHttpResponseStreamWriterFactory
         {
-            public const int DefaultBufferSize = 16 * 1024;
+            private const int DefaultBufferSize = 16 * 1024;
 
             public TextWriter CreateWriter(Stream stream, Encoding encoding)
             {
