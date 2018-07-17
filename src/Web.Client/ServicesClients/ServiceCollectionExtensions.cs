@@ -8,7 +8,7 @@
 
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddValuesServiceClient(
+        public static IHttpClientBuilder AddValuesServiceClient(
             this IServiceCollection services, 
             IConfiguration config,
             ISerializer serializer)
@@ -20,13 +20,12 @@
             if (serializer == null)
                 throw new ArgumentNullException(nameof(serializer));
 
-            services
+            return services
                 .AddClient<ValuesServiceClient>()
                 .ConfigureClient<ValuesServiceClientOptions>(config, builder => builder.WithSerializer(serializer));
-            return services;
         }
 
-        public static IServiceCollection AddAccountControllerClient(
+        public static IHttpClientBuilder AddAccountControllerClient(
             this IServiceCollection services,
             IConfiguration config,
             ISerializer serializer)
@@ -38,10 +37,9 @@
             if (serializer == null)
                 throw new ArgumentNullException(nameof(serializer));
 
-            services
+            return services
                 .AddClient<AccountControllerClient>()
                 .ConfigureClient<AccountControllerClientOptions>(config, builder => builder.WithSerializer(serializer));
-            return services;
         }
     }
 }
