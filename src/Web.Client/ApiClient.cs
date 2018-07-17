@@ -1,18 +1,46 @@
 ﻿namespace Web.Client
 {
     using System;
+    using System.Net.Http;
+    using Microsoft.Extensions.Options;
     using ServicesClients;
-    using Skeleton.Web.Integration.BaseApiClient.Configuration;
     using Skeleton.Web.Integration.BaseApiFluentClient;
 
     public partial class ApiClient : BaseFluentClient
     {
-        public ApiClient(Func<ClientConfiguration, ClientConfiguration> configurationBuilder)
+        public ApiClient(HttpClient httpClient, IOptions<ApiClientOptions> clientOptions)
         {
-            _valuesServiceClient = new ValuesServiceClient(configurationBuilder);
+            if(httpClient == null)
+                throw new ArgumentNullException(nameof(httpClient));
+            if (clientOptions == null)
+                throw new ArgumentNullException(nameof(clientOptions));
+
+            var optionsValue = clientOptions.Value;
+
+            _valuesServiceClient = new ValuesServiceClient(
+                httpClient,
+                Options.Create(
+                    new ValuesServiceClientOptions
+                    {
+                        BaseUrl = optionsValue.BaseUrl,
+                        Timeout = optionsValue.Timeout,
+                        Serializer = optionsValue.Serializer
+                    }
+                )
+            );
             ServicesClients.Add(_valuesServiceClient);
 
-            _accountControllerClient = new AccountControllerClient(configurationBuilder);
+            _accountControllerClient = new AccountControllerClient(
+                httpClient,
+                Options.Create(
+                    new AccountControllerClientOptions
+                    {
+                        BaseUrl = optionsValue.BaseUrl,
+                        Timeout = optionsValue.Timeout,
+                        Serializer = optionsValue.Serializer
+                    }
+                )
+            );
             ServicesClients.Add(_accountControllerClient);
         }
     }

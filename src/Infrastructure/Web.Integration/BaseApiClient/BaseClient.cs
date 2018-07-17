@@ -10,28 +10,47 @@
     using Configuration;
     using Conventions.Responses;
     using Exceptions;
+    using Serialization.Abstractions;
 
     public abstract class BaseClient
     {
-        private readonly ClientConfiguration _configuration;
+        private readonly HttpClient _httpClient;
+        private readonly ISerializer _serializer;
         private readonly Dictionary<HttpStatusCode, Type> _exceptionsTypesByStatusCodes;
 
         protected virtual void RequestHeadersConfigurator(HttpRequestHeaders requestHeaders)
         {
         }
 
-        protected BaseClient(Func<ClientConfiguration, ClientConfiguration> configurationBuilder)
+        protected BaseClient(HttpClient httpClient, BaseClientOptions options)
         {
-            if (configurationBuilder == null)
-                throw new ArgumentNullException(nameof(configurationBuilder));
+            if(httpClient == null)
+                throw new ArgumentNullException(nameof(httpClient));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
+            if (string.IsNullOrWhiteSpace(options.BaseUrl))
+                throw new ArgumentNullException(nameof(options.BaseUrl));
+            if (options.Serializer == null)
+                throw new ArgumentNullException(nameof(options.Serializer));
 
-            _configuration = configurationBuilder(new ClientConfiguration());
-            if(string.IsNullOrWhiteSpace(_configuration.BaseUrl))
-                throw new ArgumentNullException(nameof(_configuration.BaseUrl));
-            if (_configuration.Serializer == null)
-                throw new ArgumentNullException(nameof(_configuration.Serializer));
-            if (_configuration.HttpMessageHandlersFactory == null)
-                throw new ArgumentNullException(nameof(_configuration.HttpMessageHandlersFactory));
+            _serializer = options.Serializer;
+            _httpClient = httpClient;
+
+            _httpClient.BaseAddress = new Uri(options.BaseUrl);
+            _httpClient.Timeout = options.Timeout;
+            
+            _httpClient.DefaultRequestHeaders.Accept.Clear();
+            _httpClient.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue(_serializer.MediaType.MediaType)
+            );
+
+            if (string.IsNullOrWhiteSpace(_serializer.MediaType.CharSet) == false)
+            {
+                _httpClient.DefaultRequestHeaders.AcceptCharset.Clear();
+                _httpClient.DefaultRequestHeaders.AcceptCharset.Add(
+                    new StringWithQualityHeaderValue(_serializer.MediaType.CharSet)
+                );
+            }
 
             _exceptionsTypesByStatusCodes = new Dictionary<HttpStatusCode, Type>
                                             {
@@ -46,27 +65,12 @@
             if (string.IsNullOrWhiteSpace(url))
                 throw new ArgumentNullException(nameof(url));
 
-            using (var httpClient = new HttpClient(_configuration.HttpMessageHandlersFactory(), _configuration.DisposeHttpMessageHandlersAfterCall))
-            {
-                httpClient.BaseAddress = new Uri(_configuration.BaseUrl);
-                httpClient.Timeout = _configuration.Timeout;
+            RequestHeadersConfigurator(_httpClient.DefaultRequestHeaders);
 
-                RequestHeadersConfigurator(httpClient.DefaultRequestHeaders);
-                httpClient.DefaultRequestHeaders.Accept.Clear();
-                httpClient.DefaultRequestHeaders.Accept.Add(
-                    new MediaTypeWithQualityHeaderValue(_configuration.Serializer.MediaType.MediaType));
-                if (string.IsNullOrWhiteSpace(_configuration.Serializer.MediaType.CharSet) == false)
-                {
-                    httpClient.DefaultRequestHeaders.AcceptCharset.Clear();
-                    httpClient.DefaultRequestHeaders.AcceptCharset.Add(
-                        new StringWithQualityHeaderValue(_configuration.Serializer.MediaType.CharSet));
-                }
-
-                var request = new HttpRequestMessage(method, url);
-                if (method != HttpMethod.Get)
-                    request.Content = data as HttpContent ?? _configuration.Serializer.Serialize(data);
-                return await httpClient.SendAsync(request).ConfigureAwait(false);
-            }
+            var request = new HttpRequestMessage(method, url);
+            if (method != HttpMethod.Get)
+                request.Content = data as HttpContent ?? _serializer.Serialize(data);
+            return await _httpClient.SendAsync(request).ConfigureAwait(false);
         }
 
         private HttpResponseMessage GetResponseMessage(string url, HttpMethod method, object data)
@@ -77,7 +81,7 @@
         private async Task<TResponse> ReadAsAsyncWithAwaitConfiguration<TResponse>(HttpContent httpContent)
         {
             using (var stream = await httpContent.ReadAsStreamAsync().ConfigureAwait(false))
-                return _configuration.Serializer.Deserialize<TResponse>(stream);
+                return _serializer.Deserialize<TResponse>(stream);
         }
 
         private string ReadSpecialApiResponseMessage<TResponse>(Stream stream)
@@ -85,7 +89,7 @@
             try
             {
                 stream.Position = 0;
-                var message = _configuration.Serializer.Deserialize<TResponse>(stream)?.ToString();
+                var message = _serializer.Deserialize<TResponse>(stream)?.ToString();
                 return string.IsNullOrWhiteSpace(message) ? null : message;
             }
             catch (Exception)

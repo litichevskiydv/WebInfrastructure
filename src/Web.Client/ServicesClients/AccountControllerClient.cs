@@ -1,18 +1,19 @@
 ﻿namespace Web.Client.ServicesClients
 {
-    using System;
     using System.Collections.Generic;
+    using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
+    using Microsoft.Extensions.Options;
     using Skeleton.Web.Authentication.JwtBearer.Models;
     using Skeleton.Web.Integration.BaseApiClient;
-    using Skeleton.Web.Integration.BaseApiClient.Configuration;
 
     public class AccountControllerClient : BaseClient
     {
         private string _token;
 
-        public AccountControllerClient(Func<ClientConfiguration, ClientConfiguration> configurationBuilder) : base(configurationBuilder)
+        public AccountControllerClient(HttpClient httpClient, IOptions<AccountControllerClientOptions> clientOptions) 
+            : base(httpClient, clientOptions.Value)
         {
         }
 

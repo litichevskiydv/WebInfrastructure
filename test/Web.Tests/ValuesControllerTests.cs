@@ -4,9 +4,10 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Client.ServicesClients;
+    using Microsoft.Extensions.Options;
     using Models.Input;
-    using Skeleton.Web.Integration.BaseApiClient.Configuration;
     using Skeleton.Web.Integration.BaseApiClient.Exceptions;
+    using Skeleton.Web.Serialization.Jil.Serializer;
     using Skeleton.Web.Serialization.JsonNet.Serializer;
     using Skeleton.Web.Serialization.Protobuf.Serializer;
     using Skeleton.Web.Testing;
@@ -16,7 +17,22 @@
     [Collection(nameof(ApiTestsCollection))]
     public class ValuesControllerTests : BaseServiceClientTests<BaseApiTestsFixture<Startup>, ValuesServiceClient>
     {
-        public ValuesControllerTests(BaseApiTestsFixture<Startup> fixture) : base(fixture)
+        public ValuesControllerTests(BaseApiTestsFixture<Startup> fixture)
+            : base(
+                fixture,
+                (httpClient, baseUrl, timeout) =>
+                    new ValuesServiceClient(
+                        httpClient,
+                        Options.Create(
+                            new ValuesServiceClientOptions
+                            {
+                                BaseUrl = baseUrl,
+                                Timeout = timeout,
+                                Serializer = JilSerializer.Default
+                            }
+                        )
+                    )
+            )
         {
         }
 
@@ -33,12 +49,18 @@
         public void ShouldReturnBadRequestIfOperationWasCancelled()
         {
             // Given
-            var client = new ValuesServiceClient(
-                x => x.WithBaseUrl(Fixture.Server.BaseAddress.ToString())
-                    .WithTimeout(TimeSpan.FromMilliseconds(100))
-                    .WithHttpMessageHandler(Fixture.Server.CreateHandler())
-                    .WithSerializer(JsonNetSerializer.Default)
-            );
+            var client =
+                new ValuesServiceClient(
+                    Fixture.Server.CreateClient(),
+                    Options.Create(
+                        new ValuesServiceClientOptions
+                        {
+                            BaseUrl = Fixture.Server.BaseAddress.ToString(),
+                            Timeout = TimeSpan.FromMilliseconds(100),
+                            Serializer = JsonNetSerializer.Default
+                        }
+                    )
+                );
 
             Assert.Throws<BadRequestException>(() => client.Get());
             Fixture.MockLogger
@@ -92,12 +114,19 @@
             const int id = 1;
             const string expectedValue = "test";
 
-            var client = new ValuesServiceClient(
-                x => x.WithBaseUrl(Fixture.Server.BaseAddress.ToString())
-                    .WithTimeout(TimeSpan.FromMilliseconds(Fixture.TimeoutInMilliseconds))
-                    .WithHttpMessageHandler(Fixture.Server.CreateHandler())
-                    .WithSerializer(ProtobufSerializer.Default)
-            );
+
+            var client =
+                new ValuesServiceClient(
+                    Fixture.Server.CreateClient(),
+                    Options.Create(
+                        new ValuesServiceClientOptions
+                        {
+                            BaseUrl = Fixture.Server.BaseAddress.ToString(),
+                            Timeout = TimeSpan.FromMilliseconds(Fixture.TimeoutInMilliseconds),
+                            Serializer = ProtobufSerializer.Default
+                        }
+                    )
+                );
 
             // When
             client.Set(new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = expectedValue}}});

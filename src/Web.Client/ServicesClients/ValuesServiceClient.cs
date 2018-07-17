@@ -1,16 +1,17 @@
 ﻿namespace Web.Client.ServicesClients
 {
-    using System;
     using System.Collections.Generic;
+    using System.Net.Http;
     using System.Threading.Tasks;
+    using Microsoft.Extensions.Options;
     using Models.Input;
     using Skeleton.Web.Conventions.Responses;
     using Skeleton.Web.Integration.BaseApiClient;
-    using Skeleton.Web.Integration.BaseApiClient.Configuration;
 
     public class ValuesServiceClient : BaseClient
     {
-        public ValuesServiceClient(Func<ClientConfiguration, ClientConfiguration> configurationBuilder) : base(configurationBuilder)
+        public ValuesServiceClient(HttpClient httpClient, IOptions<ValuesServiceClientOptions> clientOptions) 
+            : base(httpClient, clientOptions.Value)
         {
         }
 

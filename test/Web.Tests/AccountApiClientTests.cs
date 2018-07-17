@@ -4,7 +4,9 @@
     using System.Linq;
     using System.Security.Claims;
     using Client;
+    using Microsoft.Extensions.Options;
     using Skeleton.Web.Integration.BaseApiClient.Exceptions;
+    using Skeleton.Web.Serialization.Jil.Serializer;
     using Skeleton.Web.Testing;
     using Skeleton.Web.Testing.Extensions;
     using Xunit;
@@ -12,7 +14,22 @@
     [Collection(nameof(ApiTestsCollection))]
     public class AccountApiClientTests : BaseApiClientTests<BaseApiTestsFixture<Startup>, ApiClient>
     {
-        public AccountApiClientTests(BaseApiTestsFixture<Startup> fixture) : base(fixture)
+        public AccountApiClientTests(BaseApiTestsFixture<Startup> fixture)
+            : base(
+                fixture,
+                (httpClient, baseUrl, timeout) =>
+                    new ApiClient(
+                        httpClient,
+                        Options.Create(
+                            new ApiClientOptions
+                            {
+                                BaseUrl = baseUrl,
+                                Timeout = timeout,
+                                Serializer = JilSerializer.Default
+                            }
+                        )
+                    )
+            )
         {
         }
 

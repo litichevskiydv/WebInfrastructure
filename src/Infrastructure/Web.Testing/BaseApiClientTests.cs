@@ -1,12 +1,10 @@
 ﻿namespace Skeleton.Web.Testing
 {
     using System;
+    using System.Net.Http;
     using System.Threading.Tasks;
-    using Integration.BaseApiClient.Configuration;
     using Integration.BaseApiFluentClient;
     using Moq;
-    using Serialization.Jil.Configuration;
-    using Serialization.Jil.Serializer;
 
     public class BaseApiClientTests<TFixture, TApiClient>
         where TFixture : BaseApiTestsFixture, new()
@@ -16,18 +14,15 @@
         protected readonly TApiClient ApiClient;
         protected dynamic AsyncApiClient => new FluentChainedTask<TApiClient>(Task.FromResult(ApiClient));
 
-        protected BaseApiClientTests(TFixture fixture)
+        protected BaseApiClientTests(TFixture fixture, Func<HttpClient, string, TimeSpan, TApiClient> defaultClientFactory)
         {
             Fixture = fixture;
             Fixture.MockLogger.ResetCalls();
 
-            ApiClient = (TApiClient) Activator.CreateInstance(typeof(TApiClient),
-                new Func<ClientConfiguration, ClientConfiguration>(
-                    x => x.WithBaseUrl(Fixture.Server.BaseAddress.ToString())
-                        .WithTimeout(TimeSpan.FromMilliseconds(Fixture.TimeoutInMilliseconds))
-                        .WithHttpMessageHandler(Fixture.Server.CreateHandler())
-                        .WithSerializer(new JilSerializer(OptionsExtensions.Default))
-                )
+            ApiClient = defaultClientFactory(
+                Fixture.Server.CreateClient(),
+                Fixture.Server.BaseAddress.ToString(),
+                TimeSpan.FromMilliseconds(Fixture.TimeoutInMilliseconds)
             );
         }
     }
