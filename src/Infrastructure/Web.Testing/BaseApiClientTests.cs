@@ -22,7 +22,7 @@
             ApiClient = defaultClientFactory(
                 Fixture.Server.CreateClient(),
                 Fixture.Server.BaseAddress.ToString(),
-                TimeSpan.FromMilliseconds(Fixture.TimeoutInMilliseconds)
+                Fixture.ApiTimeout
             );
         }
     }

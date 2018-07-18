@@ -122,7 +122,7 @@
                         new ValuesServiceClientOptions
                         {
                             BaseUrl = Fixture.Server.BaseAddress.ToString(),
-                            Timeout = TimeSpan.FromMilliseconds(Fixture.TimeoutInMilliseconds),
+                            Timeout = Fixture.ApiTimeout,
                             Serializer = ProtobufSerializer.Default
                         }
                     )

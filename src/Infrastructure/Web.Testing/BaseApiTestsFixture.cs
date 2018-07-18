@@ -21,7 +21,7 @@
         public Mock<ILogger> MockLogger { get; }
 
         public IConfigurationRoot Configuration { get; }
-        public int TimeoutInMilliseconds { get; }
+        public TimeSpan ApiTimeout { get; }
 
         protected virtual void OverrideRegisteredDependencies(ContainerBuilder containerBuilder)
         {
@@ -42,7 +42,7 @@
                     .AddCiDependentSettings(environmentName);
 
             Configuration = ConfigurationSetup(new ConfigurationBuilder(), currentDirectory, environment).Build();
-            TimeoutInMilliseconds = Configuration.GetValue<int>("ApiTimeoutInMilliseconds");
+            ApiTimeout = Configuration.GetValue<TimeSpan>("ApiTimeout");
 
             Server = new TestServer(
                 new WebHostBuilder()
