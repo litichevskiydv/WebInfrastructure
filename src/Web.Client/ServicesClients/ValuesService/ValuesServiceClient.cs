@@ -1,4 +1,4 @@
-﻿namespace Web.Client.ServicesClients
+﻿namespace Web.Client.ServicesClients.ValuesService
 {
     using System.Collections.Generic;
     using System.Net.Http;
@@ -8,7 +8,7 @@
     using Skeleton.Web.Conventions.Responses;
     using Skeleton.Web.Integration.BaseApiClient;
 
-    public class ValuesServiceClient : BaseClient
+    public class ValuesServiceClient : BaseClient, IValuesServiceClient
     {
         public ValuesServiceClient(HttpClient httpClient, IOptions<ValuesServiceClientOptions> clientOptions) 
             : base(httpClient, clientOptions.Value)

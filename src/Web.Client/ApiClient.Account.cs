@@ -1,6 +1,6 @@
 ﻿namespace Web.Client
 {
-    using ServicesClients;
+    using ServicesClients.AccountController;
 
     public partial class ApiClient
     {

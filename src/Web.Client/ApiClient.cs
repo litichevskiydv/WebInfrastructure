@@ -3,7 +3,8 @@
     using System;
     using System.Net.Http;
     using Microsoft.Extensions.Options;
-    using ServicesClients;
+    using ServicesClients.AccountController;
+    using ServicesClients.ValuesService;
     using Skeleton.Web.Integration.BaseApiFluentClient;
 
     public partial class ApiClient : BaseFluentClient

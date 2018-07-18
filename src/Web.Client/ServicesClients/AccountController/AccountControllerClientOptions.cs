@@ -1,4 +1,4 @@
-﻿namespace Web.Client.ServicesClients
+﻿namespace Web.Client.ServicesClients.AccountController
 {
     using Skeleton.Web.Integration.BaseApiClient.Configuration;
 
