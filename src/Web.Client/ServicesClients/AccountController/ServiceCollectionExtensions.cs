@@ -5,7 +5,6 @@
     using Microsoft.Extensions.DependencyInjection;
     using Skeleton.Web.Integration.BaseApiClient.Configuration;
     using Skeleton.Web.Serialization.Abstractions;
-    using ValuesService;
 
     public static class ServiceCollectionExtensions
     {

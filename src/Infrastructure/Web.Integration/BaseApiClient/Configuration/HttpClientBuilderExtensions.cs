@@ -1,6 +1,8 @@
 ﻿namespace Skeleton.Web.Integration.BaseApiClient.Configuration
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Net.Http;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Options;
@@ -25,6 +27,19 @@
             optionsConfigurator(services.AddOptions<TClientOptions>());
 
             return httpClientBuilder;
+        }
+
+        [ExcludeFromCodeCoverage]
+        public static IHttpClientBuilder UseDefaultPrimaryMessageHandler(
+            this IHttpClientBuilder httpClientBuilder,
+            Func<HttpClientHandler, HttpClientHandler> handlerConfigurator)
+        {
+            if (httpClientBuilder == null)
+                throw new ArgumentNullException(nameof(httpClientBuilder));
+
+            return httpClientBuilder.ConfigurePrimaryHttpMessageHandler(
+                x => handlerConfigurator(new HttpClientHandler())
+            );
         }
     }
 }
