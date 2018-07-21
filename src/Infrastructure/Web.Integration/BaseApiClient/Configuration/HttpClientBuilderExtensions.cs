@@ -1,7 +1,6 @@
 ﻿namespace Skeleton.Web.Integration.BaseApiClient.Configuration
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using System.Net.Http;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -29,7 +28,6 @@
             return httpClientBuilder;
         }
 
-        [ExcludeFromCodeCoverage]
         public static IHttpClientBuilder UseDefaultPrimaryMessageHandler(
             this IHttpClientBuilder httpClientBuilder,
             Func<HttpClientHandler, HttpClientHandler> handlerConfigurator)
