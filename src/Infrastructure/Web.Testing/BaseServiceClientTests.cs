@@ -5,21 +5,23 @@
     using Integration.BaseApiClient;
     using Moq;
 
-    public class BaseServiceClientTests<TFixture, TServiceClient>
-        where TFixture : BaseApiTestsFixture, new()
+    public class BaseServiceClientTests<TStartup, TServiceClient>
+        where TStartup : class
         where TServiceClient : BaseClient
     {
-        protected readonly TFixture Fixture;
+        protected readonly BaseApiTestsFixture<TStartup> Fixture;
         protected readonly TServiceClient ServiceClient;
 
-        protected BaseServiceClientTests(TFixture fixture, Func<HttpClient, string, TimeSpan, TServiceClient> defaultClientFactory)
+        protected BaseServiceClientTests(
+            BaseApiTestsFixture<TStartup> fixture, 
+            Func<HttpClient, string, TimeSpan, TServiceClient> defaultClientFactory)
         {
             Fixture = fixture;
             Fixture.MockLogger.ResetCalls();
 
             ServiceClient = defaultClientFactory(
-                Fixture.Server.CreateClient(),
-                Fixture.Server.BaseAddress.ToString(),
+                Fixture.CreateClient(),
+                Fixture.ClientOptions.BaseAddress.ToString(),
                 Fixture.ApiTimeout
             );
         }

@@ -12,9 +12,8 @@
     [UsedImplicitly(ImplicitUseTargetFlags.Members)]
     public static class Program
     {
-        public static void Main(string[] args)
-        {
-            var host = new WebHostBuilder()
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+            new WebHostBuilder()
                 .UseKestrel()
                 .ConfigureServices(services => services.AddAutofac())
                 .UseIISIntegration()
@@ -31,10 +30,9 @@
                     }
                 )
                 .UseSerilog((context, configuration) => configuration.UseDefaultSettings(context.Configuration))
-                .UseStartup<Startup>()
-                .Build();
+                .UseStartup<Startup>();
 
-            host.Run();
-        }
+        public static void Main(string[] args) =>
+            CreateWebHostBuilder(args).Build().Run();
     }
 }

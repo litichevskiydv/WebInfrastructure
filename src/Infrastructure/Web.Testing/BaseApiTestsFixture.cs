@@ -4,83 +4,61 @@
     using System.IO;
     using System.Reflection;
     using Autofac;
-    using Autofac.Extensions.DependencyInjection;
     using Configuration;
     using Extensions;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Mvc.Testing;
     using Microsoft.AspNetCore.TestHost;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Moq;
 
-    public abstract class BaseApiTestsFixture : IDisposable
+    public class BaseApiTestsFixture<TStartup> : WebApplicationFactory<TStartup> where TStartup : class
     {
-        protected bool Disposed;
-
-        public TestServer Server { get; }
-        public Mock<ILogger> MockLogger { get; }
+        private readonly string _environmentName;
+        private readonly string _configsDirectory;
 
         public IConfigurationRoot Configuration { get; }
         public TimeSpan ApiTimeout { get; }
+
+        public Mock<ILogger> MockLogger { get; }
+
+        private static IConfigurationBuilder ConfigurationSetup(IConfigurationBuilder builder, string configsPath, string environmentName) =>
+            builder
+                .AddDefaultConfigs(configsPath, environmentName)
+                .AddCiDependentSettings(environmentName);
+
+        public BaseApiTestsFixture()
+        {
+            _environmentName
+                = Environment.GetEnvironmentVariable("Hosting:Environment")
+                  ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
+                  ?? EnvironmentName.Development;
+            _configsDirectory = Path.GetDirectoryName(typeof(TStartup).GetTypeInfo().Assembly.Location);
+
+            Configuration = ConfigurationSetup(new ConfigurationBuilder(), _configsDirectory, _environmentName).Build();
+            ApiTimeout = Configuration.GetValue<TimeSpan>("ApiTimeout");
+
+            MockLogger = MockLoggerExtensions.CreateMockLogger();
+        }
+
+        protected virtual void OverrideRegisteredDependencies(IServiceCollection serviceCollection)
+        {
+        }
 
         protected virtual void OverrideRegisteredDependencies(ContainerBuilder containerBuilder)
         {
         }
 
-        protected BaseApiTestsFixture(Type startupType)
+        protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            MockLogger = MockLoggerExtensions.CreateMockLogger();
-
-            var environment = Environment.GetEnvironmentVariable("Hosting:Environment")
-                                  ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
-                                  ?? EnvironmentName.Development;
-            var currentDirectory = Path.GetDirectoryName(startupType.GetTypeInfo().Assembly.Location);
-
-            IConfigurationBuilder ConfigurationSetup(IConfigurationBuilder builder, string configsPath, string environmentName) =>
-                builder
-                    .AddDefaultConfigs(configsPath, environmentName)
-                    .AddCiDependentSettings(environmentName);
-
-            Configuration = ConfigurationSetup(new ConfigurationBuilder(), currentDirectory, environment).Build();
-            ApiTimeout = Configuration.GetValue<TimeSpan>("ApiTimeout");
-
-            Server = new TestServer(
-                new WebHostBuilder()
-                    .UseEnvironment(environment)
-                    .ConfigureAppConfiguration(builder => ConfigurationSetup(builder, currentDirectory, environment))
-                    .ConfigureServices(services => services.AddAutofac())
-                    .UseMockLogger(MockLogger)
-                    .UseStartup(startupType)
-                    .ConfigureTestContainer<ContainerBuilder>(OverrideRegisteredDependencies)
-            );
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if(Disposed)
-                return;
-
-            if (disposing)
-                Server?.Dispose();
-            Disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        ~BaseApiTestsFixture()
-        {
-            Dispose(false);
-        }
-    }
-
-    public class BaseApiTestsFixture<TStartup> : BaseApiTestsFixture where TStartup : WebApiBaseStartup
-    {
-        public BaseApiTestsFixture() : base(typeof(TStartup))
-        {
+            builder
+                .UseMockLogger(MockLogger)
+                .UseEnvironment(_environmentName)
+                .ConfigureAppConfiguration(x => ConfigurationSetup(x, _configsDirectory, _environmentName))
+                .ConfigureTestServices(OverrideRegisteredDependencies)
+                .ConfigureTestContainer<ContainerBuilder>(OverrideRegisteredDependencies);
         }
     }
 }

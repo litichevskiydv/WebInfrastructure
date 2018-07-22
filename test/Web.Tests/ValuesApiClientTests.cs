@@ -13,7 +13,7 @@
     using Xunit;
 
     [Collection(nameof(ApiTestsCollection))]
-    public class ValuesApiClientTests : BaseApiClientTests<BaseApiTestsFixture<Startup>, ApiClient>
+    public class ValuesApiClientTests : BaseApiClientTests<Startup, ApiClient>
     {
         public ValuesApiClientTests(BaseApiTestsFixture<Startup> fixture)
             : base(

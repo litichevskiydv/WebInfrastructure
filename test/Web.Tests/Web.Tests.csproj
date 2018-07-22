@@ -8,14 +8,15 @@
     <IsPackable>false</IsPackable>
     <AssemblyName>Web.Tests</AssemblyName>
   </PropertyGroup>
-
-  <Target Name="CopyAditionalFiles" AfterTargets="Build" Condition="'$(TargetFramework)'!=''">
-    <ItemGroup>
-      <DepsFilePaths Include="$([System.IO.Path]::ChangeExtension('%(_ResolvedProjectReferencePaths.FullPath)', '.deps.json'))" />
-    </ItemGroup>
-
-    <Copy SourceFiles="%(DepsFilePaths.FullPath)" DestinationFolder="$(OutputPath)" Condition="Exists('%(DepsFilePaths.FullPath)')" />
-  </Target>
+  
+  <ItemGroup>
+    <AssemblyAttribute Include="Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactoryContentRootAttribute ">
+      <_Parameter1>Web</_Parameter1>
+      <_Parameter2>../../../../../src/Web</_Parameter2>
+      <_Parameter3>Web.csproj</_Parameter3>
+      <_Parameter4>-1</_Parameter4>
+    </AssemblyAttribute>
+  </ItemGroup>
 
   <ItemGroup>
     <None Update="appsettings.Development.json">

@@ -6,22 +6,24 @@
     using Integration.BaseApiFluentClient;
     using Moq;
 
-    public class BaseApiClientTests<TFixture, TApiClient>
-        where TFixture : BaseApiTestsFixture, new()
+    public class BaseApiClientTests<TStartup, TApiClient>
+        where TStartup : class
         where TApiClient : BaseFluentClient
     {
-        protected readonly TFixture Fixture;
+        protected readonly BaseApiTestsFixture<TStartup> Fixture;
         protected readonly TApiClient ApiClient;
         protected dynamic AsyncApiClient => new FluentChainedTask<TApiClient>(Task.FromResult(ApiClient));
 
-        protected BaseApiClientTests(TFixture fixture, Func<HttpClient, string, TimeSpan, TApiClient> defaultClientFactory)
+        protected BaseApiClientTests(
+            BaseApiTestsFixture<TStartup> fixture, 
+            Func<HttpClient, string, TimeSpan, TApiClient> defaultClientFactory)
         {
             Fixture = fixture;
             Fixture.MockLogger.ResetCalls();
 
             ApiClient = defaultClientFactory(
-                Fixture.Server.CreateClient(),
-                Fixture.Server.BaseAddress.ToString(),
+                Fixture.CreateClient(),
+                Fixture.ClientOptions.BaseAddress.ToString(),
                 Fixture.ApiTimeout
             );
         }
