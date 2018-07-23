@@ -1,28 +1,39 @@
 ﻿namespace Skeleton.Web.Testing
 {
     using System;
-    using System.Net.Http;
     using Integration.BaseApiClient;
+    using Integration.BaseApiClient.Configuration;
+    using Microsoft.Extensions.Options;
     using Moq;
+    using Serialization.Jil.Serializer;
 
-    public class BaseServiceClientTests<TStartup, TServiceClient>
-        where TStartup : class
-        where TServiceClient : BaseClient
+    public class BaseServiceClientTests<TStartup> where TStartup : class
     {
         protected readonly BaseApiTestsFixture<TStartup> Fixture;
-        protected readonly TServiceClient ServiceClient;
 
-        protected BaseServiceClientTests(
-            BaseApiTestsFixture<TStartup> fixture, 
-            Func<HttpClient, string, TimeSpan, TServiceClient> defaultClientFactory)
+        protected BaseServiceClientTests(BaseApiTestsFixture<TStartup> fixture)
         {
             Fixture = fixture;
             Fixture.MockLogger.ResetCalls();
+        }
 
-            ServiceClient = defaultClientFactory(
+        protected TClient CreateClient<TClient, TClientOptions>(Action<TClientOptions> configureOptions = null)
+            where TClient : BaseClient
+            where TClientOptions : BaseClientOptions, new()
+        {
+            var clientOptions
+                = new TClientOptions
+                  {
+                      BaseUrl = Fixture.ClientOptions.BaseAddress.ToString(),
+                      Timeout = Fixture.ApiTimeout,
+                      Serializer = JilSerializer.Default
+                  };
+            configureOptions?.Invoke(clientOptions);
+
+            return (TClient) Activator.CreateInstance(
+                typeof(TClient),
                 Fixture.CreateClient(),
-                Fixture.ClientOptions.BaseAddress.ToString(),
-                Fixture.ApiTimeout
+                Options.Create(clientOptions)
             );
         }
     }

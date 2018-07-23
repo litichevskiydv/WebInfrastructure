@@ -4,10 +4,8 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Client.ServicesClients.ValuesService;
-    using Microsoft.Extensions.Options;
     using Models.Input;
     using Skeleton.Web.Integration.BaseApiClient.Exceptions;
-    using Skeleton.Web.Serialization.Jil.Serializer;
     using Skeleton.Web.Serialization.JsonNet.Serializer;
     using Skeleton.Web.Serialization.Protobuf.Serializer;
     using Skeleton.Web.Testing;
@@ -15,31 +13,19 @@
     using Xunit;
 
     [Collection(nameof(ApiTestsCollection))]
-    public class ValuesControllerTests : BaseServiceClientTests<Startup, ValuesServiceClient>
+    public class ValuesControllerTests : BaseServiceClientTests<Startup>
     {
-        public ValuesControllerTests(BaseApiTestsFixture<Startup> fixture)
-            : base(
-                fixture,
-                (httpClient, baseUrl, timeout) =>
-                    new ValuesServiceClient(
-                        httpClient,
-                        Options.Create(
-                            new ValuesServiceClientOptions
-                            {
-                                BaseUrl = baseUrl,
-                                Timeout = timeout,
-                                Serializer = JilSerializer.Default
-                            }
-                        )
-                    )
-            )
+        private readonly ValuesServiceClient _defaultClient;
+
+        public ValuesControllerTests(BaseApiTestsFixture<Startup> fixture) : base(fixture)
         {
+            _defaultClient = CreateClient<ValuesServiceClient, ValuesServiceClientOptions>();
         }
 
         [Fact]
         public void ShouldReturnValues()
         {
-            Assert.NotEmpty(ServiceClient.Get());
+            Assert.NotEmpty(_defaultClient.Get());
             Fixture.MockLogger
                 .VerifyNoErrorsWasLogged()
                 .VerifyNoWarningsWasLogged();
@@ -49,19 +35,15 @@
         public void ShouldReturnBadRequestIfOperationWasCancelled()
         {
             // Given
-            var client =
-                new ValuesServiceClient(
-                    Fixture.Server.CreateClient(),
-                    Options.Create(
-                        new ValuesServiceClientOptions
-                        {
-                            BaseUrl = Fixture.Server.BaseAddress.ToString(),
-                            Timeout = TimeSpan.FromMilliseconds(100),
-                            Serializer = JsonNetSerializer.Default
-                        }
-                    )
-                );
+            var client = CreateClient<ValuesServiceClient, ValuesServiceClientOptions>(
+                x =>
+                {
+                    x.Timeout = TimeSpan.FromMilliseconds(100);
+                    x.Serializer = JsonNetSerializer.Default;
+                }
+            );
 
+            // When, Then
             Assert.Throws<BadRequestException>(() => client.Get());
             Fixture.MockLogger
                 .VerifyNoErrorsWasLogged()
@@ -71,7 +53,7 @@
         [Fact]
         public async Task ShouldReturnValuesAsync()
         {
-            Assert.NotEmpty(await ServiceClient.GetAsync());
+            Assert.NotEmpty(await _defaultClient.GetAsync());
             Fixture.MockLogger
                 .VerifyNoErrorsWasLogged()
                 .VerifyNoWarningsWasLogged();
@@ -85,8 +67,10 @@
             const string expectedValue = "test";
 
             // When
-            ServiceClient.Set(new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = expectedValue}}});
-            var actualValue = ServiceClient.Get(id);
+            _defaultClient.Set(
+                new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = expectedValue}}}
+            );
+            var actualValue = _defaultClient.Get(id);
 
             // Then
             Assert.Equal(expectedValue, actualValue);
@@ -98,13 +82,13 @@
         [Fact]
         public void ShouldNotSetValuesBecauseOfEmptyCollection()
         {
-            Assert.Throws<BadRequestException>(() => ServiceClient.Set(new ValuesModificationRequest()));
+            Assert.Throws<BadRequestException>(() => _defaultClient.Set(new ValuesModificationRequest()));
         }
 
         [Fact]
         public void ShouldNotSetValuesBecauseOfEmptyRequest()
         {
-            Assert.Throws<BadRequestException>(() => ServiceClient.Set(null));
+            Assert.Throws<BadRequestException>(() => _defaultClient.Set(null));
         }
 
         [Fact]
@@ -116,16 +100,8 @@
 
 
             var client =
-                new ValuesServiceClient(
-                    Fixture.Server.CreateClient(),
-                    Options.Create(
-                        new ValuesServiceClientOptions
-                        {
-                            BaseUrl = Fixture.Server.BaseAddress.ToString(),
-                            Timeout = Fixture.ApiTimeout,
-                            Serializer = ProtobufSerializer.Default
-                        }
-                    )
+                CreateClient<ValuesServiceClient, ValuesServiceClientOptions>(
+                    x => x.Serializer = ProtobufSerializer.Default
                 );
 
             // When
@@ -147,10 +123,10 @@
             const string expectedValue = "test";
 
             // When
-            await ServiceClient.SetAsync(
+            await _defaultClient.SetAsync(
                 new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = expectedValue}}}
             );
-            var actualValue = await ServiceClient.GetAsync(id);
+            var actualValue = await _defaultClient.GetAsync(id);
 
             // Then
             Assert.Equal(expectedValue, actualValue);
@@ -162,7 +138,7 @@
         [Fact]
         public void ShouldNotValidateNegativeKeys()
         {
-            Assert.Throws<BadRequestException>(() => ServiceClient.Post(-1, "test"));
+            Assert.Throws<BadRequestException>(() => _defaultClient.Post(-1, "test"));
 
             Fixture.MockLogger
                 .VerifyNoErrorsWasLogged()
@@ -177,8 +153,8 @@
             const string expectedValue = "test";
 
             // When
-            await ServiceClient.PostAsync(id, expectedValue);
-            var actualValue = await ServiceClient.GetAsync(id);
+            await _defaultClient.PostAsync(id, expectedValue);
+            var actualValue = await _defaultClient.GetAsync(id);
 
             // Then
             Assert.Equal(expectedValue, actualValue);
@@ -194,11 +170,13 @@
             const int id = 1;
 
             // When
-            ServiceClient.Set(new ValuesModificationRequest { Values = new[] { new ConfigurationValue { Id = id, Value = "test" } } });
-            ServiceClient.Delete(id);
+            _defaultClient.Set(
+                new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = "test"}}}
+            );
+            _defaultClient.Delete(id);
 
             // Then
-            Assert.Throws<ApiException>(() => ServiceClient.Get(id));
+            Assert.Throws<ApiException>(() => _defaultClient.Get(id));
             Fixture.MockLogger
                 .VerifyErrorWasLogged(typeof(KeyNotFoundException))
                 .VerifyNoWarningsWasLogged();
@@ -211,11 +189,13 @@
             const int id = 1;
 
             // When
-            await ServiceClient.SetAsync(new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = "trst"}}});
-            await ServiceClient.DeleteAsync(id);
+            await _defaultClient.SetAsync(
+                new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = "trst"}}}
+            );
+            await _defaultClient.DeleteAsync(id);
 
             // Then
-            Assert.Throws<ApiException>(() => ServiceClient.Get(id));
+            Assert.Throws<ApiException>(() => _defaultClient.Get(id));
             Fixture.MockLogger
                 .VerifyErrorWasLogged<KeyNotFoundException>()
                 .VerifyNoWarningsWasLogged();
@@ -228,7 +208,7 @@
             const int id = 2;
 
             // When, Then
-            Assert.Throws<ApiException>(() => ServiceClient.Get(id));
+            Assert.Throws<ApiException>(() => _defaultClient.Get(id));
             Fixture.MockLogger
                 .VerifyErrorWasLogged<KeyNotFoundException>()
                 .VerifyNoWarningsWasLogged();
@@ -241,7 +221,7 @@
             const int id = 2;
 
             // When, Then
-            await Assert.ThrowsAsync<ApiException>(async () => await ServiceClient.GetAsync(id));
+            await Assert.ThrowsAsync<ApiException>(async () => await _defaultClient.GetAsync(id));
             Fixture.MockLogger
                 .VerifyErrorWasLogged<KeyNotFoundException>()
                 .VerifyNoWarningsWasLogged();
@@ -254,8 +234,8 @@
             const int id = 2;
 
             // When, Then
-            ServiceClient.Set(new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = "   "}}});
-            await Assert.ThrowsAsync<NotFoundException>(async () => await ServiceClient.GetAsync(id));
+            _defaultClient.Set(new ValuesModificationRequest {Values = new[] {new ConfigurationValue {Id = id, Value = "   "}}});
+            await Assert.ThrowsAsync<NotFoundException>(async () => await _defaultClient.GetAsync(id));
         }
     }
 }

@@ -1,31 +1,44 @@
 ﻿namespace Skeleton.Web.Testing
 {
     using System;
-    using System.Net.Http;
     using System.Threading.Tasks;
+    using Integration.BaseApiClient.Configuration;
     using Integration.BaseApiFluentClient;
+    using Microsoft.Extensions.Options;
     using Moq;
+    using Serialization.Jil.Serializer;
 
-    public class BaseApiClientTests<TStartup, TApiClient>
-        where TStartup : class
-        where TApiClient : BaseFluentClient
+    public class BaseApiClientTests<TStartup> where TStartup : class
     {
         protected readonly BaseApiTestsFixture<TStartup> Fixture;
-        protected readonly TApiClient ApiClient;
-        protected dynamic AsyncApiClient => new FluentChainedTask<TApiClient>(Task.FromResult(ApiClient));
 
-        protected BaseApiClientTests(
-            BaseApiTestsFixture<TStartup> fixture, 
-            Func<HttpClient, string, TimeSpan, TApiClient> defaultClientFactory)
+        protected BaseApiClientTests(BaseApiTestsFixture<TStartup> fixture)
         {
             Fixture = fixture;
             Fixture.MockLogger.ResetCalls();
+        }
 
-            ApiClient = defaultClientFactory(
+        protected TClient CreateClient<TClient, TClientOptions>(Action<TClientOptions> configureOptions = null)
+            where TClient : BaseFluentClient
+            where TClientOptions : BaseClientOptions, new()
+        {
+            var clientOptions
+                = new TClientOptions
+                  {
+                      BaseUrl = Fixture.ClientOptions.BaseAddress.ToString(),
+                      Timeout = Fixture.ApiTimeout,
+                      Serializer = JilSerializer.Default
+                  };
+            configureOptions?.Invoke(clientOptions);
+
+            return (TClient)Activator.CreateInstance(
+                typeof(TClient),
                 Fixture.CreateClient(),
-                Fixture.ClientOptions.BaseAddress.ToString(),
-                Fixture.ApiTimeout
+                Options.Create(clientOptions)
             );
         }
+
+        protected dynamic CreateAsyncClient<TClient>(TClient client) where TClient : BaseFluentClient =>
+            new FluentChainedTask<TClient>(Task.FromResult(client));
     }
 }
