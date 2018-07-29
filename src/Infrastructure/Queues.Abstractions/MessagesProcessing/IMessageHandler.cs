@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Queues.Abstractions
+﻿namespace Skeleton.Queues.Abstractions.MessagesProcessing
 {
     public interface IMessageHandler<in TMessage>
     {

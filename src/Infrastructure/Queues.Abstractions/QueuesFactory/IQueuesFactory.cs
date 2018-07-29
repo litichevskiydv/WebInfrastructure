@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Queues.Abstractions
+﻿namespace Skeleton.Queues.Abstractions.QueuesFactory
 {
     public interface IQueuesFactory
     {
