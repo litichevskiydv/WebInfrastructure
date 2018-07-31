@@ -3,11 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Data;
-    using System.Dynamic;
-    using System.Linq;
     using System.Threading.Tasks;
-    using Extensions;
-    using Extensions.PropertyInfoProviders;
 
     public static class SessionExtensions
     {
