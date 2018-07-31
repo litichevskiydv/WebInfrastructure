@@ -3,7 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Data.SqlClient;
     using System.Threading.Tasks;
+    using Extensions;
     using global::Dapper;
 
     public class Session : ISession
@@ -30,28 +32,47 @@
                 throw new ObjectDisposedException(objectName);
         }
 
-        public IEnumerable<TSource> Query<TSource>(string sql, object param = null, bool buffered = true, int? commandTimeout = null, CommandType? commandType = null)
+        private static int? ComputeCommandTimeoutInSeconds(TimeSpan? commandTimeout)
         {
-            ValidateStatus(nameof(IDbConnection));
-            return _connection.Query<TSource>(sql, param, _transaction, buffered, commandTimeout, commandType);
+            return commandTimeout.HasValue ? (int)commandTimeout.Value.TotalSeconds : (int?)null;
         }
 
-        public Task<IEnumerable<TSource>> QueryAsync<TSource>(string sql, object param = null, int? commandTimeout = null, CommandType? commandType = null)
+        public IEnumerable<TSource> Query<TSource>(string sql, object param = null, bool buffered = true, TimeSpan? commandTimeout = null, CommandType? commandType = null)
         {
             ValidateStatus(nameof(IDbConnection));
-            return _connection.QueryAsync<TSource>(sql, param, _transaction, commandTimeout, commandType);
+            return _connection.Query<TSource>(sql, param, _transaction, buffered, ComputeCommandTimeoutInSeconds(commandTimeout), commandType);
         }
 
-        public int Execute(string sql, object param = null, int? commandTimeout = null, CommandType? commandType = null)
+        public Task<IEnumerable<TSource>> QueryAsync<TSource>(string sql, object param = null, TimeSpan? commandTimeout = null, CommandType? commandType = null)
         {
             ValidateStatus(nameof(IDbConnection));
-            return _connection.Execute(sql, param, _transaction, commandTimeout, commandType);
+            return _connection.QueryAsync<TSource>(sql, param, _transaction, ComputeCommandTimeoutInSeconds(commandTimeout), commandType);
         }
 
-        public Task<int> ExecuteAsync(string sql, object param = null, int? commandTimeout = null, CommandType? commandType = null)
+        public int Execute(string sql, object param = null, TimeSpan? commandTimeout = null, CommandType? commandType = null)
         {
             ValidateStatus(nameof(IDbConnection));
-            return _connection.ExecuteAsync(sql, param, _transaction, commandTimeout, commandType);
+            return _connection.Execute(sql, param, _transaction, ComputeCommandTimeoutInSeconds(commandTimeout), commandType);
+        }
+
+        public Task<int> ExecuteAsync(string sql, object param = null, TimeSpan? commandTimeout = null, CommandType? commandType = null)
+        {
+            ValidateStatus(nameof(IDbConnection));
+            return _connection.ExecuteAsync(sql, param, _transaction, ComputeCommandTimeoutInSeconds(commandTimeout), commandType);
+        }
+
+        public void BulkInsert<TSource>(string tableName, IReadOnlyCollection<TSource> source,
+            Func<IColumnsMappingConfigurator<TSource>, IColumnsMappingConfigurator<TSource>> columnsMappingSetup = null,
+            int? batchSize = null, TimeSpan? timeout = null) where TSource : class
+        {
+            ValidateStatus(nameof(IDbConnection));
+
+            var sqlConnection = _connection as SqlConnection;
+            var sqlTransaction = _transaction as SqlTransaction;
+            if (sqlConnection == null || sqlTransaction == null)
+                throw new NotImplementedException();
+
+            sqlConnection.BulkInsert(tableName, source, columnsMappingSetup, sqlTransaction, batchSize, timeout);
         }
 
         public void Commit()
