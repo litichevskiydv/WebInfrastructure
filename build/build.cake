@@ -36,7 +36,7 @@ var branch =
 string versionSuffix = null;
 if(string.IsNullOrWhiteSpace(branch) == false && branch != "master")
 {
-    versionSuffix = $"-dev-build{buildNumber:00000}";
+    versionSuffix = $"dev-build{buildNumber:00000}";
 
     var match = Regex.Match(branch, "release\\/\\d+\\.\\d+\\.\\d+\\-?(.*)", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
     if(match.Success)
