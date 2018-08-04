@@ -21,20 +21,13 @@
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Web.Conventions\Web.Conventions.csproj" />
     <ProjectReference Include="..\Web.Logging.Abstractions\Web.Logging.Abstractions.csproj" />
-    <ProjectReference Include="..\Web.Serialization.Jil\Web.Serialization.Jil.csproj" />
     <ProjectReference Include="..\Web.Serialization.JsonNet\Web.Serialization.JsonNet.csproj" />
-    <ProjectReference Include="..\Web.Serialization.Protobuf\Web.Serialization.Protobuf.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="4.8.1" />
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.1.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0" />
   </ItemGroup>
 

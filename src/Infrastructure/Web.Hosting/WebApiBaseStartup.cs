@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Web
+﻿namespace Skeleton.Web.Hosting
 {
     using System;
     using Autofac;

@@ -18,7 +18,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Web.Hosting\Web.Hosting.csproj" />
     <ProjectReference Include="..\Web.Integration\Web.Integration.csproj" />
+    <ProjectReference Include="..\Web.Serialization.Jil\Web.Serialization.Jil.csproj" />
     <ProjectReference Include="..\Web\Web.csproj" />
   </ItemGroup>
 

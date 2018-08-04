@@ -6,6 +6,7 @@
     using Autofac;
     using Configuration;
     using Extensions;
+    using Hosting;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc.Testing;
     using Microsoft.AspNetCore.TestHost;
@@ -14,7 +15,7 @@
     using Microsoft.Extensions.Logging;
     using Moq;
 
-    public class BaseApiTestsFixture<TStartup> : WebApplicationFactory<TStartup> where TStartup : class
+    public class BaseApiTestsFixture<TStartup> : WebApplicationFactory<TStartup> where TStartup : WebApiBaseStartup
     {
         private readonly string _environmentName;
         private readonly string _configsDirectory;
