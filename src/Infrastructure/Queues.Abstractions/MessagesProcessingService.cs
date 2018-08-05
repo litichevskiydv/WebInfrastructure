@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Queues.Abstractions.MessagesProcessing
+﻿namespace Skeleton.Queues.Abstractions
 {
     using System;
     using System.Threading;
@@ -14,7 +14,8 @@
         protected readonly ILogger Logger;
         protected readonly MessagesProcessingServiceOptions Options;
         
-        protected IQueue<TMessage> Queue;
+        protected readonly CancellationTokenSource StoppingCts;
+        protected ITypedQueue<TMessage> Queue;
         protected bool Disposed;
 
         protected MessagesProcessingService(
@@ -36,6 +37,8 @@
             MessageHandler = messageHandler;
             Logger = logger;
             Options = options;
+
+            StoppingCts = new CancellationTokenSource();
         }
 
         private async Task EstablishConnection(CancellationToken stoppingToken)
@@ -44,13 +47,13 @@
             {
                 try
                 {
-                    Queue = QueuesFactory.Create<TMessage>(Options.QueueName)
-                        .Subscribe(MessageHandler);
+                    Queue = QueuesFactory.Create<TMessage>(Options.QueueCreationOptions)
+                        .Subscribe(MessageHandler, StoppingCts.Token);
                 }
                 catch (Exception e)
                 {
                     Logger.LogError(e, "Error has been occurred during establishing connection to queue");
-                    await Task.Delay(Options.RetryInitialTimeout, stoppingToken);
+                    await Task.Delay(Options.ConnectionAttemptTimeout, stoppingToken);
                 }
             }
         }
@@ -68,7 +71,10 @@
                 return;
 
             if (disposing)
+            {
+                StoppingCts.Cancel();
                 Queue?.Dispose();
+            }
 
             Disposed = true;
         }

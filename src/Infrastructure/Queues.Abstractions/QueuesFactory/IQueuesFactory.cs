@@ -2,6 +2,6 @@
 {
     public interface IQueuesFactory
     {
-        IQueue<TMessage> Create<TMessage>(string name);
+        ITypedQueue<TMessage> Create<TMessage>(QueueCreationOptions creationOptions);
     }
 }
