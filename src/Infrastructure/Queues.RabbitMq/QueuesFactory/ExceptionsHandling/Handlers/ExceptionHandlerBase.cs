@@ -26,11 +26,28 @@
             Queue = queue;
         }
 
-        public abstract Task HandleAsync(
+        protected abstract Task HandleExceptionAsync(
             Exception exception,
             ulong messageDeliveryTag,
             string messageId,
             string messageContent,
             CancellationToken cancellationToken);
+
+        public async Task HandleAsync(
+            Exception exception,
+            ulong messageDeliveryTag,
+            string messageId,
+            string messageContent,
+            CancellationToken cancellationToken)
+        {
+            try
+            {
+                await HandleExceptionAsync(exception, messageDeliveryTag, messageId, messageContent, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, "Error during has occurred during handling previous exception");
+            }
+        }
     }
 }

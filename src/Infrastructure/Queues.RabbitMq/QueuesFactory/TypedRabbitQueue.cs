@@ -17,7 +17,7 @@
             int retriesCount,
             TimeSpan retryInitialTimeout,
             ExceptionHandlerBase exceptionHandler,
-            ILogger logger)
+            ILogger<TypedRabbitQueue<TMessage>> logger)
             : base(name, connection, retriesCount, retryInitialTimeout, exceptionHandler, logger)
         {
         }

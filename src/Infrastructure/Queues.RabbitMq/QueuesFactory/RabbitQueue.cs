@@ -36,7 +36,7 @@
             _connection = connection;
 
             ExceptionHandler = exceptionHandler;
-            exceptionHandler.Init(this);
+            ExceptionHandler.Init(this);
 
             _queue = _connection.CreateModel();
             _queue.QueueDeclare(
@@ -77,7 +77,7 @@
             return Task.CompletedTask;
         }
 
-        protected override void Subscribe(Func<string, string, ActionForAcknowledge, ActionForExceptionHandling, Task> handleAction)
+        protected override void Subscribe(ActionForMessageHandling actionForMessageHandling)
         {
             ThrowIfDiposed();
 
@@ -85,7 +85,7 @@
             consumer.Received +=
                 async (s, e) =>
                 {
-                    await handleAction(
+                    await actionForMessageHandling(
                         e.BasicProperties.MessageId,
                         Encoding.UTF8.GetString(e.Body),
                         () =>

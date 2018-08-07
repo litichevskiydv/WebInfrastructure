@@ -15,11 +15,16 @@
             string messageId,
             string messageContent,
             CancellationToken cancellationToken);
+        protected delegate Task ActionForMessageHandling(
+            string messageId, 
+            string messageContent, 
+            ActionForAcknowledge actionForAcknowledge,
+            ActionForExceptionHandling actionForExceptionHandling);
 
+        private readonly int _retriesCount;
+        private readonly TimeSpan _retryInitialTimeout;
         protected readonly ILogger Logger;
 
-        protected readonly int RetriesCount;
-        protected readonly TimeSpan RetryInitialTimeout;
         protected bool Disposed;
 
         protected QueueBase(
@@ -30,8 +35,8 @@
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
 
-            RetriesCount = retriesCount;
-            RetryInitialTimeout = retryInitialTimeout;
+            _retriesCount = retriesCount;
+            _retryInitialTimeout = retryInitialTimeout;
 
             Logger = logger;
         }
@@ -41,7 +46,7 @@
             var succeeded = false;
             ExceptionDispatchInfo lastExceptionDispatchInfo = null;
 
-            for (var i = 0; i < RetriesCount && cancellationToken.IsCancellationRequested == false; i++)
+            for (var i = 0; i < _retriesCount && cancellationToken.IsCancellationRequested == false; i++)
             {
                 try
                 {
@@ -55,8 +60,8 @@
                     lastExceptionDispatchInfo = ExceptionDispatchInfo.Capture(e);
                 }
 
-                if (i != RetriesCount - 1)
-                    await Task.Delay(RetryInitialTimeout, cancellationToken);
+                if (i != _retriesCount - 1)
+                    await Task.Delay(_retryInitialTimeout, cancellationToken);
             }
 
             if(succeeded == false)
@@ -78,7 +83,7 @@
             }
         }
 
-        protected abstract void Subscribe(Func<string, string, ActionForAcknowledge, ActionForExceptionHandling, Task> handleAction);
+        protected abstract void Subscribe(ActionForMessageHandling actionForMessageHandling);
 
         protected void Subscribe<TMessage>(IMessageHandler<TMessage> handler, CancellationToken cancellationToken)
         {

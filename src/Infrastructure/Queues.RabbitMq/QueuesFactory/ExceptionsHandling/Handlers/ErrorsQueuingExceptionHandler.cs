@@ -22,30 +22,24 @@
             _errorsQueue = errorsQueue;
         }
 
-        public override async Task HandleAsync(
+        protected override async Task HandleExceptionAsync(
             Exception exception,
             ulong messageDeliveryTag,
             string messageId,
             string messageContent,
             CancellationToken cancellationToken)
         {
-            try
-            {
-                await Queue.AcknowledgeMessageAsync(messageDeliveryTag, cancellationToken);
-                await _errorsQueue.SendMessageAsync(
-                    new ExceptionDescription
-                    {
-                        ExceptionMessage = exception.Message,
-                        MessageId = messageId,
-                        MessageContent = messageContent
-                    },
-                    cancellationToken
-                );
-            }
-            catch (Exception e)
-            {
-                Logger.LogError(e, "Error during has occurred during handling previous exception");
-            }
+
+            await Queue.AcknowledgeMessageAsync(messageDeliveryTag, cancellationToken);
+            await _errorsQueue.SendMessageAsync(
+                new ExceptionDescription
+                {
+                    ExceptionMessage = exception.Message,
+                    MessageId = messageId,
+                    MessageContent = messageContent
+                },
+                cancellationToken
+            );
         }
     }
 }
