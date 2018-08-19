@@ -4,41 +4,42 @@
     using System.Runtime.ExceptionServices;
     using System.Threading;
     using System.Threading.Tasks;
+    using ExceptionsHandling;
+    using ExceptionsHandling.Handlers;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
 
-    public abstract class QueueBase : IDisposable
+    public abstract class QueueBase<TMessageDescription> : IDisposable 
+        where TMessageDescription : QueueMessageDescriptionBase, new()
     {
-        protected delegate Task ActionForAcknowledge();
-        protected delegate Task ActionForExceptionHandling(
-            Exception exception,
-            string messageId,
-            string messageContent,
-            CancellationToken cancellationToken);
-        protected delegate Task ActionForMessageHandling(
-            string messageId, 
-            string messageContent, 
-            ActionForAcknowledge actionForAcknowledge,
-            ActionForExceptionHandling actionForExceptionHandling);
-
         private readonly int _retriesCount;
         private readonly TimeSpan _retryInitialTimeout;
-        protected readonly ILogger Logger;
 
+        protected readonly ExceptionHandlerBase<TMessageDescription> ExceptionHandler;
+        protected readonly ILogger Logger;
         protected bool Disposed;
+
+        public ITypedQueue<ExceptionDescription> ErrorsQueue { get; }
 
         protected QueueBase(
             int retriesCount,
             TimeSpan retryInitialTimeout,
+            ITypedQueue<ExceptionDescription> errorsQueue,
+            ExceptionHandlerBase<TMessageDescription> exceptionHandler,
             ILogger logger)
         {
+            if (exceptionHandler == null)
+                throw new ArgumentNullException(nameof(exceptionHandler));
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
 
             _retriesCount = retriesCount;
             _retryInitialTimeout = retryInitialTimeout;
 
+            ExceptionHandler = exceptionHandler;
             Logger = logger;
+
+            ErrorsQueue = errorsQueue;
         }
 
         protected async Task RetryAsync(Func<Task> action, CancellationToken cancellationToken)
@@ -64,18 +65,34 @@
                     await Task.Delay(_retryInitialTimeout, cancellationToken);
             }
 
-            if(succeeded == false)
+            if (succeeded == false)
                 lastExceptionDispatchInfo?.Throw();
         }
 
-        protected abstract Task SendMessageAsync(string content);
+        protected abstract Task SendMessageAsync(TMessageDescription messageDescription, CancellationToken cancellationToken);
 
-        protected async Task SendMessageAsync<TMessage>(TMessage message, CancellationToken cancellationToken)
+        protected abstract Task SubscribeAsync(Func<TMessageDescription, Task> messageHandler, CancellationToken cancellationToken);
+
+        protected abstract void Dispose(bool disposing);
+
+        public async Task SendMessageAsync<TMessage>(
+            TMessage message, 
+            CancellationToken cancellationToken = default(CancellationToken))
         {
             try
             {
-                var content = JsonConvert.SerializeObject(message);
-                await RetryAsync(() => SendMessageAsync(content), cancellationToken);
+                await RetryAsync(
+                    () =>
+                        SendMessageAsync(
+                            new TMessageDescription
+                            {
+                                Id = Guid.NewGuid().ToString(),
+                                Content = JsonConvert.SerializeObject(message)
+                            },
+                            cancellationToken
+                        ),
+                    cancellationToken
+                );
             }
             catch (Exception e)
             {
@@ -83,29 +100,36 @@
             }
         }
 
-        protected abstract void Subscribe(ActionForMessageHandling actionForMessageHandling);
-
-        protected void Subscribe<TMessage>(IMessageHandler<TMessage> handler, CancellationToken cancellationToken)
+        public async Task SubscribeAsync<TMessage>(
+            IMessageHandler<TMessage> handler, 
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            Subscribe(
-                async (messageId, messageContent, actionForAcknowledge, actionForExceptionHandling) =>
+            await SubscribeAsync(
+                async messageDescription =>
                 {
                     try
                     {
-                        var message = JsonConvert.DeserializeObject<TMessage>(messageContent);
+                        var message = JsonConvert.DeserializeObject<TMessage>(messageDescription.Content);
                         await RetryAsync(() => handler.Handle(message, cancellationToken), cancellationToken);
-                        await RetryAsync(() => actionForAcknowledge(), cancellationToken);
+                        await AcknowledgeMessageAsync(messageDescription, cancellationToken);
                     }
                     catch (Exception e)
                     {
-                        Logger.LogError(e, $"Error has been occurred during processing the message, Id {messageId}");
-                        await actionForExceptionHandling(e, messageId, messageContent, cancellationToken);
+                        Logger.LogError(e, $"Error has been occurred during processing the message, Id {messageDescription.Id}");
+                        await ExceptionHandler.HandleAsync(this, messageDescription, e, cancellationToken);
                     }
-                }
+                },
+                cancellationToken
             );
         }
 
-        protected abstract void Dispose(bool disposing);
+        public abstract Task AcknowledgeMessageAsync(
+            TMessageDescription messageDescription,
+            CancellationToken cancellationToken = default(CancellationToken));
+
+        public abstract Task RejectMessageAsync(
+            TMessageDescription messageDescription,
+            CancellationToken cancellationToken = default(CancellationToken));
 
         public void Dispose()
         {

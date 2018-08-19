@@ -2,21 +2,22 @@
 {
     using System;
     using Abstractions.QueuesFactory;
-    using ExceptionsHandling;
+    using Abstractions.QueuesFactory.ExceptionsHandling;
+    using Configuration;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
     using RabbitMQ.Client;
 
-    public class TypedRabbitQueuesFactory : ITypedQueuesFactory<RabbitQueue>
+    public class TypedRabbitQueuesFactory : TypedQueuesFactory<RabbitMessageDescription, RabbitQueueCreationOptions>
     {
-        private readonly IExceptionHandlersFactory _exceptionHandlersFactory;
+        private readonly IExceptionHandlersFactory<RabbitMessageDescription> _exceptionHandlersFactory;
         private readonly ILoggerFactory _loggerFactory;
 
         private readonly string[] _hosts;
         private readonly IConnectionFactory _connectionsFactory;
 
         public TypedRabbitQueuesFactory(
-            IExceptionHandlersFactory exceptionHandlersFactory, 
+            IExceptionHandlersFactory<RabbitMessageDescription> exceptionHandlersFactory, 
             ILoggerFactory loggerFactory, 
             IOptions<TypedRabbitQueuesFactoryOptions> options)
         {
@@ -42,15 +43,34 @@
                   };
         }
 
-        public ITypedQueue<TMessage> Create<TMessage>(QueueCreationOptions creationOptions)
+        protected override ITypedQueue<TMessage> Create<TMessage>(RabbitQueueCreationOptions creationOptions)
         {
-            var connection = _connectionsFactory.CreateConnection(_hosts);
+            if (creationOptions == null)
+                throw new ArgumentNullException(nameof(creationOptions));
+            if (creationOptions.ExceptionHandlingPolicy.HasValue == false && creationOptions.ExceptionHandler == null)
+                throw new ArgumentException(
+                    $"{nameof(RabbitQueueCreationOptions.ExceptionHandlingPolicy)} " +
+                    $"and {creationOptions.ExceptionHandler} can't be null simultaneously"
+                );
+
             return new TypedRabbitQueue<TMessage>(
                 creationOptions.QueueName,
-                connection,
+                _connectionsFactory.CreateConnection(_hosts),
                 creationOptions.RetriesCount,
                 creationOptions.RetryInitialTimeout,
-                _exceptionHandlersFactory.CreateHandler(creationOptions),
+                creationOptions.ExceptionHandlingPolicy == ExceptionHandlingPolicy.SendToErrorsQueue
+                    ? Create<ExceptionDescription>(
+                        new RabbitQueueCreationOptions
+                        {
+                            QueueName = $"{creationOptions.QueueName}.Errors",
+                            RetriesCount = creationOptions.RetriesCount,
+                            RetryInitialTimeout = creationOptions.RetryInitialTimeout,
+                            ExceptionHandlingPolicy = ExceptionHandlingPolicy.None
+                        }
+                    )
+                    : null,
+                creationOptions.ExceptionHandler
+                ?? _exceptionHandlersFactory.CreateHandler(creationOptions.ExceptionHandlingPolicy.Value),
                 _loggerFactory.CreateLogger<TypedRabbitQueue<TMessage>>()
             );
         }

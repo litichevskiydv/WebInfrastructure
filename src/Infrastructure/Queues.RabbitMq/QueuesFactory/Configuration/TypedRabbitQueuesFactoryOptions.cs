@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Queues.RabbitMq.QueuesFactory
+﻿namespace Skeleton.Queues.RabbitMq.QueuesFactory.Configuration
 {
     using System;
 

@@ -5,38 +5,33 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Abstractions.QueuesFactory;
-    using ExceptionsHandling.Handlers;
+    using Abstractions.QueuesFactory.ExceptionsHandling;
+    using Abstractions.QueuesFactory.ExceptionsHandling.Handlers;
     using Microsoft.Extensions.Logging;
     using RabbitMQ.Client;
     using RabbitMQ.Client.Events;
 
-    public class RabbitQueue : QueueBase
+    public class RabbitQueue : QueueBase<RabbitMessageDescription>
     {
         private readonly string _name;
         private readonly IConnection _connection;
         private readonly IModel _queue;
-
-        protected readonly ExceptionHandlerBase ExceptionHandler;
 
         protected RabbitQueue(
             string name,
             IConnection connection,
             int retriesCount,
             TimeSpan retryInitialTimeout,
-            ExceptionHandlerBase exceptionHandler,
+            ITypedQueue<ExceptionDescription> errorsQueue,
+            ExceptionHandlerBase<RabbitMessageDescription> exceptionHandler,
             ILogger logger)
-            : base(retriesCount, retryInitialTimeout, logger)
+            : base(retriesCount, retryInitialTimeout, errorsQueue, exceptionHandler, logger)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
-            if (exceptionHandler == null)
-                throw new ArgumentNullException(nameof(exceptionHandler));
 
             _name = name;
             _connection = connection;
-
-            ExceptionHandler = exceptionHandler;
-            ExceptionHandler.Init(this);
 
             _queue = _connection.CreateModel();
             _queue.QueueDeclare(
@@ -59,78 +54,45 @@
                 throw new ObjectDisposedException(GetType().Name);
         }
 
-        protected override Task SendMessageAsync(string content)
+        protected override Task SendMessageAsync(
+            RabbitMessageDescription messageDescription, 
+            CancellationToken cancellationToken)
         {
             ThrowIfDiposed();
 
             var properties = _queue.CreateBasicProperties();
             properties.Persistent = true;
-            properties.MessageId = Guid.NewGuid().ToString();
+            properties.MessageId = messageDescription.Id;
 
             _queue.BasicPublish(
                 exchange: "",
                 routingKey: _name,
                 basicProperties: properties,
-                body: Encoding.UTF8.GetBytes(content)
+                body: Encoding.UTF8.GetBytes(messageDescription.Content)
             );
 
             return Task.CompletedTask;
         }
 
-        protected override void Subscribe(ActionForMessageHandling actionForMessageHandling)
+        protected override Task SubscribeAsync(
+            Func<RabbitMessageDescription, Task> messageHandler, 
+            CancellationToken cancellationToken)
         {
             ThrowIfDiposed();
 
             var consumer = new AsyncEventingBasicConsumer(_queue);
             consumer.Received +=
                 async (s, e) =>
-                {
-                    await actionForMessageHandling(
-                        e.BasicProperties.MessageId,
-                        Encoding.UTF8.GetString(e.Body),
-                        () =>
+                    await messageHandler(
+                        new RabbitMessageDescription
                         {
-                            _queue.BasicAck(e.DeliveryTag, false);
-                            return Task.CompletedTask;
-                        },
-                        (exception, messageId, messageContent, cancellationToken) =>
-                            ExceptionHandler.HandleAsync(exception, e.DeliveryTag, messageId, messageContent, cancellationToken)
+                            Id = e.BasicProperties.MessageId,
+                            Content = Encoding.UTF8.GetString(e.Body),
+                            DeliveryTag = e.DeliveryTag
+                        }
                     );
-                };
-        }
 
-        protected internal async Task<RabbitQueue> AcknowledgeMessageAsync(
-            ulong messageDeliveryTag, 
-            CancellationToken cancellationToken = default(CancellationToken))
-        {
-            ThrowIfDiposed();
-
-            await RetryAsync(
-                () =>
-                {
-                    _queue.BasicAck(messageDeliveryTag, false);
-                    return Task.CompletedTask;
-                },
-                cancellationToken
-            );
-            return this;
-        }
-
-        protected internal async Task<RabbitQueue> RequeueMessageAsync(
-            ulong messageDeliveryTag,
-            CancellationToken cancellationToken = default(CancellationToken))
-        {
-            ThrowIfDiposed();
-
-            await RetryAsync(
-                () =>
-                {
-                    _queue.BasicNack(messageDeliveryTag, false, true);
-                    return Task.CompletedTask;
-                },
-                cancellationToken
-            );
-            return this;
+            return Task.CompletedTask;
         }
 
         protected override void Dispose(bool disposing)
@@ -146,5 +108,36 @@
             Disposed = true;
         }
 
+        public override async Task AcknowledgeMessageAsync(
+            RabbitMessageDescription messageDescription, 
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            ThrowIfDiposed();
+
+            await RetryAsync(
+                () =>
+                {
+                    _queue.BasicAck(messageDescription.DeliveryTag.Value, false);
+                    return Task.CompletedTask;
+                },
+                cancellationToken
+            );
+        }
+
+        public override async Task RejectMessageAsync(
+            RabbitMessageDescription messageDescription,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            ThrowIfDiposed();
+
+            await RetryAsync(
+                () =>
+                {
+                    _queue.BasicNack(messageDescription.DeliveryTag.Value, false, true);
+                    return Task.CompletedTask;
+                },
+                cancellationToken
+            );
+        }
     }
 }

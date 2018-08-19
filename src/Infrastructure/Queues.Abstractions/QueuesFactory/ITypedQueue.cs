@@ -8,6 +8,6 @@
     {
         Task<ITypedQueue<TMessage>> SendMessageAsync(TMessage message, CancellationToken cancellationToken = default(CancellationToken));
 
-        ITypedQueue<TMessage> Subscribe(IMessageHandler<TMessage> handler, CancellationToken cancellationToken = default(CancellationToken));
+        Task<ITypedQueue<TMessage>> SubscribeAsync(IMessageHandler<TMessage> handler, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

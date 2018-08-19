@@ -5,36 +5,38 @@
     using System.Threading.Tasks;
     using Abstractions;
     using Abstractions.QueuesFactory;
-    using ExceptionsHandling.Handlers;
+    using Abstractions.QueuesFactory.ExceptionsHandling;
+    using Abstractions.QueuesFactory.ExceptionsHandling.Handlers;
     using Microsoft.Extensions.Logging;
     using RabbitMQ.Client;
 
     public class TypedRabbitQueue<TMessage> : RabbitQueue, ITypedQueue<TMessage>
     {
         public TypedRabbitQueue(
-            string name,
-            IConnection connection,
-            int retriesCount,
+            string name, 
+            IConnection connection, 
+            int retriesCount, 
             TimeSpan retryInitialTimeout,
-            ExceptionHandlerBase exceptionHandler,
-            ILogger<TypedRabbitQueue<TMessage>> logger)
-            : base(name, connection, retriesCount, retryInitialTimeout, exceptionHandler, logger)
+            ITypedQueue<ExceptionDescription> errorsQueue,
+            ExceptionHandlerBase<RabbitMessageDescription> exceptionHandler,
+            ILogger<TypedRabbitQueue<TMessage>> logger) 
+            : base(name, connection, retriesCount, retryInitialTimeout, errorsQueue, exceptionHandler, logger)
         {
         }
 
         public async Task<ITypedQueue<TMessage>> SendMessageAsync(
-            TMessage message,
+            TMessage message, 
             CancellationToken cancellationToken = default(CancellationToken))
         {
             await base.SendMessageAsync(message, cancellationToken);
             return this;
         }
 
-        public ITypedQueue<TMessage> Subscribe(
-            IMessageHandler<TMessage> handler,
+        public async Task<ITypedQueue<TMessage>> SubscribeAsync(
+            IMessageHandler<TMessage> handler, 
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            base.Subscribe(handler, cancellationToken);
+            await base.SubscribeAsync(handler, cancellationToken);
             return this;
         }
     }

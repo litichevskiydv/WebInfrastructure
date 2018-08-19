@@ -47,8 +47,8 @@
             {
                 try
                 {
-                    Queue = QueuesFactory.Create<TMessage>(Options.QueueCreationOptions)
-                        .Subscribe(MessageHandler, StoppingCts.Token);
+                    Queue = await QueuesFactory.Create<TMessage>(Options.QueueCreationOptions)
+                        .SubscribeAsync(MessageHandler, StoppingCts.Token);
                 }
                 catch (Exception e)
                 {
