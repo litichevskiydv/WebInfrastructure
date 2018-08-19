@@ -4,6 +4,7 @@
     {
         None = 0,
         Requeue = 1,
-        SendToErrorsQueue = 2
+        SendToErrorsQueue = 2,
+        Custom = 3
     }
 }
