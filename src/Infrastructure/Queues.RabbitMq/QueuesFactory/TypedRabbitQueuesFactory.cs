@@ -39,7 +39,8 @@
                       Password = options.Value.Credentianls.Password,
                       AutomaticRecoveryEnabled = true,
                       NetworkRecoveryInterval = options.Value.NetworkRecoveryInterval,
-                      TopologyRecoveryEnabled = true
+                      TopologyRecoveryEnabled = true,
+                      DispatchConsumersAsync = true
                   };
         }
 

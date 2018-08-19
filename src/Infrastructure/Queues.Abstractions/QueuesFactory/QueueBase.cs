@@ -47,7 +47,7 @@
             var succeeded = false;
             ExceptionDispatchInfo lastExceptionDispatchInfo = null;
 
-            for (var i = 0; i < _retriesCount && cancellationToken.IsCancellationRequested == false; i++)
+            for (var i = 0; i < _retriesCount + 1 && cancellationToken.IsCancellationRequested == false; i++)
             {
                 try
                 {

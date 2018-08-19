@@ -91,6 +91,7 @@
                             DeliveryTag = e.DeliveryTag
                         }
                     );
+            _queue.BasicConsume(_name, false, consumer);
 
             return Task.CompletedTask;
         }
@@ -104,6 +105,7 @@
             {
                 _queue?.Dispose();
                 _connection?.Dispose();
+                ErrorsQueue?.Dispose();
             }
             Disposed = true;
         }
