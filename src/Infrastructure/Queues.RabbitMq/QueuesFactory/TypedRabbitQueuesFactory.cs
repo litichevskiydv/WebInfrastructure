@@ -54,7 +54,7 @@
                     $"and {creationOptions.ExceptionHandler} can't be null simultaneously"
                 );
 
-            return new TypedRabbitQueue<TMessage>(
+            return TypedRabbitQueue.Create(
                 creationOptions.QueueName,
                 _connectionsFactory.CreateConnection(_hosts),
                 creationOptions.RetriesCount,

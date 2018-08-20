@@ -34,18 +34,16 @@
             _connection = connection;
 
             _queue = _connection.CreateModel();
-            _queue.QueueDeclare(
-                queue: name,
-                durable: true,
-                exclusive: false,
-                autoDelete: false,
-                arguments: null
-            );
-            _queue.BasicQos(
-                prefetchSize: 0,
-                prefetchCount: 1,
-                global: false
-            );
+            try
+            {
+                _queue.QueueDeclare(queue: name, durable: true, exclusive: false, autoDelete: false, arguments: null);
+                _queue.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
+            }
+            catch (Exception)
+            {
+                _queue.Dispose();
+                throw;
+            }
         }
 
         private void ThrowIfDiposed()

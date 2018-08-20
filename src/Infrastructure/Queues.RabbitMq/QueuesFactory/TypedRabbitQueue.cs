@@ -10,9 +10,33 @@
     using Microsoft.Extensions.Logging;
     using RabbitMQ.Client;
 
+    public static class TypedRabbitQueue
+    {
+        public static TypedRabbitQueue<TMessage> Create<TMessage>(
+            string name,
+            IConnection connection,
+            int retriesCount,
+            TimeSpan retryInitialTimeout,
+            ITypedQueue<ExceptionDescription> errorsQueue,
+            ExceptionHandlerBase<RabbitMessageDescription> exceptionHandler,
+            ILogger<TypedRabbitQueue<TMessage>> logger)
+        {
+            try
+            {
+                return new TypedRabbitQueue<TMessage>(name, connection, retriesCount, retryInitialTimeout, errorsQueue, exceptionHandler, logger);
+            }
+            catch (Exception)
+            {
+                connection?.Dispose();
+                errorsQueue?.Dispose();
+                throw;
+            }
+        }
+    }
+
     public class TypedRabbitQueue<TMessage> : RabbitQueue, ITypedQueue<TMessage>
     {
-        public TypedRabbitQueue(
+        internal TypedRabbitQueue(
             string name, 
             IConnection connection, 
             int retriesCount, 
