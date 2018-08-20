@@ -16,6 +16,7 @@
     using Moq;
     using QueuesFactory;
     using QueuesFactory.Configuration;
+    using RabbitMQ.Client;
     using Web.Configuration;
     using Web.Testing.Extensions;
     using Xunit;
@@ -23,8 +24,9 @@
     public class RabbitQueueTests
     {
         private readonly TimeSpan _completionTimeout;
-
         private readonly Mock<ILogger> _mockLogger;
+        private readonly IConnectionFactory _connectionsFactory;
+
         private readonly IQueuesFactory _queuesFactory;
 
         public RabbitQueueTests()
@@ -39,7 +41,18 @@
                 .AddCiDependentSettings(EnvironmentName.Development)
                 .Build();
             _completionTimeout = configuration.GetSection("CompletionTimeout").Get<TimeSpan>();
+            var queuesFactoryOptions = configuration.GetSection("QueuesFactoryOptions").Get<TypedRabbitQueuesFactoryOptions>();
 
+            _connectionsFactory
+                = new ConnectionFactory
+                  {
+                      UserName = queuesFactoryOptions.Credentianls.UserName,
+                      Password = queuesFactoryOptions.Credentianls.Password,
+                      AutomaticRecoveryEnabled = true,
+                      NetworkRecoveryInterval = queuesFactoryOptions.NetworkRecoveryInterval,
+                      TopologyRecoveryEnabled = true,
+                      HostName = queuesFactoryOptions.Hosts.Single()
+                };
             _queuesFactory = new TypedRabbitQueuesFactory(
                 new ExceptionHandlersFactory<RabbitMessageDescription>(
                     new ExceptionHandlerBase<RabbitMessageDescription>[]
@@ -56,8 +69,15 @@
                     }
                 ),
                 loggerFactory,
-                Options.Create(configuration.GetSection("QueuesFactoryOptions").Get<TypedRabbitQueuesFactoryOptions>())
+                Options.Create(queuesFactoryOptions)
             );
+        }
+
+        private ulong GetQueueMessagesCount(string queueName)
+        {
+            using (var conection = _connectionsFactory.CreateConnection())
+            using (var queue = conection.CreateModel())
+                return queue.MessageCount(queueName);
         }
 
         [Fact]
@@ -90,6 +110,7 @@
             _mockLogger.VerifyNoErrorsWasLogged();
 
             Assert.Equal(expectedMessage, messageHandler.Messages.Single());
+            Assert.Equal(0UL, GetQueueMessagesCount(queueCreationOptions.QueueName));
         }
     }
 }
