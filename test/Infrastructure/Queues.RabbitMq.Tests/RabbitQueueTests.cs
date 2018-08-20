@@ -22,13 +22,14 @@
 
     public class RabbitQueueTests
     {
+        private readonly TimeSpan _completionTimeout;
+
         private readonly Mock<ILogger> _mockLogger;
         private readonly IQueuesFactory _queuesFactory;
 
         public RabbitQueueTests()
         {
             _mockLogger = MockLoggerExtensions.CreateMockLogger();
-
             var mockLoggerFactory = new Mock<ILoggerFactory>();
             mockLoggerFactory.Setup(x => x.CreateLogger(It.IsAny<string>())).Returns(_mockLogger.Object);
             var loggerFactory = mockLoggerFactory.Object;
@@ -37,6 +38,7 @@
                 .AddDefaultConfigs(Path.GetDirectoryName(GetType().GetTypeInfo().Assembly.Location), EnvironmentName.Development)
                 .AddCiDependentSettings(EnvironmentName.Development)
                 .Build();
+            _completionTimeout = configuration.GetSection("CompletionTimeout").Get<TimeSpan>();
 
             _queuesFactory = new TypedRabbitQueuesFactory(
                 new ExceptionHandlersFactory<RabbitMessageDescription>(
@@ -81,7 +83,7 @@
                 await queue.SendMessageAsync(expectedMessage);
                 await queue.SubscribeAsync(messageHandler);
 
-                await Task.Delay(TimeSpan.FromSeconds(10));
+                await Task.Delay(_completionTimeout);
             }
 
             // Then
