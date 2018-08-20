@@ -79,25 +79,18 @@
             TMessage message, 
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            try
-            {
-                await RetryAsync(
-                    () =>
-                        SendMessageAsync(
-                            new TMessageDescription
-                            {
-                                Id = Guid.NewGuid().ToString(),
-                                Content = JsonConvert.SerializeObject(message)
-                            },
-                            cancellationToken
-                        ),
-                    cancellationToken
-                );
-            }
-            catch (Exception e)
-            {
-                Logger.LogError(e, "Error has been occurred during sending the message");
-            }
+            await RetryAsync(
+                () =>
+                    SendMessageAsync(
+                        new TMessageDescription
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            Content = JsonConvert.SerializeObject(message)
+                        },
+                        cancellationToken
+                    ),
+                cancellationToken
+            );
         }
 
         public async Task SubscribeAsync<TMessage>(
