@@ -112,5 +112,70 @@
             Assert.Equal(expectedMessage, messageHandler.Messages.Single());
             Assert.Equal(0UL, GetQueueMessagesCount(queueCreationOptions.QueueName));
         }
+
+        [Fact]
+        public async Task ShouldDeleteBadMessageFromQueue()
+        {
+            // Given
+            var queueCreationOptions
+                = new RabbitQueueCreationOptions
+                  {
+                      QueueName = Guid.NewGuid().ToString(),
+                      RetriesCount = 0,
+                      RetryInitialTimeout = TimeSpan.Zero,
+                      ExceptionHandlingPolicy = ExceptionHandlingPolicy.None
+                  };
+
+
+            // When
+            var messageHandler = new ThrowingExceptionMessageHandler();
+
+            using (var queue = _queuesFactory.Create<string>(queueCreationOptions))
+            {
+                await queue.SendMessageAsync("Test message");
+                await queue.SubscribeAsync(messageHandler);
+
+                await Task.Delay(_completionTimeout);
+            }
+
+            // Then
+            _mockLogger.VerifyErrorWasLogged<InvalidOperationException>();
+
+            Assert.Empty(messageHandler.Messages);
+            Assert.Equal(0UL, GetQueueMessagesCount(queueCreationOptions.QueueName));
+        }
+
+        [Fact]
+        public async Task ShouldProcessMessageOnSecondAttempt()
+        {
+            // Given
+            const string expectedMessage = "Test message";
+            var queueCreationOptions
+                = new RabbitQueueCreationOptions
+                  {
+                      QueueName = Guid.NewGuid().ToString(),
+                      RetriesCount = 1,
+                      RetryInitialTimeout = TimeSpan.FromMilliseconds(100),
+                      ExceptionHandlingPolicy = ExceptionHandlingPolicy.None
+                  };
+
+
+            // When
+            var messageHandler = new ThrowingExceptionMessageHandler();
+
+            using (var queue = _queuesFactory.Create<string>(queueCreationOptions))
+            {
+                await queue.SendMessageAsync(expectedMessage);
+                await queue.SubscribeAsync(messageHandler);
+
+                await Task.Delay(_completionTimeout);
+            }
+
+            // Then
+            _mockLogger.VerifyNoErrorsWasLogged();
+
+            Assert.Equal(expectedMessage, messageHandler.Messages.Single());
+            Assert.Equal(0UL, GetQueueMessagesCount(queueCreationOptions.QueueName));
+        }
     }
 }
