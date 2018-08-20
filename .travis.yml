@@ -5,6 +5,7 @@ env:
     - ASPNETCORE_ENVIRONMENT=Staging
 services:
   - docker
+  - rabbitmq
 mono: none
 dotnet: 2.1.301
 branches:

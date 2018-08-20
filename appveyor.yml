@@ -28,6 +28,8 @@ for:
       only:
         - image: Visual Studio 2017
     services: mssql2016
+    install:
+      - ps: choco install rabbitmq --ignoredependencies -y
     build_script:
       - ps: >-
           cd build
@@ -38,7 +40,9 @@ for:
     matrix:
       only:
         - image: Ubuntu
-    services: mssql
+    services: 
+      - mssql
+      - rabbitmq
     build_script:
       - sh: >-
           cd build
