@@ -66,7 +66,7 @@
             var queueCreationOptions
                 = new RabbitQueueCreationOptions
                   {
-                      QueueName = "TestQueue",
+                      QueueName = Guid.NewGuid().ToString(),
                       RetriesCount = 0,
                       RetryInitialTimeout = TimeSpan.Zero,
                       ExceptionHandlingPolicy = ExceptionHandlingPolicy.None
