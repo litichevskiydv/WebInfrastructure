@@ -177,5 +177,38 @@
             Assert.Equal(expectedMessage, messageHandler.Messages.Single());
             Assert.Equal(0UL, GetQueueMessagesCount(queueCreationOptions.QueueName));
         }
+
+        [Fact]
+        public async Task ShouldRequeueAndProcessBadMessage()
+        {
+            // Given
+            const string expectedMessage = "Test message";
+            var queueCreationOptions
+                = new RabbitQueueCreationOptions
+                  {
+                      QueueName = Guid.NewGuid().ToString(),
+                      RetriesCount = 0,
+                      RetryInitialTimeout = TimeSpan.FromMilliseconds(100),
+                      ExceptionHandlingPolicy = ExceptionHandlingPolicy.Requeue
+                  };
+
+
+            // When
+            var messageHandler = new ThrowingExceptionMessageHandler();
+
+            using (var queue = _queuesFactory.Create<string>(queueCreationOptions))
+            {
+                await queue.SendMessageAsync(expectedMessage);
+                await queue.SubscribeAsync(messageHandler);
+
+                await Task.Delay(_completionTimeout);
+            }
+
+            // Then
+            _mockLogger.VerifyErrorWasLogged<InvalidOperationException>();
+
+            Assert.Equal(expectedMessage, messageHandler.Messages.Single());
+            Assert.Equal(0UL, GetQueueMessagesCount(queueCreationOptions.QueueName));
+        }
     }
 }
