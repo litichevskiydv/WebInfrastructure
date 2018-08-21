@@ -5,13 +5,13 @@
     using System.Threading.Tasks;
     using Abstractions;
 
-    public class CatchingMessageHandler : IMessageHandler<string>
+    public class CatchingMessageHandler<TMessage> : IMessageHandler<TMessage>
     {
-        private readonly List<string> _messages = new List<string>();
+        private readonly List<TMessage> _messages = new List<TMessage>();
 
-        public IReadOnlyCollection<string> Messages => _messages;
+        public IReadOnlyCollection<TMessage> Messages => _messages;
 
-        public Task Handle(string message, CancellationToken cancellationToken)
+        public Task Handle(TMessage message, CancellationToken cancellationToken)
         {
             _messages.Add(message);
             return Task.CompletedTask;
