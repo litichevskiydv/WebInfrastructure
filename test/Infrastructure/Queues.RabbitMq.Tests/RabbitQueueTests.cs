@@ -1,6 +1,7 @@
 ﻿namespace Skeleton.Queues.RabbitMq.Tests
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -23,18 +24,48 @@
 
     public class RabbitQueueTests
     {
-        private readonly TimeSpan _completionTimeout;
-        private readonly Mock<ILogger> _mockLogger;
-        private readonly IConnectionFactory _connectionsFactory;
+        private class QueuesFactoryForTests : TypedRabbitQueuesFactory
+        {
+            private readonly IConnection _connection;
+            private readonly ITypedQueue<ExceptionDescription> _errorsQueue;
 
+            public QueuesFactoryForTests(
+                IExceptionHandlersFactory<RabbitMessageDescription> exceptionHandlersFactory,
+                ILoggerFactory loggerFactory,
+                IOptions<TypedRabbitQueuesFactoryOptions> options, 
+                IConnection connection, 
+                ITypedQueue<ExceptionDescription> errorsQueue)
+                : base(exceptionHandlersFactory, loggerFactory, options)
+            {
+                _connection = connection;
+                _errorsQueue = errorsQueue;
+            }
+
+            protected override IConnection CreateConnection(string[] hosts)
+            {
+                return _connection;
+            }
+
+            protected override ITypedQueue<ExceptionDescription> CreateErrorsQueue(RabbitQueueCreationOptions parentQueueCreationOptions)
+            {
+                return _errorsQueue;
+            }
+        }
+
+        
+        private readonly Mock<ILogger> _mockLogger;
+        private readonly ILoggerFactory _loggerFactory;
+
+        private readonly TimeSpan _completionTimeout;
         private readonly IQueuesFactory _queuesFactory;
+        private readonly IConnectionFactory _connectionsFactory;
 
         public RabbitQueueTests()
         {
             _mockLogger = MockLoggerExtensions.CreateMockLogger();
             var mockLoggerFactory = new Mock<ILoggerFactory>();
             mockLoggerFactory.Setup(x => x.CreateLogger(It.IsAny<string>())).Returns(_mockLogger.Object);
-            var loggerFactory = mockLoggerFactory.Object;
+            _loggerFactory = mockLoggerFactory.Object;
 
             var configuration = new ConfigurationBuilder()
                 .AddDefaultConfigs(Path.GetDirectoryName(GetType().GetTypeInfo().Assembly.Location), EnvironmentName.Development)
@@ -58,17 +89,17 @@
                     new ExceptionHandlerBase<RabbitMessageDescription>[]
                     {
                         new EmptyExceptionHandler<RabbitMessageDescription>(
-                            loggerFactory.CreateLogger<EmptyExceptionHandler<RabbitMessageDescription>>()
+                            _loggerFactory.CreateLogger<EmptyExceptionHandler<RabbitMessageDescription>>()
                         ),
                         new RequeuingExceptionHandler<RabbitMessageDescription>(
-                            loggerFactory.CreateLogger<RequeuingExceptionHandler<RabbitMessageDescription>>()
+                            _loggerFactory.CreateLogger<RequeuingExceptionHandler<RabbitMessageDescription>>()
                         ),
                         new ErrorsQueuingExceptionHandler<RabbitMessageDescription>(
-                            loggerFactory.CreateLogger<ErrorsQueuingExceptionHandler<RabbitMessageDescription>>()
+                            _loggerFactory.CreateLogger<ErrorsQueuingExceptionHandler<RabbitMessageDescription>>()
                         )
                     }
                 ),
-                loggerFactory,
+                _loggerFactory,
                 Options.Create(queuesFactoryOptions)
             );
         }
@@ -259,6 +290,55 @@
 
             Assert.Contains(expectedMessage, errorMessagesHandler.Messages.Single().MessageContent);
             Assert.Equal(0UL, GetQueueMessagesCount(errorQueueCreationOptions.QueueName));
+        }
+
+        [Fact]
+        public void ShouldDisposeObjectsIfExceptionInConstructorOccures()
+        {
+            // Given
+            var mockConnection = new Mock<IConnection>();
+            var mockModel = new Mock<IModel>();
+            mockModel
+                .Setup(x => x.QueueDeclare(It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<IDictionary<string, object>>()))
+                .Throws(new Exception());
+            mockConnection.Setup(x => x.CreateModel()).Returns(mockModel.Object);
+            var mockErrorsQueue = new Mock<ITypedQueue<ExceptionDescription>>();
+            var queuesFactory = new QueuesFactoryForTests(
+                new ExceptionHandlersFactory<RabbitMessageDescription>(
+                    new[]
+                    {
+                        new ErrorsQueuingExceptionHandler<RabbitMessageDescription>(
+                            _loggerFactory.CreateLogger<ErrorsQueuingExceptionHandler<RabbitMessageDescription>>()
+                        )
+                    }
+                ),
+                _loggerFactory,
+                Options.Create(
+                    new TypedRabbitQueuesFactoryOptions
+                    {
+                        Credentianls = new RabbitCredentianls {UserName = "guest", Password = "guest"}
+                    }
+                ),
+                mockConnection.Object,
+                mockErrorsQueue.Object
+            );
+
+            // When
+            Assert.Throws<Exception>(
+                () => queuesFactory.Create<string>(
+                    new RabbitQueueCreationOptions
+                    {
+                        QueueName = "TestQueue",
+                        RetryInitialTimeout = TimeSpan.FromMilliseconds(100),
+                        ExceptionHandlingPolicy = ExceptionHandlingPolicy.SendToErrorsQueue
+                    }
+                )
+            );
+
+            // Then
+            mockConnection.Verify(x => x.Dispose(), Times.Once);
+            mockErrorsQueue.Verify(x => x.Dispose(), Times.Once);
+            mockModel.Verify(x => x.Dispose(), Times.Once);
         }
     }
 }

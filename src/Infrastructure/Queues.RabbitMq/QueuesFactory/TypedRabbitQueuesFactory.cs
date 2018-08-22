@@ -44,6 +44,24 @@
                   };
         }
 
+        protected virtual IConnection CreateConnection(string[] hosts)
+        {
+            return _connectionsFactory.CreateConnection(hosts);
+        }
+
+        protected virtual ITypedQueue<ExceptionDescription> CreateErrorsQueue(RabbitQueueCreationOptions parentQueueCreationOptions)
+        {
+            return Create<ExceptionDescription>(
+                new RabbitQueueCreationOptions
+                {
+                    QueueName = $"{parentQueueCreationOptions.QueueName}.Errors",
+                    RetriesCount = parentQueueCreationOptions.RetriesCount,
+                    RetryInitialTimeout = parentQueueCreationOptions.RetryInitialTimeout,
+                    ExceptionHandlingPolicy = ExceptionHandlingPolicy.None
+                }
+            );
+        }
+
         protected override ITypedQueue<TMessage> Create<TMessage>(RabbitQueueCreationOptions creationOptions)
         {
             if (creationOptions == null)
@@ -56,19 +74,11 @@
 
             return TypedRabbitQueue.Create(
                 creationOptions.QueueName,
-                _connectionsFactory.CreateConnection(_hosts),
+                CreateConnection(_hosts),
                 creationOptions.RetriesCount,
                 creationOptions.RetryInitialTimeout,
                 creationOptions.ExceptionHandlingPolicy == ExceptionHandlingPolicy.SendToErrorsQueue
-                    ? Create<ExceptionDescription>(
-                        new RabbitQueueCreationOptions
-                        {
-                            QueueName = $"{creationOptions.QueueName}.Errors",
-                            RetriesCount = creationOptions.RetriesCount,
-                            RetryInitialTimeout = creationOptions.RetryInitialTimeout,
-                            ExceptionHandlingPolicy = ExceptionHandlingPolicy.None
-                        }
-                    )
+                    ? CreateErrorsQueue(creationOptions)
                     : null,
                 creationOptions.ExceptionHandler
                 ?? _exceptionHandlersFactory.CreateHandler(creationOptions.ExceptionHandlingPolicy.Value),
