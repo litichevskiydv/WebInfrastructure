@@ -19,4 +19,5 @@ script:
  - docker run -p 1433:1433 -e 'SA_PASSWORD=Password12!' -e 'ACCEPT_EULA=Y' -e 'MSSQL_PID=Developer' -d microsoft/mssql-server-linux:2017-latest
  - sleep 180
  - cd build
+ - export PATH="$PATH:/home/travis/.dotnet/tools"
  - ./build.sh
