@@ -1,5 +1,7 @@
 ﻿namespace Skeleton.Queues.Abstractions.QueuesFactory
 {
+    using Configuration;
+
     public abstract class TypedQueuesFactory<TMessageDescription, TQueueCreationOptions> : IQueuesFactory
         where TMessageDescription : QueueMessageDescriptionBase, new()
         where TQueueCreationOptions : QueueCreationOptions<TMessageDescription>, new()

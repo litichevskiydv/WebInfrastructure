@@ -1,7 +1,7 @@
 ﻿namespace Skeleton.Queues.Abstractions
 {
     using System;
-    using QueuesFactory;
+    using QueuesFactory.Configuration;
 
     public class MessagesProcessingServiceOptions
     {

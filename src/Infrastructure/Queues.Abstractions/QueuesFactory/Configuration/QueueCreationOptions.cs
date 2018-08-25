@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Queues.Abstractions.QueuesFactory
+﻿namespace Skeleton.Queues.Abstractions.QueuesFactory.Configuration
 {
     using System;
     using ExceptionsHandling;
