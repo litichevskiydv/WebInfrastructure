@@ -55,9 +55,8 @@
                 .ConfigureServices(
                     (context, collection) =>
                         collection
-                            .AddHostedService<NotificationsProcessingService>()
+                            .AddNotificationsProcessingService(context.Configuration.GetSection("NotificationsProcessingServiceOptions"))
                             .Configure<TypedRabbitQueuesFactoryOptions>(context.Configuration.GetSection("QueuesFactoryOptions"))
-                            .Configure<NotificationsProcessingServiceOptions>(context.Configuration.GetSection("NotificationsProcessingServiceOptions"))
                 )
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureContainer<ContainerBuilder>(
@@ -69,7 +68,7 @@
                             .SingleInstance();
                         builder
                             .RegisterType<RequeuingExceptionHandler<RabbitMessageDescription>>()
-                            .As<ExceptionHandlerBase<RabbitMessageDescription>>()
+                            .As<ExceptionHandlerBase<RabbitMessageDescription>, RequeuingExceptionHandler<RabbitMessageDescription>>()
                             .SingleInstance();
                         builder
                             .RegisterType<ErrorsQueuingExceptionHandler<RabbitMessageDescription>>()

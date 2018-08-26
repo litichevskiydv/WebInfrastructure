@@ -35,8 +35,8 @@
             _connectionsFactory
                 = new ConnectionFactory
                   {
-                      UserName = options.Value.Credentianls.UserName,
-                      Password = options.Value.Credentianls.Password,
+                      UserName = options.Value.Credentials.UserName,
+                      Password = options.Value.Credentials.Password,
                       AutomaticRecoveryEnabled = true,
                       NetworkRecoveryInterval = options.Value.NetworkRecoveryInterval,
                       TopologyRecoveryEnabled = true,

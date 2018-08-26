@@ -4,7 +4,7 @@
 
     public class TypedRabbitQueuesFactoryOptions
     {
-        public RabbitCredentianls Credentianls { get; set; }
+        public RabbitCredentianls Credentials { get; set; }
 
         public string[] Hosts { get; set; }
 

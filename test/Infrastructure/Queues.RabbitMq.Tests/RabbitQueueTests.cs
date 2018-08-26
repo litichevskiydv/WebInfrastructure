@@ -77,8 +77,8 @@
             _connectionsFactory
                 = new ConnectionFactory
                   {
-                      UserName = queuesFactoryOptions.Credentianls.UserName,
-                      Password = queuesFactoryOptions.Credentianls.Password,
+                      UserName = queuesFactoryOptions.Credentials.UserName,
+                      Password = queuesFactoryOptions.Credentials.Password,
                       AutomaticRecoveryEnabled = true,
                       NetworkRecoveryInterval = queuesFactoryOptions.NetworkRecoveryInterval,
                       TopologyRecoveryEnabled = true,
@@ -316,7 +316,7 @@
                 Options.Create(
                     new TypedRabbitQueuesFactoryOptions
                     {
-                        Credentianls = new RabbitCredentianls {UserName = "guest", Password = "guest"}
+                        Credentials = new RabbitCredentianls {UserName = "guest", Password = "guest"}
                     }
                 ),
                 mockConnection.Object,
