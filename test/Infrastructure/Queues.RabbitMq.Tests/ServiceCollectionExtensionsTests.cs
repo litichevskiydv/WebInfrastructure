@@ -14,11 +14,11 @@
     public class ServiceCollectionExtensionsTests
     {
         [UsedImplicitly]
-        public static IEnumerable<object[]> ConfigureMessagesProcessingServiceValidationTestsData;
+        public static IEnumerable<object[]> ConfigureMessagesProcessingServiceParametersValidationTestsData;
 
         static ServiceCollectionExtensionsTests()
         {
-            ConfigureMessagesProcessingServiceValidationTestsData =
+            ConfigureMessagesProcessingServiceParametersValidationTestsData =
                 new[]
                 {
                     new object[]
@@ -43,7 +43,7 @@
         }
 
         [Theory]
-        [MemberData(nameof(ConfigureMessagesProcessingServiceValidationTestsData))]
+        [MemberData(nameof(ConfigureMessagesProcessingServiceParametersValidationTestsData))]
         public void ConfigureMessagesProcessingServiceShouldValidateParameters(
             IServiceCollection services,
             IConfiguration configuration,
