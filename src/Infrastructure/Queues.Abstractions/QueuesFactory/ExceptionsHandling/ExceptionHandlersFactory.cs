@@ -23,7 +23,7 @@
             _supportedPolicies = registeredHandlersArray.ToDictionary(x => x.ExceptionHandlingPolicy);
         }
 
-        public ExceptionHandlerBase<TMessageDescription> CreateHandler(ExceptionHandlingPolicy policy)
+        public ExceptionHandlerBase<TMessageDescription> GetHandler(ExceptionHandlingPolicy policy)
         {
             if(_supportedPolicies.TryGetValue(policy, out var handler) == false)
                 throw new NotSupportedException($"Policy {policy.ToString()} is not supported");

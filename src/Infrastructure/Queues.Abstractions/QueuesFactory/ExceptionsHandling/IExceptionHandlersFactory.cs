@@ -5,6 +5,6 @@
 
     public interface IExceptionHandlersFactory<TMessageDescription> where TMessageDescription : QueueMessageDescriptionBase, new()
     {
-        ExceptionHandlerBase<TMessageDescription> CreateHandler(ExceptionHandlingPolicy policy);
+        ExceptionHandlerBase<TMessageDescription> GetHandler(ExceptionHandlingPolicy policy);
     }
 }

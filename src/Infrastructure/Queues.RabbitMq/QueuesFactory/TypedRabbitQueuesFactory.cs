@@ -81,7 +81,7 @@
                     ? CreateErrorsQueue(creationOptions)
                     : null,
                 creationOptions.ExceptionHandler
-                ?? _exceptionHandlersFactory.CreateHandler(creationOptions.ExceptionHandlingPolicy.Value),
+                ?? _exceptionHandlersFactory.GetHandler(creationOptions.ExceptionHandlingPolicy.Value),
                 _loggerFactory.CreateLogger<TypedRabbitQueue<TMessage>>()
             );
         }
