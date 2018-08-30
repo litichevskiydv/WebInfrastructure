@@ -15,7 +15,7 @@
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<AutofacCommandsFactory>().As<ICommandsFactory>().SingleInstance();
+            builder.RegisterType<GenericCommandsFactory>().As<ICommandsFactory>().SingleInstance();
             builder.RegisterType<CommandsDispatcher>().As<ICommandsDispatcher>().SingleInstance();
 
             var commandType = typeof(ICommand<>);
