@@ -3,12 +3,7 @@
     using Abstractions;
     using QueuesFactory.Configuration;
 
-    public class NotificationsProcessingServiceOptions : MessagesProcessingServiceOptions
+    public class NotificationsProcessingServiceOptions : MessagesProcessingServiceOptions<RabbitQueueCreationOptions>
     {
-        public new RabbitQueueCreationOptions QueueCreationOptions
-        {
-            get => (RabbitQueueCreationOptions) base.QueueCreationOptions;
-            set => base.QueueCreationOptions = value;
-        }
     }
 }

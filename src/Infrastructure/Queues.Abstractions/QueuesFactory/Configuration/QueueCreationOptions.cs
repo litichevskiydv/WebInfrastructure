@@ -13,6 +13,10 @@
         public TimeSpan RetryInitialTimeout { get; set; }
 
         public ExceptionHandlingPolicy? ExceptionHandlingPolicy { get; set; }
+
+        internal QueueCreationOptions()
+        {
+        }
     }
 
     public abstract class QueueCreationOptions<TMessageDescription> : QueueCreationOptions
