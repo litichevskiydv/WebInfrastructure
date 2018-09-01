@@ -80,7 +80,11 @@
                             .SingleInstance();
                         builder
                             .RegisterType<TypedRabbitQueuesFactory>()
-                            .As<TypedQueuesFactory<RabbitMessageDescription, RabbitQueueCreationOptions>, IQueuesFactory>()
+                            .As<ITypedQueuesFactory<RabbitQueueCreationOptions>>()
+                            .SingleInstance();
+                        builder
+                            .RegisterType<GenericQueuesFactory>()
+                            .As<IGenericQueuesFactory>()
                             .SingleInstance();
                         builder
                             .RegisterInstance(_messageHandler)
@@ -106,7 +110,7 @@
             const string expectedMessage = "Test message";
 
             // When
-            using (var queue = _host.Services.GetService<IQueuesFactory>()
+            using (var queue = _host.Services.GetService<IGenericQueuesFactory>()
                 .Create<string>(_host.Services.GetService<IOptions<NotificationsProcessingServiceOptions>>().Value.QueueCreationOptions)
             )
                 await queue.SendMessageAsync(expectedMessage);

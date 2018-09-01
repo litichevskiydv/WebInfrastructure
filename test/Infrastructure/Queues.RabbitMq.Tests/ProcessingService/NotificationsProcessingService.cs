@@ -2,15 +2,15 @@
 {
     using Abstractions;
     using Abstractions.QueuesFactory;
+    using JetBrains.Annotations;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
-    using QueuesFactory;
-    using QueuesFactory.Configuration;
 
+    [UsedImplicitly]
     public class NotificationsProcessingService : MessagesProcessingService<string>
     {
         public NotificationsProcessingService(
-            TypedQueuesFactory<RabbitMessageDescription, RabbitQueueCreationOptions> queuesFactory,
+            IGenericQueuesFactory queuesFactory,
             IMessageHandler<string> messageHandler,
             ILogger<NotificationsProcessingService> logger,
             IOptions<NotificationsProcessingServiceOptions> options)

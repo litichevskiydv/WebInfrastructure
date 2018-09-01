@@ -9,7 +9,7 @@
 
     public abstract class MessagesProcessingService<TMessage> : IHostedService, IDisposable
     {
-        protected readonly IQueuesFactory QueuesFactory;
+        protected readonly IGenericQueuesFactory QueuesFactory;
         protected readonly IMessageHandler<TMessage> MessageHandler;
         protected readonly ILogger Logger;
         protected readonly MessagesProcessingServiceOptions Options;
@@ -19,7 +19,7 @@
         protected bool Disposed;
 
         protected MessagesProcessingService(
-            IQueuesFactory queuesFactory, 
+            IGenericQueuesFactory queuesFactory, 
             IMessageHandler<TMessage> messageHandler, 
             ILogger logger, 
             MessagesProcessingServiceOptions options)

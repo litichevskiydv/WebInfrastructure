@@ -57,7 +57,7 @@
         private readonly ILoggerFactory _loggerFactory;
 
         private readonly TimeSpan _completionTimeout;
-        private readonly IQueuesFactory _queuesFactory;
+        private readonly ITypedQueuesFactory<RabbitQueueCreationOptions> _queuesFactory;
         private readonly IConnectionFactory _connectionsFactory;
 
         public RabbitQueueTests()

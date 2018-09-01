@@ -2,7 +2,7 @@
 {
     using Configuration;
 
-    public interface IQueuesFactory
+    public interface IGenericQueuesFactory
     {
         ITypedQueue<TMessage> Create<TMessage>(QueueCreationOptions creationOptions);
     }

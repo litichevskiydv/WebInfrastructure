@@ -8,7 +8,7 @@
     using Microsoft.Extensions.Options;
     using RabbitMQ.Client;
 
-    public class TypedRabbitQueuesFactory : TypedQueuesFactory<RabbitMessageDescription, RabbitQueueCreationOptions>
+    public class TypedRabbitQueuesFactory : ITypedQueuesFactory<RabbitQueueCreationOptions>
     {
         private readonly IExceptionHandlersFactory<RabbitMessageDescription> _exceptionHandlersFactory;
         private readonly ILoggerFactory _loggerFactory;
@@ -62,7 +62,7 @@
             );
         }
 
-        protected override ITypedQueue<TMessage> Create<TMessage>(RabbitQueueCreationOptions creationOptions)
+        public ITypedQueue<TMessage> Create<TMessage>(RabbitQueueCreationOptions creationOptions)
         {
             if (creationOptions == null)
                 throw new ArgumentNullException(nameof(creationOptions));
