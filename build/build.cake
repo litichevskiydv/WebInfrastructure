@@ -33,6 +33,11 @@ var branch =
     AppVeyor.IsRunningOnAppVeyor ? AppVeyor.Environment.Repository.Branch :
     TravisCI.IsRunningOnTravisCI ? TravisCI.Environment.Build.Branch : (string)null;
 
+// Commit Id for packages info
+var commitId =
+    AppVeyor.IsRunningOnAppVeyor ? AppVeyor.Environment.Repository.Commit.Id :
+    TravisCI.IsRunningOnTravisCI ? TravisCI.Environment.Repository.Commit : (string)null;
+
 // Text suffix of the package version
 string versionSuffix = null;
 if(string.IsNullOrWhiteSpace(branch) == false && branch != "master")
@@ -91,6 +96,8 @@ Task("Pack")
                     IncludeSymbols = true,
                     VersionSuffix = versionSuffix
                 };
+        if(string.IsNullOrWhiteSpace(commitId) == false)
+            settings.ArgumentCustomization = x => x.Append($"/p:RepositoryCommit={commitId}");
 
         foreach (var project in projects)
             DotNetCorePack(project.GetDirectory().FullPath, settings);
