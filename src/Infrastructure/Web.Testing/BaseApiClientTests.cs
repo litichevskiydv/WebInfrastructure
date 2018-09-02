@@ -6,7 +6,6 @@
     using Integration.BaseApiClient.Configuration;
     using Integration.BaseApiFluentClient;
     using Microsoft.Extensions.Options;
-    using Moq;
     using Serialization.Jil.Serializer;
 
     public class BaseApiClientTests<TStartup> where TStartup : WebApiBaseStartup
@@ -16,7 +15,7 @@
         protected BaseApiClientTests(BaseApiTestsFixture<TStartup> fixture)
         {
             Fixture = fixture;
-            Fixture.MockLogger.ResetCalls();
+            Fixture.MockLogger.Invocations.Clear();
         }
 
         protected TClient CreateClient<TClient, TClientOptions>(Action<TClientOptions> configureOptions = null)
