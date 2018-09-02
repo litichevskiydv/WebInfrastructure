@@ -33,7 +33,7 @@ var branch =
     AppVeyor.IsRunningOnAppVeyor ? AppVeyor.Environment.Repository.Branch :
     TravisCI.IsRunningOnTravisCI ? TravisCI.Environment.Build.Branch : (string)null;
 
-// Commit Id for packages info
+// Commit properties for packages info
 var commitId =
     AppVeyor.IsRunningOnAppVeyor ? AppVeyor.Environment.Repository.Commit.Id :
     TravisCI.IsRunningOnTravisCI ? TravisCI.Environment.Repository.Commit : (string)null;
@@ -74,7 +74,7 @@ Task("Clean")
                     VersionSuffix = versionSuffix
                 };
         if(buildNumber != 0)
-            settings.MSBuildSettings.Properties["Build"] = buildNumber;
+            settings.MSBuildSettings.Properties["Build"] = new[] {buildNumber.ToString()};
 
         foreach(var project in projects)
             DotNetCoreBuild(project.GetDirectory().FullPath, settings);
@@ -95,11 +95,10 @@ Task("Pack")
                     NoBuild = true,
                     OutputDirectory = artifactsDirectory,
                     IncludeSymbols = true,
-                    VersionSuffix = versionSuffix,
-                    MsB
+                    VersionSuffix = versionSuffix
                 };
         if(string.IsNullOrWhiteSpace(commitId) == false)
-            settings.MSBuildSettings.Properties["RepositoryCommit"] = commitId;
+            settings.MSBuildSettings.Properties["RepositoryCommit"] = new[] {commitId};
 
         foreach (var project in projects)
             DotNetCorePack(project.GetDirectory().FullPath, settings);
