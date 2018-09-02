@@ -1,20 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), common.props))\common.props" />
-
   <PropertyGroup>
     <Description>Library with common classes for Web Applications hosting</Description>
-    <Authors>dmitriy.litichevskiy</Authors>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <DebugType>portable</DebugType>
     <AssemblyName>Skeleton.Web.Hosting</AssemblyName>
     <RootNamespace>Skeleton.Web.Hosting</RootNamespace>
     <PackageId>Skeleton.Web.Hosting</PackageId>
     <PackageTags>Web Hosting</PackageTags>
-    <PackageProjectUrl>https://github.com/litichevskiydv/WebInfrastructure</PackageProjectUrl>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE</PackageLicenseUrl>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/litichevskiydv/WebInfrastructure</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

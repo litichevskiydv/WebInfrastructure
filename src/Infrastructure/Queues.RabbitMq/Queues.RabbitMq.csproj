@@ -1,20 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), common.props))\common.props" />
-
   <PropertyGroup>
     <Description>Library with classes for working with RabbitMq</Description>
-    <Authors>dmitriy.litichevskiy</Authors>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <DebugType>portable</DebugType>
     <AssemblyName>Skeleton.Queues.RabbitMq</AssemblyName>
     <RootNamespace>Skeleton.Queues.RabbitMq</RootNamespace>
     <PackageId>Skeleton.Queues.RabbitMq</PackageId>
     <PackageTags>RabbitMq</PackageTags>
-    <PackageProjectUrl>https://github.com/litichevskiydv/WebInfrastructure</PackageProjectUrl>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE</PackageLicenseUrl>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/litichevskiydv/WebInfrastructure</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

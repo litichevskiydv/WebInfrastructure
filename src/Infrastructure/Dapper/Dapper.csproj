@@ -1,20 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), common.props))\common.props" />
-
   <PropertyGroup>
     <Description>Library with common extensions and helpers for use Dapper in code</Description>
-    <Authors>dmitriy.litichevskiy</Authors>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <DebugType>portable</DebugType>
     <AssemblyName>Skeleton.Dapper</AssemblyName>
     <RootNamespace>Skeleton.Dapper</RootNamespace>
     <PackageId>Skeleton.Dapper</PackageId>
     <PackageTags>Helpers for Dapper;TVP;Bulk Copy</PackageTags>
-    <PackageProjectUrl>https://github.com/litichevskiydv/WebInfrastructure</PackageProjectUrl>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE</PackageLicenseUrl>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/litichevskiydv/WebInfrastructure</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

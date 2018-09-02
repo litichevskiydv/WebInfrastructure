@@ -1,20 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), common.props))\common.props" />
-
   <PropertyGroup>
     <Description>Library with classe for NLog integration in ASP.NET Core application</Description>
-    <Authors>dmitriy.litichevskiy</Authors>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <DebugType>portable</DebugType>
     <AssemblyName>Skeleton.Web.Logging.NLog</AssemblyName>
     <RootNamespace>Skeleton.Web.Logging.NLog</RootNamespace>
     <PackageId>Skeleton.Web.Logging.NLog</PackageId>
     <PackageTags>NLog AspNetCore</PackageTags>
-    <PackageProjectUrl>https://github.com/litichevskiydv/WebInfrastructure</PackageProjectUrl>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE</PackageLicenseUrl>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/litichevskiydv/WebInfrastructure</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

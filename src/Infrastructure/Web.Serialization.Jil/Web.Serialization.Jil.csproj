@@ -1,20 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), common.props))\common.props" />
-
   <PropertyGroup>
-    <DebugType>portable</DebugType>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Skeleton.Web.Serialization.Jil</AssemblyName>
     <RootNamespace>Skeleton.Web.Serialization.Jil</RootNamespace>
     <PackageId>Skeleton.Web.Serialization.Jil</PackageId>
-    <Authors>dmitriy.litichevskiy</Authors>
     <Description>Library for Jil serializer integration</Description>
     <PackageTags>Jil;InputFormatter;OutputFormatter</PackageTags>
-    <PackageProjectUrl>https://github.com/litichevskiydv/WebInfrastructure</PackageProjectUrl>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE</PackageLicenseUrl>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/litichevskiydv/WebInfrastructure</RepositoryUrl>
   </PropertyGroup>
   
   <ItemGroup>

@@ -1,6 +1,7 @@
 #tool "nuget:?package=OpenCover"
 #tool "nuget:?package=Codecov&version=1.0.4"
 #addin "nuget:?package=Cake.Codecov"
+using System.Linq;
 using System.Text.RegularExpressions;
 
 // Target - The task you want to start. Runs the Default task if not specified.
@@ -119,15 +120,10 @@ Task("CalculateCoverage")
     .IsDependentOn("Pack")
     .Does(() =>
     {
-        var projects = GetFiles("../src/Infrastructure/**/*.csproj");
-        foreach(var project in projects)
-        {
-            TransformTextFile(project.FullPath, ">", "<")
-                .WithToken("portable", ">full<")
-                .Save(project.FullPath);
-        }
+        var buildProps = GetFiles("../src/Infrastructure/Directory.Build.props").Single();
+        TransformTextFile(buildProps.FullPath, ">", "<").WithToken("portable", ">full<").Save(buildProps.FullPath);
 
-        projects = GetFiles("../test/**/*.csproj");
+        var projects = GetFiles("../test/**/*.csproj");
         var resultsFile = artifactsDirectory.CombineWithFilePath("coverage.xml");
         var settings = new OpenCoverSettings
                 {

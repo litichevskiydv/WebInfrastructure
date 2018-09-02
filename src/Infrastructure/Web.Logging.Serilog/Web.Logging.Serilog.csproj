@@ -1,20 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), common.props))\common.props" />
-
   <PropertyGroup>
     <Description>Library with classe for Serilog integration in ASP.NET Core application</Description>
-    <Authors>dmitriy.litichevskiy</Authors>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <DebugType>portable</DebugType>
     <RootNamespace>Skeleton.Web.Logging.Serilog</RootNamespace>
     <AssemblyName>Skeleton.Web.Logging.Serilog</AssemblyName>
     <PackageId>Skeleton.Web.Logging.Serilog</PackageId>
     <PackageTags>Serilog AspNetCore</PackageTags>
-    <PackageProjectUrl>https://github.com/litichevskiydv/WebInfrastructure</PackageProjectUrl>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE</PackageLicenseUrl>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/litichevskiydv/WebInfrastructure</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

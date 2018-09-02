@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DE1BE141-BE1D-4C36-BF58-E4747EE33A30}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{DB312248-D325-4521-8EE6-852CD9B44CAA}"
+	ProjectSection(SolutionItems) = preProject
+		src\Infrastructure\Directory.Build.props = src\Infrastructure\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{47FA2CFA-AE7F-4DC7-8C8A-965FB2FA12EE}"
 EndProject
