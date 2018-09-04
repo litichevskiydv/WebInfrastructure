@@ -2,6 +2,12 @@
 
   <PropertyGroup>
     <Description>Library with authentication models implementations</Description>
+    <PackageDescription Condition="'$(RepositoryBranch)'!=''">
+$(Description)
+Branch: $(RepositoryBranch)
+Working tree: $(RepositoryUrl)/tree/$(RepositoryCommit)
+Commit message: $(RepositoryCommitMessage)
+    </PackageDescription>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Skeleton.Web.Authentication</AssemblyName>
     <RootNamespace>Skeleton.Web.Authentication</RootNamespace>

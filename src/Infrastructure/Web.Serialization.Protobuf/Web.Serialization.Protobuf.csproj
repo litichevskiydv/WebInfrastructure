@@ -1,11 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <Description>Library for protobuf-net serializer integration</Description>
+    <PackageDescription Condition="'$(RepositoryBranch)'!=''">
+$(Description)
+Branch: $(RepositoryBranch)
+Working tree: $(RepositoryUrl)/tree/$(RepositoryCommit)
+Commit message: $(RepositoryCommitMessage)
+    </PackageDescription>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Skeleton.Web.Serialization.Protobuf</AssemblyName>
     <RootNamespace>Skeleton.Web.Serialization.Protobuf</RootNamespace>
     <PackageId>Skeleton.Web.Serialization.Protobuf</PackageId>
-    <Description>Library for protobuf-net serializer integration</Description>
     <PackageTags>protobuf-net;InputFormatter;OutputFormatter</PackageTags>
   </PropertyGroup>
 

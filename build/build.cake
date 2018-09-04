@@ -28,15 +28,18 @@ var buildNumber =
     TravisCI.IsRunningOnTravisCI ? TravisCI.Environment.Build.BuildNumber :
     EnvironmentVariable("BuildNumber") != null ? int.Parse(EnvironmentVariable("BuildNumber")) : 0;
 
-// The branch name use in version suffix
+// The branch name use in version suffix and packages info
 var branch = 
     AppVeyor.IsRunningOnAppVeyor ? AppVeyor.Environment.Repository.Branch :
     TravisCI.IsRunningOnTravisCI ? TravisCI.Environment.Build.Branch : (string)null;
-
-// Commit properties for packages info
+// Commit Id for packages info
 var commitId =
     AppVeyor.IsRunningOnAppVeyor ? AppVeyor.Environment.Repository.Commit.Id :
     TravisCI.IsRunningOnTravisCI ? TravisCI.Environment.Repository.Commit : (string)null;
+// Commit message for packages info
+var commitMessage =
+    AppVeyor.IsRunningOnAppVeyor ? AppVeyor.Environment.Repository.Commit.Message :
+    TravisCI.IsRunningOnTravisCI ? EnvironmentVariable("TRAVIS_COMMIT_MESSAGE") : (string)null;
 
 // Text suffix of the package version
 string versionSuffix = null;
@@ -100,6 +103,11 @@ Task("Pack")
                 };
         if(string.IsNullOrWhiteSpace(commitId) == false)
             settings.MSBuildSettings.Properties["RepositoryCommit"] = new[] {commitId};
+        if(string.IsNullOrWhiteSpace(branch) == false && branch != "master")
+        {
+            settings.MSBuildSettings.Properties["RepositoryBranch"] = new[] {branch};
+            settings.MSBuildSettings.Properties["RepositoryCommitMessage"] = new[] {commitMessage};
+        }
 
         foreach (var project in projects)
             DotNetCorePack(project.GetDirectory().FullPath, settings);
