@@ -40,8 +40,6 @@ for:
     matrix:
       only:
         - image: Ubuntu
-    environment:
-      APPVEYOR_BUILD_ARTIFACT_STORAGE: gce-artifacts-us
     services: 
       - mssql
       - rabbitmq
