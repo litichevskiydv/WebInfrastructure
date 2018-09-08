@@ -1,6 +1,7 @@
 ﻿namespace Skeleton.Queues.RabbitMq.QueuesFactory
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
     using Abstractions;
@@ -13,8 +14,9 @@
     public static class TypedRabbitQueue
     {
         public static TypedRabbitQueue<TMessage> Create<TMessage>(
-            string name,
             IConnection connection,
+            string name,
+            IDictionary<string, object> additionalArguments,
             int retriesCount,
             TimeSpan retryInitialTimeout,
             ITypedQueue<ExceptionDescription> errorsQueue,
@@ -23,7 +25,7 @@
         {
             try
             {
-                return new TypedRabbitQueue<TMessage>(name, connection, retriesCount, retryInitialTimeout, errorsQueue, exceptionHandler, logger);
+                return new TypedRabbitQueue<TMessage>(connection, name, additionalArguments, retriesCount, retryInitialTimeout, errorsQueue, exceptionHandler, logger);
             }
             catch (Exception)
             {
@@ -37,14 +39,15 @@
     public class TypedRabbitQueue<TMessage> : RabbitQueue, ITypedQueue<TMessage>
     {
         internal TypedRabbitQueue(
-            string name, 
-            IConnection connection, 
-            int retriesCount, 
+            IConnection connection,
+            string name,
+            IDictionary<string, object> additionalArguments,
+            int retriesCount,
             TimeSpan retryInitialTimeout,
             ITypedQueue<ExceptionDescription> errorsQueue,
             ExceptionHandlerBase<RabbitMessageDescription> exceptionHandler,
-            ILogger<TypedRabbitQueue<TMessage>> logger) 
-            : base(name, connection, retriesCount, retryInitialTimeout, errorsQueue, exceptionHandler, logger)
+            ILogger<TypedRabbitQueue<TMessage>> logger)
+            : base(connection, name, additionalArguments, retriesCount, retryInitialTimeout, errorsQueue, exceptionHandler, logger)
         {
         }
 

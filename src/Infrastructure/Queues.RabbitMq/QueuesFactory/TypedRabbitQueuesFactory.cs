@@ -73,8 +73,9 @@
                 );
 
             return TypedRabbitQueue.Create(
-                creationOptions.QueueName,
                 CreateConnection(_hosts),
+                creationOptions.QueueName,
+                creationOptions.AdditionalArguments,
                 creationOptions.RetriesCount,
                 creationOptions.RetryInitialTimeout,
                 creationOptions.ExceptionHandlingPolicy == ExceptionHandlingPolicy.SendToErrorsQueue

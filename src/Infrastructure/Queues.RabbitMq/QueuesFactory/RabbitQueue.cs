@@ -1,6 +1,7 @@
 ﻿namespace Skeleton.Queues.RabbitMq.QueuesFactory
 {
     using System;
+    using System.Collections.Generic;
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
@@ -18,8 +19,9 @@
         private readonly IModel _queue;
 
         protected RabbitQueue(
-            string name,
             IConnection connection,
+            string name,
+            IDictionary<string, object> additionalArguments,
             int retriesCount,
             TimeSpan retryInitialTimeout,
             ITypedQueue<ExceptionDescription> errorsQueue,
@@ -36,7 +38,7 @@
             _queue = _connection.CreateModel();
             try
             {
-                _queue.QueueDeclare(queue: name, durable: true, exclusive: false, autoDelete: false, arguments: null);
+                _queue.QueueDeclare(queue: name, durable: true, exclusive: false, autoDelete: false, arguments: additionalArguments);
                 _queue.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
             }
             catch (Exception)
