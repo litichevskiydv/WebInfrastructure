@@ -69,26 +69,29 @@
                 lastExceptionDispatchInfo?.Throw();
         }
 
-        protected abstract Task SendMessageAsync(TMessageDescription messageDescription, CancellationToken cancellationToken);
+        protected abstract Task SendMessageInternalAsync(TMessageDescription messageDescription, CancellationToken cancellationToken);
 
-        protected abstract Task SubscribeAsync(Func<TMessageDescription, Task> messageHandler, CancellationToken cancellationToken);
+        protected abstract Task SubscribeInternalAsync(Func<TMessageDescription, Task> messageHandler, CancellationToken cancellationToken);
 
-        protected abstract void Dispose(bool disposing);
+        protected abstract void DisposeInternal(bool disposing);
+
+        public async Task SendMessageAsync(
+            TMessageDescription messageDescription,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            await RetryAsync(() => SendMessageInternalAsync(messageDescription, cancellationToken), cancellationToken);
+        }
 
         public async Task SendMessageAsync<TMessage>(
             TMessage message, 
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            await RetryAsync(
-                () =>
-                    SendMessageAsync(
-                        new TMessageDescription
-                        {
-                            Id = Guid.NewGuid().ToString(),
-                            Content = JsonConvert.SerializeObject(message)
-                        },
-                        cancellationToken
-                    ),
+            await SendMessageAsync(
+                new TMessageDescription
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Content = JsonConvert.SerializeObject(message)
+                },
                 cancellationToken
             );
         }
@@ -97,7 +100,7 @@
             IMessageHandler<TMessage> handler, 
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            await SubscribeAsync(
+            await SubscribeInternalAsync(
                 async messageDescription =>
                 {
                     try
@@ -126,13 +129,13 @@
 
         public void Dispose()
         {
-            Dispose(true);
+            DisposeInternal(true);
             GC.SuppressFinalize(this);
         }
 
         ~QueueBase()
         {
-            Dispose(false);
+            DisposeInternal(false);
         }
     }
 }

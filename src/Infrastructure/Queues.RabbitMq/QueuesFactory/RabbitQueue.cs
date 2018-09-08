@@ -54,7 +54,7 @@
                 throw new ObjectDisposedException(GetType().Name);
         }
 
-        protected override Task SendMessageAsync(
+        protected override Task SendMessageInternalAsync(
             RabbitMessageDescription messageDescription, 
             CancellationToken cancellationToken)
         {
@@ -63,6 +63,7 @@
             var properties = _queue.CreateBasicProperties();
             properties.Persistent = true;
             properties.MessageId = messageDescription.Id;
+            properties.Headers = messageDescription.Headers;
 
             _queue.BasicPublish(
                 exchange: "",
@@ -74,7 +75,7 @@
             return Task.CompletedTask;
         }
 
-        protected override Task SubscribeAsync(
+        protected override Task SubscribeInternalAsync(
             Func<RabbitMessageDescription, Task> messageHandler, 
             CancellationToken cancellationToken)
         {
@@ -87,6 +88,7 @@
                         new RabbitMessageDescription
                         {
                             Id = e.BasicProperties.MessageId,
+                            Headers = e.BasicProperties.Headers,
                             Content = Encoding.UTF8.GetString(e.Body),
                             DeliveryTag = e.DeliveryTag
                         }
@@ -96,7 +98,7 @@
             return Task.CompletedTask;
         }
 
-        protected override void Dispose(bool disposing)
+        protected override void DisposeInternal(bool disposing)
         {
             if (Disposed)
                 return;
