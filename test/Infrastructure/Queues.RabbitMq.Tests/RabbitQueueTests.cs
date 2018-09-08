@@ -17,6 +17,7 @@
     using Moq;
     using QueuesFactory;
     using QueuesFactory.Configuration;
+    using QueuesFactory.ExceptionsHandling.Handlers;
     using RabbitMQ.Client;
     using Web.Configuration;
     using Web.Testing.Extensions;
@@ -231,6 +232,51 @@
             {
                 await queue.SendMessageAsync(expectedMessage);
                 await queue.SubscribeAsync(messageHandler);
+
+                await Task.Delay(_completionTimeout);
+            }
+
+            // Then
+            _mockLogger.VerifyErrorWasLogged<InvalidOperationException>();
+
+            Assert.Equal(expectedMessage, messageHandler.Messages.Single());
+            Assert.Equal(0UL, GetQueueMessagesCount(queueCreationOptions.QueueName));
+        }
+
+        [Fact]
+        public async Task ShouldRequeueBadMessageWithDelayAndProcessIt()
+        {
+            // Given
+            const string expectedMessage = "Test message";
+
+            var queueName = Guid.NewGuid().ToString();
+            var messageRequeuingDelay = TimeSpan.FromSeconds(1);
+            var queueCreationOptions
+                = new RabbitQueueCreationOptions
+                  {
+                      QueueName = queueName,
+                      RetriesCount = 0,
+                      RetryInitialTimeout = TimeSpan.FromMilliseconds(100),
+                      ExceptionHandler =
+                          new RequeuingWithDelayExceptionHandler(
+                              _queuesFactory,
+                              _loggerFactory.CreateLogger<RequeuingWithDelayExceptionHandler>(),
+                              queueName,
+                              messageRequeuingDelay
+                          )
+                  };
+
+
+            // When
+            var messageHandler = new ThrowingExceptionMessageHandler();
+
+            using (var queue = _queuesFactory.Create<string>(queueCreationOptions))
+            {
+                await queue.SendMessageAsync(expectedMessage);
+                await queue.SubscribeAsync(messageHandler);
+
+                await Task.Delay((int)(messageRequeuingDelay.TotalMilliseconds / 2));
+                Assert.Equal(0UL, GetQueueMessagesCount(queueCreationOptions.QueueName));
 
                 await Task.Delay(_completionTimeout);
             }

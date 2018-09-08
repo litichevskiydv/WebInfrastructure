@@ -2,11 +2,14 @@
 {
     using System;
     using Abstractions.Configuration;
+    using Abstractions.QueuesFactory;
     using Abstractions.QueuesFactory.Configuration;
-    using Abstractions.QueuesFactory.ExceptionsHandling.Handlers;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using QueuesFactory;
+    using Microsoft.Extensions.Hosting;
+    using Microsoft.Extensions.Logging;
+    using QueuesFactory.Configuration;
+    using QueuesFactory.ExceptionsHandling.Handlers;
 
     public static class ServiceCollectionExtensions
     {
@@ -23,8 +26,21 @@
                 .AddHostedService<NotificationsProcessingService>()
                 .ConfigureMessagesProcessingService<NotificationsProcessingServiceOptions>(
                     configuration,
-                    x => x.Configure<RequeuingExceptionHandler<RabbitMessageDescription>>(
-                        (options, exceptionHandler) => options.QueueCreationOptions.WithExceptionHandler(exceptionHandler)
+                    x => x.Configure<ITypedQueuesFactory<RabbitQueueCreationOptions>,
+                        ILogger<RequeuingWithDelayExceptionHandler>,
+                        IApplicationLifetime>(
+                        (options, queuesFactory, logger, appLifetime) =>
+                        {
+                            var exceptionHandler
+                                = new RequeuingWithDelayExceptionHandler(
+                                    queuesFactory,
+                                    logger,
+                                    options.QueueCreationOptions.QueueName,
+                                    options.MessagesRequeuingDelay
+                                );
+                            appLifetime.ApplicationStopping.Register(() => exceptionHandler.Dispose());
+                            options.QueueCreationOptions.WithExceptionHandler(exceptionHandler);
+                        }
                     )
                 );
         }
