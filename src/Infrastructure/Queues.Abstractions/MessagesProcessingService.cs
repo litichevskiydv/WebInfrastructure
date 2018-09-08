@@ -93,10 +93,5 @@
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
-        ~MessagesProcessingService()
-        {
-            Dispose(false);
-        }
     }
 }

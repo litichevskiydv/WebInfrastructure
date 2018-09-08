@@ -132,10 +132,5 @@
             DisposeInternal(true);
             GC.SuppressFinalize(this);
         }
-
-        ~QueueBase()
-        {
-            DisposeInternal(false);
-        }
     }
 }

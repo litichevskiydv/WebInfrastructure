@@ -99,10 +99,5 @@
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
-        ~Session()
-        {
-            Dispose(false);
-        }
     }
 }
