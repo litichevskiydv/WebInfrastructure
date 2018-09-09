@@ -108,6 +108,7 @@
                 _queue?.Dispose();
                 _connection?.Dispose();
                 ErrorsQueue?.Dispose();
+                (ExceptionHandler as IDisposable)?.Dispose();
             }
             Disposed = true;
         }
