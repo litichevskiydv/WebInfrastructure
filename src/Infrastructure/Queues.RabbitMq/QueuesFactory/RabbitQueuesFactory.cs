@@ -8,7 +8,9 @@
     using Microsoft.Extensions.Options;
     using RabbitMQ.Client;
 
-    public class TypedRabbitQueuesFactory : ITypedQueuesFactory<RabbitQueueCreationOptions>
+    public class RabbitQueuesFactory : 
+        ITypedQueuesFactory<RabbitQueueCreationOptions>,
+        IUntypedQueuesFactory<RabbitQueueCreationOptions, QueueBase<RabbitMessageDescription>>
     {
         private readonly IExceptionHandlersFactory<RabbitMessageDescription> _exceptionHandlersFactory;
         private readonly ILoggerFactory _loggerFactory;
@@ -16,16 +18,16 @@
         private readonly string[] _hosts;
         private readonly IConnectionFactory _connectionsFactory;
 
-        public TypedRabbitQueuesFactory(
-            IExceptionHandlersFactory<RabbitMessageDescription> exceptionHandlersFactory, 
-            ILoggerFactory loggerFactory, 
+        public RabbitQueuesFactory(
+            IExceptionHandlersFactory<RabbitMessageDescription> exceptionHandlersFactory,
+            ILoggerFactory loggerFactory,
             IOptions<TypedRabbitQueuesFactoryOptions> options)
         {
             if (exceptionHandlersFactory == null)
                 throw new ArgumentNullException(nameof(exceptionHandlersFactory));
             if (loggerFactory == null)
                 throw new ArgumentNullException(nameof(loggerFactory));
-            if(options == null)
+            if (options == null)
                 throw new ArgumentNullException(nameof(options));
 
             _exceptionHandlersFactory = exceptionHandlersFactory;
@@ -62,7 +64,7 @@
             );
         }
 
-        public ITypedQueue<TMessage> Create<TMessage>(RabbitQueueCreationOptions creationOptions)
+        private TypedRabbitQueue<TMessage> CreateInternal<TMessage>(RabbitQueueCreationOptions creationOptions)
         {
             if (creationOptions == null)
                 throw new ArgumentNullException(nameof(creationOptions));
@@ -85,6 +87,16 @@
                 ?? _exceptionHandlersFactory.GetHandler(creationOptions.ExceptionHandlingPolicy.Value),
                 _loggerFactory.CreateLogger<TypedRabbitQueue<TMessage>>()
             );
+        }
+
+        public ITypedQueue<TMessage> Create<TMessage>(RabbitQueueCreationOptions creationOptions)
+        {
+            return CreateInternal<TMessage>(creationOptions);
+        }
+
+        public QueueBase<RabbitMessageDescription> Create(RabbitQueueCreationOptions creationOptions)
+        {
+            return CreateInternal<object>(creationOptions);
         }
     }
 }

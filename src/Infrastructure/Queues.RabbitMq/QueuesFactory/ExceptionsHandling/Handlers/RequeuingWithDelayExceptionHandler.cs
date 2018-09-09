@@ -15,12 +15,12 @@
     /// </summary>
     public class RequeuingWithDelayExceptionHandler : ExceptionHandlerBase<RabbitMessageDescription>, IDisposable
     {
-        private readonly ITypedQueue<string> _pendingMessagesQueue;
+        private readonly QueueBase<RabbitMessageDescription> _pendingMessagesQueue;
 
         protected bool Disposed;
 
         public RequeuingWithDelayExceptionHandler(
-            ITypedQueuesFactory<RabbitQueueCreationOptions> rabbitQueuesFactory,
+            IUntypedQueuesFactory<RabbitQueueCreationOptions, QueueBase<RabbitMessageDescription>> rabbitQueuesFactory,
             ILogger<RequeuingWithDelayExceptionHandler> logger,
             string parentQueueName,
             TimeSpan messageDelay) 
@@ -29,7 +29,7 @@
             if(rabbitQueuesFactory == null)
                 throw new ArgumentNullException(nameof(rabbitQueuesFactory));
 
-            _pendingMessagesQueue = rabbitQueuesFactory.Create<string>(
+            _pendingMessagesQueue = rabbitQueuesFactory.Create(
                 new RabbitQueueCreationOptions
                 {
                     QueueName = $"{parentQueueName}_PendingMessages_{messageDelay}",
@@ -55,7 +55,7 @@
         {
 
             await queue.AcknowledgeMessageAsync(messageDescription, cancellationToken);
-            await _pendingMessagesQueue.SendMessageAsync(messageDescription.Content.Trim('"'), cancellationToken);
+            await _pendingMessagesQueue.SendMessageAsync(messageDescription, cancellationToken);
         }
 
         protected virtual void DisposeInternal(bool disposing)

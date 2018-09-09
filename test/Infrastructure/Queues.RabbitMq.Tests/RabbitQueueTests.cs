@@ -25,7 +25,7 @@
 
     public class RabbitQueueTests
     {
-        private class QueuesFactoryForTests : TypedRabbitQueuesFactory
+        private class QueuesFactoryForTests : RabbitQueuesFactory
         {
             private readonly IConnection _connection;
             private readonly ITypedQueue<ExceptionDescription> _errorsQueue;
@@ -58,7 +58,7 @@
         private readonly ILoggerFactory _loggerFactory;
 
         private readonly TimeSpan _completionTimeout;
-        private readonly ITypedQueuesFactory<RabbitQueueCreationOptions> _queuesFactory;
+        private readonly RabbitQueuesFactory _queuesFactory;
         private readonly IConnectionFactory _connectionsFactory;
 
         public RabbitQueueTests()
@@ -85,7 +85,7 @@
                       TopologyRecoveryEnabled = true,
                       HostName = queuesFactoryOptions.Hosts.Single()
                 };
-            _queuesFactory = new TypedRabbitQueuesFactory(
+            _queuesFactory = new RabbitQueuesFactory(
                 new ExceptionHandlersFactory<RabbitMessageDescription>(
                     new ExceptionHandlerBase<RabbitMessageDescription>[]
                     {

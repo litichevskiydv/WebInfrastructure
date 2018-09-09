@@ -43,7 +43,7 @@
                 = new GenericQueuesFactory(
                     new ServiceCollection()
                         .AddSingleton<ITypedQueuesFactory<RabbitQueueCreationOptions>>(
-                            new TypedRabbitQueuesFactory(
+                            new RabbitQueuesFactory(
                                 new ExceptionHandlersFactory<RabbitMessageDescription>(
                                     new ExceptionHandlerBase<RabbitMessageDescription>[]
                                     {

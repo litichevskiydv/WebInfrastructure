@@ -68,7 +68,7 @@
                             .SingleInstance();
                         builder
                             .RegisterType<RequeuingExceptionHandler<RabbitMessageDescription>>()
-                            .As<ExceptionHandlerBase<RabbitMessageDescription>, RequeuingExceptionHandler<RabbitMessageDescription>>()
+                            .As<ExceptionHandlerBase<RabbitMessageDescription>>()
                             .SingleInstance();
                         builder
                             .RegisterType<ErrorsQueuingExceptionHandler<RabbitMessageDescription>>()
@@ -79,8 +79,8 @@
                             .As<IExceptionHandlersFactory<RabbitMessageDescription>>()
                             .SingleInstance();
                         builder
-                            .RegisterType<TypedRabbitQueuesFactory>()
-                            .As<ITypedQueuesFactory<RabbitQueueCreationOptions>>()
+                            .RegisterType<RabbitQueuesFactory>()
+                            .As<ITypedQueuesFactory<RabbitQueueCreationOptions>, IUntypedQueuesFactory<RabbitQueueCreationOptions, QueueBase<RabbitMessageDescription>>>()
                             .SingleInstance();
                         builder
                             .RegisterType<GenericQueuesFactory>()

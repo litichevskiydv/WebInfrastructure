@@ -1,6 +1,7 @@
 ﻿namespace Skeleton.Queues.Abstractions.QueuesFactory
 {
     using System;
+    using System.Linq;
     using System.Reflection;
     using System.Runtime.ExceptionServices;
     using Configuration;
@@ -24,7 +25,8 @@
             var creationOptionsType = creationOptions.GetType();
             var typedQueuesFactory = _serviceProvider.GetService(_typedQueuesFactoryType.MakeGenericType(creationOptionsType));
             var createMethodDefinition = typedQueuesFactory.GetType()
-                .GetRuntimeMethod(nameof(ITypedQueuesFactory<QueueCreationOptions>.Create), new[] {creationOptionsType})
+                .GetMethods()
+                .Single(x => x.IsGenericMethod && x.Name == nameof(ITypedQueuesFactory<QueueCreationOptions>.Create))
                 .MakeGenericMethod(typeof(TMessage));
 
             try

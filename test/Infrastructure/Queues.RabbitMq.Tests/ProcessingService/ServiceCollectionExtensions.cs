@@ -7,6 +7,7 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+    using QueuesFactory;
     using QueuesFactory.Configuration;
     using QueuesFactory.ExceptionsHandling.Handlers;
 
@@ -25,17 +26,19 @@
                 .AddHostedService<NotificationsProcessingService>()
                 .ConfigureMessagesProcessingService<NotificationsProcessingServiceOptions>(
                     configuration,
-                    x => x.Configure<ITypedQueuesFactory<RabbitQueueCreationOptions>, ILogger<RequeuingWithDelayExceptionHandler>>(
-                        (options, queuesFactory, logger) =>
-                            options.QueueCreationOptions.WithExceptionHandler(
-                                new RequeuingWithDelayExceptionHandler(
-                                    queuesFactory,
-                                    logger,
-                                    options.QueueCreationOptions.QueueName,
-                                    options.MessagesRequeuingDelay
+                    x => x
+                        .Configure<IUntypedQueuesFactory<RabbitQueueCreationOptions, QueueBase<RabbitMessageDescription>>,
+                            ILogger<RequeuingWithDelayExceptionHandler>>(
+                            (options, queuesFactory, logger) =>
+                                options.QueueCreationOptions.WithExceptionHandler(
+                                    new RequeuingWithDelayExceptionHandler(
+                                        queuesFactory,
+                                        logger,
+                                        options.QueueCreationOptions.QueueName,
+                                        options.MessagesRequeuingDelay
+                                    )
                                 )
-                            )
-                    )
+                        )
                 );
         }
     }
