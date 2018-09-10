@@ -13,6 +13,7 @@ Commit message: $(RepositoryCommitMessage)
     <RootNamespace>Skeleton.Web.Testing</RootNamespace>
     <PackageId>Skeleton.Web.Testing</PackageId>
     <PackageTags>WebApi integration testing</PackageTags>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,7 +29,6 @@ Commit message: $(RepositoryCommitMessage)
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.1.1" />
     <PackageReference Include="Moq" Version="4.9.0" />
     <PackageReference Include="xunit" Version="2.4.0" />
   </ItemGroup>
