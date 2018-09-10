@@ -55,6 +55,7 @@
                 .ConfigureServices(
                     (context, collection) =>
                         collection
+                            .AddRabbitMqSupport()
                             .AddNotificationsProcessingService(context.Configuration.GetSection("NotificationsProcessingServiceOptions"))
                             .Configure<TypedRabbitQueuesFactoryOptions>(context.Configuration.GetSection("QueuesFactoryOptions"))
                 )
@@ -62,35 +63,8 @@
                 .ConfigureContainer<ContainerBuilder>(
                     builder =>
                     {
-                        builder
-                            .RegisterType<EmptyExceptionHandler<RabbitMessageDescription>>()
-                            .As<ExceptionHandlerBase<RabbitMessageDescription>>()
-                            .SingleInstance();
-                        builder
-                            .RegisterType<RequeuingExceptionHandler<RabbitMessageDescription>>()
-                            .As<ExceptionHandlerBase<RabbitMessageDescription>>()
-                            .SingleInstance();
-                        builder
-                            .RegisterType<ErrorsQueuingExceptionHandler<RabbitMessageDescription>>()
-                            .As<ExceptionHandlerBase<RabbitMessageDescription>>()
-                            .SingleInstance();
-                        builder
-                            .RegisterType<ExceptionHandlersFactory<RabbitMessageDescription>>()
-                            .As<IExceptionHandlersFactory<RabbitMessageDescription>>()
-                            .SingleInstance();
-                        builder
-                            .RegisterType<RabbitQueuesFactory>()
-                            .As<ITypedQueuesFactory<RabbitQueueCreationOptions>, IUntypedQueuesFactory<RabbitQueueCreationOptions, QueueBase<RabbitMessageDescription>>>()
-                            .SingleInstance();
-                        builder
-                            .RegisterType<GenericQueuesFactory>()
-                            .As<IGenericQueuesFactory>()
-                            .SingleInstance();
-                        builder
-                            .RegisterInstance(_messageHandler)
-                            .As<IMessageHandler<string>>();
+                        builder.RegisterInstance(_messageHandler).As<IMessageHandler<string>>();
                     }
-
                 )
                 .ConfigureLogging(
                     builder =>
