@@ -41,7 +41,8 @@
                           {
                               {"x-dead-letter-exchange", ""},
                               {"x-dead-letter-routing-key", parentQueueName},
-                              {"x-message-ttl", (long) messageDelay.TotalMilliseconds}
+                              {"x-message-ttl", (long) messageDelay.TotalMilliseconds},
+                              {"x-expires", (long)messageDelay.TotalMilliseconds*2}
                           }
                 }
             );
