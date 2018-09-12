@@ -17,8 +17,8 @@ Commit message: $(RepositoryCommitMessage)
   
   <ItemGroup>
     <PackageReference Include="Jil" Version="2.16.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.1.2" />
     <PackageReference Include="Microsoft.Net.Http.Headers" Version="2.1.1" />
   </ItemGroup>
   
