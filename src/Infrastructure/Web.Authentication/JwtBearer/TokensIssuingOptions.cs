@@ -5,7 +5,7 @@ namespace Skeleton.Web.Authentication.JwtBearer
 
     public class TokensIssuingOptions
     {
-        public string GetEndpotint { get; set; }
+        public string GetEndpoint { get; set; }
 
         public SecurityKey SigningKey { get; set; }
 

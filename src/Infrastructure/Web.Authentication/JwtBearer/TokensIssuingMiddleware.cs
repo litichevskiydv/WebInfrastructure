@@ -36,8 +36,8 @@
                 throw new ArgumentNullException(nameof(userClaimsProvider));
             if (options == null)
                 throw new ArgumentNullException(nameof(options));
-            if (string.IsNullOrWhiteSpace(options.Value.GetEndpotint))
-                throw new ArgumentNullException(nameof(options.Value.GetEndpotint));
+            if (string.IsNullOrWhiteSpace(options.Value.GetEndpoint))
+                throw new ArgumentNullException(nameof(options.Value.GetEndpoint));
             if (string.IsNullOrWhiteSpace(options.Value.SigningAlgorithmName))
                 throw new ArgumentNullException(nameof(options.Value.SigningAlgorithmName));
             if (options.Value.SigningKey == null)
@@ -47,7 +47,7 @@
             _userClaimsProvider = userClaimsProvider;
             _tokenHandler = new JwtSecurityTokenHandler();
             _tokenIssueEventHandler = options.Value.TokenIssueEventHandler;
-            _getEndpointPath = new PathString(options.Value.GetEndpotint);
+            _getEndpointPath = new PathString(options.Value.GetEndpoint);
             _signingCredentials = new SigningCredentials(options.Value.SigningKey, options.Value.SigningAlgorithmName);
             _lifetime = options.Value.Lifetime;
 
@@ -99,14 +99,14 @@
             {
                 _tokenIssueEventHandler?.LoginNotFoundEventHandle(requestModel.Login);
                 await WriteResponse(context.Response, HttpStatusCode.BadRequest,
-                    new TokenErrorResponseModel {ErrorMessage = "Login or passwor is incorrect"});
+                    new TokenErrorResponseModel {ErrorMessage = "Login or password is incorrect"});
                 return;
             }
             catch (IncorrectPasswordException)
             {
                 _tokenIssueEventHandler?.IncorrectPasswordEventHandle(requestModel.Login, requestModel.Password);
                 await WriteResponse(context.Response, HttpStatusCode.BadRequest,
-                    new TokenErrorResponseModel {ErrorMessage = "Login or passwor is incorrect"});
+                    new TokenErrorResponseModel {ErrorMessage = "Login or password is incorrect"});
                 return;
             }
             var notBefore = DateTime.UtcNow;

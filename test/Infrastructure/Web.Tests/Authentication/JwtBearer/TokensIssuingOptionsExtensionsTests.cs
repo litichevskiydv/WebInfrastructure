@@ -72,7 +72,7 @@
         [MemberData(nameof(WithGetEndpotintValidationTestsData))]
         public void WithGetEndpotintShouldValidateInput(TokensIssuingOptions options, string endpoint)
         {
-            Assert.Throws<ArgumentNullException>(() => options.WithGetEndpotint(endpoint));
+            Assert.Throws<ArgumentNullException>(() => options.WithGetEndpoint(endpoint));
         }
 
         [Theory]
@@ -97,10 +97,10 @@
             const string expectedGetEndpoint = "/api/Account/Token";
 
             // When
-            options.WithGetEndpotint(expectedGetEndpoint);
+            options.WithGetEndpoint(expectedGetEndpoint);
 
             // Then
-            Assert.Equal(expectedGetEndpoint, options.GetEndpotint);
+            Assert.Equal(expectedGetEndpoint, options.GetEndpoint);
         }
 
         [Fact]

@@ -30,7 +30,7 @@
         /// Converts sequence to array
         /// </summary>
         /// <typeparam name="T">The type of the elements of <paramref name="source" /></typeparam>
-        /// <param name="source">Sequence for convertation</param>
+        /// <param name="source">Sequence for convertion</param>
         /// <returns>Result array</returns>
         public static T[] AsArray<T>(this IEnumerable<T> source)
         {

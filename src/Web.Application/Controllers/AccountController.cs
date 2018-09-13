@@ -20,6 +20,7 @@
         public IEnumerable<string> UserInfo()
         {
             var identity = (ClaimsIdentity)User.Identity;
+
             return identity.Claims
                 .Select(x => $"{x.Type}:{x.Value}")
                 .ToArray();

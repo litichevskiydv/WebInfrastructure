@@ -4,11 +4,11 @@
     using System.Collections.Generic;
     using System.Data.SqlClient;
 
-    public class ExpandoObjectMappingInfoProvider : IMappingInfoProvider
+    public class ExpandObjectMappingInfoProvider : IMappingInfoProvider
     {
         private readonly Dictionary<int, string> _propertiesKeyIndices;
 
-        public ExpandoObjectMappingInfoProvider(
+        public ExpandObjectMappingInfoProvider(
             IDictionary<string, object> properties,
             SqlBulkCopyColumnMappingCollection mappingsCollection)
         {

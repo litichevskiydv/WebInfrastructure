@@ -9,9 +9,8 @@ namespace Skeleton.Web.Documentation
     {
         public void Apply(Operation operation, OperationFilterContext context)
         {
-            var authAttributes = context.ApiDescription
-                .ControllerAttributes()
-                .Union(context.ApiDescription.ActionAttributes())
+            var authAttributes = context.ControllerActionDescriptor
+                .GetControllerAndActionAttributes(true)
                 .OfType<AuthorizeAttribute>();
 
             if (authAttributes.Any())
