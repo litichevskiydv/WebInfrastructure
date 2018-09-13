@@ -5,14 +5,14 @@
 
     public static class TokensIssuingOptionsExtensions
     {
-        public static TokensIssuingOptions WithGetEndpotint(this TokensIssuingOptions options, string endpoint)
+        public static TokensIssuingOptions WithGetEndpoint(this TokensIssuingOptions options, string endpoint)
         {
             if (options == null)
                 throw new ArgumentNullException(nameof(options));
             if (string.IsNullOrWhiteSpace(endpoint))
                 throw new ArgumentNullException(nameof(endpoint));
 
-            options.GetEndpotint = endpoint;
+            options.GetEndpoint = endpoint;
             return options;
         }
 

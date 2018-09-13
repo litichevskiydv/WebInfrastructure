@@ -24,7 +24,7 @@
             if (typeof(TSource) == typeof(ExpandoObject))
                 BulkInsert(
                     connection, tableName, source,
-                    x => new ExpandoObjectMappingInfoProvider(source.First() as Dictionary<string, object>, x),
+                    x => new ExpandObjectMappingInfoProvider(source.First() as Dictionary<string, object>, x),
                     transaction, batchSize, timeout
                 );
             else
