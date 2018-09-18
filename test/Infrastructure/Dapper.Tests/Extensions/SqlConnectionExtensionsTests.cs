@@ -200,7 +200,7 @@
                     using (var connection = SqlConnectionsFactoryMethod())
                         connection.BulkInsert(
                             "#TestEntities", new ExpandoObject[0],
-                            x => new ExpandObjectMappingInfoProvider(new ExpandoObject(), x)
+                            x => new ExpandoObjectMappingInfoProvider(new ExpandoObject(), x)
                         );
                 });
         }
@@ -225,7 +225,7 @@
             using (var connection = SqlConnectionsFactoryMethod())
             {
                 connection.Execute(@"create table #TestEntities (Id int identity(1, 1) not null, Name nvarchar(max) not null, Value int not null)");
-                connection.BulkInsert("#TestEntities", expected, x => new ExpandObjectMappingInfoProvider(item1, x));
+                connection.BulkInsert("#TestEntities", expected, x => new ExpandoObjectMappingInfoProvider(item1, x));
                 actual = connection.Query("select * from #TestEntities").ToArray();
             }
             // Then
