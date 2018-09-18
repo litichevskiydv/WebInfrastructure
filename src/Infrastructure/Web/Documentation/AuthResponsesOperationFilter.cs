@@ -9,10 +9,13 @@ namespace Skeleton.Web.Documentation
     {
         public void Apply(Operation operation, OperationFilterContext context)
         {
-            var authAttributes = context.ControllerActionDescriptor
-                .GetControllerAndActionAttributes(true)
+            var authAttributes = context?.MethodInfo?.DeclaringType?.GetCustomAttributes(true)
+                .Union(context.MethodInfo.GetCustomAttributes(true))
                 .OfType<AuthorizeAttribute>();
 
+            if(authAttributes == null)
+                return;
+            
             if (authAttributes.Any())
                 operation.Responses.Add("401", new Response { Description = "Unauthorized" });
         }
