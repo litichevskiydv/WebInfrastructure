@@ -192,17 +192,13 @@
         }
 
         [Fact]
-        public void NullExpandoObjectPropertyInfoProviderFailTest()
+        public void ShouldNotPerformAnyActionIfSourceIsEmpty()
         {
-            Assert.Throws<InvalidOperationException>(
-                () =>
-                {
-                    using (var connection = SqlConnectionsFactoryMethod())
-                        connection.BulkInsert(
-                            "#TestEntities", new ExpandoObject[0],
-                            x => new ExpandoObjectMappingInfoProvider(new ExpandoObject(), x)
-                        );
-                });
+            using (var connection = SqlConnectionsFactoryMethod())
+                connection.BulkInsert(
+                    "#TestEntities", new ExpandoObject[0],
+                    x => new ExpandoObjectMappingInfoProvider(new ExpandoObject(), x)
+                );
         }
 
         [Fact]

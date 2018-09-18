@@ -2,20 +2,20 @@
 {
     using System;
     using System.Threading.Tasks;
+    using Hosting;
     using Integration.BaseApiClient.Configuration;
     using Integration.BaseApiFluentClient;
     using Microsoft.Extensions.Options;
-    using Moq;
     using Serialization.Jil.Serializer;
 
-    public class BaseApiClientTests<TStartup> where TStartup : class
+    public class BaseApiClientTests<TStartup> where TStartup : WebApiBaseStartup
     {
         protected readonly BaseApiTestsFixture<TStartup> Fixture;
 
         protected BaseApiClientTests(BaseApiTestsFixture<TStartup> fixture)
         {
             Fixture = fixture;
-            Fixture.MockLogger.ResetCalls();
+            Fixture.MockLogger.Invocations.Clear();
         }
 
         protected TClient CreateClient<TClient, TClientOptions>(Action<TClientOptions> configureOptions = null)

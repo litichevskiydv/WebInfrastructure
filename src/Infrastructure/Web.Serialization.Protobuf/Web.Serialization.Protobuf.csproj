@@ -1,26 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), common.props))\common.props" />
-
   <PropertyGroup>
-    <DebugType>portable</DebugType>
+    <Description>Library for protobuf-net serializer integration</Description>
+    <PackageDescription Condition="'$(RepositoryBranch)'!=''">
+$(Description)
+Branch: $(RepositoryBranch)
+Working tree: $(RepositoryUrl)/tree/$(RepositoryCommit)
+Commit message: $(RepositoryCommitMessage)
+    </PackageDescription>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Skeleton.Web.Serialization.Protobuf</AssemblyName>
     <RootNamespace>Skeleton.Web.Serialization.Protobuf</RootNamespace>
     <PackageId>Skeleton.Web.Serialization.Protobuf</PackageId>
-    <Authors>dmitriy.litichevskiy</Authors>
-    <Description>Library for protobuf-net serializer integration</Description>
     <PackageTags>protobuf-net;InputFormatter;OutputFormatter</PackageTags>
-    <PackageProjectUrl>https://github.com/litichevskiydv/WebInfrastructure</PackageProjectUrl>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE</PackageLicenseUrl>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/litichevskiydv/WebInfrastructure</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.1.2" />
     <PackageReference Include="Microsoft.Net.Http.Headers" Version="2.1.1" />
-    <PackageReference Include="protobuf-net" Version="2.3.13" />
+    <PackageReference Include="protobuf-net" Version="2.4.0" />
   </ItemGroup>
 
   <ItemGroup>

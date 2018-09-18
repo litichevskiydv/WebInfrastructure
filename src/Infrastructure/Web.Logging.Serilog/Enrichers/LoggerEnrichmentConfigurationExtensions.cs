@@ -8,7 +8,6 @@
 
     public static class LoggerEnrichmentConfigurationExtensions
     {
-        [ExcludeFromCodeCoverage]
         public static LoggerConfiguration WithApplicationVersion(
             this LoggerEnrichmentConfiguration enrichmentConfiguration, 
             string versionString)
@@ -21,7 +20,6 @@
             return enrichmentConfiguration.WithProperty("Version", versionString);
         }
 
-        [ExcludeFromCodeCoverage]
         public static LoggerConfiguration WithApplicationInformationalVersion(
             this LoggerEnrichmentConfiguration enrichmentConfiguration)
         {
@@ -45,7 +43,6 @@
             );
         }
 
-        [ExcludeFromCodeCoverage]
         public static LoggerConfiguration WithMessageTemplateHash(
             this LoggerEnrichmentConfiguration enrichmentConfiguration)
         {

@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Library with classes for working with RabbitMq</Description>
+    <PackageDescription Condition="'$(RepositoryBranch)'!=''">
+$(Description)
+Branch: $(RepositoryBranch)
+Working tree: $(RepositoryUrl)/tree/$(RepositoryCommit)
+Commit message: $(RepositoryCommitMessage)
+    </PackageDescription>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Skeleton.Queues.RabbitMq</AssemblyName>
+    <RootNamespace>Skeleton.Queues.RabbitMq</RootNamespace>
+    <PackageId>Skeleton.Queues.RabbitMq</PackageId>
+    <PackageTags>RabbitMq</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RabbitMQ.Client" Version="5.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Queues.Abstractions\Queues.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
