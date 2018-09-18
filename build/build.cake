@@ -1,6 +1,7 @@
 #tool "nuget:?package=OpenCover"
 #tool "nuget:?package=Codecov&version=1.0.4"
 #addin "nuget:?package=Cake.Codecov"
+using System.Linq;
 using System.Text.RegularExpressions;
 
 // Target - The task you want to start. Runs the Default task if not specified.
@@ -27,16 +28,24 @@ var buildNumber =
     TravisCI.IsRunningOnTravisCI ? TravisCI.Environment.Build.BuildNumber :
     EnvironmentVariable("BuildNumber") != null ? int.Parse(EnvironmentVariable("BuildNumber")) : 0;
 
-// The branch name use in version suffix
+// The branch name use in version suffix and packages info
 var branch = 
     AppVeyor.IsRunningOnAppVeyor ? AppVeyor.Environment.Repository.Branch :
     TravisCI.IsRunningOnTravisCI ? TravisCI.Environment.Build.Branch : (string)null;
+// Commit Id for packages info
+var commitId =
+    AppVeyor.IsRunningOnAppVeyor ? AppVeyor.Environment.Repository.Commit.Id :
+    TravisCI.IsRunningOnTravisCI ? TravisCI.Environment.Repository.Commit : (string)null;
+// Commit message for packages info
+var commitMessage =
+    AppVeyor.IsRunningOnAppVeyor ? AppVeyor.Environment.Repository.Commit.Message :
+    TravisCI.IsRunningOnTravisCI ? EnvironmentVariable("TRAVIS_COMMIT_MESSAGE") : (string)null;
 
 // Text suffix of the package version
 string versionSuffix = null;
 if(string.IsNullOrWhiteSpace(branch) == false && branch != "master")
 {
-    versionSuffix = $"-dev-build{buildNumber:00000}";
+    versionSuffix = $"dev-build{buildNumber:00000}";
 
     var match = Regex.Match(branch, "release\\/\\d+\\.\\d+\\.\\d+\\-?(.*)", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
     if(match.Success)
@@ -64,10 +73,11 @@ Task("Clean")
         var settings = new DotNetCoreBuildSettings
                 {
                     Configuration = configuration,
-                    VersionSuffix = versionSuffix
+                    VersionSuffix = versionSuffix,
+                    MSBuildSettings = new DotNetCoreMSBuildSettings()
                 };
         if(buildNumber != 0)
-            settings.ArgumentCustomization = x => x.Append($"/p:Build={buildNumber}");
+            settings.MSBuildSettings.Properties["Build"] = new[] {buildNumber.ToString()};
 
         foreach(var project in projects)
             DotNetCoreBuild(project.GetDirectory().FullPath, settings);
@@ -88,8 +98,16 @@ Task("Pack")
                     NoBuild = true,
                     OutputDirectory = artifactsDirectory,
                     IncludeSymbols = true,
-                    VersionSuffix = versionSuffix
+                    VersionSuffix = versionSuffix,
+                    MSBuildSettings = new DotNetCoreMSBuildSettings()
                 };
+        if(string.IsNullOrWhiteSpace(commitId) == false)
+            settings.MSBuildSettings.Properties["RepositoryCommit"] = new[] {commitId};
+        if(string.IsNullOrWhiteSpace(branch) == false && branch != "master")
+        {
+            settings.MSBuildSettings.Properties["RepositoryBranch"] = new[] {branch};
+            settings.MSBuildSettings.Properties["RepositoryCommitMessage"] = new[] {commitMessage};
+        }
 
         foreach (var project in projects)
             DotNetCorePack(project.GetDirectory().FullPath, settings);
@@ -119,15 +137,10 @@ Task("CalculateCoverage")
     .IsDependentOn("Pack")
     .Does(() =>
     {
-        var projects = GetFiles("../src/Infrastructure/**/*.csproj");
-        foreach(var project in projects)
-        {
-            TransformTextFile(project.FullPath, ">", "<")
-                .WithToken("portable", ">full<")
-                .Save(project.FullPath);
-        }
+        var buildProps = GetFiles("../src/Infrastructure/Directory.Build.props").Single();
+        TransformTextFile(buildProps.FullPath, ">", "<").WithToken("portable", ">full<").Save(buildProps.FullPath);
 
-        projects = GetFiles("../test/**/*.csproj");
+        var projects = GetFiles("../test/**/*.csproj");
         var resultsFile = artifactsDirectory.CombineWithFilePath("coverage.xml");
         var settings = new OpenCoverSettings
                 {

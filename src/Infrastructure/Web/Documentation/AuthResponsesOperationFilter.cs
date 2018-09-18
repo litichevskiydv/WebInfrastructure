@@ -1,7 +1,7 @@
 namespace Skeleton.Web.Documentation
 {
     using System.Linq;
-    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc.Authorization;
     using Swashbuckle.AspNetCore.Swagger;
     using Swashbuckle.AspNetCore.SwaggerGen;
 

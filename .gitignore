@@ -1,4 +1,6 @@
 _ReSharper.*/
+build/artifacts/
+build/tools/
 bin
 obj
 Backup

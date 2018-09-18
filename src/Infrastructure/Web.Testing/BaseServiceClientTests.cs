@@ -1,20 +1,20 @@
 ﻿namespace Skeleton.Web.Testing
 {
     using System;
+    using Hosting;
     using Integration.BaseApiClient;
     using Integration.BaseApiClient.Configuration;
     using Microsoft.Extensions.Options;
-    using Moq;
     using Serialization.Jil.Serializer;
 
-    public class BaseServiceClientTests<TStartup> where TStartup : class
+    public class BaseServiceClientTests<TStartup> where TStartup : WebApiBaseStartup
     {
         protected readonly BaseApiTestsFixture<TStartup> Fixture;
 
         protected BaseServiceClientTests(BaseApiTestsFixture<TStartup> fixture)
         {
             Fixture = fixture;
-            Fixture.MockLogger.ResetCalls();
+            Fixture.MockLogger.Invocations.Clear();
         }
 
         protected TClient CreateClient<TClient, TClientOptions>(Action<TClientOptions> configureOptions = null)

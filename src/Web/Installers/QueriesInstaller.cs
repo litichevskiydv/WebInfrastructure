@@ -15,7 +15,7 @@
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<AutofacQueriesFactory>().As<IQueriesFactory>().SingleInstance();
+            builder.RegisterType<GenericQueriesFactory>().As<IQueriesFactory>().SingleInstance();
             builder.RegisterType<QueriesDispatcher>().As<IQueriesDispatcher>().SingleInstance();
 
             var queryType = typeof(IQuery<,>);

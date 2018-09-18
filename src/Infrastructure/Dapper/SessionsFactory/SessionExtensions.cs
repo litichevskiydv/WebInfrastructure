@@ -16,7 +16,7 @@
         }
 
         public static IEnumerable<TSource> Query<TSource>(this ISession session, QueryObject queryObject, 
-            bool buffered = true, int? commandTimeout = null, CommandType? commandType = null)
+            bool buffered = true, TimeSpan? commandTimeout = null, CommandType? commandType = null)
         {
             ValidateRequiredParameters(session, queryObject);
 
@@ -24,7 +24,7 @@
         }
 
         public static Task<IEnumerable<TSource>> QueryAsync<TSource>(this ISession session, QueryObject queryObject,
-            int? commandTimeout = null, CommandType? commandType = null)
+            TimeSpan? commandTimeout = null, CommandType? commandType = null)
         {
             ValidateRequiredParameters(session, queryObject);
 
@@ -32,7 +32,7 @@
         }
 
         public static int Execute(this ISession session, QueryObject queryObject, 
-            int? commandTimeout = null, CommandType? commandType = null)
+            TimeSpan? commandTimeout = null, CommandType? commandType = null)
         {
             ValidateRequiredParameters(session, queryObject);
 
@@ -40,7 +40,7 @@
         }
 
         public static Task<int> ExecuteAsync(this ISession session, QueryObject queryObject, 
-            int? commandTimeout = null, CommandType? commandType = null)
+            TimeSpan? commandTimeout = null, CommandType? commandType = null)
         {
             ValidateRequiredParameters(session, queryObject);
 

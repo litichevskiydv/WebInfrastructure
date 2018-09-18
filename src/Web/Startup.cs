@@ -15,10 +15,10 @@
     using Microsoft.Extensions.Logging;
     using Microsoft.IdentityModel.Tokens;
     using Skeleton.Dapper.ConnectionsFactory;
-    using Skeleton.Web;
     using Skeleton.Web.Authentication.JwtBearer;
     using Skeleton.Web.Authentication.JwtBearer.Configuration;
     using Skeleton.Web.Documentation;
+    using Skeleton.Web.Hosting;
     using Swashbuckle.AspNetCore.Swagger;
     using Swashbuckle.AspNetCore.SwaggerGen;
     using Swashbuckle.AspNetCore.SwaggerUI;

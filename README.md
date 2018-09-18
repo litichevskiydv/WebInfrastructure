@@ -23,3 +23,5 @@ Package  | Description | NuGet |
 `Skeleton.Web.Serialization.JsonNet` | Primitives for using serializer based on Json.Net| [![NuGet version](https://badge.fury.io/nu/Skeleton.Web.Serialization.JsonNet.svg)](https://www.nuget.org/packages/Skeleton.Web.Serialization.JsonNet)
 `Skeleton.Web.Serialization.Protobuf` | Primitives for using serializer based on Protobuf | [![NuGet version](https://badge.fury.io/nu/Skeleton.Web.Serialization.Protobuf.svg)](https://www.nuget.org/packages/Skeleton.Web.Serialization.Protobuf)
 `Skeleton.Web.Testing` | Primitives for writing WebApi integration tests | [![NuGet version](https://badge.fury.io/nu/Skeleton.Web.Testing.svg)](https://www.nuget.org/packages/Skeleton.Web.Testing)
+`Skeleton.Queues.Abstractions` | Library with abstractions for working with message queues | [![NuGet version](https://badge.fury.io/nu/Skeleton.Queues.Abstractions.svg)](https://www.nuget.org/packages/Skeleton.Queues.Abstractions)
+`Skeleton.Queues.RabbitMq` | Library with classes for working with RabbitMq | [![NuGet version](https://badge.fury.io/nu/Skeleton.Queues.RabbitMq.svg)](https://www.nuget.org/packages/Skeleton.Queues.RabbitMq)
