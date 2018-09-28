@@ -6,7 +6,7 @@
 
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddJwtBearerAuthorisationTokens(this IServiceCollection services,
+        public static IServiceCollection AddJwtBearerAuthorizationTokens(this IServiceCollection services,
             Func<IJwtBearerAuthenticationConfigurator, IJwtBearerAuthenticationConfigurator> configurationBuilder)
         {
             if (services == null)

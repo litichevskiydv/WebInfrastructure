@@ -67,14 +67,14 @@
             services
                 .Configure<DefaultConfigurationValues>(Configuration.GetSection("DefaultConfigurationValues"))
                 .Configure<SqlConnectionsFactoryOptions>(Configuration.GetSection("ConnectionStrings"))
-                .AddJwtBearerAuthorisationTokens(
+                .AddJwtBearerAuthorizationTokens(
                     b => b
                         .ConfigureSigningKey(
                             SecurityAlgorithms.HmacSha256,
                             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokensSigningKey"])))
                         .ConfigureTokensIssuingOptions(
                             i => i
-                                .WithGetEndpotint("/api/Account/Token")
+                                .WithGetEndpoint("/api/Account/Token")
                                 .WithLifetime(TimeSpan.FromHours(2))
                                 .WithTokenIssueEventHandler(
                                     new TokenIssueEventHandler(LoggerFactory.CreateLogger<TokenIssueEventHandler>())))
@@ -96,7 +96,7 @@
             IHostingEnvironment env,
             Func<IApplicationBuilder, IApplicationBuilder> pipelineBaseConfigurator)
         {
-            return x => pipelineBaseConfigurator(x.UseJwtBearerAuthorisationTokens());
+            return x => pipelineBaseConfigurator(x.UseJwtBearerAuthorizationTokens());
         }
     }
 }

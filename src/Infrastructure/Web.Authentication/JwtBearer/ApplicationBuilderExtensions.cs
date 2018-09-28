@@ -5,7 +5,7 @@
 
     public static class ApplicationBuilderExtensions
     {
-        public static IApplicationBuilder UseJwtBearerAuthorisationTokens(this IApplicationBuilder applicationBuilder)
+        public static IApplicationBuilder UseJwtBearerAuthorizationTokens(this IApplicationBuilder applicationBuilder)
         {
             if (applicationBuilder == null)
                 throw new ArgumentNullException(nameof(applicationBuilder));
