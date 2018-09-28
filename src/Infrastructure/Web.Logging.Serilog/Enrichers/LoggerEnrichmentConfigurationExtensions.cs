@@ -51,5 +51,14 @@
 
             return enrichmentConfiguration.With<MessageTemplateHashEnricher>();
         }
+
+        public static LoggerConfiguration WithLogEventHash(
+            this LoggerEnrichmentConfiguration enrichmentConfiguration)
+        {
+            if (enrichmentConfiguration == null)
+                throw new ArgumentNullException(nameof(enrichmentConfiguration));
+
+            return enrichmentConfiguration.With<LogEventHashEnricher>();
+        }
     }
 }
