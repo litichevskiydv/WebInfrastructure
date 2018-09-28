@@ -10,7 +10,7 @@ namespace Skeleton.Web.Documentation
         public void Apply(Operation operation, OperationFilterContext context)
         {
             var authAttributes = context?.MethodInfo?.DeclaringType?.GetCustomAttributes(true)
-                .Union(context.MethodInfo.GetCustomAttributes(true))
+                .Union(context.MethodInfo?.GetCustomAttributes(true))
                 .OfType<AuthorizeAttribute>();
 
             if(authAttributes == null)
