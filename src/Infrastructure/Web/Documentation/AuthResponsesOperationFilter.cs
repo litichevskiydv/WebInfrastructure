@@ -1,6 +1,7 @@
 namespace Skeleton.Web.Documentation
 {
     using System.Linq;
+    using Common.Extensions;
     using Microsoft.AspNetCore.Authorization;
     using Swashbuckle.AspNetCore.Swagger;
     using Swashbuckle.AspNetCore.SwaggerGen;
@@ -12,11 +13,8 @@ namespace Skeleton.Web.Documentation
             var authAttributes = context?.MethodInfo?.DeclaringType?.GetCustomAttributes(true)
                 .Union(context.MethodInfo?.GetCustomAttributes(true))
                 .OfType<AuthorizeAttribute>();
-
-            if(authAttributes == null)
-                return;
             
-            if (authAttributes.Any())
+            if (authAttributes.IsNotEmpty())
                 operation.Responses.Add("401", new Response { Description = "Unauthorized" });
         }
     }
