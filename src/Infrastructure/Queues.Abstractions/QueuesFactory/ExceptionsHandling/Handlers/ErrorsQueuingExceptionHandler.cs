@@ -23,9 +23,9 @@
 
             await queue.AcknowledgeMessageAsync(messageDescription, cancellationToken);
             await queue.ErrorsQueue.SendMessageAsync(
-                new ExceptionDescription
+                new ErrorInformation
                 {
-                    ExceptionMessage = exception.Message,
+                    ExceptionDescription = exception.ToString(),
                     MessageId = messageDescription.Id,
                     MessageContent = messageDescription.Content
                 },

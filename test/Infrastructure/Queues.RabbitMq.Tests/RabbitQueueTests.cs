@@ -28,14 +28,14 @@
         private class QueuesFactoryForTests : RabbitQueuesFactory
         {
             private readonly IConnection _connection;
-            private readonly ITypedQueue<ExceptionDescription> _errorsQueue;
+            private readonly ITypedQueue<ErrorInformation> _errorsQueue;
 
             public QueuesFactoryForTests(
                 IExceptionHandlersFactory<RabbitMessageDescription> exceptionHandlersFactory,
                 ILoggerFactory loggerFactory,
                 IOptions<TypedRabbitQueuesFactoryOptions> options, 
                 IConnection connection, 
-                ITypedQueue<ExceptionDescription> errorsQueue)
+                ITypedQueue<ErrorInformation> errorsQueue)
                 : base(exceptionHandlersFactory, loggerFactory, options)
             {
                 _connection = connection;
@@ -47,7 +47,7 @@
                 return _connection;
             }
 
-            protected override ITypedQueue<ExceptionDescription> CreateErrorsQueue(RabbitQueueCreationOptions parentQueueCreationOptions)
+            protected override ITypedQueue<ErrorInformation> CreateErrorsQueue(RabbitQueueCreationOptions parentQueueCreationOptions)
             {
                 return _errorsQueue;
             }
@@ -321,8 +321,8 @@
                 await Task.Delay(_completionTimeout);
             }
 
-            var errorMessagesHandler = new CatchingMessageHandler<ExceptionDescription>();
-            using (var errorsQueue = _queuesFactory.Create<ExceptionDescription>(errorQueueCreationOptions))
+            var errorMessagesHandler = new CatchingMessageHandler<ErrorInformation>();
+            using (var errorsQueue = _queuesFactory.Create<ErrorInformation>(errorQueueCreationOptions))
             {
                 await errorsQueue.SubscribeAsync(errorMessagesHandler);
                 await Task.Delay(_completionTimeout);
@@ -348,7 +348,7 @@
                 .Setup(x => x.QueueDeclare(It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<IDictionary<string, object>>()))
                 .Throws(new Exception());
             mockConnection.Setup(x => x.CreateModel()).Returns(mockModel.Object);
-            var mockErrorsQueue = new Mock<ITypedQueue<ExceptionDescription>>();
+            var mockErrorsQueue = new Mock<ITypedQueue<ErrorInformation>>();
             var queuesFactory = new QueuesFactoryForTests(
                 new ExceptionHandlersFactory<RabbitMessageDescription>(
                     new[]

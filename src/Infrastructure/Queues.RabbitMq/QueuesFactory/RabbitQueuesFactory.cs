@@ -51,9 +51,9 @@
             return _connectionsFactory.CreateConnection(hosts);
         }
 
-        protected virtual ITypedQueue<ExceptionDescription> CreateErrorsQueue(RabbitQueueCreationOptions parentQueueCreationOptions)
+        protected virtual ITypedQueue<ErrorInformation> CreateErrorsQueue(RabbitQueueCreationOptions parentQueueCreationOptions)
         {
-            return Create<ExceptionDescription>(
+            return Create<ErrorInformation>(
                 new RabbitQueueCreationOptions
                 {
                     QueueName = $"{parentQueueCreationOptions.QueueName}.Errors",

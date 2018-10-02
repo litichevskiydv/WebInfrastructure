@@ -19,7 +19,7 @@
             IDictionary<string, object> additionalArguments,
             int retriesCount,
             TimeSpan retryInitialTimeout,
-            ITypedQueue<ExceptionDescription> errorsQueue,
+            ITypedQueue<ErrorInformation> errorsQueue,
             ExceptionHandlerBase<RabbitMessageDescription> exceptionHandler,
             ILogger<TypedRabbitQueue<TMessage>> logger)
         {
@@ -44,7 +44,7 @@
             IDictionary<string, object> additionalArguments,
             int retriesCount,
             TimeSpan retryInitialTimeout,
-            ITypedQueue<ExceptionDescription> errorsQueue,
+            ITypedQueue<ErrorInformation> errorsQueue,
             ExceptionHandlerBase<RabbitMessageDescription> exceptionHandler,
             ILogger<TypedRabbitQueue<TMessage>> logger)
             : base(connection, name, additionalArguments, retriesCount, retryInitialTimeout, errorsQueue, exceptionHandler, logger)

@@ -79,12 +79,12 @@
         where TMessageDescription : QueueMessageDescriptionBase, new()
     {
         protected readonly ExceptionHandlerBase<TMessageDescription> ExceptionHandler;
-        public ITypedQueue<ExceptionDescription> ErrorsQueue { get; }
+        public ITypedQueue<ErrorInformation> ErrorsQueue { get; }
 
         protected QueueBase(
             int retriesCount,
             TimeSpan retryInitialTimeout,
-            ITypedQueue<ExceptionDescription> errorsQueue,
+            ITypedQueue<ErrorInformation> errorsQueue,
             ExceptionHandlerBase<TMessageDescription> exceptionHandler,
             ILogger logger) : base(retriesCount, retryInitialTimeout, logger)
         {
