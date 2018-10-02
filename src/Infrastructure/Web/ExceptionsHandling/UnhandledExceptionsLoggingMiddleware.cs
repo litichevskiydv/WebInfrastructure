@@ -87,7 +87,7 @@
                     {
                         context.Response.ContentType = "application/json; charset=utf-8";
                         await context.Response.WriteAsync(
-                            JsonConvert.SerializeObject(new ApiExceptionResponse(message, exception), _jsonSerializerSettings)
+                            JsonConvert.SerializeObject(content, _jsonSerializerSettings)
                         );
                     }
                 }
