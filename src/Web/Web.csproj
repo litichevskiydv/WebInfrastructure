@@ -4,7 +4,7 @@
 
   <PropertyGroup>
     <Authors>dmitriy.litichevskiy</Authors>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <DebugType>portable</DebugType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
