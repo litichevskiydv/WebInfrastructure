@@ -58,6 +58,17 @@
                 if (obj.GetType() != this.GetType()) return false;
                 return Equals((Totals) obj);
             }
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    var hashCode = First;
+                    hashCode = (hashCode * 397) ^ Second;
+                    hashCode = (hashCode * 397) ^ Sum;
+                    return hashCode;
+                }
+            }
         }
 
         [UsedImplicitly]
