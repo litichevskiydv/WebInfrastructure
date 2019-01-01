@@ -14,6 +14,11 @@ branches:
   - master
   - /^release\/.*$/
   - develop
+addons:
+  apt:
+    update: true
+    packages:
+    - rabbitmq-server
 script:
  - set -e
  - docker pull microsoft/mssql-server-linux:2017-latest
