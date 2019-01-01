@@ -30,7 +30,7 @@
         /// Converts sequence to array
         /// </summary>
         /// <typeparam name="T">The type of the elements of <paramref name="source" /></typeparam>
-        /// <param name="source">Sequence for convertion</param>
+        /// <param name="source">Sequence for conversion</param>
         /// <returns>Result array</returns>
         public static T[] AsArray<T>(this IEnumerable<T> source)
         {
@@ -86,12 +86,18 @@
             if (ReferenceEquals(first, null) || ReferenceEquals(second, null))
                 return false;
 
-            var firstArray = first as TSource[] ?? first.ToArray();
-            var secondArray = second as TSource[] ?? second.ToArray();
-            var equalityComparer = comparer ?? EqualityComparer<TSource>.Default;
+            var elementsCounts = first
+                .GroupBy(x => x)
+                .ToDictionary(x => x.Key, x => x.Count(), comparer ?? EqualityComparer<TSource>.Default);
+            foreach (var element in second)
+            {
+                if (elementsCounts.TryGetValue(element, out var elementCount) == false || elementCount == 0)
+                    return false;
 
-            return firstArray.SequenceEqual(secondArray, equalityComparer)
-                   || firstArray.Length == secondArray.Length && firstArray.Except(secondArray, equalityComparer).Any() == false;
+                elementsCounts[element]--;
+            }
+
+            return elementsCounts.All(x => x.Value == 0);
         }
 
         /// <summary>

@@ -60,6 +60,12 @@
                                        new object[] {Enumerable.Empty<int>(), Enumerable.Repeat(1, 2), false},
                                        new object[] {new[] {1, 2}, new[] {1, 2}, true},
                                        new object[] {new[] {2, 1}, new[] {1, 2}, true},
+                                       new object[] {new[] {1, 1}, new[] {1, 2}, false},
+                                       new object[] {new[] {1, 2}, new[] {1, 1}, false},
+                                       new object[] {new[] {1, 1}, new[] {1, 1}, true},
+                                       new object[] {new[] {1, 1}, new[] {1, 1, 1}, false},
+                                       new object[] {new[] {1, 1, 2, 2}, new[] {1, 1, 1, 2}, false},
+                                       new object[] {new[] {1, 1, 1, 2}, new[] {1, 1, 2, 2}, false},
                                        new object[] {array, array, true}
                                    };
         }
