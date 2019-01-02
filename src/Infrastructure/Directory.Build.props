@@ -6,7 +6,7 @@
     <DebugType>portable</DebugType>
     <Authors>dmitriy.litichevskiy</Authors>
     <PackageProjectUrl>https://github.com/litichevskiydv/WebInfrastructure</PackageProjectUrl>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/litichevskiydv/WebInfrastructure/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/litichevskiydv/WebInfrastructure</RepositoryUrl>
   </PropertyGroup>
