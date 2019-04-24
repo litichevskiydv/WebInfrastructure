@@ -16,7 +16,7 @@ Commit message: $(RepositoryCommitMessage)
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="murmurhash" Version="1.0.2" />
+    <PackageReference Include="murmurhash" Version="1.0.3" />
     <PackageReference Include="Serilog.Exceptions" Version="5.0.0" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.0.1" />
   </ItemGroup>
