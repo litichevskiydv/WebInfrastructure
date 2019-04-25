@@ -29,7 +29,7 @@ for:
         - image: Visual Studio 2017
     services: mssql2016
     install:
-      - ps: choco install rabbitmq --version 3.7.7 --ignoredependencies -y
+      - ps: choco install rabbitmq --version 3.7.7 -y
     build_script:
       - ps: >-
           cd build
