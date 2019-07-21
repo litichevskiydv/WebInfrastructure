@@ -1,133 +1,230 @@
 ﻿namespace Skeleton.Common.Tests.Extensions
 {
-    using System.Collections.Generic;
     using Common.Extensions;
     using JetBrains.Annotations;
     using Xunit;
 
     public class DoubleExtensionsTests
     {
+        public class ComparisonOperationsTestCase
+        {
+            public double First { get; set; }
+
+            public double Second { get; set; }
+
+            public bool Expected { get; set; }
+        }
+
         [UsedImplicitly]
-        public static IEnumerable<object[]> LessExtensionTestsData;
+        public static TheoryData<ComparisonOperationsTestCase> LessExtensionTestsData;
         [UsedImplicitly]
-        public static IEnumerable<object[]> LessOrEqualExtensionTestsData;
+        public static TheoryData<ComparisonOperationsTestCase> LessOrEqualExtensionTestsData;
         [UsedImplicitly]
-        public static IEnumerable<object[]> GreaterExtensionTestsData;
+        public static TheoryData<ComparisonOperationsTestCase> GreaterExtensionTestsData;
         [UsedImplicitly]
-        public static IEnumerable<object[]> GreaterOrEqualExtensionTestsData;
+        public static TheoryData<ComparisonOperationsTestCase> GreaterOrEqualExtensionTestsData;
         [UsedImplicitly]
-        public static IEnumerable<object[]> EqualExtensionTestsData;
+        public static TheoryData<ComparisonOperationsTestCase> EqualExtensionTestsData;
         [UsedImplicitly]
-        public static IEnumerable<object[]> NotEqualExtensionTestsData;
+        public static TheoryData<ComparisonOperationsTestCase> NotEqualExtensionTestsData;
 
         static DoubleExtensionsTests()
         {
             LessExtensionTestsData =
-                new[]
+                new TheoryData<ComparisonOperationsTestCase>
                 {
-                    new object[] {1d, 2d, true},
-                    new object[] {2d - DoubleExtensions.DefaultAccuracy / 2d, 2d, false},
-                    new object[] {2d - DoubleExtensions.DefaultAccuracy, 2d, false},
-                    new object[] {2d, 1d, false}
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 1d, Second = 2d, Expected = true
+                    },
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 2d - DoubleExtensions.DefaultAccuracy / 2d, Second = 2d, Expected = false
+                    },
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 2d - DoubleExtensions.DefaultAccuracy, Second = 2d, Expected = false
+                    },
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 2d, Second = 1d, Expected = false
+                    }
                 };
             LessOrEqualExtensionTestsData =
-                new[]
+                new TheoryData<ComparisonOperationsTestCase>
                 {
-                    new object[] {1d, 2d, true},
-                    new object[] {2d - DoubleExtensions.DefaultAccuracy, 2d, true},
-                    new object[] {2d - DoubleExtensions.DefaultAccuracy / 2d, 2d, true},
-                    new object[] {2d + DoubleExtensions.DefaultAccuracy, 2d, true},
-                    new object[] {2d, 1d, false}
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 1d, Second = 2d, Expected = true
+                    },
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 2d - DoubleExtensions.DefaultAccuracy, Second = 2d, Expected = true
+                    },
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 2d - DoubleExtensions.DefaultAccuracy / 2d, Second = 2d, Expected = true
+                    },
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 2d + DoubleExtensions.DefaultAccuracy, Second = 2d, Expected = true
+                    },
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 2d, Second = 1d, Expected = false
+                    }
                 };
             GreaterExtensionTestsData =
-                new[]
+                new TheoryData<ComparisonOperationsTestCase>
                 {
-                    new object[] {1d, 2d, false},
-                    new object[] {2d + DoubleExtensions.DefaultAccuracy / 2d, 2d, false},
-                    new object[] {2d + DoubleExtensions.DefaultAccuracy, 2d, false},
-                    new object[] {2d, 1d, true}
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 1d, Second = 2d, Expected = false
+                    },
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 2d + DoubleExtensions.DefaultAccuracy / 2d, Second = 2d, Expected = false
+                    },
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 2d + DoubleExtensions.DefaultAccuracy, Second = 2d, Expected = false
+                    },
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 2d, Second = 1d, Expected = true
+                    }
                 };
 
             GreaterOrEqualExtensionTestsData =
-                new[]
+                new TheoryData<ComparisonOperationsTestCase>
                 {
-                    new object[] {1d, 2d, false},
-                    new object[] {2d - DoubleExtensions.DefaultAccuracy, 2d, true},
-                    new object[] {2d - DoubleExtensions.DefaultAccuracy / 2d, 2d, true},
-                    new object[] {2d + DoubleExtensions.DefaultAccuracy, 2d, true},
-                    new object[] {2d, 1d, true}
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 1d, Second = 2d, Expected = false
+                    },
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 2d - DoubleExtensions.DefaultAccuracy, Second = 2d, Expected = true
+                    },
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 2d - DoubleExtensions.DefaultAccuracy / 2d, Second = 2d, Expected = true
+                    },
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 2d + DoubleExtensions.DefaultAccuracy, Second = 2d, Expected = true
+                    },
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 2d, Second = 1d, Expected = true
+                    }
                 };
             EqualExtensionTestsData =
-                new[]
+                new TheoryData<ComparisonOperationsTestCase>
                 {
-                    new object[] {1d, 2d, false},
-                    new object[] {2d - DoubleExtensions.DefaultAccuracy, 2d, true},
-                    new object[] {2d - DoubleExtensions.DefaultAccuracy / 2d, 2d, true},
-                    new object[] {2d, 2d, true},
-                    new object[] {2d + DoubleExtensions.DefaultAccuracy, 2d, true},
-                    new object[] {2d, 1d, false}
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 1d, Second = 2d, Expected = false
+                    },
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 2d - DoubleExtensions.DefaultAccuracy, Second = 2d, Expected = true
+                    },
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 2d - DoubleExtensions.DefaultAccuracy / 2d, Second = 2d, Expected = true
+                    },
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 2d, Second = 2d, Expected = true
+                    },
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 2d + DoubleExtensions.DefaultAccuracy, Second = 2d, Expected = true
+                    },
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 2d, Second = 1d, Expected = false
+                    }
                 };
             NotEqualExtensionTestsData =
-                new[]
+                new TheoryData<ComparisonOperationsTestCase>
                 {
-                    new object[] {1d, 2d, true},
-                    new object[] {2d - DoubleExtensions.DefaultAccuracy, 2d, false},
-                    new object[] {2d - DoubleExtensions.DefaultAccuracy / 2d, 2d, false},
-                    new object[] {2d + DoubleExtensions.DefaultAccuracy, 2d, false},
-                    new object[] {2d, 1d, true}
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 1d, Second = 2d, Expected = true
+                    },
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 2d - DoubleExtensions.DefaultAccuracy, Second = 2d, Expected = false
+                    },
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 2d - DoubleExtensions.DefaultAccuracy / 2d, Second = 2d, Expected = false
+                    },
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 2d + DoubleExtensions.DefaultAccuracy, Second = 2d, Expected = false
+                    },
+                    new ComparisonOperationsTestCase
+                    {
+                        First = 2d, Second = 1d, Expected = true
+                    }
                 };
         }
 
         [Theory]
         [MemberData(nameof(LessExtensionTestsData))]
-        public static void ShouldCheckLessExtension(double first, double second, bool expected)
+        public static void ShouldCheckLessExtension(ComparisonOperationsTestCase testCase)
         {
-            Assert.Equal(expected, first.Less(second, DoubleExtensions.DefaultAccuracy));
+            Assert.Equal(testCase.Expected, testCase.First.Less(testCase.Second, DoubleExtensions.DefaultAccuracy));
         }
 
         [Theory]
         [MemberData(nameof(LessOrEqualExtensionTestsData))]
-        public static void ShouldCheckLessOrEqualExtension(double first, double second, bool expected)
+        public static void ShouldCheckLessOrEqualExtension(ComparisonOperationsTestCase testCase)
         {
-            Assert.Equal(expected, first.LessOrEqual(second, DoubleExtensions.DefaultAccuracy));
-            Assert.Equal(expected, !second.Less(first, DoubleExtensions.DefaultAccuracy));
+            Assert.Equal(testCase.Expected, testCase.First.LessOrEqual(testCase.Second, DoubleExtensions.DefaultAccuracy));
+            Assert.Equal(testCase.Expected, !testCase.Second.Less(testCase.First, DoubleExtensions.DefaultAccuracy));
         }
 
         [Theory]
         [MemberData(nameof(GreaterExtensionTestsData))]
-        public static void ShouldCheckGreaterExtension(double first, double second, bool expected)
+        public static void ShouldCheckGreaterExtension(ComparisonOperationsTestCase testCase)
         {
-            Assert.Equal(expected, first.Greater(second, DoubleExtensions.DefaultAccuracy));
-            Assert.Equal(expected, second.Less(first, DoubleExtensions.DefaultAccuracy));
+            Assert.Equal(testCase.Expected, testCase.First.Greater(testCase.Second, DoubleExtensions.DefaultAccuracy));
+            Assert.Equal(testCase.Expected, testCase.Second.Less(testCase.First, DoubleExtensions.DefaultAccuracy));
         }
 
         [Theory]
         [MemberData(nameof(GreaterOrEqualExtensionTestsData))]
-        public static void ShouldCheckGreaterOrEqualExtension(double first, double second, bool expected)
+        public static void ShouldCheckGreaterOrEqualExtension(ComparisonOperationsTestCase testCase)
         {
-            Assert.Equal(expected, first.GreaterOrEqual(second, DoubleExtensions.DefaultAccuracy));
-            Assert.Equal(expected, !first.Less(second, DoubleExtensions.DefaultAccuracy));
+            Assert.Equal(testCase.Expected, testCase.First.GreaterOrEqual(testCase.Second, DoubleExtensions.DefaultAccuracy));
+            Assert.Equal(testCase.Expected, !testCase.First.Less(testCase.Second, DoubleExtensions.DefaultAccuracy));
         }
 
         [Theory]
         [MemberData(nameof(EqualExtensionTestsData))]
-        public static void ShouldCheckEqualExtension(double first, double second, bool expected)
+        public static void ShouldCheckEqualExtension(ComparisonOperationsTestCase testCase)
         {
-            Assert.Equal(expected, first.Equal(second, DoubleExtensions.DefaultAccuracy));
+            Assert.Equal(testCase.Expected, testCase.First.Equal(testCase.Second, DoubleExtensions.DefaultAccuracy));
             Assert.Equal(
-                expected,
-                !first.Less(second, DoubleExtensions.DefaultAccuracy) && !second.Less(first, DoubleExtensions.DefaultAccuracy)
+                testCase.Expected,
+                !testCase.First.Less(testCase.Second, DoubleExtensions.DefaultAccuracy)
+                && !testCase.Second.Less(testCase.First, DoubleExtensions.DefaultAccuracy)
             );
         }
 
         [Theory]
         [MemberData(nameof(NotEqualExtensionTestsData))]
-        public static void ShouldCheckNotEqualExtension(double first, double second, bool expected)
+        public static void ShouldCheckNotEqualExtension(ComparisonOperationsTestCase testCase)
         {
-            Assert.Equal(expected, first.NotEqual(second, DoubleExtensions.DefaultAccuracy));
+            Assert.Equal(testCase.Expected, testCase.First.NotEqual(testCase.Second, DoubleExtensions.DefaultAccuracy));
             Assert.Equal(
-                expected,
-                first.Less(second, DoubleExtensions.DefaultAccuracy) || second.Less(first, DoubleExtensions.DefaultAccuracy)
+                testCase.Expected,
+                testCase.First.Less(testCase.Second, DoubleExtensions.DefaultAccuracy)
+                || testCase.Second.Less(testCase.First, DoubleExtensions.DefaultAccuracy)
             );
         }
     }
