@@ -8,10 +8,17 @@
 
     public class EnumerableExtensionsTests
     {
+        public class UnaryComparisonOperationsTestCase
+        {
+            public IEnumerable<int> Source { get; set; }
+
+            public bool Expected { get; set; }
+        }
+
         [UsedImplicitly]
-        public static IEnumerable<object[]> IsEmptyExtensionTests;
+        public static TheoryData<UnaryComparisonOperationsTestCase> IsEmptyExtensionTests;
         [UsedImplicitly]
-        public static IEnumerable<object[]> IsNotEmptyExtensionTests;
+        public static TheoryData<UnaryComparisonOperationsTestCase> IsNotEmptyExtensionTests;
         [UsedImplicitly]
         public static IEnumerable<object[]> AsArrayExtensionTests;
         [UsedImplicitly]
@@ -21,18 +28,21 @@
 
         static EnumerableExtensionsTests()
         {
-            IsEmptyExtensionTests = new[]
-                                    {
-                                        new object[] {null, true},
-                                        new object[] {Enumerable.Empty<int>(), true},
-                                        new object[] {Enumerable.Repeat(1, 2), false}
-                                    };
-            IsNotEmptyExtensionTests = new[]
-                                       {
-                                           new object[] {null, false},
-                                           new object[] {Enumerable.Empty<int>(), false},
-                                           new object[] {Enumerable.Repeat(1, 2), true}
-                                       };
+            IsEmptyExtensionTests =
+                new TheoryData<UnaryComparisonOperationsTestCase>
+                {
+                    new UnaryComparisonOperationsTestCase {Source = null, Expected = true},
+                    new UnaryComparisonOperationsTestCase {Source = Enumerable.Empty<int>(), Expected = true},
+                    new UnaryComparisonOperationsTestCase {Source = Enumerable.Repeat(1, 2), Expected = false}
+                };
+            IsNotEmptyExtensionTests =
+                new TheoryData<UnaryComparisonOperationsTestCase>
+                {
+                    new UnaryComparisonOperationsTestCase {Source = null, Expected = false},
+                    new UnaryComparisonOperationsTestCase {Source = Enumerable.Empty<int>(), Expected = false},
+                    new UnaryComparisonOperationsTestCase {Source = Enumerable.Repeat(1, 2), Expected = true}
+                };
+
             var arrayForTesting = new[] {1, 2, 3, 4, 5};
             AsArrayExtensionTests = new[]
                                     {
@@ -72,16 +82,16 @@
 
         [Theory]
         [MemberData(nameof(IsEmptyExtensionTests))]
-        public void ShouldCheckCollectionsForEmptiness(IEnumerable<int> source, bool expected)
+        public void ShouldCheckCollectionsForEmptiness(UnaryComparisonOperationsTestCase testCase)
         {
-            Assert.Equal(expected, source.IsEmpty());
+            Assert.Equal(testCase.Expected, testCase.Source.IsEmpty());
         }
 
         [Theory]
         [MemberData(nameof(IsNotEmptyExtensionTests))]
-        public void ShouldCheckCollectionsForNotEmptiness(IEnumerable<int> source, bool expected)
+        public void ShouldCheckCollectionsForNotEmptiness(UnaryComparisonOperationsTestCase testCase)
         {
-            Assert.Equal(expected, source.IsNotEmpty());
+            Assert.Equal(testCase.Expected, testCase.Source.IsNotEmpty());
         }
 
         [Theory]
