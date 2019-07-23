@@ -9,24 +9,31 @@
 
     public class ParallelExtensionsTests
     {
+        public class ValidationTestCase
+        {
+            public IEnumerable<int> Source { get; set; }
+
+            public Func<int, int> Body { get; set; }
+        }
+
         [UsedImplicitly]
-        public static IEnumerable<object[]> ForEachAsyncParametersValidationTestsData;
+        public static TheoryData<ValidationTestCase> ForEachAsyncParametersValidationTestsData;
 
         static ParallelExtensionsTests()
         {
             ForEachAsyncParametersValidationTestsData
-                = new[]
+                = new TheoryData<ValidationTestCase>
                   {
-                      new object[] {null, new Func<int, int>(x => x)},
-                      new object[] {new[] {1, 2, 3}, null}
+                      new ValidationTestCase {Source = null, Body = x => x},
+                      new ValidationTestCase {Source = new[] {1, 2, 3}, Body = null}
                   };
         }
 
         [Theory]
         [MemberData(nameof(ForEachAsyncParametersValidationTestsData))]
-        public void ForEachAsyncShouldValidateParameters(IEnumerable<int> source, Func<int, int> body)
+        public void ForEachAsyncShouldValidateParameters(ValidationTestCase testCase)
         {
-            Assert.Throws<ArgumentNullException>(() => source.ForEachAsync(body, 1));
+            Assert.Throws<ArgumentNullException>(() => testCase.Source.ForEachAsync(testCase.Body, 1));
         }
 
         [Fact]
