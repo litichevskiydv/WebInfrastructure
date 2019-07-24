@@ -15,6 +15,15 @@
             public bool Expected { get; set; }
         }
 
+        public class BinaryComparisonOperationsTestCase
+        {
+            public IEnumerable<int> First { get; set; }
+
+            public IEnumerable<int> Second { get; set; }
+
+            public bool Expected { get; set; }
+        }
+
         [UsedImplicitly]
         public static TheoryData<UnaryComparisonOperationsTestCase> IsEmptyExtensionTests;
         [UsedImplicitly]
@@ -22,9 +31,9 @@
         [UsedImplicitly]
         public static IEnumerable<object[]> AsArrayExtensionTests;
         [UsedImplicitly]
-        public static IEnumerable<object[]> IsEqualsExtensionTests;
+        public static TheoryData<BinaryComparisonOperationsTestCase> IsEqualsExtensionTests;
         [UsedImplicitly]
-        public static IEnumerable<object[]> IsSameExtensionTests;
+        public static TheoryData<BinaryComparisonOperationsTestCase> IsSameExtensionTests;
 
         static EnumerableExtensionsTests()
         {
@@ -50,34 +59,96 @@
                                         new object[] {Enumerable.Range(1, 3), new[] {1, 2, 3}},
                                         new object[] {arrayForTesting, arrayForTesting}
                                     };
-            IsEqualsExtensionTests = new[]
-                                     {
-                                         new object[] {null, null, true},
-                                         new object[] {Enumerable.Empty<int>(), Enumerable.Empty<int>(), true},
-                                         new object[] {null, Enumerable.Empty<int>(), false},
-                                         new object[] {Enumerable.Empty<int>(), null, false},
-                                         new object[] {Enumerable.Empty<int>(), Enumerable.Repeat(1, 2), false},
-                                         new object[] {Enumerable.Repeat(1, 2), Enumerable.Repeat(1, 2), true}
-                                     };
+            IsEqualsExtensionTests =
+                new TheoryData<BinaryComparisonOperationsTestCase>
+                {
+                    new BinaryComparisonOperationsTestCase
+                    {
+                        First = null, Second = null, Expected = true
+                    },
+                    new BinaryComparisonOperationsTestCase
+                    {
+                        First = Enumerable.Empty<int>(), Second = Enumerable.Empty<int>(), Expected = true
+                    },
+                    new BinaryComparisonOperationsTestCase
+                    {
+                        First = null, Second = Enumerable.Empty<int>(), Expected = false
+                    },
+                    new BinaryComparisonOperationsTestCase
+                    {
+                        First = Enumerable.Empty<int>(), Second = null, Expected = false
+                    },
+                    new BinaryComparisonOperationsTestCase
+                    {
+                        First = Enumerable.Empty<int>(), Second = Enumerable.Repeat(1, 2), Expected = false
+                    },
+                    new BinaryComparisonOperationsTestCase
+                    {
+                        First = Enumerable.Repeat(1, 2), Second = Enumerable.Repeat(1, 2), Expected = true
+                    }
+                };
 
             var array = new[] {1, 2, 3};
-            IsSameExtensionTests = new[]
-                                   {
-                                       new object[] {null, null, true},
-                                       new object[] {Enumerable.Empty<int>(), Enumerable.Empty<int>(), true},
-                                       new object[] {null, Enumerable.Empty<int>(), false},
-                                       new object[] {Enumerable.Empty<int>(), null, false},
-                                       new object[] {Enumerable.Empty<int>(), Enumerable.Repeat(1, 2), false},
-                                       new object[] {new[] {1, 2}, new[] {1, 2}, true},
-                                       new object[] {new[] {2, 1}, new[] {1, 2}, true},
-                                       new object[] {new[] {1, 1}, new[] {1, 2}, false},
-                                       new object[] {new[] {1, 2}, new[] {1, 1}, false},
-                                       new object[] {new[] {1, 1}, new[] {1, 1}, true},
-                                       new object[] {new[] {1, 1}, new[] {1, 1, 1}, false},
-                                       new object[] {new[] {1, 1, 2, 2}, new[] {1, 1, 1, 2}, false},
-                                       new object[] {new[] {1, 1, 1, 2}, new[] {1, 1, 2, 2}, false},
-                                       new object[] {array, array, true}
-                                   };
+            IsSameExtensionTests =
+                new TheoryData<BinaryComparisonOperationsTestCase>
+                {
+                    new BinaryComparisonOperationsTestCase
+                    {
+                        First = null, Second = null, Expected = true
+                    },
+                    new BinaryComparisonOperationsTestCase
+                    {
+                        First = Enumerable.Empty<int>(), Second = Enumerable.Empty<int>(), Expected = true
+                    },
+                    new BinaryComparisonOperationsTestCase
+                    {
+                        First = null, Second = Enumerable.Empty<int>(), Expected = false
+                    },
+                    new BinaryComparisonOperationsTestCase
+                    {
+                        First = Enumerable.Empty<int>(), Second = null, Expected = false
+                    },
+                    new BinaryComparisonOperationsTestCase
+                    {
+                        First = Enumerable.Empty<int>(), Second = Enumerable.Repeat(1, 2), Expected = false
+                    },
+                    new BinaryComparisonOperationsTestCase
+                    {
+                        First = new[] {1, 2}, Second = new[] {1, 2}, Expected = true
+                    },
+                    new BinaryComparisonOperationsTestCase
+                    {
+                        First = new[] {2, 1}, Second = new[] {1, 2}, Expected = true
+                    },
+                    new BinaryComparisonOperationsTestCase
+                    {
+                        First = new[] {1, 1}, Second = new[] {1, 2}, Expected = false
+                    },
+                    new BinaryComparisonOperationsTestCase
+                    {
+                        First = new[] {1, 2}, Second = new[] {1, 1}, Expected = false
+                    },
+                    new BinaryComparisonOperationsTestCase
+                    {
+                        First = new[] {1, 1}, Second = new[] {1, 1}, Expected = true
+                    },
+                    new BinaryComparisonOperationsTestCase
+                    {
+                        First = new[] {1, 1}, Second = new[] {1, 1, 1}, Expected = false
+                    },
+                    new BinaryComparisonOperationsTestCase
+                    {
+                        First = new[] {1, 1, 2, 2}, Second = new[] {1, 1, 1, 2}, Expected = false
+                    },
+                    new BinaryComparisonOperationsTestCase
+                    {
+                        First = new[] {1, 1, 1, 2}, Second = new[] {1, 1, 2, 2}, Expected = false
+                    },
+                    new BinaryComparisonOperationsTestCase
+                    {
+                        First = array, Second = array, Expected = true
+                    }
+                };
         }
 
         [Theory]
@@ -103,35 +174,39 @@
 
         [Theory]
         [MemberData(nameof(IsEqualsExtensionTests))]
-        public void ShouldCheckCollectionsIsEquals(IEnumerable<int> first, IEnumerable<int> second, bool expected)
+        public void ShouldCheckCollectionsIsEquals(BinaryComparisonOperationsTestCase testCase)
         {
-            Assert.Equal(expected, first.IsEquals(second, EqualityComparer<int>.Default));
+            Assert.Equal(testCase.Expected, testCase.First.IsEquals(testCase.Second, EqualityComparer<int>.Default));
         }
 
         [Theory]
         [MemberData(nameof(IsEqualsExtensionTests))]
-        public void ShouldCheckCollectionsHashCodeWithRespectToOrder(IEnumerable<int> first, IEnumerable<int> second, bool expected)
+        public void ShouldCheckCollectionsHashCodeWithRespectToOrder(BinaryComparisonOperationsTestCase testCase)
         {
             Assert.True(
-                first.IsEquals(second) && first.GetHashCodeWithRespectToOrder(x => x) == second.GetHashCodeWithRespectToOrder(x => x)
-                || first.IsEquals(second) == false);
+                testCase.First.IsEquals(testCase.Second)
+                && testCase.First.GetHashCodeWithRespectToOrder(x => x) == testCase.Second.GetHashCodeWithRespectToOrder(x => x)
+                || testCase.First.IsEquals(testCase.Second) == false
+            );
         }
 
         [Theory]
         [MemberData(nameof(IsSameExtensionTests))]
-        public void ShouldCheckCollectionsIsSame(IEnumerable<int> first, IEnumerable<int> second, bool expected)
+        public void ShouldCheckCollectionsIsSame(BinaryComparisonOperationsTestCase testCase)
         {
-            Assert.Equal(expected, first.IsSame(second, EqualityComparer<int>.Default));
+            Assert.Equal(testCase.Expected, testCase.First.IsSame(testCase.Second, EqualityComparer<int>.Default));
         }
 
         [Theory]
         [MemberData(nameof(IsSameExtensionTests))]
-        public void ShouldCheckCollectionsHashCodeWithoutRespectToOrder(IEnumerable<int> first, IEnumerable<int> second, bool expected)
+        public void ShouldCheckCollectionsHashCodeWithoutRespectToOrder(BinaryComparisonOperationsTestCase testCase)
         {
 
             Assert.True(
-                first.IsSame(second) && first.GetHashCodeWithoutRespectToOrder(x => x) == second.GetHashCodeWithoutRespectToOrder(x => x)
-                || first.IsSame(second) == false);
+                testCase.First.IsSame(testCase.Second)
+                && testCase.First.GetHashCodeWithoutRespectToOrder(x => x) == testCase.Second.GetHashCodeWithoutRespectToOrder(x => x)
+                || testCase.First.IsSame(testCase.Second) == false
+            );
         }
     }
 }
