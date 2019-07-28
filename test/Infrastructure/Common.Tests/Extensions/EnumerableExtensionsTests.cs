@@ -24,27 +24,34 @@
             public bool Expected { get; set; }
         }
 
+        public class AsArrayExtensionTestCase
+        {
+            public IEnumerable<int> Source { get; set; }
+
+            public int[] Expected { get; set; }
+        }
+
         [UsedImplicitly]
-        public static TheoryData<UnaryComparisonOperationsTestCase> IsEmptyExtensionTests;
+        public static TheoryData<UnaryComparisonOperationsTestCase> IsEmptyExtensionTestCases;
         [UsedImplicitly]
-        public static TheoryData<UnaryComparisonOperationsTestCase> IsNotEmptyExtensionTests;
+        public static TheoryData<UnaryComparisonOperationsTestCase> IsNotEmptyExtensionTestCases;
         [UsedImplicitly]
-        public static IEnumerable<object[]> AsArrayExtensionTests;
+        public static TheoryData<AsArrayExtensionTestCase> AsArrayExtensionTestCases;
         [UsedImplicitly]
-        public static TheoryData<BinaryComparisonOperationsTestCase> IsEqualsExtensionTests;
+        public static TheoryData<BinaryComparisonOperationsTestCase> IsEqualsExtensionTestCases;
         [UsedImplicitly]
-        public static TheoryData<BinaryComparisonOperationsTestCase> IsSameExtensionTests;
+        public static TheoryData<BinaryComparisonOperationsTestCase> IsSameExtensionTestCases;
 
         static EnumerableExtensionsTests()
         {
-            IsEmptyExtensionTests =
+            IsEmptyExtensionTestCases =
                 new TheoryData<UnaryComparisonOperationsTestCase>
                 {
                     new UnaryComparisonOperationsTestCase {Source = null, Expected = true},
                     new UnaryComparisonOperationsTestCase {Source = Enumerable.Empty<int>(), Expected = true},
                     new UnaryComparisonOperationsTestCase {Source = Enumerable.Repeat(1, 2), Expected = false}
                 };
-            IsNotEmptyExtensionTests =
+            IsNotEmptyExtensionTestCases =
                 new TheoryData<UnaryComparisonOperationsTestCase>
                 {
                     new UnaryComparisonOperationsTestCase {Source = null, Expected = false},
@@ -53,13 +60,15 @@
                 };
 
             var arrayForTesting = new[] {1, 2, 3, 4, 5};
-            AsArrayExtensionTests = new[]
-                                    {
-                                        new object[] {null, new int[0]},
-                                        new object[] {Enumerable.Range(1, 3), new[] {1, 2, 3}},
-                                        new object[] {arrayForTesting, arrayForTesting}
-                                    };
-            IsEqualsExtensionTests =
+            AsArrayExtensionTestCases =
+                new TheoryData<AsArrayExtensionTestCase>
+                {
+                    new AsArrayExtensionTestCase {Source = null, Expected = new int[0]},
+                    new AsArrayExtensionTestCase {Source = Enumerable.Range(1, 3), Expected = new[] {1, 2, 3}},
+                    new AsArrayExtensionTestCase {Source = arrayForTesting, Expected = arrayForTesting}
+                };
+
+            IsEqualsExtensionTestCases =
                 new TheoryData<BinaryComparisonOperationsTestCase>
                 {
                     new BinaryComparisonOperationsTestCase
@@ -89,7 +98,7 @@
                 };
 
             var array = new[] {1, 2, 3};
-            IsSameExtensionTests =
+            IsSameExtensionTestCases =
                 new TheoryData<BinaryComparisonOperationsTestCase>
                 {
                     new BinaryComparisonOperationsTestCase
@@ -152,35 +161,35 @@
         }
 
         [Theory]
-        [MemberData(nameof(IsEmptyExtensionTests))]
+        [MemberData(nameof(IsEmptyExtensionTestCases))]
         public void ShouldCheckCollectionsForEmptiness(UnaryComparisonOperationsTestCase testCase)
         {
             Assert.Equal(testCase.Expected, testCase.Source.IsEmpty());
         }
 
         [Theory]
-        [MemberData(nameof(IsNotEmptyExtensionTests))]
+        [MemberData(nameof(IsNotEmptyExtensionTestCases))]
         public void ShouldCheckCollectionsForNotEmptiness(UnaryComparisonOperationsTestCase testCase)
         {
             Assert.Equal(testCase.Expected, testCase.Source.IsNotEmpty());
         }
 
         [Theory]
-        [MemberData(nameof(AsArrayExtensionTests))]
-        public void ShouldCheckEnumerableToArrayConversion(IEnumerable<int> source, int[] expected)
+        [MemberData(nameof(AsArrayExtensionTestCases))]
+        public void ShouldCheckEnumerableToArrayConversion(AsArrayExtensionTestCase testCase)
         {
-            Assert.Equal(expected, source.AsArray());
+            Assert.Equal(testCase.Expected, testCase.Source.AsArray());
         }
 
         [Theory]
-        [MemberData(nameof(IsEqualsExtensionTests))]
+        [MemberData(nameof(IsEqualsExtensionTestCases))]
         public void ShouldCheckCollectionsIsEquals(BinaryComparisonOperationsTestCase testCase)
         {
             Assert.Equal(testCase.Expected, testCase.First.IsEquals(testCase.Second, EqualityComparer<int>.Default));
         }
 
         [Theory]
-        [MemberData(nameof(IsEqualsExtensionTests))]
+        [MemberData(nameof(IsEqualsExtensionTestCases))]
         public void ShouldCheckCollectionsHashCodeWithRespectToOrder(BinaryComparisonOperationsTestCase testCase)
         {
             Assert.True(
@@ -191,14 +200,14 @@
         }
 
         [Theory]
-        [MemberData(nameof(IsSameExtensionTests))]
+        [MemberData(nameof(IsSameExtensionTestCases))]
         public void ShouldCheckCollectionsIsSame(BinaryComparisonOperationsTestCase testCase)
         {
             Assert.Equal(testCase.Expected, testCase.First.IsSame(testCase.Second, EqualityComparer<int>.Default));
         }
 
         [Theory]
-        [MemberData(nameof(IsSameExtensionTests))]
+        [MemberData(nameof(IsSameExtensionTestCases))]
         public void ShouldCheckCollectionsHashCodeWithoutRespectToOrder(BinaryComparisonOperationsTestCase testCase)
         {
 
