@@ -17,11 +17,11 @@
         }
 
         [UsedImplicitly]
-        public static TheoryData<ValidationTestCase> ForEachAsyncParametersValidationTestsData;
+        public static TheoryData<ValidationTestCase> ForEachAsyncParametersValidationTestCases;
 
         static ParallelExtensionsTests()
         {
-            ForEachAsyncParametersValidationTestsData
+            ForEachAsyncParametersValidationTestCases
                 = new TheoryData<ValidationTestCase>
                   {
                       new ValidationTestCase {Source = null, Body = x => x},
@@ -30,7 +30,7 @@
         }
 
         [Theory]
-        [MemberData(nameof(ForEachAsyncParametersValidationTestsData))]
+        [MemberData(nameof(ForEachAsyncParametersValidationTestCases))]
         public void ForEachAsyncShouldValidateParameters(ValidationTestCase testCase)
         {
             Assert.Throws<ArgumentNullException>(() => testCase.Source.ForEachAsync(testCase.Body, 1));

@@ -16,21 +16,21 @@
         }
 
         [UsedImplicitly]
-        public static TheoryData<ComparisonOperationsTestCase> LessExtensionTestsData;
+        public static TheoryData<ComparisonOperationsTestCase> LessExtensionTestCases;
         [UsedImplicitly]
-        public static TheoryData<ComparisonOperationsTestCase> LessOrEqualExtensionTestsData;
+        public static TheoryData<ComparisonOperationsTestCase> LessOrEqualExtensionTestCases;
         [UsedImplicitly]
-        public static TheoryData<ComparisonOperationsTestCase> GreaterExtensionTestsData;
+        public static TheoryData<ComparisonOperationsTestCase> GreaterExtensionTestCases;
         [UsedImplicitly]
-        public static TheoryData<ComparisonOperationsTestCase> GreaterOrEqualExtensionTestsData;
+        public static TheoryData<ComparisonOperationsTestCase> GreaterOrEqualExtensionTestCases;
         [UsedImplicitly]
-        public static TheoryData<ComparisonOperationsTestCase> EqualExtensionTestsData;
+        public static TheoryData<ComparisonOperationsTestCase> EqualExtensionTestCases;
         [UsedImplicitly]
-        public static TheoryData<ComparisonOperationsTestCase> NotEqualExtensionTestsData;
+        public static TheoryData<ComparisonOperationsTestCase> NotEqualExtensionTestCases;
 
         static DoubleExtensionsTests()
         {
-            LessExtensionTestsData =
+            LessExtensionTestCases =
                 new TheoryData<ComparisonOperationsTestCase>
                 {
                     new ComparisonOperationsTestCase
@@ -50,7 +50,7 @@
                         First = 2d, Second = 1d, Expected = false
                     }
                 };
-            LessOrEqualExtensionTestsData =
+            LessOrEqualExtensionTestCases =
                 new TheoryData<ComparisonOperationsTestCase>
                 {
                     new ComparisonOperationsTestCase
@@ -74,7 +74,7 @@
                         First = 2d, Second = 1d, Expected = false
                     }
                 };
-            GreaterExtensionTestsData =
+            GreaterExtensionTestCases =
                 new TheoryData<ComparisonOperationsTestCase>
                 {
                     new ComparisonOperationsTestCase
@@ -95,7 +95,7 @@
                     }
                 };
 
-            GreaterOrEqualExtensionTestsData =
+            GreaterOrEqualExtensionTestCases =
                 new TheoryData<ComparisonOperationsTestCase>
                 {
                     new ComparisonOperationsTestCase
@@ -119,7 +119,7 @@
                         First = 2d, Second = 1d, Expected = true
                     }
                 };
-            EqualExtensionTestsData =
+            EqualExtensionTestCases =
                 new TheoryData<ComparisonOperationsTestCase>
                 {
                     new ComparisonOperationsTestCase
@@ -147,7 +147,7 @@
                         First = 2d, Second = 1d, Expected = false
                     }
                 };
-            NotEqualExtensionTestsData =
+            NotEqualExtensionTestCases =
                 new TheoryData<ComparisonOperationsTestCase>
                 {
                     new ComparisonOperationsTestCase
@@ -174,14 +174,14 @@
         }
 
         [Theory]
-        [MemberData(nameof(LessExtensionTestsData))]
+        [MemberData(nameof(LessExtensionTestCases))]
         public static void ShouldCheckLessExtension(ComparisonOperationsTestCase testCase)
         {
             Assert.Equal(testCase.Expected, testCase.First.Less(testCase.Second, DoubleExtensions.DefaultAccuracy));
         }
 
         [Theory]
-        [MemberData(nameof(LessOrEqualExtensionTestsData))]
+        [MemberData(nameof(LessOrEqualExtensionTestCases))]
         public static void ShouldCheckLessOrEqualExtension(ComparisonOperationsTestCase testCase)
         {
             Assert.Equal(testCase.Expected, testCase.First.LessOrEqual(testCase.Second, DoubleExtensions.DefaultAccuracy));
@@ -189,7 +189,7 @@
         }
 
         [Theory]
-        [MemberData(nameof(GreaterExtensionTestsData))]
+        [MemberData(nameof(GreaterExtensionTestCases))]
         public static void ShouldCheckGreaterExtension(ComparisonOperationsTestCase testCase)
         {
             Assert.Equal(testCase.Expected, testCase.First.Greater(testCase.Second, DoubleExtensions.DefaultAccuracy));
@@ -197,7 +197,7 @@
         }
 
         [Theory]
-        [MemberData(nameof(GreaterOrEqualExtensionTestsData))]
+        [MemberData(nameof(GreaterOrEqualExtensionTestCases))]
         public static void ShouldCheckGreaterOrEqualExtension(ComparisonOperationsTestCase testCase)
         {
             Assert.Equal(testCase.Expected, testCase.First.GreaterOrEqual(testCase.Second, DoubleExtensions.DefaultAccuracy));
@@ -205,7 +205,7 @@
         }
 
         [Theory]
-        [MemberData(nameof(EqualExtensionTestsData))]
+        [MemberData(nameof(EqualExtensionTestCases))]
         public static void ShouldCheckEqualExtension(ComparisonOperationsTestCase testCase)
         {
             Assert.Equal(testCase.Expected, testCase.First.Equal(testCase.Second, DoubleExtensions.DefaultAccuracy));
@@ -217,7 +217,7 @@
         }
 
         [Theory]
-        [MemberData(nameof(NotEqualExtensionTestsData))]
+        [MemberData(nameof(NotEqualExtensionTestCases))]
         public static void ShouldCheckNotEqualExtension(ComparisonOperationsTestCase testCase)
         {
             Assert.Equal(testCase.Expected, testCase.First.NotEqual(testCase.Second, DoubleExtensions.DefaultAccuracy));
