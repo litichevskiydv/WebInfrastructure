@@ -2,7 +2,6 @@
 {
     using System;
     using System.Dynamic;
-    using System.Collections.Generic;
     using System.Linq;
     using Common.Extensions;
     using global::Dapper;
@@ -14,6 +13,8 @@
 
     public class SqlConnectionExtensionsTests : DbUsingTestBase
     {
+        #region TestCases
+
         public class TestEntity
         {
             public int Id { get; [UsedImplicitly]set; }
@@ -71,63 +72,70 @@
             }
         }
 
+        public class BulkInsertTestCase<TSource>
+        {
+            public TSource[] Source { get; set; }
+        }
+
+        #endregion
+
         [UsedImplicitly]
-        public static IEnumerable<object[]> BulkInsertUsageTestsData;
+        public static TheoryData<BulkInsertTestCase<TestEntity>> BulkInsertUsageTestsData;
         [UsedImplicitly]
-        public static IEnumerable<object[]> ManualConfiguredBulkInsertUsageTestsData;
+        public static TheoryData<BulkInsertTestCase<Totals>> ManualConfiguredBulkInsertUsageTestsData;
 
         static SqlConnectionExtensionsTests()
         {
             BulkInsertUsageTestsData =
-                new[]
+                new TheoryData<BulkInsertTestCase<TestEntity>>
                 {
-                    new object[]
+                    new BulkInsertTestCase<TestEntity>
                     {
-                        new[]
-                        {
-                            new TestEntity {Name = "First", Value = 1},
-                            new TestEntity {Name = "Second", Value = 2},
-                            new TestEntity {Name = "Third", Value = 3}
-                        }
+                        Source = new[]
+                                 {
+                                     new TestEntity {Name = "First", Value = 1},
+                                     new TestEntity {Name = "Second", Value = 2},
+                                     new TestEntity {Name = "Third", Value = 3}
+                                 }
                     },
-                    new object[] {new TestEntity[0]}
+                    new BulkInsertTestCase<TestEntity> {Source = new TestEntity[0]}
                 };
             ManualConfiguredBulkInsertUsageTestsData =
-                new[]
+                new TheoryData<BulkInsertTestCase<Totals>>
                 {
-                    new object[]
+                    new BulkInsertTestCase<Totals>
                     {
-                        new[]
+                        Source = new[]
                         {
                             new Totals {First = 1, Second = 2, Sum = 3},
                             new Totals {First = -1, Second = 1, Sum = 0},
                             new Totals {First = 100, Second = 12, Sum = 112}
                         }
                     },
-                    new object[] {new Totals[0]}
+                    new BulkInsertTestCase<Totals> {Source = new Totals[0]}
                 };
         }
 
         [Theory]
         [MemberData(nameof(BulkInsertUsageTestsData))]
-        public void ShouldPerformBulkInsertWithPropertyInfoProvider(TestEntity[] expected)
+        public void ShouldPerformBulkInsertWithPropertyInfoProvider(BulkInsertTestCase<TestEntity> testCase)
         {
             // When
             TestEntity[] actual;
             using (var connection = SqlConnectionsFactoryMethod())
             {
                 connection.Execute(@"create table #TestEntities (Id int identity(1, 1) not null, Name nvarchar(max) not null, Value int not null)");
-                connection.BulkInsert("#TestEntities", expected, x => new StrictTypeMappingInfoProvider(typeof(TestEntity), x));
+                connection.BulkInsert("#TestEntities", testCase.Source, x => new StrictTypeMappingInfoProvider(typeof(TestEntity), x));
                 actual = connection.Query<TestEntity>("select * from #TestEntities").ToArray();
             }
 
             // Then
-            Assert.Equal(expected, actual);
+            Assert.Equal(testCase.Source, actual);
         }
 
         [Theory]
         [MemberData(nameof(BulkInsertUsageTestsData))]
-        public void ShouldPerformBulkInsertInExternalTransaction(TestEntity[] expected)
+        public void ShouldPerformBulkInsertInExternalTransaction(BulkInsertTestCase<TestEntity> testCase)
         {
             // When
             TestEntity[] actual;
@@ -137,7 +145,7 @@
 
                 using (var transaction = connection.BeginTransaction())
                 {
-                    connection.BulkInsert("#TestEntities", expected, x => new StrictTypeMappingInfoProvider(typeof(TestEntity), x), transaction);
+                    connection.BulkInsert("#TestEntities", testCase.Source, x => new StrictTypeMappingInfoProvider(typeof(TestEntity), x), transaction);
                     transaction.Commit();
                 }
 
@@ -145,29 +153,29 @@
             }
 
             // Then
-            Assert.Equal(expected, actual);
+            Assert.Equal(testCase.Source, actual);
         }
 
         [Theory]
         [MemberData(nameof(BulkInsertUsageTestsData))]
-        public void ShouldPerformBulkInsert(TestEntity[] expected)
+        public void ShouldPerformBulkInsert(BulkInsertTestCase<TestEntity> testCase)
         {
             // When
             TestEntity[] actual;
             using (var connection = SqlConnectionsFactoryMethod())
             {
                 connection.Execute(@"create table #TestEntities (Id int identity(1, 1) not null, Name nvarchar(max) not null, Value int not null)");
-                connection.BulkInsert("#TestEntities", expected);
+                connection.BulkInsert("#TestEntities", testCase.Source);
                 actual = connection.Query<TestEntity>("select * from #TestEntities").ToArray();
             }
 
             // Then
-            Assert.Equal(expected, actual);
+            Assert.Equal(testCase.Source, actual);
         }
 
         [Theory]
         [MemberData(nameof(ManualConfiguredBulkInsertUsageTestsData))]
-        public void ShouldPerformBulkInsertWithManuallyConfiguredMapping(Totals[] expected)
+        public void ShouldPerformBulkInsertWithManuallyConfiguredMapping(BulkInsertTestCase<Totals> testCase)
         {
             // When
             Totals[] actual;
@@ -176,7 +184,7 @@
                 connection.Execute(@"create table #TestEntities (Id int identity(1, 1) not null, First int not null, Second int not null, Sum int not null)");
                 connection.BulkInsert(
                     "#TestEntities",
-                    expected,
+                    testCase.Source,
                     x => x.WithProperty(entity => entity.First)
                         .WithProperty(entity => entity.Second)
                         .WithFunction(entity => entity.First + entity.Second, "Sum")
@@ -185,7 +193,7 @@
             }
 
             // Then
-            Assert.True(expected.IsSame(actual));
+            Assert.True(testCase.Source.IsSame(actual));
         }
 
         [Fact]

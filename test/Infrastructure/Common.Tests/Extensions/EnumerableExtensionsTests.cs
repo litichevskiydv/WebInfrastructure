@@ -8,6 +8,8 @@
 
     public class EnumerableExtensionsTests
     {
+        #region TestCases
+
         public class UnaryComparisonOperationsTestCase
         {
             public IEnumerable<int> Source { get; set; }
@@ -30,6 +32,8 @@
 
             public int[] Expected { get; set; }
         }
+
+        #endregion
 
         [UsedImplicitly]
         public static TheoryData<UnaryComparisonOperationsTestCase> IsEmptyExtensionTestCases;
