@@ -11,37 +11,49 @@
 
     public class PrimitiveValuesListTests : DbUsingTestBase
     {
+        #region TestCases
+
+        public class ValuesListUsageTestCase<TSource>
+        {
+            public TSource[] Source { get; set; }
+        }
+
+        #endregion
+
         [UsedImplicitly]
-        public static readonly IEnumerable<object[]> Int32ValuesListTestsData;
+        public static readonly TheoryData<ValuesListUsageTestCase<int>> Int32ValuesListTestsData;
         [UsedImplicitly]
-        public static readonly IEnumerable<object[]> Int64ValuesListTestsData;
+        public static readonly TheoryData<ValuesListUsageTestCase<long>> Int64ValuesListTestsData;
         [UsedImplicitly]
-        public static readonly IEnumerable<object[]> DecimalValuesListTestsData;
+        public static readonly TheoryData<ValuesListUsageTestCase<decimal>> DecimalValuesListTestsData;
 
         static PrimitiveValuesListTests()
         {
-            Int32ValuesListTestsData = new[]
-                                       {
-                                           new object[] {Enumerable.Range(0, 11).ToArray()},
-                                           new object[] {new int[0]}
-                                       };
-            Int64ValuesListTestsData = new[]
-                                       {
-                                           new object[] {new[] {1000000000L, 1000000001L, 1000000002L}},
-                                           new object[] {new long[0]}
-                                       };
-            DecimalValuesListTestsData = new[]
-                                         {
-                                             new object[] {new[] {1.234m, 5.678m, 99.123m}},
-                                             new object[] {new decimal[0]}
-                                         };
+            Int32ValuesListTestsData =
+                new TheoryData<ValuesListUsageTestCase<int>>
+                {
+                    new ValuesListUsageTestCase<int> {Source = Enumerable.Range(0, 11).ToArray()},
+                    new ValuesListUsageTestCase<int> {Source = new int[0]}
+                };
+            Int64ValuesListTestsData =
+                new TheoryData<ValuesListUsageTestCase<long>>
+                {
+                    new ValuesListUsageTestCase<long> {Source = new[] {1000000000L, 1000000001L, 1000000002L}},
+                    new ValuesListUsageTestCase<long> {Source = new long[0]}
+                };
+            DecimalValuesListTestsData =
+                new TheoryData<ValuesListUsageTestCase<decimal>>
+                {
+                    new ValuesListUsageTestCase<decimal> {Source = new[] {1.234m, 5.678m, 99.123m}},
+                    new ValuesListUsageTestCase<decimal> {Source = new decimal[0]}
+                };
         }
 
         private static QueryObject CreateTableQuery()
         {
             return new QueryObject(@"
 if type_id (N'[dbo].[Int32ValuesList]') is null
-	create type [dbo].[Int32ValuesList] as table([Value] [int] not null)");
+    create type [dbo].[Int32ValuesList] as table([Value] [int] not null)");
         }
 
         private static QueryObject GetAllValuesQuery(IEnumerable<int> values)
@@ -52,23 +64,23 @@ if type_id (N'[dbo].[Int32ValuesList]') is null
 
         [Theory]
         [MemberData(nameof(Int32ValuesListTestsData))]
-        public async Task ShouldUseInt32ValuesListInQuery(int[] expected)
+        public async Task ShouldUseInt32ValuesListInQuery(ValuesListUsageTestCase<int> testCase)
         {
             // When
             int[] actual;
             using (var connection = ConnectionsFactory.Create())
             {
                 connection.Execute(CreateTableQuery());
-                actual = (await connection.QueryAsync<int>(GetAllValuesQuery(expected))).ToArray();
+                actual = (await connection.QueryAsync<int>(GetAllValuesQuery(testCase.Source))).ToArray();
             }
 
             // Then
-            Assert.Equal(expected, actual);
+            Assert.Equal(testCase.Source, actual);
         }
 
         [Theory]
         [MemberData(nameof(Int64ValuesListTestsData))]
-        public void ShouldUseInt64ValuesListInQuery(long[] expected)
+        public void ShouldUseInt64ValuesListInQuery(ValuesListUsageTestCase<long> testCase)
         {
             // When
             long[] actual;
@@ -76,21 +88,21 @@ if type_id (N'[dbo].[Int32ValuesList]') is null
             {
                 connection.Execute(@"
 if type_id (N'[dbo].[Int64ValuesList]') is null
-	create type [dbo].[Int64ValuesList] as table([Value] [bigint] not null)");
+    create type [dbo].[Int64ValuesList] as table([Value] [bigint] not null)");
 
                 actual = connection.Query<long>(@"
 select [Value] from @Param",
-                        new { Param = new Int64ValuesList("Int64ValuesList", expected) })
+                        new { Param = new Int64ValuesList("Int64ValuesList", testCase.Source) })
                     .ToArray();
             }
 
             // Then
-            Assert.Equal(expected, actual);
+            Assert.Equal(testCase.Source, actual);
         }
 
         [Theory]
         [MemberData(nameof(DecimalValuesListTestsData))]
-        public void ShouldUseDecimalValuesListInQuery(decimal[] expected)
+        public void ShouldUseDecimalValuesListInQuery(ValuesListUsageTestCase<decimal> testCase)
         {
             // When
             decimal[] actual;
@@ -98,20 +110,23 @@ select [Value] from @Param",
             {
                 connection.Execute(@"
 if type_id (N'[dbo].[DecimalValuesList]') is null
-	create type [dbo].[DecimalValuesList] as table([Value] [numeric](6,3) not null)");
+    create type [dbo].[DecimalValuesList] as table([Value] [numeric](6,3) not null)");
 
                 actual = connection.Query<decimal>(@"
 select [Value] from @Param",
                         new
                         {
-                            Param = PrimitiveValuesList.Create("DecimalValuesList", expected,
-                                new MetaDataCreationOptions {Precision = 6, Scale = 3})
+                            Param = PrimitiveValuesList.Create(
+                                "DecimalValuesList",
+                                testCase.Source,
+                                new MetaDataCreationOptions {Precision = 6, Scale = 3}
+                            )
                         })
                     .ToArray();
             }
 
             // Then
-            Assert.Equal(expected, actual);
+            Assert.Equal(testCase.Source, actual);
         }
     }
 }
