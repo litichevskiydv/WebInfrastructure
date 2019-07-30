@@ -1,7 +1,6 @@
 ﻿namespace Skeleton.Dapper.Tests.SessionsFactory
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using Dapper.Extensions;
@@ -11,6 +10,8 @@
 
     public class SessionsTests : DbUsingTestBase
     {
+        #region TestCases
+
         public class TestEntity
         {
             public int Id { get; [UsedImplicitly]set; }
@@ -33,26 +34,34 @@
             }
         }
 
+        public class BulkInsertTestCase<TSource>
+        {
+            public TSource[] Source { get; set; }
+        }
+
+        #endregion
+
         private readonly SessionsFactory _sessionsFactory;
 
         [UsedImplicitly]
-        public static IEnumerable<object[]> BulkInsertUsageTestsData;
+        public static TheoryData<BulkInsertTestCase<TestEntity>> BulkInsertUsageTestCases;
 
         static SessionsTests()
         {
-            BulkInsertUsageTestsData =
-                new[]
+            BulkInsertUsageTestCases =
+                new TheoryData<BulkInsertTestCase<TestEntity>>
                 {
-                    new object[]
+                    new BulkInsertTestCase<TestEntity>
                     {
-                        new[]
-                        {
-                            new TestEntity {Name = "First", Value = 1},
-                            new TestEntity {Name = "Second", Value = 2},
-                            new TestEntity {Name = "Third", Value = 3}
-                        }
+                        Source =
+                            new[]
+                            {
+                                new TestEntity {Name = "First", Value = 1},
+                                new TestEntity {Name = "Second", Value = 2},
+                                new TestEntity {Name = "Third", Value = 3}
+                            }
                     },
-                    new object[] {new TestEntity[0]}
+                    new BulkInsertTestCase<TestEntity> {Source = new TestEntity[0]}
                 };
         }
 
@@ -75,7 +84,7 @@
         }
 
         [Fact]
-        public void ShouldReadDataFromCommitedTransaction()
+        public void ShouldReadDataFromCommittedTransaction()
         {
             // Given
             var createTableQuery = new QueryObject("create table ##TransactionsTest ([ID] int, [Value] varchar(32));");
@@ -136,8 +145,8 @@
         }
 
         [Theory]
-        [MemberData(nameof(BulkInsertUsageTestsData))]
-        public void ShouldPerformBulkInsert(TestEntity[] expected)
+        [MemberData(nameof(BulkInsertUsageTestCases))]
+        public void ShouldPerformBulkInsert(BulkInsertTestCase<TestEntity> testCase)
         {
             // Given
             var createTableQuery = new QueryObject("create table ##TransactionsTest (Id int identity(1, 1) not null, Name nvarchar(max) not null, Value int not null);");
@@ -153,7 +162,7 @@
 
                     using (var session = _sessionsFactory.Create())
                     {
-                        session.BulkInsert("##TransactionsTest", expected);
+                        session.BulkInsert("##TransactionsTest", testCase.Source);
                         session.Commit();
                     }
 
@@ -165,7 +174,7 @@
                 }
 
             // Then
-            Assert.Equal(expected, actual);
+            Assert.Equal(testCase.Source, actual);
         }
     }
 }
