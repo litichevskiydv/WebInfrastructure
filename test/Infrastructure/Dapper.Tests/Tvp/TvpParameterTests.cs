@@ -11,6 +11,8 @@
 
     public class TvpParameterTests : DbUsingTestBase
     {
+        #region TestCases
+
         public class TestEntityWithAllTypes
         {
             public int Id { get; set; }
@@ -56,71 +58,80 @@
             }
         }
 
+        public class TvpUsageTestCase<TSource>
+        {
+            public TSource[] Source { get; set; }
+        }
+
+        #endregion
+
         [UsedImplicitly]
-        public static readonly IEnumerable<object[]> TvpParameterUsageTestsData;
+        public static readonly TheoryData<TvpUsageTestCase<TestEntityWithAllTypes>> TvpUsageTestCases;
 
         static TvpParameterTests()
         {
-            TvpParameterUsageTestsData = new[]
-                                         {
-                                             new object[]
-                                             {
-                                                 new[]
-                                                 {
-                                                     new TestEntityWithAllTypes
-                                                     {
-                                                         Id = 1,
-                                                         Value1 = 1,
-                                                         Value2 = 2,
-                                                         Value3 = 12L,
-                                                         Value4 = 1.5f,
-                                                         Value5 = 1.7d,
-                                                         Value6 = 1.834m,
-                                                         Value7 = true,
-                                                         Value8 = Guid.NewGuid(),
-                                                         Value9 = new DateTime(2016, 01, 01, 00, 00, 00, DateTimeKind.Unspecified),
-                                                         Value10 = DateTimeOffset.Now,
-                                                         Value12 = new byte[] {5, 6, 7},
-                                                         Value14 = "abcde",
-                                                         Value15 = 'f'
-                                                     },
-                                                     new TestEntityWithAllTypes
-                                                     {
-                                                         Id = 1,
-                                                         Value1 = 1,
-                                                         Value2 = 2,
-                                                         Value4 = 1.5f,
-                                                         Value5 = 1.7d,
-                                                         Value10 = DateTimeOffset.Now,
-                                                         Value12 = new byte[0],
-                                                         Value14 = "ab",
-                                                         Value15 = 'l'
-                                                     }
-                                                 }
-                                             },
-                                             new object[] {new TestEntityWithAllTypes[0]}
-                                         };
+            TvpUsageTestCases =
+                new TheoryData<TvpUsageTestCase<TestEntityWithAllTypes>>
+                {
+                    new TvpUsageTestCase<TestEntityWithAllTypes>
+                    {
+                        Source =
+                            new[]
+                            {
+                                new TestEntityWithAllTypes
+                                {
+                                    Id = 1,
+                                    Value1 = 1,
+                                    Value2 = 2,
+                                    Value3 = 12L,
+                                    Value4 = 1.5f,
+                                    Value5 = 1.7d,
+                                    Value6 = 1.834m,
+                                    Value7 = true,
+                                    Value8 = Guid.NewGuid(),
+                                    Value9 = new DateTime(2016, 01, 01, 00, 00, 00, DateTimeKind.Unspecified),
+                                    Value10 = DateTimeOffset.Now,
+                                    Value12 = new byte[] {5, 6, 7},
+                                    Value14 = "abcde",
+                                    Value15 = 'f'
+                                },
+                                new TestEntityWithAllTypes
+                                {
+                                    Id = 1,
+                                    Value1 = 1,
+                                    Value2 = 2,
+                                    Value4 = 1.5f,
+                                    Value5 = 1.7d,
+                                    Value10 = DateTimeOffset.Now,
+                                    Value12 = new byte[0],
+                                    Value14 = "ab",
+                                    Value15 = 'l'
+                                }
+                            }
+                    },
+                    new TvpUsageTestCase<TestEntityWithAllTypes> {Source = new TestEntityWithAllTypes[0]}
+                };
         }
 
         private static QueryObject CreateTableQuery()
         {
             return new QueryObject(@"
 if type_id (N'[dbo].[TestListWithAllTypes]') is null
-	create type [dbo].[TestListWithAllTypes] as table(
-	    [Id] [int] not null,
+    create type [dbo].[TestListWithAllTypes] as table(
+        [Id] [int] not null,
         [Value1] [tinyint] null,
         [Value2] [smallint] null,
-		[Value3] [bigint] null,
-		[Value4] [real] null,
-		[Value5] [float] null,
-		[Value6] [decimal](6,3) null,
-		[Value7] [bit] null,
-		[Value8] [uniqueidentifier] null,
-		[Value9] [datetime] null,
-		[Value10] [datetimeoffset] null,
-		[Value12] [varbinary](max) null,
-		[Value14] [nvarchar](6) null,
-		[Value15] [nchar](1) null)");
+        [Value3] [bigint] null,
+        [Value4] [real] null,
+        [Value5] [float] null,
+        [Value6] [decimal](6,3) null,
+        [Value7] [bit] null,
+        [Value8] [uniqueidentifier] null,
+        [Value9] [datetime] null,
+        [Value10] [datetimeoffset] null,
+        [Value12] [varbinary](max) null,
+        [Value14] [nvarchar](6) null,
+        [Value15] [nchar](1) null)");
         }
 
         private static QueryObject GetAllValuesQuery(IEnumerable<TestEntityWithAllTypes> values)
@@ -136,19 +147,19 @@ if type_id (N'[dbo].[TestListWithAllTypes]') is null
         }
 
         [Theory]
-        [MemberData(nameof(TvpParameterUsageTestsData))]
-        public void ShouldUseTvpInQueryWithAllTypes(TestEntityWithAllTypes[] expected)
+        [MemberData(nameof(TvpUsageTestCases))]
+        public void ShouldUseTvpInQueryWithAllTypes(TvpUsageTestCase<TestEntityWithAllTypes> testCase)
         {
             // When
             TestEntityWithAllTypes[] actual;
             using (var connection = ConnectionsFactory.Create())
             {
                 connection.Execute(CreateTableQuery());
-                actual = connection.Query<TestEntityWithAllTypes>(GetAllValuesQuery(expected)).ToArray();
+                actual = connection.Query<TestEntityWithAllTypes>(GetAllValuesQuery(testCase.Source)).ToArray();
             }
 
             // Then
-            Assert.Equal(expected, actual);
+            Assert.Equal(testCase.Source, actual);
         }
     }
 }
