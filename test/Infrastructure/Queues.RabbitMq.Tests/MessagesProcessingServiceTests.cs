@@ -7,8 +7,6 @@
     using System.Threading.Tasks;
     using Abstractions;
     using Abstractions.QueuesFactory;
-    using Abstractions.QueuesFactory.ExceptionsHandling;
-    using Abstractions.QueuesFactory.ExceptionsHandling.Handlers;
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
     using Handlers;
@@ -20,7 +18,6 @@
     using Microsoft.Extensions.Options;
     using Moq;
     using ProcessingService;
-    using QueuesFactory;
     using QueuesFactory.Configuration;
     using Web.Configuration;
     using Web.Testing.Extensions;

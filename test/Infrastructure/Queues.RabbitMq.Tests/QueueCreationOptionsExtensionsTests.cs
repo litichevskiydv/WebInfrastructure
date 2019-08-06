@@ -1,7 +1,6 @@
 ﻿namespace Skeleton.Queues.RabbitMq.Tests
 {
     using System;
-    using System.Collections.Generic;
     using Abstractions.QueuesFactory.Configuration;
     using Abstractions.QueuesFactory.ExceptionsHandling.Handlers;
     using JetBrains.Annotations;
@@ -13,36 +12,43 @@
 
     public class QueueCreationOptionsExtensionsTests
     {
+        #region TestCases
+
+        public class ExceptionHandlerParametersValidationTestCase
+        {
+            public RabbitQueueCreationOptions QueueCreationOptions { get; set; }
+
+            public ExceptionHandlerBase<RabbitMessageDescription> ExceptionHandler { get; set; }
+        }
+
+        #endregion
+
         [UsedImplicitly]
-        public static IEnumerable<object[]> WithExceptionHandlerParametersValidationTestsData;
+        public static TheoryData<ExceptionHandlerParametersValidationTestCase> ExceptionHandlerParametersValidationTestCases;
 
         static QueueCreationOptionsExtensionsTests()
         {
-            WithExceptionHandlerParametersValidationTestsData =
-                new[]
+            ExceptionHandlerParametersValidationTestCases =
+                new TheoryData<ExceptionHandlerParametersValidationTestCase>
                 {
-                    new object[]
+                    new ExceptionHandlerParametersValidationTestCase
                     {
-                        null,
-                        new EmptyExceptionHandler<RabbitMessageDescription>(
+                        ExceptionHandler = new EmptyExceptionHandler<RabbitMessageDescription>(
                             new Mock<ILogger<EmptyExceptionHandler<RabbitMessageDescription>>>().Object
                         )
                     },
-                    new object[]
+                    new ExceptionHandlerParametersValidationTestCase
                     {
-                        new RabbitQueueCreationOptions(),
-                        null
+                        QueueCreationOptions = new RabbitQueueCreationOptions(),
                     }
                 };
         }
 
         [Theory]
-        [MemberData(nameof(WithExceptionHandlerParametersValidationTestsData))]
-        public void WithExceptionHandlerShouldValidateParameters(
-            RabbitQueueCreationOptions queueCreationOptions,
-            ExceptionHandlerBase<RabbitMessageDescription> exceptionHandler)
+        [MemberData(nameof(ExceptionHandlerParametersValidationTestCases))]
+        public void WithExceptionHandlerShouldValidateParameters(ExceptionHandlerParametersValidationTestCase testCase)
         {
-            Assert.Throws<ArgumentNullException>(() => queueCreationOptions.WithExceptionHandler(exceptionHandler));
+            Assert.Throws<ArgumentNullException>(() => testCase.QueueCreationOptions.WithExceptionHandler(testCase.ExceptionHandler));
         }
 
         [Fact]
