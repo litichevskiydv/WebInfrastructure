@@ -1,7 +1,6 @@
 ﻿namespace Skeleton.Queues.RabbitMq.Tests
 {
     using System;
-    using System.Collections.Generic;
     using Abstractions.QueuesFactory;
     using Abstractions.QueuesFactory.ExceptionsHandling;
     using Abstractions.QueuesFactory.ExceptionsHandling.Handlers;
@@ -16,23 +15,32 @@
 
     public class GenericQueuesFactoryTests
     {
+        #region TestCases
+
+        public class ConstructorParametersValidationTestCase
+        {
+            public IServiceProvider ServiceProvider { get; set; }
+        }
+
+        #endregion
+
         [UsedImplicitly]
-        public static IEnumerable<object[]> GenericQueuesFactoryConstructorParametersValidationTestsData;
+        public static TheoryData<ConstructorParametersValidationTestCase> ConstructorParametersValidationTestCases;
 
         static GenericQueuesFactoryTests()
         {
-            GenericQueuesFactoryConstructorParametersValidationTestsData =
-                new[]
+            ConstructorParametersValidationTestCases =
+                new TheoryData<ConstructorParametersValidationTestCase>
                 {
-                    new object[] {null}
+                    new ConstructorParametersValidationTestCase()
                 };
         }
 
         [Theory]
-        [MemberData(nameof(GenericQueuesFactoryConstructorParametersValidationTestsData))]
-        public void GenericQueuesFactoryConstructorShouldValidateParameters(IServiceProvider serviceProvider)
+        [MemberData(nameof(ConstructorParametersValidationTestCases))]
+        public void GenericQueuesFactoryConstructorShouldValidateParameters(ConstructorParametersValidationTestCase testCase)
         {
-            Assert.Throws<ArgumentNullException>(() => new GenericQueuesFactory(serviceProvider));
+            Assert.Throws<ArgumentNullException>(() => new GenericQueuesFactory(testCase.ServiceProvider));
         }
 
         [Fact]
