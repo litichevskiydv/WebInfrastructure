@@ -1,7 +1,6 @@
 ﻿namespace Skeleton.Web.Tests.Authentication.JwtBearer
 {
     using System;
-    using System.Collections.Generic;
     using JetBrains.Annotations;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.IdentityModel.Tokens;
@@ -11,52 +10,78 @@
 
     public class JwtBearerOptionsExtensionsTests
     {
+        #region TestCases
+
+        public class TokenValidationParametersVerificationTestCase
+        {
+            public JwtBearerOptions Options { get; set; }
+
+            public Func<TokenValidationParameters, TokenValidationParameters> ParametersBuilder { get; set; }
+        }
+
+        public class EventsProcessorParametersVerificationTestCase
+        {
+            public JwtBearerOptions Options { get; set; }
+
+            public JwtBearerEvents EventsProcessor { get; set; }
+        }
+
+        public class ErrorsProcessingParametersVerificationTestCase
+        {
+            public JwtBearerOptions Options { get; set; }
+
+            public bool IncludeErrorDetails { get; set; }
+        }
+
+        #endregion
+
         [UsedImplicitly]
-        public static readonly IEnumerable<object[]> WithTokenValidationParametersValidationTestsData;
+        public static readonly TheoryData<TokenValidationParametersVerificationTestCase> TokenValidationParametersVerificationTestCases;
         [UsedImplicitly]
-        public static readonly IEnumerable<object[]> WithEventsProcessorValidationTestsData;
+        public static readonly TheoryData<EventsProcessorParametersVerificationTestCase> EventsProcessorParametersVerificationTestCases;
         [UsedImplicitly]
-        public static readonly IEnumerable<object[]> WithErrorDetailsValidationTestsData;
+        public static readonly TheoryData<ErrorsProcessingParametersVerificationTestCase> ErrorsProcessingParametersVerificationTestCases;
 
         static JwtBearerOptionsExtensionsTests()
         {
-            WithTokenValidationParametersValidationTestsData =
-                new[]
+            TokenValidationParametersVerificationTestCases =
+                new TheoryData<TokenValidationParametersVerificationTestCase>
                 {
-                    new object[] {null, new Func<TokenValidationParameters, TokenValidationParameters>(x => x)},
-                    new object[] {new JwtBearerOptions(), null}
+                    new TokenValidationParametersVerificationTestCase {ParametersBuilder = x => x},
+                    new TokenValidationParametersVerificationTestCase {Options = new JwtBearerOptions()}
                 };
-            WithEventsProcessorValidationTestsData =
-                new[]
+            EventsProcessorParametersVerificationTestCases =
+                new TheoryData<EventsProcessorParametersVerificationTestCase>
                 {
-                    new object[] {null, new Mock<JwtBearerEvents>().Object},
-                    new object[] {new JwtBearerOptions(), null}
+                    new EventsProcessorParametersVerificationTestCase {EventsProcessor = new Mock<JwtBearerEvents>().Object},
+                    new EventsProcessorParametersVerificationTestCase {Options = new JwtBearerOptions()}
                 };
-            WithErrorDetailsValidationTestsData = new[] {new object[] {null, true}};
+            ErrorsProcessingParametersVerificationTestCases =
+                new TheoryData<ErrorsProcessingParametersVerificationTestCase>
+                {
+                    new ErrorsProcessingParametersVerificationTestCase {IncludeErrorDetails = true}
+                };
         }
 
         [Theory]
-        [MemberData(nameof(WithTokenValidationParametersValidationTestsData))]
-        public void WithTokenValidationParametersValidationShouldValidateInput(JwtBearerOptions options,
-            Func<TokenValidationParameters, TokenValidationParameters> parametersBuilder)
+        [MemberData(nameof(TokenValidationParametersVerificationTestCases))]
+        public void WithTokenValidationParametersValidationShouldValidateInput(TokenValidationParametersVerificationTestCase testCase)
         {
-            Assert.Throws<ArgumentNullException>(() => options.WithTokenValidationParameters(parametersBuilder));
+            Assert.Throws<ArgumentNullException>(() => testCase.Options.WithTokenValidationParameters(testCase.ParametersBuilder));
         }
 
         [Theory]
-        [MemberData(nameof(WithEventsProcessorValidationTestsData))]
-        public void WithEventsProcessorShouldValidateInput(JwtBearerOptions options,
-            JwtBearerEvents eventsProcessor)
+        [MemberData(nameof(EventsProcessorParametersVerificationTestCases))]
+        public void WithEventsProcessorShouldValidateInput(EventsProcessorParametersVerificationTestCase testCase)
         {
-            Assert.Throws<ArgumentNullException>(() => options.WithEventsProcessor(eventsProcessor));
+            Assert.Throws<ArgumentNullException>(() => testCase.Options.WithEventsProcessor(testCase.EventsProcessor));
         }
 
         [Theory]
-        [MemberData(nameof(WithErrorDetailsValidationTestsData))]
-        public void WithErrorDetailsShouldValidateInput(JwtBearerOptions options,
-            bool includeErrorDetails)
+        [MemberData(nameof(ErrorsProcessingParametersVerificationTestCases))]
+        public void WithErrorDetailsShouldValidateInput(ErrorsProcessingParametersVerificationTestCase testCase)
         {
-            Assert.Throws<ArgumentNullException>(() => options.WithErrorDetails(includeErrorDetails));
+            Assert.Throws<ArgumentNullException>(() => testCase.Options.WithErrorDetails(testCase.IncludeErrorDetails));
         }
 
         [Fact]
