@@ -12,10 +12,28 @@
 
     public class TokensIssuingOptionsExtensionsTests
     {
+        #region TestCases
+
+        public class TokenIssueEventHandlerParametersVerificationTestCase
+        {
+            public TokensIssuingOptions Options { get; set; }
+
+            public ITokenIssueEventHandler EventHandler { get; set; }
+        }
+
+        public class GetEndpointParametersVerificationTestCase
+        {
+            public TokensIssuingOptions Options { get; set; }
+
+            public string Endpoint { get; set; }
+        }
+
+        #endregion
+
         [UsedImplicitly]
-        public static readonly IEnumerable<object[]> WithTokenIssueEventHandlerValidationTestsData;
+        public static readonly TheoryData<TokenIssueEventHandlerParametersVerificationTestCase> TokenIssueEventHandlerParametersVerificationTestCases;
         [UsedImplicitly]
-        public static readonly IEnumerable<object[]> WithGetEndpotintValidationTestsData;
+        public static readonly TheoryData<GetEndpointParametersVerificationTestCase> GetEndpointParametersVerificationTestCases;
         [UsedImplicitly]
         public static readonly IEnumerable<object[]> WithSigningKeyValidationTestsData;
         [UsedImplicitly]
@@ -23,11 +41,11 @@
 
         static TokensIssuingOptionsExtensionsTests()
         {
-            WithGetEndpotintValidationTestsData =
-                new[]
+            GetEndpointParametersVerificationTestCases =
+                new TheoryData<GetEndpointParametersVerificationTestCase>
                 {
-                    new object[] {null, "/api/Account/Token"},
-                    new object[] {new TokensIssuingOptions(), null}
+                    new GetEndpointParametersVerificationTestCase {Endpoint = "/api/Account/Token"},
+                    new GetEndpointParametersVerificationTestCase {Options = new TokensIssuingOptions()}
                 };
             WithSigningKeyValidationTestsData =
                 new[]
@@ -53,26 +71,26 @@
                 };
             WithLifetimeValidationTestsData = new[] { new object[] { null, TimeSpan.FromHours(2) } };
 
-            WithTokenIssueEventHandlerValidationTestsData =
-                new[]
+            TokenIssueEventHandlerParametersVerificationTestCases =
+                new TheoryData<TokenIssueEventHandlerParametersVerificationTestCase>
                 {
-                    new object[] {null, new Mock<ITokenIssueEventHandler>().Object},
-                    new object[] {new TokensIssuingOptions(), null}
+                    new TokenIssueEventHandlerParametersVerificationTestCase {EventHandler = new Mock<ITokenIssueEventHandler>().Object},
+                    new TokenIssueEventHandlerParametersVerificationTestCase {Options = new TokensIssuingOptions()}
                 };
         }
 
         [Theory]
-        [MemberData(nameof(WithTokenIssueEventHandlerValidationTestsData))]
-        public void SetTokenIssueEventHandlerFailTest(TokensIssuingOptions options, ITokenIssueEventHandler eventHandler)
+        [MemberData(nameof(TokenIssueEventHandlerParametersVerificationTestCases))]
+        public void SetTokenIssueEventHandlerFailTest(TokenIssueEventHandlerParametersVerificationTestCase testCase)
         {
-            Assert.Throws<ArgumentNullException>(() => options.WithTokenIssueEventHandler(eventHandler));
+            Assert.Throws<ArgumentNullException>(() => testCase.Options.WithTokenIssueEventHandler(testCase.EventHandler));
         }
 
         [Theory]
-        [MemberData(nameof(WithGetEndpotintValidationTestsData))]
-        public void WithGetEndpotintShouldValidateInput(TokensIssuingOptions options, string endpoint)
+        [MemberData(nameof(GetEndpointParametersVerificationTestCases))]
+        public void WithGetEndpotintShouldValidateInput(GetEndpointParametersVerificationTestCase testCase)
         {
-            Assert.Throws<ArgumentNullException>(() => options.WithGetEndpoint(endpoint));
+            Assert.Throws<ArgumentNullException>(() => testCase.Options.WithGetEndpoint(testCase.Endpoint));
         }
 
         [Theory]
