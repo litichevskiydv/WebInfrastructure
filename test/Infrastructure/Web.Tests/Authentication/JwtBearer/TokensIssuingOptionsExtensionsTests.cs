@@ -1,7 +1,6 @@
 ﻿namespace Skeleton.Web.Tests.Authentication.JwtBearer
 {
     using System;
-    using System.Collections.Generic;
     using System.Text;
     using JetBrains.Annotations;
     using Microsoft.IdentityModel.Tokens;
@@ -37,6 +36,13 @@
             public SecurityKey SigningKey { get; set; }
         }
 
+        public class LifetimeParametersVerificationTestCase
+        {
+            public TokensIssuingOptions Options { get; set; }
+
+            public TimeSpan Lifetime { get; set; }
+        }
+
         #endregion
 
         [UsedImplicitly]
@@ -46,7 +52,7 @@
         [UsedImplicitly]
         public static readonly TheoryData<SigningKeyParametersVerificationTestCase> SigningKeyParametersVerificationTestCases;
         [UsedImplicitly]
-        public static readonly IEnumerable<object[]> WithLifetimeValidationTestsData;
+        public static readonly TheoryData<LifetimeParametersVerificationTestCase> LifetimeParametersVerificationTestCases;
 
         static TokensIssuingOptionsExtensionsTests()
         {
@@ -75,7 +81,11 @@
                         SigningAlgorithmName = SecurityAlgorithms.HmacSha256,
                     }
                 };
-            WithLifetimeValidationTestsData = new[] { new object[] { null, TimeSpan.FromHours(2) } };
+            LifetimeParametersVerificationTestCases =
+                new TheoryData<LifetimeParametersVerificationTestCase>
+                {
+                    new LifetimeParametersVerificationTestCase {Lifetime = TimeSpan.FromHours(2)}
+                };
 
             TokenIssueEventHandlerParametersVerificationTestCases =
                 new TheoryData<TokenIssueEventHandlerParametersVerificationTestCase>
@@ -107,10 +117,10 @@
         }
 
         [Theory]
-        [MemberData(nameof(WithLifetimeValidationTestsData))]
-        public void WithLifetimeShouldValidateInput(TokensIssuingOptions options, TimeSpan lifetime)
+        [MemberData(nameof(LifetimeParametersVerificationTestCases))]
+        public void WithLifetimeShouldValidateInput(LifetimeParametersVerificationTestCase testCase)
         {
-            Assert.Throws<ArgumentNullException>(() => options.WithLifetime(lifetime));
+            Assert.Throws<ArgumentNullException>(() => testCase.Options.WithLifetime(testCase.Lifetime));
         }
 
         [Fact]
