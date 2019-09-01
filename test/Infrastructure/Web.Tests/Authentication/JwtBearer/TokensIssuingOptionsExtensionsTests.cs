@@ -28,6 +28,15 @@
             public string Endpoint { get; set; }
         }
 
+        public class SigningKeyParametersVerificationTestCase
+        {
+            public TokensIssuingOptions Options { get; set; }
+
+            public string SigningAlgorithmName { get; set; }
+
+            public SecurityKey SigningKey { get; set; }
+        }
+
         #endregion
 
         [UsedImplicitly]
@@ -35,7 +44,7 @@
         [UsedImplicitly]
         public static readonly TheoryData<GetEndpointParametersVerificationTestCase> GetEndpointParametersVerificationTestCases;
         [UsedImplicitly]
-        public static readonly IEnumerable<object[]> WithSigningKeyValidationTestsData;
+        public static readonly TheoryData<SigningKeyParametersVerificationTestCase> SigningKeyParametersVerificationTestCases;
         [UsedImplicitly]
         public static readonly IEnumerable<object[]> WithLifetimeValidationTestsData;
 
@@ -47,26 +56,23 @@
                     new GetEndpointParametersVerificationTestCase {Endpoint = "/api/Account/Token"},
                     new GetEndpointParametersVerificationTestCase {Options = new TokensIssuingOptions()}
                 };
-            WithSigningKeyValidationTestsData =
-                new[]
+            SigningKeyParametersVerificationTestCases =
+                new TheoryData<SigningKeyParametersVerificationTestCase>
                 {
-                    new object[]
+                    new SigningKeyParametersVerificationTestCase
                     {
-                        null,
-                        SecurityAlgorithms.HmacSha256,
-                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes("23j79h675s78T904gldUt0M5SftPg50H3W85s5A8u68zUV4AIJ"))
+                        SigningAlgorithmName = SecurityAlgorithms.HmacSha256,
+                        SigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("23j79h675s78T904gldUt0M5SftPg50H3W85s5A8u68zUV4AIJ"))
                     },
-                    new object[]
+                    new SigningKeyParametersVerificationTestCase
                     {
-                        new TokensIssuingOptions(),
-                        null,
-                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes("23j79h675s78T904gldUt0M5SftPg50H3W85s5A8u68zUV4AIJ"))
+                        Options = new TokensIssuingOptions(),
+                        SigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("23j79h675s78T904gldUt0M5SftPg50H3W85s5A8u68zUV4AIJ"))
                     },
-                    new object[]
+                    new SigningKeyParametersVerificationTestCase
                     {
-                        new TokensIssuingOptions(),
-                        SecurityAlgorithms.HmacSha256,
-                        null
+                        Options = new TokensIssuingOptions(),
+                        SigningAlgorithmName = SecurityAlgorithms.HmacSha256,
                     }
                 };
             WithLifetimeValidationTestsData = new[] { new object[] { null, TimeSpan.FromHours(2) } };
@@ -94,10 +100,10 @@
         }
 
         [Theory]
-        [MemberData(nameof(WithSigningKeyValidationTestsData))]
-        public void WithSigningKeyShouldValidateInput(TokensIssuingOptions options, string signingAlgorithmName, SecurityKey signingKey)
+        [MemberData(nameof(SigningKeyParametersVerificationTestCases))]
+        public void WithSigningKeyShouldValidateInput(SigningKeyParametersVerificationTestCase testCase)
         {
-            Assert.Throws<ArgumentNullException>(() => options.WithSigningKey(signingAlgorithmName, signingKey));
+            Assert.Throws<ArgumentNullException>(() => testCase.Options.WithSigningKey(testCase.SigningAlgorithmName, testCase.SigningKey));
         }
 
         [Theory]
