@@ -11,8 +11,20 @@
 
     public class TokenValidationParametersExtensionsTests
     {
+        #region TestCases
+
+        public class SecurityKeyParametersVerificationTestCase
+        {
+            public TokenValidationParameters Options { get; set; }
+
+            public SecurityKey SecurityKey { get; set; }
+        }
+
+        #endregion
+
+
         [UsedImplicitly]
-        public static readonly IEnumerable<object[]> WithIssuerKeyValidationParametersValidationTestsData1;
+        public static readonly TheoryData<SecurityKeyParametersVerificationTestCase> SecurityKeyParametersVerificationTestCases;
         [UsedImplicitly]
         public static readonly IEnumerable<object[]> WithIssuerKeyValidationParametersValidationTestsData2;
         [UsedImplicitly]
@@ -28,18 +40,16 @@
 
         static TokenValidationParametersExtensionsTests()
         {
-            WithIssuerKeyValidationParametersValidationTestsData1 =
-                new[]
+            SecurityKeyParametersVerificationTestCases =
+                new TheoryData<SecurityKeyParametersVerificationTestCase>
                 {
-                    new object[]
+                    new SecurityKeyParametersVerificationTestCase
                     {
-                        null,
-                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes("23j79h675s78T904gldUt0M5SftPg50H3W85s5A8u68zUV4AIJ"))
+                        SecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("23j79h675s78T904gldUt0M5SftPg50H3W85s5A8u68zUV4AIJ"))
                     },
-                    new object[]
+                    new SecurityKeyParametersVerificationTestCase
                     {
-                        new TokenValidationParameters(),
-                        null
+                        Options = new TokenValidationParameters()
                     }
                 };
             WithIssuerKeyValidationParametersValidationTestsData2 =
@@ -104,10 +114,10 @@
         }
 
         [Theory]
-        [MemberData(nameof(WithIssuerKeyValidationParametersValidationTestsData1))]
-        public void WithIssuerKeyValidationShouldValidateInput1(TokenValidationParameters options, SecurityKey securityKey)
+        [MemberData(nameof(SecurityKeyParametersVerificationTestCases))]
+        public void WithIssuerKeyValidationShouldValidateSecurityKeyParameters(SecurityKeyParametersVerificationTestCase testCase)
         {
-            Assert.Throws<ArgumentNullException>(() => options.WithIssuerKeyValidation(securityKey));
+            Assert.Throws<ArgumentNullException>(() => testCase.Options.WithIssuerKeyValidation(testCase.SecurityKey));
         }
 
         [Theory]
