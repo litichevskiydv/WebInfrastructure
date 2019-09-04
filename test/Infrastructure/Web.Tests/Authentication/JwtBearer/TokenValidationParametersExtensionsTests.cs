@@ -20,13 +20,19 @@
             public SecurityKey SecurityKey { get; set; }
         }
 
+        public class IssuerSigningKeyResolverParametersVerificationTestCase
+        {
+            public TokenValidationParameters Options { get; set; }
+            public IssuerSigningKeyResolver SecurityKeyResolver { get; set; }
+        }
+
         #endregion
 
 
         [UsedImplicitly]
         public static readonly TheoryData<SecurityKeyParametersVerificationTestCase> SecurityKeyParametersVerificationTestCases;
         [UsedImplicitly]
-        public static readonly IEnumerable<object[]> WithIssuerKeyValidationParametersValidationTestsData2;
+        public static readonly TheoryData<IssuerSigningKeyResolverParametersVerificationTestCase> IssuerSigningKeyResolverParametersVerificationTestCases;
         [UsedImplicitly]
         public static readonly IEnumerable<object[]> WithIssuerKeyValidationParametersValidationTestsData3;
         [UsedImplicitly]
@@ -52,18 +58,16 @@
                         Options = new TokenValidationParameters()
                     }
                 };
-            WithIssuerKeyValidationParametersValidationTestsData2 =
-                new[]
+            IssuerSigningKeyResolverParametersVerificationTestCases =
+                new TheoryData<IssuerSigningKeyResolverParametersVerificationTestCase>
                 {
-                    new object[]
+                    new IssuerSigningKeyResolverParametersVerificationTestCase
                     {
-                        null,
-                        new IssuerSigningKeyResolver((w, x, y, z) => Enumerable.Empty<SecurityKey>())
+                        SecurityKeyResolver = (w, x, y, z) => Enumerable.Empty<SecurityKey>()
                     },
-                    new object[]
+                    new IssuerSigningKeyResolverParametersVerificationTestCase
                     {
-                        new TokenValidationParameters(),
-                        null
+                        Options = new TokenValidationParameters()
                     }
                 };
             WithIssuerKeyValidationParametersValidationTestsData3 =
@@ -121,10 +125,10 @@
         }
 
         [Theory]
-        [MemberData(nameof(WithIssuerKeyValidationParametersValidationTestsData2))]
-        public void WithIssuerKeyValidationShouldValidateInput2(TokenValidationParameters options, IssuerSigningKeyResolver securityKeyResolver)
+        [MemberData(nameof(IssuerSigningKeyResolverParametersVerificationTestCases))]
+        public void WithIssuerKeyValidationShouldValidateIssuerSigningKeyResolverParameters(IssuerSigningKeyResolverParametersVerificationTestCase testCase)
         {
-            Assert.Throws<ArgumentNullException>(() => options.WithIssuerKeyValidation(securityKeyResolver));
+            Assert.Throws<ArgumentNullException>(() => testCase.Options.WithIssuerKeyValidation(testCase.SecurityKeyResolver));
         }
 
         [Theory]
