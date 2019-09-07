@@ -34,6 +34,13 @@
             public IEnumerable<SecurityKey> SecurityKeys { get; set; }
         }
 
+        public class IssuerValidationParametersVerificationTestCase
+        {
+            public TokenValidationParameters Options { get; set; }
+
+            public string ValidIssuer { get; set; }
+        }
+
         #endregion
 
 
@@ -44,7 +51,7 @@
         [UsedImplicitly]
         public static readonly TheoryData<IssuerSigningKeysParametersVerificationTestCase> IssuerSigningKeysParametersVerificationTestCases;
         [UsedImplicitly]
-        public static readonly IEnumerable<object[]> WithIssuerValidationParametersValidationTestsData1;
+        public static readonly TheoryData<IssuerValidationParametersVerificationTestCase> IssuerValidationParametersVerificationTestCases;
         [UsedImplicitly]
         public static readonly IEnumerable<object[]> WithIssuerValidationParametersValidationTestsData2;
         [UsedImplicitly]
@@ -95,11 +102,11 @@
                         SecurityKeys = Enumerable.Empty<SecurityKey>()
                     }
                 };
-            WithIssuerValidationParametersValidationTestsData1 =
-                new[]
+            IssuerValidationParametersVerificationTestCases =
+                new TheoryData<IssuerValidationParametersVerificationTestCase>
                 {
-                    new object[] {null, "abc"},
-                    new object[] {new TokenValidationParameters(), null}
+                    new IssuerValidationParametersVerificationTestCase {ValidIssuer = "abc"},
+                    new IssuerValidationParametersVerificationTestCase {Options = new TokenValidationParameters()}
                 };
             WithIssuerValidationParametersValidationTestsData2 =
                 new[]
@@ -175,10 +182,10 @@
         }
 
         [Theory]
-        [MemberData(nameof(WithIssuerValidationParametersValidationTestsData1))]
-        public void WithIssuerValidationShouldValidateInput1(TokenValidationParameters options, string validIssuer)
+        [MemberData(nameof(IssuerValidationParametersVerificationTestCases))]
+        public void ShouldValidateIssuerVerificationParameters(IssuerValidationParametersVerificationTestCase testCase)
         {
-            Assert.Throws<ArgumentNullException>(() => options.WithIssuerValidation(validIssuer));
+            Assert.Throws<ArgumentNullException>(() => testCase.Options.WithIssuerValidation(testCase.ValidIssuer));
         }
 
         [Theory]
