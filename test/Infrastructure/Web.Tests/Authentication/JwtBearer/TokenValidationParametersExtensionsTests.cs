@@ -13,7 +13,7 @@
     {
         #region TestCases
 
-        public class SecurityKeyParametersVerificationTestCase
+        public class IssuerSigningKeyParametersVerificationTestCase
         {
             public TokenValidationParameters Options { get; set; }
 
@@ -23,18 +23,26 @@
         public class IssuerSigningKeyResolverParametersVerificationTestCase
         {
             public TokenValidationParameters Options { get; set; }
+
             public IssuerSigningKeyResolver SecurityKeyResolver { get; set; }
+        }
+
+        public class IssuerSigningKeysParametersVerificationTestCase
+        {
+            public TokenValidationParameters Options { get; set; }
+
+            public IEnumerable<SecurityKey> SecurityKeys { get; set; }
         }
 
         #endregion
 
 
         [UsedImplicitly]
-        public static readonly TheoryData<SecurityKeyParametersVerificationTestCase> SecurityKeyParametersVerificationTestCases;
+        public static readonly TheoryData<IssuerSigningKeyParametersVerificationTestCase> IssuerSigningKeyParametersVerificationTestCases;
         [UsedImplicitly]
         public static readonly TheoryData<IssuerSigningKeyResolverParametersVerificationTestCase> IssuerSigningKeyResolverParametersVerificationTestCases;
         [UsedImplicitly]
-        public static readonly IEnumerable<object[]> WithIssuerKeyValidationParametersValidationTestsData3;
+        public static readonly TheoryData<IssuerSigningKeysParametersVerificationTestCase> IssuerSigningKeysParametersVerificationTestCases;
         [UsedImplicitly]
         public static readonly IEnumerable<object[]> WithIssuerValidationParametersValidationTestsData1;
         [UsedImplicitly]
@@ -46,14 +54,14 @@
 
         static TokenValidationParametersExtensionsTests()
         {
-            SecurityKeyParametersVerificationTestCases =
-                new TheoryData<SecurityKeyParametersVerificationTestCase>
+            IssuerSigningKeyParametersVerificationTestCases =
+                new TheoryData<IssuerSigningKeyParametersVerificationTestCase>
                 {
-                    new SecurityKeyParametersVerificationTestCase
+                    new IssuerSigningKeyParametersVerificationTestCase
                     {
                         SecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("23j79h675s78T904gldUt0M5SftPg50H3W85s5A8u68zUV4AIJ"))
                     },
-                    new SecurityKeyParametersVerificationTestCase
+                    new IssuerSigningKeyParametersVerificationTestCase
                     {
                         Options = new TokenValidationParameters()
                     }
@@ -70,23 +78,21 @@
                         Options = new TokenValidationParameters()
                     }
                 };
-            WithIssuerKeyValidationParametersValidationTestsData3 =
-                new[]
+            IssuerSigningKeysParametersVerificationTestCases =
+                new TheoryData<IssuerSigningKeysParametersVerificationTestCase>
                 {
-                    new object[]
+                    new IssuerSigningKeysParametersVerificationTestCase
                     {
-                        null,
-                        new[] {new SymmetricSecurityKey(Encoding.UTF8.GetBytes("23j79h675s78T904gldUt0M5SftPg50H3W85s5A8u68zUV4AIJ"))}
+                        SecurityKeys = new[] {new SymmetricSecurityKey(Encoding.UTF8.GetBytes("23j79h675s78T904gldUt0M5SftPg50H3W85s5A8u68zUV4AIJ"))}
                     },
-                    new object[]
+                    new IssuerSigningKeysParametersVerificationTestCase
                     {
-                        new TokenValidationParameters(),
-                        null
+                        Options = new TokenValidationParameters()
                     },
-                    new object[]
+                    new IssuerSigningKeysParametersVerificationTestCase
                     {
-                        new TokenValidationParameters(),
-                        Enumerable.Empty<SecurityKey>()
+                        Options = new TokenValidationParameters(),
+                        SecurityKeys = Enumerable.Empty<SecurityKey>()
                     }
                 };
             WithIssuerValidationParametersValidationTestsData1 =
@@ -118,24 +124,24 @@
         }
 
         [Theory]
-        [MemberData(nameof(SecurityKeyParametersVerificationTestCases))]
-        public void WithIssuerKeyValidationShouldValidateSecurityKeyParameters(SecurityKeyParametersVerificationTestCase testCase)
+        [MemberData(nameof(IssuerSigningKeyParametersVerificationTestCases))]
+        public void ShouldValidateIssuerSigningKeyParameters(IssuerSigningKeyParametersVerificationTestCase testCase)
         {
             Assert.Throws<ArgumentNullException>(() => testCase.Options.WithIssuerKeyValidation(testCase.SecurityKey));
         }
 
         [Theory]
         [MemberData(nameof(IssuerSigningKeyResolverParametersVerificationTestCases))]
-        public void WithIssuerKeyValidationShouldValidateIssuerSigningKeyResolverParameters(IssuerSigningKeyResolverParametersVerificationTestCase testCase)
+        public void ShouldValidateIssuerSigningKeyResolverParameters(IssuerSigningKeyResolverParametersVerificationTestCase testCase)
         {
             Assert.Throws<ArgumentNullException>(() => testCase.Options.WithIssuerKeyValidation(testCase.SecurityKeyResolver));
         }
 
         [Theory]
-        [MemberData(nameof(WithIssuerKeyValidationParametersValidationTestsData3))]
-        public void WithIssuerKeyValidationShouldValidateInput3(TokenValidationParameters options, IEnumerable<SecurityKey> securityKeys)
+        [MemberData(nameof(IssuerSigningKeysParametersVerificationTestCases))]
+        public void ShouldValidateIssuerSigningKeysParameters(IssuerSigningKeysParametersVerificationTestCase testCase)
         {
-            Assert.Throws<ArgumentNullException>(() => options.WithIssuerKeyValidation(securityKeys));
+            Assert.Throws<ArgumentNullException>(() => testCase.Options.WithIssuerKeyValidation(testCase.SecurityKeys));
         }
 
         [Fact]
