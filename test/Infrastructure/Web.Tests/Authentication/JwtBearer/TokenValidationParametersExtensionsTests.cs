@@ -48,6 +48,13 @@
             public IEnumerable<string> ValidIssuers { get; set; }
         }
 
+        public class AudienceValidationParametersVerificationTestCase
+        {
+            public TokenValidationParameters Options { get; set; }
+
+            public  string ValidAudience { get; set; }
+        }
+
         #endregion
 
 
@@ -62,7 +69,7 @@
         [UsedImplicitly]
         public static readonly TheoryData<IssuersValidationParametersVerificationTestCase> IssuersValidationParametersVerificationTestCases;
         [UsedImplicitly]
-        public static readonly IEnumerable<object[]> WithAudienceValidationParametersValidationTestsData1;
+        public static readonly TheoryData<AudienceValidationParametersVerificationTestCase> AudienceValidationParametersVerificationTestCases;
         [UsedImplicitly]
         public static readonly IEnumerable<object[]> WithAudienceValidationParametersValidationTestsData2;
 
@@ -132,11 +139,11 @@
                         ValidIssuers = Enumerable.Empty<string>()
                     }
                 };
-            WithAudienceValidationParametersValidationTestsData1 =
-                new[]
+            AudienceValidationParametersVerificationTestCases =
+                new TheoryData<AudienceValidationParametersVerificationTestCase>
                 {
-                    new object[] {null, "abc"},
-                    new object[] {new TokenValidationParameters(), null}
+                    new AudienceValidationParametersVerificationTestCase {ValidAudience = "abc"},
+                    new AudienceValidationParametersVerificationTestCase {Options = new TokenValidationParameters()}
                 };
             WithAudienceValidationParametersValidationTestsData2 =
                 new[]
@@ -223,10 +230,10 @@
         }
 
         [Theory]
-        [MemberData(nameof(WithAudienceValidationParametersValidationTestsData1))]
-        public void WithAudienceValidationShouldValidateInput1(TokenValidationParameters options, string validAudience)
+        [MemberData(nameof(AudienceValidationParametersVerificationTestCases))]
+        public void ShouldValidateAudienceVerificationParameters(AudienceValidationParametersVerificationTestCase testCase)
         {
-            Assert.Throws<ArgumentNullException>(() => options.WithAudienceValidation(validAudience));
+            Assert.Throws<ArgumentNullException>(() => testCase.Options.WithAudienceValidation(testCase.ValidAudience));
         }
 
         [Theory]
