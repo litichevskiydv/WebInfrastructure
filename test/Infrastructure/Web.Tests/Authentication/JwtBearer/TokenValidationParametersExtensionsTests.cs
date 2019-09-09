@@ -41,6 +41,13 @@
             public string ValidIssuer { get; set; }
         }
 
+        public class IssuersValidationParametersVerificationTestCase
+        {
+            public TokenValidationParameters Options { get; set; }
+
+            public IEnumerable<string> ValidIssuers { get; set; }
+        }
+
         #endregion
 
 
@@ -53,7 +60,7 @@
         [UsedImplicitly]
         public static readonly TheoryData<IssuerValidationParametersVerificationTestCase> IssuerValidationParametersVerificationTestCases;
         [UsedImplicitly]
-        public static readonly IEnumerable<object[]> WithIssuerValidationParametersValidationTestsData2;
+        public static readonly TheoryData<IssuersValidationParametersVerificationTestCase> IssuersValidationParametersVerificationTestCases;
         [UsedImplicitly]
         public static readonly IEnumerable<object[]> WithAudienceValidationParametersValidationTestsData1;
         [UsedImplicitly]
@@ -108,12 +115,22 @@
                     new IssuerValidationParametersVerificationTestCase {ValidIssuer = "abc"},
                     new IssuerValidationParametersVerificationTestCase {Options = new TokenValidationParameters()}
                 };
-            WithIssuerValidationParametersValidationTestsData2 =
-                new[]
+            IssuersValidationParametersVerificationTestCases =
+                new TheoryData<IssuersValidationParametersVerificationTestCase>
                 {
-                    new object[] {null, new[] {"abc"}},
-                    new object[] {new TokenValidationParameters(), null},
-                    new object[] {new TokenValidationParameters(), Enumerable.Empty<string>()}
+                    new IssuersValidationParametersVerificationTestCase
+                    {
+                        ValidIssuers = new[] {"abc"}
+                    },
+                    new IssuersValidationParametersVerificationTestCase
+                    {
+                        Options = new TokenValidationParameters()
+                    },
+                    new IssuersValidationParametersVerificationTestCase
+                    {
+                        Options = new TokenValidationParameters(),
+                        ValidIssuers = Enumerable.Empty<string>()
+                    }
                 };
             WithAudienceValidationParametersValidationTestsData1 =
                 new[]
@@ -189,10 +206,10 @@
         }
 
         [Theory]
-        [MemberData(nameof(WithIssuerValidationParametersValidationTestsData2))]
-        public void WithIssuerValidationShouldValidateInput2(TokenValidationParameters options, IEnumerable<string> validIssuers)
+        [MemberData(nameof(IssuersValidationParametersVerificationTestCases))]
+        public void ShouldValidateIssuersVerificationParameters(IssuersValidationParametersVerificationTestCase testCase)
         {
-            Assert.Throws<ArgumentNullException>(() => options.WithIssuerValidation(validIssuers));
+            Assert.Throws<ArgumentNullException>(() => testCase.Options.WithIssuerValidation(testCase.ValidIssuers));
         }
 
         [Fact]
