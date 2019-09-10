@@ -55,6 +55,13 @@
             public  string ValidAudience { get; set; }
         }
 
+        public class AudiencesValidationParametersVerificationTestCase
+        {
+            public TokenValidationParameters Options { get; set; }
+
+            public IEnumerable<string> ValidAudiences { get; set; }
+        }
+
         #endregion
 
 
@@ -71,7 +78,7 @@
         [UsedImplicitly]
         public static readonly TheoryData<AudienceValidationParametersVerificationTestCase> AudienceValidationParametersVerificationTestCases;
         [UsedImplicitly]
-        public static readonly IEnumerable<object[]> WithAudienceValidationParametersValidationTestsData2;
+        public static readonly TheoryData<AudiencesValidationParametersVerificationTestCase> AudiencesValidationParametersVerificationTestCases;
 
         static TokenValidationParametersExtensionsTests()
         {
@@ -145,12 +152,22 @@
                     new AudienceValidationParametersVerificationTestCase {ValidAudience = "abc"},
                     new AudienceValidationParametersVerificationTestCase {Options = new TokenValidationParameters()}
                 };
-            WithAudienceValidationParametersValidationTestsData2 =
-                new[]
+            AudiencesValidationParametersVerificationTestCases =
+                new TheoryData<AudiencesValidationParametersVerificationTestCase>
                 {
-                    new object[] {null, new[] {"abc"}},
-                    new object[] {new TokenValidationParameters(), null},
-                    new object[] {new TokenValidationParameters(), Enumerable.Empty<string>()}
+                    new AudiencesValidationParametersVerificationTestCase
+                    {
+                        ValidAudiences = new[] {"abc"}
+                    },
+                    new AudiencesValidationParametersVerificationTestCase
+                    {
+                        Options = new TokenValidationParameters()
+                    },
+                    new AudiencesValidationParametersVerificationTestCase
+                    {
+                        Options = new TokenValidationParameters(),
+                        ValidAudiences = Enumerable.Empty<string>()
+                    }
                 };
         }
 
@@ -237,10 +254,10 @@
         }
 
         [Theory]
-        [MemberData(nameof(WithAudienceValidationParametersValidationTestsData2))]
-        public void WithAudienceValidationShouldValidateInput2(TokenValidationParameters options, IEnumerable<string> validAudiences)
+        [MemberData(nameof(AudiencesValidationParametersVerificationTestCases))]
+        public void ShouldValidateAudiencesVerificationParameters(AudiencesValidationParametersVerificationTestCase testCase)
         {
-            Assert.Throws<ArgumentNullException>(() => options.WithAudienceValidation(validAudiences));
+            Assert.Throws<ArgumentNullException>(() => testCase.Options.WithAudienceValidation(testCase.ValidAudiences));
         }
 
         [Fact]
