@@ -17,6 +17,20 @@
 
     public class HttpClientBuilderExtensionsTests
     {
+        #region TestCases
+
+        public class ClientConfigurationValidationTestCase
+        {
+            public IHttpClientBuilder HttpClientBuilder { get; set; }
+
+            public IConfiguration Config { get; set; }
+
+            public Action<OptionsBuilder<FakeClientOptions>> OptionsConfigurator { get; set; }
+        }
+        
+
+        #endregion
+
         [UsedImplicitly]
         public class FakeClientOptions : BaseClientOptions
         {
@@ -47,32 +61,29 @@
         }
 
         [UsedImplicitly]
-        public static IEnumerable<object[]> ConfigureClientValidationTestsData;
+        public static TheoryData<ClientConfigurationValidationTestCase> ClientConfigurationValidationTestCases;
         [UsedImplicitly]
         public static IEnumerable<object[]> UseDefaultPrimaryMessageHandlerValidationTestsData;
 
         static HttpClientBuilderExtensionsTests()
         {
-            ConfigureClientValidationTestsData
-                = new[]
+            ClientConfigurationValidationTestCases
+                = new TheoryData<ClientConfigurationValidationTestCase>
                   {
-                      new object[] 
+                      new ClientConfigurationValidationTestCase
                       {
-                          null,
-                          new Mock<IConfiguration>().Object,
-                          new Action<OptionsBuilder<FakeClientOptions>>(x => { })
+                          Config = new Mock<IConfiguration>().Object,
+                          OptionsConfigurator = x => { }
                       },
-                      new object[]
+                      new ClientConfigurationValidationTestCase
                       {
-                          new Mock<IHttpClientBuilder>().Object,
-                          null,
-                          new Action<OptionsBuilder<FakeClientOptions>>(x => { })
+                          HttpClientBuilder = new Mock<IHttpClientBuilder>().Object,
+                          OptionsConfigurator = x => { }
                       },
-                      new object[]
+                      new ClientConfigurationValidationTestCase
                       {
-                          new Mock<IHttpClientBuilder>().Object,
-                          new Mock<IConfiguration>().Object,
-                          null
+                          HttpClientBuilder = new Mock<IHttpClientBuilder>().Object,
+                          Config = new Mock<IConfiguration>().Object
                       }
                   };
             UseDefaultPrimaryMessageHandlerValidationTestsData
@@ -92,13 +103,10 @@
         }
 
         [Theory]
-        [MemberData(nameof(ConfigureClientValidationTestsData))]
-        public void ConfigureClientShouldValidateParameters(
-            IHttpClientBuilder httpClientBuilder,
-            IConfiguration config,
-            Action<OptionsBuilder<FakeClientOptions>> optionsConfigurator)
+        [MemberData(nameof(ClientConfigurationValidationTestCases))]
+        public void ShouldValidateClientConfiguration(ClientConfigurationValidationTestCase test)
         {
-            Assert.Throws<ArgumentNullException>(() => httpClientBuilder.ConfigureClient(config, optionsConfigurator));
+            Assert.Throws<ArgumentNullException>(() => test.HttpClientBuilder.ConfigureClient(test.Config, test.OptionsConfigurator));
         }
 
         [Theory]
