@@ -1,7 +1,6 @@
 ﻿namespace Skeleton.Web.Tests.ExceptionsHandling
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Net;
     using System.Text;
@@ -36,15 +35,15 @@
         private readonly Mock<ILogger> _mockLogger;
 
         [UsedImplicitly]
-        public static IEnumerable<object[]> EnvironmentsWhereExceptionDetailAvailable;
+        public static TheoryData<string> EnvironmentsWhereExceptionDetailAvailable;
 
         static UnhandledExceptionsLoggingMiddlewareTests()
         {
             EnvironmentsWhereExceptionDetailAvailable =
-                new[]
+                new TheoryData<string>
                 {
-                    new object[] {EnvironmentName.Development},
-                    new object[] {EnvironmentName.Staging}
+                    EnvironmentName.Development,
+                    EnvironmentName.Staging
                 };
         }
 
