@@ -1,7 +1,6 @@
 ﻿namespace Skeleton.Web.Tests.Integration.BaseApiClient
 {
     using System;
-    using System.Collections.Generic;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -27,7 +26,14 @@
 
             public Action<OptionsBuilder<FakeClientOptions>> OptionsConfigurator { get; set; }
         }
-        
+
+        public class ClientHandlerConfigurationValidationTestCase
+        {
+            public IHttpClientBuilder HttpClientBuilder { get; set; }
+
+            public Func<HttpClientHandler, HttpClientHandler> HandlerConfigurator { get; set; }
+        }
+
 
         #endregion
 
@@ -63,7 +69,7 @@
         [UsedImplicitly]
         public static TheoryData<ClientConfigurationValidationTestCase> ClientConfigurationValidationTestCases;
         [UsedImplicitly]
-        public static IEnumerable<object[]> UseDefaultPrimaryMessageHandlerValidationTestsData;
+        public static TheoryData<ClientHandlerConfigurationValidationTestCase> ClientHandlerConfigurationValidationTestCases;
 
         static HttpClientBuilderExtensionsTests()
         {
@@ -86,18 +92,16 @@
                           Config = new Mock<IConfiguration>().Object
                       }
                   };
-            UseDefaultPrimaryMessageHandlerValidationTestsData
-                = new[]
+            ClientHandlerConfigurationValidationTestCases
+                = new TheoryData<ClientHandlerConfigurationValidationTestCase>
                   {
-                      new object[]
+                      new ClientHandlerConfigurationValidationTestCase
                       {
-                          null,
-                          new Func<HttpClientHandler, HttpClientHandler>(x => x)
+                          HandlerConfigurator = x => x
                       },
-                      new object[]
+                      new ClientHandlerConfigurationValidationTestCase
                       {
-                          new Mock<IHttpClientBuilder>().Object,
-                          null
+                          HttpClientBuilder = new Mock<IHttpClientBuilder>().Object
                       }
                   };
         }
@@ -110,12 +114,10 @@
         }
 
         [Theory]
-        [MemberData(nameof(UseDefaultPrimaryMessageHandlerValidationTestsData))]
-        public void UseDefaultPrimaryMessageHandlerShouldValidateParameters(
-            IHttpClientBuilder httpClientBuilder,
-            Func<HttpClientHandler, HttpClientHandler> handlerConfigurator)
+        [MemberData(nameof(ClientHandlerConfigurationValidationTestCases))]
+        public void UseDefaultPrimaryMessageHandlerShouldValidateParameters(ClientHandlerConfigurationValidationTestCase testCase)
         {
-            Assert.Throws<ArgumentNullException>(() => httpClientBuilder.UseDefaultPrimaryMessageHandler(handlerConfigurator));
+            Assert.Throws<ArgumentNullException>(() => testCase.HttpClientBuilder.UseDefaultPrimaryMessageHandler(testCase.HandlerConfigurator));
         }
 
         [Fact]
