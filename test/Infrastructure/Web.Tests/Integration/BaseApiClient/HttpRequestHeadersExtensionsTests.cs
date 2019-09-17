@@ -11,19 +11,30 @@
 
     public class HttpRequestHeadersExtensionsTests
     {
+        #region TestCases
+
+        public class BearerTokenParametersValidationTestCase
+        {
+            public HttpRequestHeaders Headers { get; set; }
+
+            public string Token { get; set; }
+        }
+
+        #endregion
+
         [UsedImplicitly]
-        public static IEnumerable<object[]> WithBearerTokenParametersValidationTestsData;
+        public static TheoryData<BearerTokenParametersValidationTestCase> BearerTokenParametersValidationTestCases;
         [UsedImplicitly]
         public static IEnumerable<object[]> WithBasicAuthParametersValidationTestsData;
 
         static HttpRequestHeadersExtensionsTests()
         {
-            WithBearerTokenParametersValidationTestsData =
-                new[]
+            BearerTokenParametersValidationTestCases =
+                new TheoryData<BearerTokenParametersValidationTestCase>
                 {
-                    new object[] {null, "123"},
-                    new object[] {new HttpClient().DefaultRequestHeaders, null},
-                    new object[] {new HttpClient().DefaultRequestHeaders, "   "}
+                    new BearerTokenParametersValidationTestCase {Token = "123"},
+                    new BearerTokenParametersValidationTestCase {Headers = new HttpClient().DefaultRequestHeaders},
+                    new BearerTokenParametersValidationTestCase {Headers = new HttpClient().DefaultRequestHeaders, Token = "   "}
                 };
             WithBasicAuthParametersValidationTestsData =
                 new[]
@@ -37,10 +48,10 @@
         }
 
         [Theory]
-        [MemberData(nameof(WithBearerTokenParametersValidationTestsData))]
-        public void WithBearerTokenShouldNotValidateParameters(HttpRequestHeaders headers, string token)
+        [MemberData(nameof(BearerTokenParametersValidationTestCases))]
+        public void ShouldValidateBearerTokenParameters(BearerTokenParametersValidationTestCase testCase)
         {
-            Assert.Throws<ArgumentNullException>(() => headers.WithBearerToken(token));
+            Assert.Throws<ArgumentNullException>(() => testCase.Headers.WithBearerToken(testCase.Token));
         }
 
         [Theory]
