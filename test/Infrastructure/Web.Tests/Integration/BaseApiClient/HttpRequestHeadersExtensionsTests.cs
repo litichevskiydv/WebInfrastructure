@@ -1,7 +1,6 @@
 ﻿namespace Skeleton.Web.Tests.Integration.BaseApiClient
 {
     using System;
-    using System.Collections.Generic;
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Text;
@@ -20,12 +19,21 @@
             public string Token { get; set; }
         }
 
+        public class BasicAuthParametersValidationTestCase
+        {
+            public HttpRequestHeaders Headers { get; set; }
+
+            public string Login { get; set; }
+
+            public string Password { get; set; }
+        }
+
         #endregion
 
         [UsedImplicitly]
         public static TheoryData<BearerTokenParametersValidationTestCase> BearerTokenParametersValidationTestCases;
         [UsedImplicitly]
-        public static IEnumerable<object[]> WithBasicAuthParametersValidationTestsData;
+        public static TheoryData<BasicAuthParametersValidationTestCase> BasicAuthParametersValidationTestCases;
 
         static HttpRequestHeadersExtensionsTests()
         {
@@ -36,14 +44,36 @@
                     new BearerTokenParametersValidationTestCase {Headers = new HttpClient().DefaultRequestHeaders},
                     new BearerTokenParametersValidationTestCase {Headers = new HttpClient().DefaultRequestHeaders, Token = "   "}
                 };
-            WithBasicAuthParametersValidationTestsData =
-                new[]
+            BasicAuthParametersValidationTestCases =
+                new TheoryData<BasicAuthParametersValidationTestCase>
                 {
-                    new object[] {null, "123", "123"},
-                    new object[] {new HttpClient().DefaultRequestHeaders, null, "123"},
-                    new object[] {new HttpClient().DefaultRequestHeaders, "   ", "123"},
-                    new object[] {new HttpClient().DefaultRequestHeaders, "123", null},
-                    new object[] {new HttpClient().DefaultRequestHeaders, "123", "   "}
+                    new BasicAuthParametersValidationTestCase
+                    {
+                        Login = "123",
+                        Password = "123"
+                    },
+                    new BasicAuthParametersValidationTestCase
+                    {
+                        Headers = new HttpClient().DefaultRequestHeaders,
+                        Password = "123"
+                    },
+                    new BasicAuthParametersValidationTestCase
+                    {
+                        Headers = new HttpClient().DefaultRequestHeaders,
+                        Login = "   ",
+                        Password = "123"
+                    },
+                    new BasicAuthParametersValidationTestCase
+                    {
+                        Headers = new HttpClient().DefaultRequestHeaders,
+                        Login = "123"
+                    },
+                    new BasicAuthParametersValidationTestCase
+                    {
+                        Headers = new HttpClient().DefaultRequestHeaders,
+                        Login = "123",
+                        Password = "   "
+                    }
                 };
         }
 
@@ -55,10 +85,10 @@
         }
 
         [Theory]
-        [MemberData(nameof(WithBasicAuthParametersValidationTestsData))]
-        public void WithBasicAuthShouldNotValidateParameters(HttpRequestHeaders headers, string login, string password)
+        [MemberData(nameof(BasicAuthParametersValidationTestCases))]
+        public void ShouldValidateBasicAuthParameters(BasicAuthParametersValidationTestCase testCase)
         {
-            Assert.Throws<ArgumentNullException>(() => headers.WithBasicAuth(login, password));
+            Assert.Throws<ArgumentNullException>(() => testCase.Headers.WithBasicAuth(testCase.Login, testCase.Password));
         }
 
         [Fact]
