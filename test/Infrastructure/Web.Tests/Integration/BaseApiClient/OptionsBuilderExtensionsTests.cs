@@ -12,29 +12,46 @@
 
     public class OptionsBuilderExtensionsTests
     {
+        #region TestCases
+
+        public class SerializerParametersValidationTestCase
+        {
+            public OptionsBuilder<FakeOptions> OptionsBuilder { get; set; }
+
+            public ISerializer Serializer { get; set; }
+        }
+
+        #endregion
+
         [UsedImplicitly]
         public class FakeOptions : BaseClientOptions
         {
         }
 
         [UsedImplicitly]
-        public static IEnumerable<object[]> WithSerializerValidationTestsData;
+        public static TheoryData<SerializerParametersValidationTestCase> SerializerParametersValidationTestCases;
 
         static OptionsBuilderExtensionsTests()
         {
-            WithSerializerValidationTestsData
-                = new[]
+            SerializerParametersValidationTestCases
+                = new TheoryData<SerializerParametersValidationTestCase>
                   {
-                      new object[] {null, JilSerializer.Default},
-                      new object[] { new OptionsBuilder<FakeOptions>(new ServiceCollection(), "test"), null},
+                      new SerializerParametersValidationTestCase
+                      {
+                          Serializer = JilSerializer.Default
+                      },
+                      new SerializerParametersValidationTestCase
+                      {
+                          OptionsBuilder = new OptionsBuilder<FakeOptions>(new ServiceCollection(), "test"),
+                      }
                   };
         }
 
         [Theory]
-        [MemberData(nameof(WithSerializerValidationTestsData))]
-        public void WithSerializerShouldValidateParameters(OptionsBuilder<FakeOptions> optionsBuilder, ISerializer serializer)
+        [MemberData(nameof(SerializerParametersValidationTestCases))]
+        public void ShouldValidateSerializerParameters(SerializerParametersValidationTestCase testCase)
         {
-            Assert.Throws<ArgumentNullException>(() => optionsBuilder.WithSerializer(serializer));
+            Assert.Throws<ArgumentNullException>(() => testCase.OptionsBuilder.WithSerializer(testCase.Serializer));
         }
 
         [Fact]
