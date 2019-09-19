@@ -1,7 +1,6 @@
 ﻿namespace Skeleton.Web.Tests.Serialization.JsonNet
 {
     using System;
-    using System.Collections.Generic;
     using JetBrains.Annotations;
     using Newtonsoft.Json;
     using Web.Serialization.JsonNet.Configuration;
@@ -10,31 +9,50 @@
 
     public class DateTimeConverterTests
     {
+        #region TestCases
+
+        public class DateTimeSerializationTestCase
+        {
+            public DateTime DateTime { get; set; }
+
+            public string Expected { get; set; }
+        }
+
+        #endregion
+
         [UsedImplicitly]
-        public static IEnumerable<object[]> DateTimeSerializationTestsData;
+        public static TheoryData<DateTimeSerializationTestCase> DateTimeSerializationTestCases;
 
         static DateTimeConverterTests()
         {
-            DateTimeSerializationTestsData =
-                new[]
+            DateTimeSerializationTestCases =
+                new TheoryData<DateTimeSerializationTestCase>
                 {
-                    new object[] {new DateTime(2016, 01, 01, 10, 30, 00, DateTimeKind.Utc), "\"2016-01-01T10:30:00.0000000Z\""},
-                    new object[] {new DateTime(2016, 01, 01, 10, 30, 00, DateTimeKind.Unspecified), "\"2016-01-01T10:30:00.0000000Z\""}
+                    new DateTimeSerializationTestCase
+                    {
+                        DateTime = new DateTime(2016, 01, 01, 10, 30, 00, DateTimeKind.Utc),
+                        Expected = "\"2016-01-01T10:30:00.0000000Z\""
+                    },
+                    new DateTimeSerializationTestCase
+                    {
+                        DateTime = new DateTime(2016, 01, 01, 10, 30, 00, DateTimeKind.Unspecified),
+                        Expected = "\"2016-01-01T10:30:00.0000000Z\""
+                    }
                 };
         }
 
         [Theory]
-        [MemberData(nameof(DateTimeSerializationTestsData))]
-        public void ShouldSerializeDateTimeWithUtcOrUnspecifiedKindAsIs(DateTime dateTime, string expected)
+        [MemberData(nameof(DateTimeSerializationTestCases))]
+        public void ShouldSerializeDateTimeWithUtcOrUnspecifiedKindAsIs(DateTimeSerializationTestCase testCase)
         {
             // Given
             var serializerSettings = new JsonSerializerSettings().UseConverter(new DateTimeConverter());
 
             // When
-            var actual = JsonConvert.SerializeObject(dateTime, serializerSettings);
+            var actual = JsonConvert.SerializeObject(testCase.DateTime, serializerSettings);
 
             // Then
-            Assert.Equal(expected, actual);
+            Assert.Equal(testCase.Expected, actual);
         }
 
         [Fact]

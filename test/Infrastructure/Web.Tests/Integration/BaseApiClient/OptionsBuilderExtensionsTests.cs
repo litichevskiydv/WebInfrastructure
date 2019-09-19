@@ -1,7 +1,6 @@
 ﻿namespace Skeleton.Web.Tests.Integration.BaseApiClient
 {
     using System;
-    using System.Collections.Generic;
     using JetBrains.Annotations;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Options;
