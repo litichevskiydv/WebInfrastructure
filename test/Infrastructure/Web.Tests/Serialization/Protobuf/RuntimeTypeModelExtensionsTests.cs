@@ -1,7 +1,6 @@
 ﻿namespace Skeleton.Web.Tests.Serialization.Protobuf
 {
     using System;
-    using System.Collections.Generic;
     using JetBrains.Annotations;
     using ProtoBuf.Meta;
     using Web.Serialization.Protobuf.Configuration;
@@ -11,24 +10,24 @@
     public class RuntimeTypeModelExtensionsTests
     {
         [UsedImplicitly]
-        public static IEnumerable<object[]> ArgumentsValidationTestsData;
+        public static TheoryData<Func<RuntimeTypeModel, RuntimeTypeModel>> ArgumentsValidationTestCases;
 
         static RuntimeTypeModelExtensionsTests()
         {
-            ArgumentsValidationTestsData =
-                new[]
+            ArgumentsValidationTestCases =
+                new TheoryData<Func<RuntimeTypeModel, RuntimeTypeModel>>
                 {
-                    new object[] {new Func<RuntimeTypeModel, RuntimeTypeModel>(x => x.WithDefaultValuesHandling(true))},
-                    new object[] {new Func<RuntimeTypeModel, RuntimeTypeModel>(x => x.WithDataContractsHandling(true))},
-                    new object[] {new Func<RuntimeTypeModel, RuntimeTypeModel>(x => x.WithDateTimeKindHandling(true))},
-                    new object[] {new Func<RuntimeTypeModel, RuntimeTypeModel>(x => x.WithTypeSurrogate<DateTimeOffset, DateTimeOffsetSurrogate>())},
-                    new object[] {new Func<RuntimeTypeModel, RuntimeTypeModel>(x => x.WithDefaultSettings())}
+                    x => x.WithDefaultValuesHandling(true),
+                    x => x.WithDataContractsHandling(true),
+                    x => x.WithDateTimeKindHandling(true),
+                    x => x.WithTypeSurrogate<DateTimeOffset, DateTimeOffsetSurrogate>(),
+                    x => x.WithDefaultSettings()
                 };
         }
 
 
         [Theory]
-        [MemberData(nameof(ArgumentsValidationTestsData))]
+        [MemberData(nameof(ArgumentsValidationTestCases))]
         public void ShouldNotValidateArguments(Func<RuntimeTypeModel, RuntimeTypeModel> call)
         {
             Assert.Throws<ArgumentNullException>(() => call(null));
