@@ -1,7 +1,6 @@
 ﻿namespace Skeleton.Queues.RabbitMq.Tests
 {
     using System;
-    using System.Collections.Generic;
     using Abstractions.Configuration;
     using JetBrains.Annotations;
     using Microsoft.Extensions.Configuration;
@@ -13,43 +12,53 @@
 
     public class ServiceCollectionExtensionsTests
     {
+        #region TestCases
+
+        public class MessagesProcessingServiceParametersVerificationTestCase
+        {
+            public IServiceCollection Services { get; set; }
+
+            public IConfiguration Configuration { get; set; }
+
+            public Action<OptionsBuilder<NotificationsProcessingServiceOptions>> OptionsConfigurator { get; set; }
+        }
+
+        #endregion
+
+
         [UsedImplicitly]
-        public static IEnumerable<object[]> ConfigureMessagesProcessingServiceParametersValidationTestsData;
+        public static TheoryData<MessagesProcessingServiceParametersVerificationTestCase> MessagesProcessingServiceParametersVerificationTestCases;
 
         static ServiceCollectionExtensionsTests()
         {
-            ConfigureMessagesProcessingServiceParametersValidationTestsData =
-                new[]
+            MessagesProcessingServiceParametersVerificationTestCases =
+                new TheoryData<MessagesProcessingServiceParametersVerificationTestCase>
                 {
-                    new object[]
+                    new MessagesProcessingServiceParametersVerificationTestCase
                     {
-                        null,
-                        new Mock<IConfiguration>().Object,
-                        new Action<OptionsBuilder<NotificationsProcessingServiceOptions>>(x => { })
+                        Configuration = new Mock<IConfiguration>().Object,
+                        OptionsConfigurator = x => { }
                     },
-                    new object[]
+                    new MessagesProcessingServiceParametersVerificationTestCase
                     {
-                        new Mock<IServiceCollection>().Object, 
-                        null,
-                        new Action<OptionsBuilder<NotificationsProcessingServiceOptions>>(x => { })
+                        Services = new Mock<IServiceCollection>().Object,
+                        OptionsConfigurator = x => { }
                     },
-                    new object[]
+                    new MessagesProcessingServiceParametersVerificationTestCase
                     {
-                        new Mock<IServiceCollection>().Object,
-                        new Mock<IConfiguration>().Object,
-                        null
-                    },
+                        Services = new Mock<IServiceCollection>().Object,
+                        Configuration = new Mock<IConfiguration>().Object
+                    }
                 };
         }
 
         [Theory]
-        [MemberData(nameof(ConfigureMessagesProcessingServiceParametersValidationTestsData))]
-        public void ConfigureMessagesProcessingServiceShouldValidateParameters(
-            IServiceCollection services,
-            IConfiguration configuration,
-            Action<OptionsBuilder<NotificationsProcessingServiceOptions>> optionsConfigurator)
+        [MemberData(nameof(MessagesProcessingServiceParametersVerificationTestCases))]
+        public void ShouldVerifyMessagesProcessingServiceParameters(MessagesProcessingServiceParametersVerificationTestCase testCase)
         {
-            Assert.Throws<ArgumentNullException>(() => services.ConfigureMessagesProcessingService(configuration, optionsConfigurator));
+            Assert.Throws<ArgumentNullException>(
+                () => testCase.Services.ConfigureMessagesProcessingService(testCase.Configuration, testCase.OptionsConfigurator)
+            );
         }
     }
 }
