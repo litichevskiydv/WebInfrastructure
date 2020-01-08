@@ -37,7 +37,7 @@
 
             _messageHandler = new CatchingMessageHandler<string>();
             _host = new HostBuilder()
-                .UseEnvironment(EnvironmentName.Development)
+                .UseEnvironment(Environments.Development)
                 .UseContentRoot(Path.GetDirectoryName(GetType().GetTypeInfo().Assembly.Location))
                 .ConfigureAppConfiguration(
                     (context, builder) =>

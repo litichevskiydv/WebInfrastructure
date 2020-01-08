@@ -10,8 +10,8 @@
     using Abstractions.QueuesFactory.ExceptionsHandling;
     using Abstractions.QueuesFactory.ExceptionsHandling.Handlers;
     using Handlers;
-    using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
     using Moq;
@@ -69,8 +69,8 @@
             _loggerFactory = mockLoggerFactory.Object;
 
             var configuration = new ConfigurationBuilder()
-                .AddDefaultConfigs(Path.GetDirectoryName(GetType().GetTypeInfo().Assembly.Location), EnvironmentName.Development)
-                .AddCiDependentSettings(EnvironmentName.Development)
+                .AddDefaultConfigs(Path.GetDirectoryName(GetType().GetTypeInfo().Assembly.Location), Environments.Development)
+                .AddCiDependentSettings(Environments.Development)
                 .Build();
             _completionTimeout = configuration.GetSection("CompletionTimeout").Get<TimeSpan>();
             var queuesFactoryOptions = configuration.GetSection("QueuesFactoryOptions").Get<TypedRabbitQueuesFactoryOptions>();
