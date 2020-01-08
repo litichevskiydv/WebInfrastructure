@@ -1,8 +1,10 @@
 ﻿namespace Skeleton.Web.Testing.Extensions
 {
     using System;
+    using System.Linq;
     using Microsoft.Extensions.Logging;
     using Moq;
+    using Xunit;
 
     public static class MockLoggerExtensions
     {
@@ -15,15 +17,10 @@
 
         public static Mock<TLogger> VerifyNoErrorsWasLogged<TLogger>(this Mock<TLogger> mockLogger) where TLogger : class, ILogger
         {
-            mockLogger.Verify(
-                x => x.Log(
-                    It.Is<LogLevel>(l => l == LogLevel.Error),
-                    It.IsAny<EventId>(),
-                    It.IsAny<object>(),
-                    It.IsAny<Exception>(),
-                    It.IsAny<Func<object, Exception, string>>()
-                ),
-                Times.Never
+            Assert.Null(
+                mockLogger.Invocations.SingleOrDefault(
+                    x => x.Arguments[0].Equals(LogLevel.Error)
+                )
             );
             return mockLogger;
         }
@@ -31,15 +28,12 @@
         public static Mock<ILogger> VerifyErrorWasLogged<TException>(this Mock<ILogger> mockLogger)
             where TException : Exception
         {
-            mockLogger.Verify(
-                x => x.Log(
-                    It.Is<LogLevel>(l => l == LogLevel.Error),
-                    It.IsAny<EventId>(),
-                    It.IsAny<object>(),
-                    It.IsAny<TException>(),
-                    It.IsAny<Func<object, Exception, string>>()
-                ),
-                Times.Once
+            Assert.NotNull(
+                mockLogger.Invocations.SingleOrDefault(
+                    x => x.Arguments[0].Equals(LogLevel.Error)
+                         && x.Arguments[3] != null
+                         && x.Arguments[3].GetType() == typeof(TException)
+                )
             );
             return mockLogger;
         }
@@ -50,45 +44,31 @@
             if (typeof(Exception).IsAssignableFrom(exceptionType) == false)
                 throw new InvalidOperationException("Specified type was not inherited from Exception");
 
-            mockLogger.Verify(
-                x => x.Log(
-                    It.Is<LogLevel>(l => l == LogLevel.Error),
-                    It.IsAny<EventId>(),
-                    It.IsAny<object>(),
-                    It.Is<Exception>(e => e.GetType() == exceptionType),
-                    It.IsAny<Func<object, Exception, string>>()
-                ),
-                Times.Once
-            );
+            Assert.NotNull(
+                mockLogger.Invocations.SingleOrDefault(
+                    x => x.Arguments[0].Equals(LogLevel.Error)
+                         && x.Arguments[3] != null
+                         && x.Arguments[3].GetType() == exceptionType
+                ));
             return mockLogger;
         }
 
         public static Mock<TLogger> VerifyNoWarningsWasLogged<TLogger>(this Mock<TLogger> mockLogger) where TLogger : class, ILogger
         {
-            mockLogger.Verify(
-                x => x.Log(
-                    It.Is<LogLevel>(l => l == LogLevel.Warning),
-                    It.IsAny<EventId>(),
-                    It.IsAny<object>(),
-                    It.IsAny<Exception>(),
-                    It.IsAny<Func<object, Exception, string>>()
-                ),
-                Times.Never
+            Assert.Null(
+                mockLogger.Invocations.SingleOrDefault(
+                    x => x.Arguments[0].Equals(LogLevel.Warning)
+                )
             );
             return mockLogger;
         }
 
         public static Mock<TLogger> VerifyWarningWasLogged<TLogger>(this Mock<TLogger> mockLogger) where TLogger : class, ILogger
         {
-            mockLogger.Verify(
-                x => x.Log(
-                    It.Is<LogLevel>(l => l == LogLevel.Warning),
-                    It.IsAny<EventId>(),
-                    It.IsAny<object>(),
-                    It.IsAny<Exception>(),
-                    It.IsAny<Func<object, Exception, string>>()
-                ),
-                Times.Once
+            Assert.NotNull(
+                mockLogger.Invocations.SingleOrDefault(
+                    x => x.Arguments[0].Equals(LogLevel.Warning)
+                )
             );
             return mockLogger;
         }
