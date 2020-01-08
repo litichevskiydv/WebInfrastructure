@@ -67,7 +67,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{45F8DBC0-4FAB-41A2-B8E6-0AE85C7DFE63}"
 	ProjectSection(SolutionItems) = preProject
 		common.props = common.props
-		global.json = global.json
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Logging.Abstractions", "src\Infrastructure\Web.Logging.Abstractions\Web.Logging.Abstractions.csproj", "{C0F23F1B-0A80-475C-994A-FE9EFA4FAE4B}"
