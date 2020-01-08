@@ -74,7 +74,8 @@ Task("Clean")
                 {
                     Configuration = configuration,
                     VersionSuffix = versionSuffix,
-                    MSBuildSettings = new DotNetCoreMSBuildSettings()
+                    MSBuildSettings = new DotNetCoreMSBuildSettings(),
+                    ArgumentCustomization = args => args.Append("--configfile ./NuGet.config")
                 };
         if(buildNumber != 0)
             settings.MSBuildSettings.Properties["Build"] = new[] {buildNumber.ToString()};

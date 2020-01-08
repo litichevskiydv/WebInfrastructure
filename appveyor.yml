@@ -1,6 +1,6 @@
 version: '{build}'
 image:
-- Visual Studio 2017
+- Visual Studio 2019
 - Ubuntu
 configuration: Release
 environment:
@@ -26,8 +26,8 @@ for:
   -
     matrix:
       only:
-        - image: Visual Studio 2017
-    services: mssql2016
+        - image: Visual Studio 2019
+    services: mssql2017
     install:
       - ps: choco install rabbitmq --version 3.7.7 -y
     build_script:

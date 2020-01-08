@@ -44,7 +44,7 @@
             );
 
             // When, Then
-            Assert.Throws<BadRequestException>(() => client.Get());
+            Assert.Throws<OperationCanceledException>(() => client.Get());
             Fixture.MockLogger
                 .VerifyNoErrorsWasLogged()
                 .VerifyWarningWasLogged();

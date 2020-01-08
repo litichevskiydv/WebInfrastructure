@@ -8,7 +8,7 @@ DRYRUN=
 SHOW_VERSION=false
 SCRIPT_ARGUMENTS=()
 
-for i in "$@"; do
+while [[ $# -gt 0 ]]; do
     case $1 in
         -s|--script) SCRIPT="$2"; shift ;;
         -t|--target) TARGET="$2"; shift ;;
@@ -23,7 +23,7 @@ for i in "$@"; do
 done
 
 if [[ $(dotnet tool list -g) != *"cake.tool"* ]]; then
-    dotnet tool install -g Cake.Tool
+    dotnet tool install --global --configfile ./NuGet.config Cake.Tool
 fi
 
 if $SHOW_VERSION; then
