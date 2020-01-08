@@ -19,7 +19,7 @@
             get
             {
                 if (_isAppVeyorWindows)
-                    return @"Data Source = (local)\SQL2016;Initial Catalog=tempdb;User Id=sa;Password=Password12!";
+                    return @"Data Source = (local)\SQL2017;Initial Catalog=tempdb;User Id=sa;Password=Password12!";
                 if (_isAppVeyorLinux)
                     return "Data Source = localhost;Initial Catalog=tempdb;User Id=sa;Password=Password12!";
 
