@@ -149,7 +149,7 @@ Task("CalculateCoverage")
                         .Append("-threshold:100")
                         .Append("-returntargetcode")
                         .Append("-hideskipped:Filter;Attribute"),
-                    Register = "user",
+                    Register = "appveyor",
                     OldStyle = true,
                     MergeOutput = true
                 }
