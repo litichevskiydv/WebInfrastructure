@@ -12,6 +12,7 @@
     using Microsoft.AspNetCore.TestHost;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Moq;
 
@@ -35,7 +36,7 @@
             _environmentName
                 = Environment.GetEnvironmentVariable("Hosting:Environment")
                   ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
-                  ?? EnvironmentName.Development;
+                  ?? Environments.Development;
             _configsDirectory = Path.GetDirectoryName(typeof(TStartup).GetTypeInfo().Assembly.Location);
 
             Configuration = ConfigurationSetup(new ConfigurationBuilder(), _configsDirectory, _environmentName).Build();
