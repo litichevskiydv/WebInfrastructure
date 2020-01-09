@@ -69,8 +69,6 @@
                                    var xmlDocsPath = Configuration.GetValue<string>("xml_docs");
                                    if (string.IsNullOrWhiteSpace(xmlDocsPath) == false)
                                        options.IncludeXmlComments(xmlDocsPath);
-
-                                   options.DescribeAllEnumsAsStrings();
                                });
 
             ConfigureOptions(services.AddOptions());
