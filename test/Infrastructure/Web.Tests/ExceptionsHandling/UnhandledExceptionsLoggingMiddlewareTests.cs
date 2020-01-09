@@ -98,6 +98,7 @@
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
 
             var content = await response.Content.ReadAsStringAsync();
+            Console.WriteLine(content);
             Assert.Empty(content);
 
             _mockLogger.VerifyErrorWasLogged<InvalidOperationException>();
