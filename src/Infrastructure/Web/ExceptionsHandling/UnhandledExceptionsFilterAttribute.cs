@@ -9,6 +9,7 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
+    using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
 
     public class UnhandledExceptionsFilterAttribute : ActionFilterAttribute
@@ -25,7 +26,7 @@
             }
         }
 
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ILogger _logger;
 
         private readonly (Type, Action<ExceptionHandlingContext>)[] _handlers;
@@ -46,7 +47,7 @@
                 _logger.LogError(context.ExecutedContext.Exception, message);
 
             context.ExecutedContext.ExceptionHandled = true;
-            context.ExecutedContext.Result = _hostingEnvironment.IsDevelopment() || _hostingEnvironment.IsStaging()
+            context.ExecutedContext.Result = _webHostEnvironment.IsDevelopment() || _webHostEnvironment.IsStaging()
                 ? new ObjectResult(new ApiExceptionResponse(message, context.ExecutedContext.Exception))
                   {
                       DeclaredType = typeof(ApiExceptionResponse),
@@ -55,14 +56,14 @@
                 : new ObjectResult(message) {DeclaredType = typeof(string), StatusCode = (int) HttpStatusCode.InternalServerError};
         }
 
-        public UnhandledExceptionsFilterAttribute(IHostingEnvironment hostingEnvironment, ILogger<UnhandledExceptionsFilterAttribute> logger)
+        public UnhandledExceptionsFilterAttribute(IWebHostEnvironment webHostEnvironment, ILogger<UnhandledExceptionsFilterAttribute> logger)
         {
-            if (hostingEnvironment == null)
-                throw new ArgumentNullException(nameof(hostingEnvironment));
+            if (webHostEnvironment == null)
+                throw new ArgumentNullException(nameof(webHostEnvironment));
             if(logger == null)
                 throw new ArgumentNullException(nameof(logger));
 
-            _hostingEnvironment = hostingEnvironment;
+            _webHostEnvironment = webHostEnvironment;
             _logger = logger;
 
             _handlers =

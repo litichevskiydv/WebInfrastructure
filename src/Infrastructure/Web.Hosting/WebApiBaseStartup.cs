@@ -84,13 +84,14 @@
         }
 
         protected virtual Func<IApplicationBuilder, IApplicationBuilder> CreatePipelineConfigurator(
-            IHostingEnvironment env,
-            Func<IApplicationBuilder, IApplicationBuilder> pipelineBaseConfigurator)
+            IWebHostEnvironment env,
+            Func<IApplicationBuilder, IApplicationBuilder> pipelineBaseConfigurator
+        )
         {
             return pipelineBaseConfigurator;
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             var pipelineConfigurator = CreatePipelineConfigurator(
                 env,

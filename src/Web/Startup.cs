@@ -92,8 +92,9 @@
         }
 
         protected override Func<IApplicationBuilder, IApplicationBuilder> CreatePipelineConfigurator(
-            IHostingEnvironment env,
-            Func<IApplicationBuilder, IApplicationBuilder> pipelineBaseConfigurator)
+            IWebHostEnvironment env,
+            Func<IApplicationBuilder, IApplicationBuilder> pipelineBaseConfigurator
+        )
         {
             return x => pipelineBaseConfigurator(x.UseJwtBearerAuthorizationTokens());
         }
