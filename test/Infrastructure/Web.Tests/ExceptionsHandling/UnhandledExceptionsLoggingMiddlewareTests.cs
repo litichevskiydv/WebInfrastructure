@@ -98,7 +98,6 @@
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
 
             var content = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(content);
             Assert.Empty(content);
 
             _mockLogger.VerifyErrorWasLogged<InvalidOperationException>();
@@ -149,7 +148,7 @@
                         .ConfigureServices(
                             services => services
                                 .AddSingleton<IHttpResponseStreamWriterFactory, TestHttpResponseStreamWriterFactory>()
-                                .AddMvc(x => { })
+                                .AddMvc()
                                 .WithJsonFormattersBasedOnJil(OptionsExtensions.Default)
                         )
                         .UseTestServer()
