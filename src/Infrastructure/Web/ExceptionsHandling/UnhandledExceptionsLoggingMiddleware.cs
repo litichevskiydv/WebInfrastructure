@@ -61,6 +61,7 @@
                 context.Response.Clear();
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
+                Console.WriteLine(_webHostEnvironment.EnvironmentName);
                 if (_webHostEnvironment.IsDevelopment() || _webHostEnvironment.IsStaging())
                 {
                     var content = new ApiExceptionResponse(message, exception);

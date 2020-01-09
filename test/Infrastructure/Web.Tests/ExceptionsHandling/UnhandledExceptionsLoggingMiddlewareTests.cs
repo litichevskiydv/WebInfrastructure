@@ -55,11 +55,11 @@
 
         private IHost ConfigureHost(string environmentName) =>
             new HostBuilder()
-                .UseEnvironment(environmentName)
                 .ConfigureWebHost(
                     webBuilder => webBuilder
                         .UseMockLogger(_mockLogger)
                         .UseTestServer()
+                        .UseEnvironment(environmentName)
                         .Configure(
                             app =>
                                 app
@@ -143,7 +143,6 @@
         {
             // Given
             using var host = new HostBuilder()
-                .UseEnvironment(Environments.Development)
                 .ConfigureWebHost(
                     webBuilder => webBuilder
                         .UseMockLogger(_mockLogger)
@@ -154,6 +153,7 @@
                                 .WithJsonFormattersBasedOnJil(OptionsExtensions.Default)
                         )
                         .UseTestServer()
+                        .UseEnvironment(Environments.Development)
                         .Configure(
                             app =>
                                 app
