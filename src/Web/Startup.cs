@@ -14,12 +14,12 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Microsoft.IdentityModel.Tokens;
+    using Microsoft.OpenApi.Models;
     using Skeleton.Dapper.ConnectionsFactory;
     using Skeleton.Web.Authentication.JwtBearer;
     using Skeleton.Web.Authentication.JwtBearer.Configuration;
     using Skeleton.Web.Documentation;
     using Skeleton.Web.Hosting;
-    using Swashbuckle.AspNetCore.Swagger;
     using Swashbuckle.AspNetCore.SwaggerGen;
     using Swashbuckle.AspNetCore.SwaggerUI;
 
@@ -37,22 +37,21 @@
         {
             options
                 .SwaggerDoc($"v{_versionString}",
-                    new Info
+                    new OpenApiInfo
                     {
                         Version = $"v{_versionString}",
                         Title = "Values providing API",
-                        Description = "A dummy to get configuration values",
-                        TermsOfService = "None"
+                        Description = "A dummy to get configuration values"
                     });
 
             options
                 .AddSecurityDefinition("Bearer",
-                    new ApiKeyScheme
+                    new OpenApiSecurityScheme
                     {
                         Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
                         Name = "Authorization",
-                        In = "header",
-                        Type = "apiKey"
+                        In = ParameterLocation.Header,
+                        Type = SecuritySchemeType.ApiKey
                     });
             options.OperationFilter<AuthResponsesOperationFilter>();
         }

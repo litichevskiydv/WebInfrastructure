@@ -13,6 +13,7 @@
     using Microsoft.AspNetCore.TestHost;
     using Microsoft.AspNetCore.WebUtilities;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Moq;
     using Testing.Extensions;
@@ -42,8 +43,8 @@
             EnvironmentsWhereExceptionDetailAvailable =
                 new TheoryData<string>
                 {
-                    EnvironmentName.Development,
-                    EnvironmentName.Staging
+                    Environments.Development,
+                    Environments.Staging
                 };
         }
 
@@ -52,121 +53,127 @@
             _mockLogger = MockLoggerExtensions.CreateMockLogger();
         }
 
-        private IWebHostBuilder ConfigureHost(string environmentName)
-        {
-            return new WebHostBuilder()
+        private IHost ConfigureHost(string environmentName) =>
+            new HostBuilder()
                 .UseEnvironment(environmentName)
-                .UseMockLogger(_mockLogger)
-                .Configure(app =>
-                           {
-                               app.UseUnhandledExceptionsLoggingMiddleware();
-                               app.Run(context =>
-                                       {
-                                           throw new InvalidOperationException("Wrong state");
-                                       });
-                           });
-        }
+                .ConfigureWebHost(
+                    webBuilder => webBuilder
+                        .UseMockLogger(_mockLogger)
+                        .UseTestServer()
+                        .Configure(
+                            app =>
+                                app
+                                    .UseUnhandledExceptionsLoggingMiddleware()
+                                    .Run(
+                                        context => throw new InvalidOperationException("Wrong state"))
+                        ))
+                .Start();
+
 
         [Theory]
         [MemberData(nameof(EnvironmentsWhereExceptionDetailAvailable))]
         public async Task ShouldSendExceptionMessageToClientInDevelopmentAndStagingEnvironmets(string environmentName)
         {
             // Given
-            var hostBuilder = ConfigureHost(environmentName);
+            using var host = ConfigureHost(environmentName);
 
             // When, Then
-            using (var server = new TestServer(hostBuilder))
-            {
-                var response = await server.CreateRequest("/").SendAsync("GET");
-                Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+            var response = await host.GetTestClient().GetAsync("/");
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
 
-                var content = await response.Content.ReadAsStringAsync();
-                Assert.Contains("Wrong state", content);
+            var content = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Wrong state", content);
 
-                _mockLogger.VerifyErrorWasLogged<InvalidOperationException>();
-            }
+            _mockLogger.VerifyErrorWasLogged<InvalidOperationException>();
         }
 
         [Fact]
-        public async Task ShouldNotReturnExceprionMessageToClientInProductionEnvironment()
+        public async Task ShouldNotReturnExceptionMessageToClientInProductionEnvironment()
         {
             // Given
-            var hostBuilder = ConfigureHost(EnvironmentName.Production);
+            using var host = ConfigureHost(Environments.Production);
 
             // When, Then
-            using (var server = new TestServer(hostBuilder))
-            {
-                var response = await server.CreateRequest("/").SendAsync("GET");
-                Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+            var response = await host.GetTestClient().GetAsync("/");
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
 
-                var content = await response.Content.ReadAsStringAsync();
-                Assert.Empty(content);
+            var content = await response.Content.ReadAsStringAsync();
+            Assert.Empty(content);
 
-                _mockLogger.VerifyErrorWasLogged<InvalidOperationException>();
-            }
+            _mockLogger.VerifyErrorWasLogged<InvalidOperationException>();
         }
 
         [Fact]
         public async Task ShouldLogWarningAndReturnBadRequestOnTaskCancellation()
         {
             // Given
-            var hostBuilder = new WebHostBuilder()
-                .UseMockLogger(_mockLogger)
-                .Configure(app =>
-                           {
-                               app.UseUnhandledExceptionsLoggingMiddleware();
-                               app.Run(context =>
-                                       {
-                                           var source = new CancellationTokenSource();
-                                           source.CancelAfter(TimeSpan.FromMilliseconds(100));
+            using var host = new HostBuilder()
+                .ConfigureWebHost(
+                    webBuilder => webBuilder
+                        .UseMockLogger(_mockLogger)
+                        .UseTestServer()
+                        .Configure(
+                            app =>
+                                app
+                                    .UseUnhandledExceptionsLoggingMiddleware()
+                                    .Run(
+                                        context =>
+                                        {
+                                            var source = new CancellationTokenSource();
+                                            source.CancelAfter(TimeSpan.FromMilliseconds(100));
 
-                                           return Task.Delay(TimeSpan.FromSeconds(5), source.Token);
-                                       });
-                           });
+                                            return Task.Delay(TimeSpan.FromSeconds(5), source.Token);
+                                        })
+                        ))
+                .Start();
 
             // When, Then
-            using (var server = new TestServer(hostBuilder))
-            {
-                var response = await server.CreateRequest("/").SendAsync("GET");
-                Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var response = await host.GetTestClient().GetAsync("/");
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
-                var content = await response.Content.ReadAsStringAsync();
-                Assert.Empty(content);
+            var content = await response.Content.ReadAsStringAsync();
+            Assert.Empty(content);
 
-                _mockLogger.VerifyWarningWasLogged();
-            }
+            _mockLogger.VerifyWarningWasLogged();
         }
 
         [Fact]
         public async Task ShouldSendExceptionToClientViaConfiguredFormatters()
         {
             // Given
-            var hostBuilder = new WebHostBuilder()
-                .UseEnvironment(EnvironmentName.Development)
-                .UseMockLogger(_mockLogger)
-                .ConfigureServices(services => services
-                                       .AddSingleton<IHttpResponseStreamWriterFactory, TestHttpResponseStreamWriterFactory>()
-                                       .AddMvc(x => { })
-                                       .WithJsonFormattersBasedOnJil(OptionsExtensions.Default)
+            using var host = new HostBuilder()
+                .UseEnvironment(Environments.Development)
+                .ConfigureWebHost(
+                    webBuilder => webBuilder
+                        .UseMockLogger(_mockLogger)
+                        .ConfigureServices(
+                            services => services
+                                .AddSingleton<IHttpResponseStreamWriterFactory, TestHttpResponseStreamWriterFactory>()
+                                .AddMvc(x => { })
+                                .WithJsonFormattersBasedOnJil(OptionsExtensions.Default)
+                        )
+                        .UseTestServer()
+                        .Configure(
+                            app =>
+                                app
+                                    .UseUnhandledExceptionsLoggingMiddleware()
+                                    .Run(context => throw new InvalidOperationException("Wrong state"))
+                        )
                 )
-                .Configure(app =>
-                           {
-                               app.UseUnhandledExceptionsLoggingMiddleware();
-                               app.Run(context => throw new InvalidOperationException("Wrong state"));
-                           }
-                );
+                .Start();
 
             // When, Then
-            using (var server = new TestServer(hostBuilder))
-            {
-                var response = await server.CreateRequest("/").AddHeader("accept", "application/json").SendAsync("GET");
-                Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+            var response = await host
+                .GetTestServer()
+                .CreateRequest("/")
+                .AddHeader("accept", "application/json")
+                .SendAsync("GET");
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
 
-                var content = await response.Content.ReadAsStringAsync();
-                Assert.Contains("Wrong state", content);
+            var content = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Wrong state", content);
 
-                _mockLogger.VerifyErrorWasLogged<InvalidOperationException>();
-            }
+            _mockLogger.VerifyErrorWasLogged<InvalidOperationException>();
         }
     }
 }

@@ -8,7 +8,7 @@ Branch: $(RepositoryBranch)
 Working tree: $(RepositoryUrl)/tree/$(RepositoryCommit)
 Commit message: $(RepositoryCommitMessage)
     </PackageDescription>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>Skeleton.Web.Testing</AssemblyName>
     <RootNamespace>Skeleton.Web.Testing</RootNamespace>
     <PackageId>Skeleton.Web.Testing</PackageId>
@@ -24,7 +24,7 @@ Commit message: $(RepositoryCommitMessage)
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="3.1.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="3.1.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.0" />

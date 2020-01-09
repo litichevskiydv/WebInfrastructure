@@ -13,7 +13,7 @@
         public static IWebHostBuilder CreateDefaultWebApiHostBuilder<TStartup>(string[] args) where TStartup : WebApiBaseStartup
         {
             return new WebHostBuilder()
-                .UseKestrel()
+                .UseKestrel(x => x.AllowSynchronousIO = true)
                 .ConfigureServices(services => services.AddAutofac())
                 .UseIISIntegration()
                 .UseContentRoot(Directory.GetCurrentDirectory())

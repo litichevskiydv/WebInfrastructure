@@ -19,9 +19,9 @@
 
         public static IConfigurationBuilder AddDefaultConfigs(
             this IConfigurationBuilder configurationBuilder,
-            IHostingEnvironment hostingEnvironment)
+            IWebHostEnvironment webHostEnvironment)
         {
-            return configurationBuilder.AddDefaultConfigs(hostingEnvironment.ContentRootPath, hostingEnvironment.EnvironmentName);
+            return configurationBuilder.AddDefaultConfigs(webHostEnvironment.ContentRootPath, webHostEnvironment.EnvironmentName);
         }
     }
 }

@@ -15,7 +15,7 @@
             if (settingsConfigurator == null)
                 throw new ArgumentNullException(nameof(settingsConfigurator));
 
-            builder.AddJsonOptions(x => settingsConfigurator(x.SerializerSettings));
+            builder.AddNewtonsoftJson(x => settingsConfigurator(x.SerializerSettings));
             return builder;
         }
     }

@@ -8,7 +8,7 @@ Branch: $(RepositoryBranch)
 Working tree: $(RepositoryUrl)/tree/$(RepositoryCommit)
 Commit message: $(RepositoryCommitMessage)
     </PackageDescription>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>Skeleton.Web.Serialization.JsonNet</AssemblyName>
     <RootNamespace>Skeleton.Web.Serialization.JsonNet</RootNamespace>
     <PackageId>Skeleton.Web.Serialization.JsonNet</PackageId>
@@ -16,8 +16,7 @@ Commit message: $(RepositoryCommitMessage)
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 

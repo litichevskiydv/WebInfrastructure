@@ -42,6 +42,8 @@
             ApiTimeout = Configuration.GetValue<TimeSpan>("ApiTimeout");
 
             MockLogger = MockLoggerExtensions.CreateMockLogger();
+
+            Server.AllowSynchronousIO = true;
         }
 
         protected virtual void OverrideRegisteredDependencies(IServiceCollection serviceCollection)
