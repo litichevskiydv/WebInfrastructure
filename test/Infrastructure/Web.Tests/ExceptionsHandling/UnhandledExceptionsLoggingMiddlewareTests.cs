@@ -64,9 +64,9 @@
                             app =>
                                 app
                                     .UseUnhandledExceptionsLoggingMiddleware()
-                                    .Run(
-                                        context => throw new InvalidOperationException("Wrong state"))
-                        ))
+                                    .Run(context => throw new InvalidOperationException("Wrong state"))
+                        )
+                )
                 .Start();
 
 

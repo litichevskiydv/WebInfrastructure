@@ -10,6 +10,7 @@
     using Microsoft.AspNetCore.Mvc.Formatters;
     using Microsoft.AspNetCore.Mvc.Infrastructure;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
     using Serialization.JsonNet.Configuration;
@@ -17,23 +18,23 @@
     public class UnhandledExceptionsLoggingMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ILogger _logger;
 
         private readonly JsonSerializerSettings _jsonSerializerSettings;
 
-        public UnhandledExceptionsLoggingMiddleware(RequestDelegate next, IHostingEnvironment hostingEnvironment,
+        public UnhandledExceptionsLoggingMiddleware(RequestDelegate next, IWebHostEnvironment webHostEnvironment,
             ILogger<UnhandledExceptionsLoggingMiddleware> logger)
         {
             if (next == null)
                 throw new ArgumentNullException(nameof(next));
-            if (hostingEnvironment == null)
-                throw new ArgumentNullException(nameof(hostingEnvironment));
+            if (webHostEnvironment == null)
+                throw new ArgumentNullException(nameof(webHostEnvironment));
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
 
             _next = next;
-            _hostingEnvironment = hostingEnvironment;
+            _webHostEnvironment = webHostEnvironment;
             _logger = logger;
 
             _jsonSerializerSettings = new JsonSerializerSettings().UseDefaultSettings();
@@ -60,7 +61,7 @@
                 context.Response.Clear();
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-                if (_hostingEnvironment.IsDevelopment() || _hostingEnvironment.IsStaging())
+                if (_webHostEnvironment.IsDevelopment() || _webHostEnvironment.IsStaging())
                 {
                     var content = new ApiExceptionResponse(message, exception);
 
