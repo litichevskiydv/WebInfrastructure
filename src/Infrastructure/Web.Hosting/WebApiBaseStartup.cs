@@ -93,8 +93,7 @@
         {
             var pipelineConfigurator = CreatePipelineConfigurator(
                 env,
-                x => x.UseStaticFiles()
-                    .UseSwagger()
+                x => x.UseSwagger()
                     .UseSwaggerUI(ConfigureSwaggerUi)
                     .UseMvc());
             pipelineConfigurator(app);
