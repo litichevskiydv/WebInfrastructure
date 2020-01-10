@@ -96,7 +96,7 @@
             Func<IApplicationBuilder, IApplicationBuilder> pipelineBaseConfigurator
         )
         {
-            return x => pipelineBaseConfigurator(x.UseJwtBearerAuthorizationTokens());
+            return x => pipelineBaseConfigurator(x).UseJwtBearerAuthorizationTokens();
         }
     }
 }

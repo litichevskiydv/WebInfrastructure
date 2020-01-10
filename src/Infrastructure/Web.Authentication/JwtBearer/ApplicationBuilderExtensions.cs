@@ -12,7 +12,8 @@
 
             return applicationBuilder
                 .UseMiddleware<TokensIssuingMiddleware>()
-                .UseAuthentication();
+                .UseAuthentication()
+                .UseAuthorization();
         }
     }
 }

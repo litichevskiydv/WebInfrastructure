@@ -50,14 +50,12 @@
 
             var mvcBuilder = services
                 .AddControllers(mvcOptions =>
-                                {
                                     mvcOptions
                                         .UseCentralRoutePrefix($"{Configuration.GetValue("api_route_preffix", "api")}/[controller]")
                                         .UseUnhandledExceptionFilter()
                                         .UseModelValidationFilter()
-                                        .UseParametersValidationFilter();
-                                    mvcOptions.EnableEndpointRouting = false;
-                                }
+                                        .UseParametersValidationFilter()
+
                 );
             ConfigureFormatters(mvcBuilder);
 
@@ -91,12 +89,11 @@
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            var pipelineConfigurator = CreatePipelineConfigurator(
-                env,
-                x => x.UseSwagger()
-                    .UseSwaggerUI(ConfigureSwaggerUi)
-                    .UseMvc());
-            pipelineConfigurator(app);
+            var pipelineConfigurator = CreatePipelineConfigurator(env, x => x.UseRouting());
+            pipelineConfigurator(app)
+                .UseSwagger()
+                .UseSwaggerUI(ConfigureSwaggerUi)
+                .UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }
