@@ -49,15 +49,15 @@
             services.AddUnhandledExceptionsStartupFilter();
 
             var mvcBuilder = services
-                .AddMvc(mvcOptions =>
-                        {
-                            mvcOptions
-                                .UseCentralRoutePrefix($"{Configuration.GetValue("api_route_preffix", "api")}/[controller]")
-                                .UseUnhandledExceptionFilter()
-                                .UseModelValidationFilter()
-                                .UseParametersValidationFilter();
-                            mvcOptions.EnableEndpointRouting = false;
-                        }
+                .AddControllers(mvcOptions =>
+                                {
+                                    mvcOptions
+                                        .UseCentralRoutePrefix($"{Configuration.GetValue("api_route_preffix", "api")}/[controller]")
+                                        .UseUnhandledExceptionFilter()
+                                        .UseModelValidationFilter()
+                                        .UseParametersValidationFilter();
+                                    mvcOptions.EnableEndpointRouting = false;
+                                }
                 );
             ConfigureFormatters(mvcBuilder);
 
