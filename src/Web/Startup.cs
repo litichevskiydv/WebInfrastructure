@@ -64,17 +64,20 @@
 
         protected override void ConfigureOptions(IServiceCollection services)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokensSigningKey"]));
             services
                 .Configure<DefaultConfigurationValues>(Configuration.GetSection("DefaultConfigurationValues"))
-                .Configure<SqlConnectionsFactoryOptions>(Configuration.GetSection("ConnectionStrings"))
-                .Configure<TokensIssuingOptions>(
+                .Configure<SqlConnectionsFactoryOptions>(Configuration.GetSection("ConnectionStrings"));
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokensSigningKey"]));
+            services
+                .AddJwtBearerTokensIssuer(
                     issuingOptions => issuingOptions
                         .WithSigningKey(SecurityAlgorithms.HmacSha256, securityKey)
                         .WithGetEndpoint("/api/Account/Token")
                         .WithLifetime(TimeSpan.FromHours(2))
                         .WithTokenIssueEventHandler(new TokenIssueEventHandler(LoggerFactory.CreateLogger<TokenIssueEventHandler>()))
-                )
+                );
+            services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(
                     jwtBearerOptions => jwtBearerOptions
