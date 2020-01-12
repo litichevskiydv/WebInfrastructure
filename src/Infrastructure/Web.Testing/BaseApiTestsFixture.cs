@@ -61,8 +61,10 @@
                 .UseMockLogger(MockLogger)
                 .UseEnvironment(_environmentName)
                 .ConfigureAppConfiguration(x => ConfigurationSetup(x, _configsDirectory, _environmentName))
-                .ConfigureTestServices(OverrideRegisteredDependencies)
-                .ConfigureTestContainer<ContainerBuilder>(OverrideRegisteredDependencies);
+                .ConfigureTestServices(OverrideRegisteredDependencies);
         }
+
+        protected override IHost CreateHost(IHostBuilder builder) =>
+            base.CreateHost(builder.UseServiceProviderFactory(new CustomAutofacServiceProviderFactory(OverrideRegisteredDependencies)));
     }
 }
