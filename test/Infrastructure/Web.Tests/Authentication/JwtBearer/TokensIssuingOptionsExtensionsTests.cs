@@ -7,6 +7,7 @@
     using Moq;
     using Web.Authentication.JwtBearer;
     using Web.Authentication.JwtBearer.Configuration;
+    using Web.Authentication.JwtBearer.Configuration.Issuing;
     using Xunit;
 
     public class TokensIssuingOptionsExtensionsTests

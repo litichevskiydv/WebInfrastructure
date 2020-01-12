@@ -16,7 +16,8 @@
     using Microsoft.OpenApi.Models;
     using Skeleton.Dapper.ConnectionsFactory;
     using Skeleton.Web.Authentication.JwtBearer;
-    using Skeleton.Web.Authentication.JwtBearer.Configuration;
+    using Skeleton.Web.Authentication.JwtBearer.Configuration.Issuing;
+    using Skeleton.Web.Authentication.JwtBearer.Configuration.Validation;
     using Skeleton.Web.Documentation;
     using Skeleton.Web.Hosting;
     using Swashbuckle.AspNetCore.SwaggerGen;

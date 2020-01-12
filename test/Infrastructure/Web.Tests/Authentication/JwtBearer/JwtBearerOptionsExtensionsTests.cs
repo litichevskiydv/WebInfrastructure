@@ -6,6 +6,7 @@
     using Microsoft.IdentityModel.Tokens;
     using Moq;
     using Web.Authentication.JwtBearer.Configuration;
+    using Web.Authentication.JwtBearer.Configuration.Validation;
     using Xunit;
 
     public class JwtBearerOptionsExtensionsTests

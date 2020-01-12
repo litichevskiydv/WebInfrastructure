@@ -1,4 +1,4 @@
-﻿namespace Skeleton.Web.Authentication.JwtBearer.Configuration
+﻿namespace Skeleton.Web.Authentication.JwtBearer.Configuration.Issuing
 {
     using System;
     using Microsoft.Extensions.Options;

@@ -7,6 +7,7 @@
     using JetBrains.Annotations;
     using Microsoft.IdentityModel.Tokens;
     using Web.Authentication.JwtBearer.Configuration;
+    using Web.Authentication.JwtBearer.Configuration.Validation;
     using Xunit;
 
     public class TokenValidationParametersExtensionsTests
