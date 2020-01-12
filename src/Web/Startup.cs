@@ -3,7 +3,6 @@
     using System;
     using System.Reflection;
     using System.Text;
-    using Application.Services;
     using Autofac;
     using Domain.Dtos;
     using Installers;
@@ -75,8 +74,8 @@
                         .WithSigningKey(SecurityAlgorithms.HmacSha256, securityKey)
                         .WithGetEndpoint("/api/Account/Token")
                         .WithLifetime(TimeSpan.FromHours(2))
-                        .WithTokenIssueEventHandler(new TokenIssueEventHandler(LoggerFactory.CreateLogger<TokenIssueEventHandler>()))
-                );
+                )
+                .WithTokenIssueEventHandler<ITokenIssueEventHandler>();
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(
