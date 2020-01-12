@@ -1,7 +1,7 @@
 ﻿namespace Skeleton.Web.Configuration
 {
-    using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Hosting;
 
     public static class ConfigurationBuilderExtensions
     {
@@ -19,9 +19,9 @@
 
         public static IConfigurationBuilder AddDefaultConfigs(
             this IConfigurationBuilder configurationBuilder,
-            IWebHostEnvironment webHostEnvironment)
+            IHostEnvironment hostEnvironment)
         {
-            return configurationBuilder.AddDefaultConfigs(webHostEnvironment.ContentRootPath, webHostEnvironment.EnvironmentName);
+            return configurationBuilder.AddDefaultConfigs(hostEnvironment.ContentRootPath, hostEnvironment.EnvironmentName);
         }
     }
 }

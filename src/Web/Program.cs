@@ -1,16 +1,16 @@
 ﻿namespace Web
 {
     using JetBrains.Annotations;
-    using Microsoft.AspNetCore.Hosting;
-    using WebHostBuilderExtensions = Skeleton.Web.Hosting.WebHostBuilderExtensions;
+    using Microsoft.Extensions.Hosting;
+    using Skeleton.Web.Hosting;
 
     [UsedImplicitly(ImplicitUseTargetFlags.Members)]
     public static class Program
     {
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHostBuilderExtensions.CreateDefaultWebApiHostBuilder<Startup>(args);
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            HostBuilderExtensions.CreateDefaultWebApiHostBuilder<Startup>(args);
 
         public static void Main(string[] args) =>
-            CreateWebHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).Build().Run();
     }
 }

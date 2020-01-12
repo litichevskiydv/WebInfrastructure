@@ -24,9 +24,8 @@ Commit message: $(RepositoryCommitMessage)
 
   <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
-    <FrameworkReference Include="Microsoft.AspNetCore.App"/>
-    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="3.1.0" />
-    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="3.0.0" />
   </ItemGroup>
 
 </Project>

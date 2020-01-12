@@ -5,19 +5,17 @@
     using Configuration;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Hosting;
     using Serilog;
     using Skeleton.Web.Logging.Serilog.Configuration;
 
-    public static class WebHostBuilderExtensions
+    public static class HostBuilderExtensions
     {
-        public static IWebHostBuilder CreateDefaultWebApiHostBuilder<TStartup>(string[] args) where TStartup : WebApiBaseStartup
-        {
-            return new WebHostBuilder()
-                .UseKestrel(x => x.AllowSynchronousIO = true)
-                .ConfigureServices(services => services.AddAutofac())
-                .UseIISIntegration()
+        public static IHostBuilder CreateDefaultWebApiHostBuilder<TStartup>(string[] args) where TStartup : WebApiBaseStartup =>
+            new HostBuilder()
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseConfiguration(new ConfigurationBuilder().AddCommandLine(args).Build())
+                .ConfigureHostConfiguration(config => config.AddEnvironmentVariables("DOTNET_").AddCommandLine(args))
                 .ConfigureAppConfiguration(
                     (context, builder) =>
                     {
@@ -29,7 +27,11 @@
                     }
                 )
                 .UseSerilog((context, configuration) => configuration.UseDefaultSettings(context.Configuration))
-                .UseStartup<TStartup>();
-        }
+                .ConfigureWebHost(
+                    webHostBuilder => webHostBuilder
+                        .UseKestrel(x => x.AllowSynchronousIO = true)
+                        .UseIISIntegration()
+                        .UseStartup<TStartup>()
+                );
     }
 }
