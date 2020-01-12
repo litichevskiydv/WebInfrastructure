@@ -12,7 +12,6 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
     using Skeleton.Dapper.ConnectionsFactory;
@@ -28,7 +27,7 @@
     {
         private string _versionString;
 
-        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory) : base(configuration, loggerFactory)
+        public Startup(IConfiguration configuration) : base(configuration)
         {
             _versionString = GetType().Assembly.GetName().Version.ToString(4);
         }

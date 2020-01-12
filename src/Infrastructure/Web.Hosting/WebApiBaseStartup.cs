@@ -18,17 +18,13 @@
     public abstract class WebApiBaseStartup
     {
         protected IConfiguration Configuration { get; }
-        protected ILoggerFactory LoggerFactory { get; }
 
-        protected WebApiBaseStartup(IConfiguration configuration, ILoggerFactory loggerFactory)
+        protected WebApiBaseStartup(IConfiguration configuration)
         {
             if(configuration == null)
                 throw new ArgumentNullException(nameof(configuration));
-            if (loggerFactory == null)
-                throw new ArgumentNullException(nameof(loggerFactory));
 
             Configuration = configuration;
-            LoggerFactory = loggerFactory;
         }
 
         protected virtual void ConfigureFormatters(IMvcBuilder mvcBuilder)
