@@ -5,15 +5,12 @@
 
     public static class ApplicationBuilderExtensions
     {
-        public static IApplicationBuilder UseJwtBearerAuthorizationTokens(this IApplicationBuilder applicationBuilder)
+        public static IApplicationBuilder UseJwtBearerTokensIssuer(this IApplicationBuilder applicationBuilder)
         {
             if (applicationBuilder == null)
                 throw new ArgumentNullException(nameof(applicationBuilder));
 
-            return applicationBuilder
-                .UseMiddleware<TokensIssuingMiddleware>()
-                .UseAuthentication()
-                .UseAuthorization();
+            return applicationBuilder.UseMiddleware<TokensIssuingMiddleware>();
         }
     }
 }
