@@ -155,6 +155,7 @@ Task("CalculateCoverage")
                 }
                 .WithFilter("+[Skeleton*]*")
                 .WithFilter("-[xunit*]*")
+                .WithFilter("-[*.Tests]*")
                 .ExcludeByAttribute("*.ExcludeFromCodeCoverage*");
 
         foreach(var project in projects)
