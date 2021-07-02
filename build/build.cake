@@ -84,40 +84,10 @@ Task("Clean")
             DotNetCoreBuild(project.GetDirectory().FullPath, settings);
     });
 
-// Run dotnet pack to produce NuGet packages from our projects. Versions the package
-// using the build number argument on the script which is used as the revision number 
-// (Last number in 1.0.0.0). The packages are dropped in the Artifacts directory.
-Task("Pack")
-    .IsDependentOn("Build")
-    .Does(() =>
-    {
-        var projects = GetFiles("../src/Infrastructure/**/*.csproj");
-        var settings = new DotNetCorePackSettings
-                {
-                    Configuration = configuration,
-                    NoRestore = true,
-                    NoBuild = true,
-                    OutputDirectory = artifactsDirectory,
-                    IncludeSymbols = true,
-                    VersionSuffix = versionSuffix,
-                    MSBuildSettings = new DotNetCoreMSBuildSettings()
-                };
-        if(string.IsNullOrWhiteSpace(commitId) == false)
-            settings.MSBuildSettings.Properties["RepositoryCommit"] = new[] {commitId};
-        if(string.IsNullOrWhiteSpace(branch) == false && branch != "master")
-        {
-            settings.MSBuildSettings.Properties["RepositoryBranch"] = new[] {branch};
-            settings.MSBuildSettings.Properties["RepositoryCommitMessage"] = new[] {commitMessage};
-        }
-
-        foreach (var project in projects)
-            DotNetCorePack(project.GetDirectory().FullPath, settings);
-    });
-
 // Look under a 'Tests' folder and run dotnet test against all of those projects.
 // Then drop the XML test results file in the Artifacts folder at the root.
 Task("Test")
-    .IsDependentOn("Pack")
+    .IsDependentOn("Build")
     .Does(() =>
     {
         var projects = GetFiles("../test/**/*.csproj");
@@ -135,7 +105,7 @@ Task("Test")
 // Look under a 'test' folder and calculate tests against all of those projects.
 // Then drop the XML test results file in the artifacts folder at the root.
 Task("CalculateCoverage")
-    .IsDependentOn("Pack")
+    .IsDependentOn("Build")
     .Does(() =>
     {
         var buildProps = GetFiles("../src/Infrastructure/Directory.Build.props").Single();
@@ -171,6 +141,38 @@ Task("CalculateCoverage")
         Codecov(resultsFile.FullPath);
     });
  
+// Run dotnet pack to produce NuGet packages from our projects. Versions the package
+// using the build number argument on the script which is used as the revision number 
+// (Last number in 1.0.0.0). The packages are dropped in the Artifacts directory.
+Task("Pack")
+    .IsDependentOn("Build")
+    .Does(() =>
+    {
+        var projects = GetFiles("../src/Infrastructure/**/*.csproj");
+        var settings = new DotNetCorePackSettings
+                {
+                    Configuration = configuration,
+                    NoRestore = true,
+                    NoBuild = true,
+                    OutputDirectory = artifactsDirectory,
+                    IncludeSymbols = true,
+                    VersionSuffix = versionSuffix,
+                    MSBuildSettings = new DotNetCoreMSBuildSettings()
+                };
+        
+        settings.MSBuildSettings.Properties["SymbolPackageFormat"] = new[] {"snupkg"};
+        if(string.IsNullOrWhiteSpace(commitId) == false)
+            settings.MSBuildSettings.Properties["RepositoryCommit"] = new[] {commitId};
+        if(string.IsNullOrWhiteSpace(branch) == false && branch != "master")
+        {
+            settings.MSBuildSettings.Properties["RepositoryBranch"] = new[] {branch};
+            settings.MSBuildSettings.Properties["RepositoryCommitMessage"] = new[] {commitMessage};
+        }
+
+        foreach (var project in projects)
+            DotNetCorePack(project.GetDirectory().FullPath, settings);
+    });
+
 // The default task to run if none is explicitly specified. In this case, we want
 // to run everything starting from Clean, all the way up to Test.
 Task("Default")
