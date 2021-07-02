@@ -11,8 +11,8 @@
     {
         private readonly bool _isAppVeyorWindows;
         private readonly bool _isAppVeyorLinux;
-
         private readonly bool _isTravis;
+        private readonly bool _isGithubActions;
 
         private string ConnectionString
         {
@@ -22,10 +22,12 @@
                     return @"Data Source = (local)\SQL2017;Initial Catalog=tempdb;User Id=sa;Password=Password12!";
                 if (_isAppVeyorLinux)
                     return "Data Source = localhost;Initial Catalog=tempdb;User Id=sa;Password=Password12!";
+                if (_isGithubActions)
+                    return "Data Source = localhost;Initial Catalog=tempdb;User Id=sa;Password=Password12!";
+                if (_isTravis)
+                    return "Data Source = localhost;Initial Catalog=tempdb;User Id=sa;Password=Password12!";
 
-                return _isTravis
-                    ? "Data Source = localhost;Initial Catalog=tempdb;User Id=sa;Password=Password12!"
-                    : @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = tempdb; Integrated Security = True";
+                return @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = tempdb; Integrated Security = True";
             }
         }
 
@@ -39,6 +41,8 @@
             _isAppVeyorLinux = isAppVeyor && Environment.GetEnvironmentVariable("CI_LINUX")?.ToUpperInvariant() == "TRUE";
 
             _isTravis = Environment.GetEnvironmentVariable("TRAVIS")?.ToUpperInvariant() == "TRUE";
+
+            _isGithubActions = Environment.GetEnvironmentVariable("GITHUB_ACTIONS")?.ToUpperInvariant() == "TRUE";
 
             ConnectionsFactory = new SqlConnectionsFactory(Options.Create(new SqlConnectionsFactoryOptions {SqlServer = ConnectionString}));
             SqlConnectionsFactoryMethod = () => (SqlConnection) ConnectionsFactory.Create();
