@@ -1,15 +1,8 @@
 version: '{build}'
-image:
-- Visual Studio 2019
-- Ubuntu
+image: Visual Studio 2019
 configuration: Release
 environment:
   ASPNETCORE_ENVIRONMENT: Staging
-nuget:
-  project_feed: true
-  disable_publish_on_pr: true
-artifacts:
-- path: build\artifacts\*.nupkg
 deploy: off
 branches:
   only:
@@ -22,29 +15,11 @@ skip_commits:
   - README.md
   - .travis.yml
   - WebInfrastructure.sln.DotSettings
-for:
-  -
-    matrix:
-      only:
-        - image: Visual Studio 2019
-    services: mssql2017
-    install:
+services: mssql2017  
+install:
       - ps: choco install rabbitmq --version 3.7.7 -y
-    build_script:
+build_script:
       - ps: >-
           cd build
 
-          .\build.ps1 -target CalculateCoverage --settings_skipverification=true
-        
-  -
-    matrix:
-      only:
-        - image: Ubuntu
-    services: 
-      - mssql
-      - rabbitmq
-    build_script:
-      - sh: >-
-          cd build
-
-          ./build.sh
+          .\build.ps1 -target Test --settings_skipverification=true
