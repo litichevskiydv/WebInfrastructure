@@ -108,7 +108,7 @@ Task("CalculateCoverage")
     .IsDependentOn("Build")
     .Does(() =>
     {
-        var projects = GetFiles("../test/**/*.csproj");
+        var projects = GetFiles("../test/**/*.csproj").ToArray();
         var temporaryCoverageFile = artifactsDirectory.CombineWithFilePath("coverage.json");
 
         var coverletsettings = new CoverletSettings 
