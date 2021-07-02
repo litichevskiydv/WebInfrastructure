@@ -17,9 +17,10 @@ skip_commits:
   - WebInfrastructure.sln.DotSettings
 services: mssql2017  
 install:
-      - ps: choco install rabbitmq --version 3.7.7 -y
+  - ps: choco install rabbitmq --version 3.7.7 -y
 build_script:
-      - ps: >-
-          cd build
-
-          .\build.ps1 -target Test --settings_skipverification=true
+  - ps: >-
+      cd build
+  
+      .\build.ps1 -target Test --settings_skipverification=true
+  
