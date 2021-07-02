@@ -1,6 +1,6 @@
-#tool "nuget:?package=OpenCover"
-#tool "nuget:?package=Codecov&version=1.0.4"
-#addin "nuget:?package=Cake.Codecov"
+#tool "dotnet:?package=coverlet.console"
+#addin "nuget:?package=Cake.Coverlet"
+
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -108,37 +108,39 @@ Task("CalculateCoverage")
     .IsDependentOn("Build")
     .Does(() =>
     {
-        var buildProps = GetFiles("../src/Infrastructure/Directory.Build.props").Single();
-        TransformTextFile(buildProps.FullPath, ">", "<").WithToken("portable", ">full<").Save(buildProps.FullPath);
-
         var projects = GetFiles("../test/**/*.csproj");
-        var resultsFile = artifactsDirectory.CombineWithFilePath("coverage.xml");
-        var settings = new OpenCoverSettings
-                {
-                    ArgumentCustomization = args => args
-                        .Append("-threshold:100")
-                        .Append("-returntargetcode")
-                        .Append("-hideskipped:Filter;Attribute"),
-                    Register = "appveyor",
-                    OldStyle = true,
-                    MergeOutput = true
-                }
-                .WithFilter("+[Skeleton*]*")
-                .WithFilter("-[xunit*]*")
-                .WithFilter("-[*.Tests]*")
-                .ExcludeByAttribute("*.ExcludeFromCodeCoverage*");
+        var temporaryCoverageFile = artifactsDirectory.CombineWithFilePath("coverage.json");
 
-        foreach(var project in projects)
-            OpenCover(
-                x => x.DotNetCoreTest(
-                     project.FullPath,
-                     new DotNetCoreTestSettings { Configuration = "Debug" }
-                ),
-                resultsFile,
-                settings
-            );
+        var coverletsettings = new CoverletSettings 
+        {
+            CollectCoverage = true,
+            CoverletOutputDirectory = artifactsDirectory,
+            CoverletOutputName = temporaryCoverageFile.GetFilenameWithoutExtension().ToString(),
+            MergeWithFile = temporaryCoverageFile,
+            Include = new List<string> {"[Skeleton*]*"},
+            Exclude = new List<string> 
+            {
+                "[xunit*]*",
+                "[*.Tests]*"
+            },
+            ExcludeByAttribute = new List<string> 
+            {
+                "*.ExcludeFromCodeCoverage*"
+            }
+        };
 
-        Codecov(resultsFile.FullPath);
+        for(var i = 0; i < projects.Length; i++)
+        {
+            var project = projects[i];
+            var projectName = project.GetFilenameWithoutExtension();
+            var projectAbsolutePath = project.GetDirectory();
+            var projectDll = GetFiles($"{projectAbsolutePath}/bin/Debug/*/*{projectName}.dll").First();
+
+            if(i == projects.Length - 1)
+                coverletsettings.CoverletOutputFormat = CoverletOutputFormat.opencover;
+
+            Coverlet(projectDll, project, coverletsettings);
+        }
     });
  
 // Run dotnet pack to produce NuGet packages from our projects. Versions the package
