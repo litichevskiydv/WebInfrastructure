@@ -1,0 +1,118 @@
+name: ci workflow
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  test:
+    name: test
+    
+    runs-on: ubuntu-latest
+    
+    services:
+      rabbitmq:
+        image: rabbitmq:alpine
+        ports:
+          - 5672:5672
+      mssql:
+        image: mcr.microsoft.com/mssql/server:2017-latest
+        ports:
+          - 1433:1433
+        env:
+          ACCEPT_EULA: Y
+          SA_PASSWORD: Password12!
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+      - name: Run the Cake script
+        uses: cake-build/cake-action@v1
+        with:
+          script-path: ./build/build.cake
+          target: Test
+          verbosity: Verbose
+          arguments: |
+            configuration: Release
+            nuget_useinprocessclient: true
+            settings_skipverification: true
+            settings_skippackageversioncheck: true
+
+  coverage:
+    name: coverage
+    needs: test
+    
+    runs-on: ubuntu-latest
+    
+    services:
+      rabbitmq:
+        image: rabbitmq:alpine
+        ports:
+          - 5672:5672
+      mssql:
+        image: mcr.microsoft.com/mssql/server:2017-latest
+        ports:
+          - 1433:1433
+        env:
+          ACCEPT_EULA: Y
+          SA_PASSWORD: Password12!
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+      - name: Run the Cake script
+        uses: cake-build/cake-action@v1
+        with:
+          script-path: ./build/build.cake
+          target: CalculateCoverage
+          verbosity: Verbose
+          arguments: |
+            configuration: Debug
+            nuget_useinprocessclient: true
+            settings_skipverification: true
+            settings_skippackageversioncheck: true
+      - name: Upload coverage
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./build/artifacts/coverage.opencover.xml
+          fail_ci_if_error: true
+            
+  deploy:
+    name: deploy
+    needs: coverage
+    if: github.ref == 'refs/heads/master'
+
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+      - name: Run the Cake script
+        uses: cake-build/cake-action@v1
+        with:
+          script-path: ./build/build.cake
+          target: Pack
+          verbosity: Verbose
+          arguments: |
+            configuration: Release
+            nuget_useinprocessclient: true
+            settings_skipverification: true
+            settings_skippackageversioncheck: true
+      - name: Publish
+        working-directory: ./build/artifacts
+        run: dotnet nuget push "*.nupkg" -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_TOKEN }}
+
+
