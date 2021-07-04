@@ -37,7 +37,7 @@
         public void ShouldConfigureDefaultValuesHandling()
         {
             // Given
-            var model = TypeModel.Create();
+            var model = RuntimeTypeModel.Create();
 
             // When
             model.WithDefaultValuesHandling(true);
@@ -50,7 +50,7 @@
         public void ShouldConfigureDataContractsHandling()
         {
             // Given
-            var model = TypeModel.Create();
+            var model = RuntimeTypeModel.Create();
 
             // When
             model.WithDataContractsHandling(true);
@@ -63,7 +63,7 @@
         public void ShouldConfigureDateTimeKindHandling()
         {
             // Given
-            var model = TypeModel.Create();
+            var model = RuntimeTypeModel.Create();
 
             // When
             model.WithDateTimeKindHandling(true);

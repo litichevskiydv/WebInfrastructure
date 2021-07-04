@@ -89,7 +89,7 @@
                         {
                             Id = e.BasicProperties.MessageId,
                             Headers = e.BasicProperties.Headers,
-                            Content = Encoding.UTF8.GetString(e.Body),
+                            Content = Encoding.UTF8.GetString(e.Body.ToArray()),
                             DeliveryTag = e.DeliveryTag
                         }
                     );

@@ -17,7 +17,7 @@
 
             // When
             DateTimeOffset actual;
-            var typeModel = TypeModel.Create().WithTypeSurrogate<DateTimeOffset, DateTimeOffsetSurrogate>();
+            var typeModel = RuntimeTypeModel.Create().WithTypeSurrogate<DateTimeOffset, DateTimeOffsetSurrogate>();
             using (var stream = new MemoryStream())
             {
                 typeModel.Serialize(stream, expected);

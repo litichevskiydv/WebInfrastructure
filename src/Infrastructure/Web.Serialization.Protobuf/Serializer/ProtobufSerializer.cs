@@ -16,7 +16,7 @@
         {
             if (serializerConfigurator == null)
                 throw new ArgumentNullException(nameof(serializerConfigurator));
-            _runtimeTypeModel = serializerConfigurator(TypeModel.Create());
+            _runtimeTypeModel = serializerConfigurator(RuntimeTypeModel.Create());
 
             MediaType = MediaTypeHeaderValue.Parse("application/x-protobuf");
         }

@@ -14,8 +14,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentMigrator" Version="3.2.1" />
-    <PackageReference Include="JetBrains.Annotations" Version="2019.1.3" />
+    <PackageReference Include="FluentMigrator" Version="3.2.17" />
+    <PackageReference Include="JetBrains.Annotations" Version="2021.1.0" />
   </ItemGroup>
 
 </Project>

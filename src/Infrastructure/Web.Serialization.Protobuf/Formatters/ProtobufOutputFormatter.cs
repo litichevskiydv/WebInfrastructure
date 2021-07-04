@@ -20,7 +20,7 @@
             if (serializerConfigurator == null)
                 throw new ArgumentNullException(nameof(serializerConfigurator));
 
-            _runtimeTypeModel = serializerConfigurator(TypeModel.Create());
+            _runtimeTypeModel = serializerConfigurator(RuntimeTypeModel.Create());
             _logger = logger;
 
             SupportedMediaTypes.Add(MediaTypeHeaderValues.ApplicationProtobuf);

@@ -16,8 +16,8 @@ Commit message: $(RepositoryCommitMessage)
   </PropertyGroup>
 
   <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App"/>
-    <PackageReference Include="protobuf-net" Version="2.4.4" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="protobuf-net" Version="3.0.101" />
   </ItemGroup>
 
   <ItemGroup>
