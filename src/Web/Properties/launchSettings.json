@@ -18,12 +18,14 @@
     "WebDevelopment": {
       "commandName": "Project",
       "commandLineArgs": "--environment Development --api_route_preffix api",
+      "applicationUrl": "http://localhost:5000/",
       "launchBrowser": true,
       "launchUrl": "http://localhost:5000/swagger/"
     },
     "WebStaging": {
       "commandName": "Project",
       "commandLineArgs": "--environment Staging --api_route_preffix api",
+      "applicationUrl": "http://localhost:5000/",
       "launchBrowser": true,
       "launchUrl": "http://localhost:5000/api/values"
     }
