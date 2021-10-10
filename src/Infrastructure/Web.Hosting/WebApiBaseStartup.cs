@@ -1,6 +1,7 @@
 ﻿namespace Skeleton.Web.Hosting
 {
     using System;
+    using System.IO;
     using Autofac;
     using ExceptionsHandling;
     using Microsoft.AspNetCore.Builder;
@@ -59,10 +60,11 @@
                                {
                                    ConfigureSwaggerDocumentator(options);
 
-                                   var xmlDocsPath = Configuration.GetValue<string>("xml_docs");
-                                   if (string.IsNullOrWhiteSpace(xmlDocsPath) == false)
-                                       options.IncludeXmlComments(xmlDocsPath);
-                               });
+                                   var xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml");
+                                   foreach (var xmlFile in xmlFiles)
+                                       options.IncludeXmlComments(xmlFile);
+                               }
+                );
 
             ConfigureOptions(services.AddOptions());
         }
